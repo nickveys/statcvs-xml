@@ -32,20 +32,25 @@
      <table>
         <tr>
        	  <th><xsl:value-of select="i18n:tr('Author')"/></th>
-          <th><xsl:value-of select="i18n:tr('Changes')"/></th>
+          <th><xsl:value-of select="i18n:tr('Commits')"/></th>
           <th><xsl:value-of select="i18n:tr('Lines of Code')"/></th>
+          <th><xsl:value-of select="i18n:tr('Added Lines of Code')"/></th>
           <th><xsl:value-of select="i18n:tr('Lines per Change')"/></th>
       	</tr>
 		<xsl:for-each select="author">
 	  	  <tr>
        		<td><a href="user_{@name}{$ext}"><xsl:value-of select="@name"/></a></td>
        		<td>
-          		<xsl:value-of select="@changes"/>
-         		(<xsl:value-of select="@changesPercent"/>%)
+          		<xsl:value-of select="@commits"/>
+         		(<xsl:value-of select="@commitsPercent"/>%)
        		</td>
        		<td>
           		<xsl:value-of select="@loc"/>
          		(<xsl:value-of select="@locPercent"/>%)
+       		</td>
+       		<td>
+          		<xsl:value-of select="@locAdded"/>
+         		(<xsl:value-of select="@locAddedPercent"/>%)
        		</td>
        		<td>
           		<xsl:value-of select="@locPerChange"/>
@@ -209,7 +214,7 @@
         <tr>
        	  <th><xsl:value-of select="i18n:tr('Directory')"/></th>
           <th><xsl:value-of select="i18n:tr('Lines of Code')"/></th>
-          <th><xsl:value-of select="i18n:tr('Changes')"/></th>
+          <th><xsl:value-of select="i18n:tr('Commits')"/></th>
        	  <th><xsl:value-of select="i18n:tr('Lines per change')"/></th>
       	</tr>
 		<xsl:for-each select="module">
@@ -227,8 +232,8 @@
          	  (<xsl:value-of select="@linesPercent"/>%)
        		</td>
        		<td>
-         	  <xsl:value-of select="@changes"/>
-         	  (<xsl:value-of select="@changesPercent"/>%)
+         	  <xsl:value-of select="@commits"/>
+         	  (<xsl:value-of select="@commitsPercent"/>%)
        		</td>
        		<td><xsl:value-of select="@linesPerChange"/></td>
      	  </tr>

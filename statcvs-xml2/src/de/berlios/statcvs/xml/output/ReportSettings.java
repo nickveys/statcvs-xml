@@ -42,14 +42,29 @@ public class ReportSettings extends Hashtable {
 		return this.get(key, null);
 	}
 
+	public int getLimit(int defaultValue)
+	{
+		return getInt("limit", defaultValue);
+	}
+
+	public int getLimit()
+	{
+		return getLimit(30);
+	}
+
 	public String getProjectName()
 	{
 		return this.getString("projectName", "");
 	}
 
+	public Iterator getFileIterator(CvsContent content)
+	{
+		return content.getFiles().iterator();
+	}
+
 	public Iterator getRevisionIterator(CvsContent content)
 	{
-		Object o = get("foreach");
+		Object o = get("_foreachObject");
 		if (o instanceof Author) {
 			return ((Author)o).getRevisions().iterator();
 		}
@@ -87,26 +102,17 @@ public class ReportSettings extends Hashtable {
 	/**
 	 * 
 	 */
-	public String getPostfix() 
+	public String getForeachId() 
 	{
-		Object o = get("foreach");
-		if (o instanceof Author) {
-			return ((Author)o).getName();
-		}
-		else if (o instanceof Directory) {
-			return ((Directory)o).getPath();
-		}
-		else {
-			return null;
-		}
+		return getString("_foreachId", null);
 	}
 
 	/**
 	 * 
 	 */
-	public String getFilenamePostfix() 
+	public String getFilenameId() 
 	{
-		String postfix = getPostfix();
+		String postfix = getForeachId();
 		return (postfix == null) ? "" : "_" + postfix;
 	}
 
@@ -139,7 +145,7 @@ public class ReportSettings extends Hashtable {
 	 */
 	public String getSubtitlePostfix() 
 	{
-		String postfix = getPostfix();
+		String postfix = getForeachId();
 		return (postfix == null) ? "" : I18n.tr(" for {0}", postfix);
 	}
 

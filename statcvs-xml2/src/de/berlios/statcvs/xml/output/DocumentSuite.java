@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -24,6 +25,12 @@ import org.jdom.input.SAXBuilder;
  * @author Steffen Pingel
  */
 public class DocumentSuite {
+
+	private Map filenameByDirectoryPath = new Hashtable();
+
+	private Map filenameByAuthorName = new Hashtable();
+
+	public static final String PRIVATE_SETTING_PREFIX = "_"; 
 
 	private static Logger logger = Logger.getLogger(DocumentSuite.class.getName());
 	
@@ -140,8 +147,11 @@ public class DocumentSuite {
 			for (Iterator i = content.getAuthors().iterator(); i.hasNext();) {
 				Author author = (Author)i.next();
 				ReportSettings settings = new ReportSettings(defaultSettings);
-				settings.put("foreach", author);
-				renderer.render(createDocument(element, settings));
+				settings.put("_foreachObject", author);
+				settings.put("_foreachId", author.getName());
+				StatCvsDocument doc = createDocument(element, settings);
+				filenameByAuthorName.put(author.getName(), doc.getFilename());
+				renderer.render(doc);
 			}
 		}
 		else if ("directory".equals(value)) {
@@ -149,8 +159,11 @@ public class DocumentSuite {
 				Directory dir = (Directory)i.next();
 				if (!dir.isEmpty()) {
 					ReportSettings settings = new ReportSettings(defaultSettings);
-					settings.put("foreach", dir);
-					renderer.render(createDocument(element, settings));
+					settings.put("_foreachObject", dir);
+					settings.put("_foreachId", dir.getPath());
+					StatCvsDocument doc = createDocument(element, settings);
+					filenameByDirectoryPath.put(dir.getPath(), doc.getFilename());
+					renderer.render(doc);
 				}
 			}
 		}
@@ -169,9 +182,7 @@ public class DocumentSuite {
 		ReportSettings settings = new ReportSettings(parentSettings);
 		for (Iterator it = root.getAttributes().iterator(); it.hasNext();) {
 			Attribute setting = (Attribute)it.next();
-			// foreach has already been set by renderDocument()
-			// and should not be overiden here
-			if (!"foreach".equals(setting.getName())) {
+			if (!setting.getName().startsWith(PRIVATE_SETTING_PREFIX)) {
 				settings.put(setting.getName(), setting.getValue());
 			}
 		}
@@ -187,9 +198,9 @@ public class DocumentSuite {
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element setting = (Element)it.next();
 			// foreach has a special meaning and should not be overiden here
-			if (!"foreach".equals(setting.getName())) {
+			if (!setting.getName().startsWith(PRIVATE_SETTING_PREFIX)) {
 				properties.put(setting.getName(), getValue(setting));
-			}	
+			}
 		}
 	}
 
@@ -207,4 +218,15 @@ public class DocumentSuite {
 			return setting.getText();
 		}
 	}
+	
+	public String getAuthorFilename(String name)
+	{
+		return (String)filenameByAuthorName.get(name);
+	}
+
+	public String getDirectoryFilename(String path)
+	{
+		return (String)filenameByDirectoryPath.get(path);
+	}
+	
 }

@@ -44,25 +44,29 @@ public class AuthorsTable {
 		
 		IntegerMap changesMap = new IntegerMap();
 		IntegerMap linesMap = new IntegerMap();
-
+		IntegerMap linesAddedMap = new IntegerMap();
+		
 		while (revs.hasNext()) {
 			CvsRevision rev = (CvsRevision)revs.next();
 			changesMap.addInt(rev.getAuthor(), 1);
-			linesMap.addInt(rev.getAuthor(), rev.getNewLines()); 
+			linesMap.addInt(rev.getAuthor(), rev.getLinesDelta());
+			linesAddedMap.addInt(rev.getAuthor(), rev.getNewLines()); 
 		}
+		
 		Iterator it = linesMap.iteratorSortedByValueReverse();
-
 		while (it.hasNext()) {
 			Author author = (Author) it.next();
 			Element element = new Element("author");
 			element.setAttribute("name", author.getName());
-			element.setAttribute("changes", changesMap.get(author) + "");
+			element.setAttribute("commits", changesMap.get(author) + "");
+			element.setAttribute("commitsPercent", 
+								 Formatter.formatNumber(changesMap.getPercent(author), 2));
 			element.setAttribute("loc", linesMap.get(author) + "");
 			element.setAttribute("locPercent", 
 								 Formatter.formatNumber(linesMap.getPercent(author), 2));
-			element.setAttribute("changesPercent", 
-								 Formatter.formatNumber(changesMap.getPercent(author), 2));
-
+			element.setAttribute("locAdded", linesAddedMap.get(author) + "");
+			element.setAttribute("locAddedPercent", 
+								 Formatter.formatNumber(linesAddedMap.getPercent(author), 2));
 			element.setAttribute("locPerChange", 
 								 Formatter.formatNumber(linesMap.get(author) / changesMap.get(author), 1));
 			authors.addContent(element);
