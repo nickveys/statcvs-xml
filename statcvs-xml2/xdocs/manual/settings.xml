@@ -155,6 +155,12 @@
          <td></td>
          <td>The url of the web repository.</td>
       </tr>
+      <tr>
+         <td>html-xsl</td>
+         <td></td>
+         <td>resources/statcvs2html.xsl <it>(internal)</it></td>
+         <td>An alternative xsl stylesheet (for html renderer only).</td>
+      </tr>
     </table>
 
     <subsection name="Authors">
