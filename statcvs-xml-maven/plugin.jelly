@@ -55,9 +55,9 @@
 
                     <java classname="net.sf.statcvs.Main" fork="true">
                         <arg line="-output-dir ${maven.gen.docs}/statcvs-xml"/> 
-                        <arg line="-output-suite net.sf.statcvs.output.xml.XDocRenderer"/> 
+                        <arg line="-output-suite xdoc"/> 
                         <arg line="-verbose"/> 
-                        <arg line="-weburl http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml/"/>
+			<arg line="-weburl ${pom.repository.url}"/>
                         <arg line="-title ${pom.name}"/>
                         <arg line="-use-history"/>
                         <arg value="${statcvs.logfile}"/>
