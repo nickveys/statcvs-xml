@@ -7,7 +7,9 @@
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:func="http://statcvs-xml.berlios.de/functions"
-                xmlns:i18n="net.sf.statcvs.I18n">
+                xmlns:i18n="net.sf.statcvs.I18n"
+				xmlns:prefs="net.sf.statcvs.output.xml.OutputSettings"
+				xmlns:fileutils="net.sf.statcvs.util.FileUtils">
 
   <xsl:param name="ext"/>
   <xsl:template match="document">

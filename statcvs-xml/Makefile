@@ -67,7 +67,7 @@ html :
 	mkdir -p out-html
 	$(JAVA_HOME)/bin/java -classpath $(CP) net.sf.statcvs.Main \
 	  $(CVS_LOG) $(CVS_PATH) $(STATCVS_ARGS) -output-dir out-html \
-	  -output-suite html -css src/net/sf/statcvs/web-files/statcvs-maven.css
+	  -output-suite html
 
 xdoc : 
 	mkdir -p xdocs/statcvs
