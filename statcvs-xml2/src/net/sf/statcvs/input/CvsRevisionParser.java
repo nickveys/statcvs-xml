@@ -38,7 +38,6 @@ import net.sf.statcvs.util.LookaheadReader;
  * 
  * @author Anja Jentzsch
  * @author Richard Cyganiak
- * @author Felipe Hoffa (fix for parsing new cvs log date format)
  * @version $Id$
  */
 public class CvsRevisionParser {
@@ -58,15 +57,15 @@ public class CvsRevisionParser {
 			= "======================================"
 			+ "=======================================";
 
-	private static final String LOG_TIMESTAMP_FORMAT =
+	private static final String OLD_LOG_TIMESTAMP_FORMAT =
 		"yyyy/MM/dd HH:mm:ss zzz";
-	private static final String LOG_TIMESTAMP_FORMAT_NEW = 
-		"yyyy-MM-dd HH:mm:ss Z zzz";
+	private static final String NEW_LOG_TIMESTAMP_FORMAT =
+		"yyyy-MM-dd HH:mm:ss Z";
 	private static final Locale LOG_TIMESTAMP_LOCALE = Locale.US;
-	private static SimpleDateFormat logTimeFormat =
-		new SimpleDateFormat(LOG_TIMESTAMP_FORMAT, LOG_TIMESTAMP_LOCALE);
-	private static SimpleDateFormat logTimeFormatNew = 
-		new SimpleDateFormat(LOG_TIMESTAMP_FORMAT_NEW, LOG_TIMESTAMP_LOCALE);
+	private static SimpleDateFormat oldLogTimeFormat =
+		new SimpleDateFormat(OLD_LOG_TIMESTAMP_FORMAT, LOG_TIMESTAMP_LOCALE);
+	private static SimpleDateFormat newLogTimeFormat =
+		new SimpleDateFormat(NEW_LOG_TIMESTAMP_FORMAT, LOG_TIMESTAMP_LOCALE);
 	private LookaheadReader logReader;
 	private CvsLogBuilder builder;
 	private boolean fileDone = false;
@@ -88,10 +87,7 @@ public class CvsRevisionParser {
 	 * @throws IOException on read error
 	 */
 	public void parse() throws LogSyntaxException, IOException {
-		if (FILE_DELIMITER.equals(logReader.getCurrentLine())) {
-			return;
-		}
-		logReader.getNextLine();
+		this.logReader.nextLine();
 		do {
 			revision = new RevisionData();
 			parseRevision();
@@ -107,28 +103,28 @@ public class CvsRevisionParser {
 		}
 		String revNo = logReader.getCurrentLine().substring("revision ".length());
 		revision.setRevisionNumber(revNo);
-		parseDateLine(logReader.getNextLine());
-		if (logReader.getNextLine().startsWith("branches:")) {
-			logReader.getNextLine();
+		parseDateLine(this.logReader.nextLine());
+		if (this.logReader.nextLine().startsWith("branches:")) {
+			this.logReader.nextLine();
 		}
 		StringBuffer comment = new StringBuffer();
 		while (true) {
 			String line = logReader.getCurrentLine();
 			if (REVISION_DELIMITER.equals(line)) {
-				String next = logReader.getNextLine();
+				String next = this.logReader.nextLine();
 				if (isNewRevisionLine(next)) {
 					revision.setComment(comment.toString());
 					return;
 				}
 			} else if (FILE_DELIMITER.equals(line)) {
-				String next = logReader.getNextLine();
-				if (next == null || "".equals(next)) {
-					revision.setComment(comment.toString());
-					fileDone = true;
-					return;
+				if (!this.logReader.hasNextLine() ||
+						"".equals(this.logReader.nextLine())) {
+					this.revision.setComment(comment.toString());
+					this.fileDone = true;
+					return;					
 				}
 			} else {
-				logReader.getNextLine();
+				this.logReader.nextLine();
 			}
 			if (comment.length() != 0) {
 				comment.append('\n');
@@ -137,8 +133,7 @@ public class CvsRevisionParser {
 		}
 	}
 
-	private void parseDateLine(String line)
-			throws IOException, LogSyntaxException {
+	private void parseDateLine(String line) throws LogSyntaxException {
 
 		// date: 2000/06/19 04:56:21;  author: somebody;  state: Exp;  lines: +114 -45
 
@@ -188,15 +183,15 @@ public class CvsRevisionParser {
 		return line.startsWith("revision ");
 	}
 
-	private boolean isDeadState(String state) throws IOException {
+	private boolean isDeadState(String state) {
 		if ("dead".equals(state)) {
 			return true;
 		}
-		if ("Exp".equals(state)) {
+		if ("Exp".equals(state) || "Stab".equals(state) || "Rel".equals(state)) {
 			return false;
 		}
 		logger.warning("unknown file state '" + state + "' at line "
-				+ logReader.getLineNumber());
+				+ this.logReader.getLineNumber());
 		return false;
 	}
 
@@ -208,13 +203,13 @@ public class CvsRevisionParser {
 	 */
 	private static Date convertFromLogTime(String modTime) {
 		try {
-			if (modTime.indexOf('-') > 0) {
-				return logTimeFormatNew.parse(modTime);
-			} else {
-			    return logTimeFormat.parse(modTime);
-			}
+			return oldLogTimeFormat.parse(modTime);
 		} catch (ParseException e) {
-			// fallback is to return null
+			// try other format
+		}
+		try {
+			return newLogTimeFormat.parse(modTime);
+		} catch (ParseException e) {
 			return null;
 		}
 	}

@@ -72,20 +72,19 @@ public class ChoraIntegration implements WebRepositoryIntegration {
 			String path = file.getDirectory().getPath();
 			String filename = file.getFilename();
 			return baseURL + "/" + path + "Attic/" + filename;
-		} else {
-			return baseURL + "/" + file.getFilenameWithPath();
 		}
+		return this.baseURL + "/" + file.getFilenameWithPath();
 	}
 
 	/**
-	 * @see net.sf.statcvs.output.WebRepositoryIntegration#getFileViewUrl
+	 * @see net.sf.statcvs.output.WebRepositoryIntegration#getFileViewUrl(CvsFile)
 	 */
 	public String getFileViewUrl(CvsFile file) {
 		return getFileHistoryUrl(file) + "?r=HEAD";
 	}
 
 	/**
-	 * @see net.sf.statcvs.output.WebRepositoryIntegration#getFileViewUrl
+	 * @see net.sf.statcvs.output.WebRepositoryIntegration#getFileViewUrl(CvsFile)
 	 */
 	public String getFileViewUrl(CvsRevision revision) {
 		return getFileHistoryUrl(revision.getFile()) + "?r="

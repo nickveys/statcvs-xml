@@ -2,7 +2,7 @@
 	StatCvs - CVS statistics generation 
 	Copyright (C) 2002  Lukasz Pekacki <lukasz@pekacki.de>
 	http://statcvs.sf.net/
-    
+	
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
 	License as published by the Free Software Foundation; either
@@ -16,7 +16,7 @@
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-    
+	
 	$RCSfile$
 	$Date$ 
 */
@@ -47,14 +47,14 @@ public class ViewCvsIntegration implements WebRepositoryIntegration {
 		int i = baseURL.indexOf("?");
 		if (i != -1) {
 			this.postfix = baseURL.substring(i + 1);
-			baseURL = baseURL.substring(0, i);			
+			baseURL = baseURL.substring(0, i);		  
 		}
 
 		if (baseURL.endsWith("/")) {
 			this.baseURL = baseURL.substring(0, baseURL.length() - 1);
 		} else {
 			this.baseURL = baseURL;
-		}		
+		}	   
 	}
 
 	/**
@@ -82,10 +82,10 @@ public class ViewCvsIntegration implements WebRepositoryIntegration {
 		}
 		
 		String append = parameter;
-		if (postfix != null) {
-			append += (append.length() > 0) ? "&" + postfix : "?" + postfix;
+		if (this.postfix != null) {
+			append += (append.length() > 0) ? "&" + this.postfix : "?" + this.postfix;
 		}
-		return baseURL + filename + append;
+		return this.baseURL + filename + append;
 	}
 
 	/**
@@ -96,14 +96,14 @@ public class ViewCvsIntegration implements WebRepositoryIntegration {
 	}
 	
 	/**
-	 * @see net.sf.statcvs.output.WebRepositoryIntegration#getFileViewUrl
+	 * @see net.sf.statcvs.output.WebRepositoryIntegration#getFileViewUrl(CvsFile)
 	 */
 	public String getFileViewUrl(CvsFile file) {
 		return getFileUrl(file, "?rev=HEAD&content-type=text/vnd.viewcvs-markup");
 	}
 
 	/**
-	 * @see net.sf.statcvs.output.WebRepositoryIntegration#getFileViewUrl
+	 * @see net.sf.statcvs.output.WebRepositoryIntegration#getFileViewUrl(CvsFile)
 	 */
 	public String getFileViewUrl(CvsRevision revision) {
 		return getFileUrl(revision.getFile(), "?rev="
@@ -118,7 +118,7 @@ public class ViewCvsIntegration implements WebRepositoryIntegration {
 			throw new IllegalArgumentException("revisions must be of the same file");
 		}
 		return getFileUrl(oldRevision.getFile(),
-				"?r1=" + oldRevision.getRevisionNumber()
+				".diff?r1=" + oldRevision.getRevisionNumber()
 				+ "&r2=" + newRevision.getRevisionNumber());
 	}
 	

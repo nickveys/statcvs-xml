@@ -54,7 +54,7 @@ import net.sf.statcvs.util.FileUtils;
  * for each author name and path. It also provides LOC count services.</p>
  * 
  * @author Richard Cyganiak <richard@cyganiak.de>
- * @author Tammo van Lessen
+ * @version $Id$
  */
 public class Builder implements CvsLogBuilder {
 	private static Logger logger = Logger.getLogger(Builder.class.getName());
@@ -193,16 +193,16 @@ public class Builder implements CvsLogBuilder {
 
 	/**
 	 * returns the <tt>Author</tt> of the given name or creates it
-	 * if it does not yet exist. 
+	 * if it does not yet exist. Author names are handled as case-insensitive.
 	 * @param name the author's name
 	 * @return a corresponding <tt>Author</tt> object
 	 */
 	public Author getAuthor(String name) {
-		if (authors.containsKey(name)) {
-			return (Author) authors.get(name);
+		if (this.authors.containsKey(name.toLowerCase())) {
+			return (Author) this.authors.get(name.toLowerCase());
 		}
 		Author newAuthor = new Author(name);
-		authors.put(name, newAuthor);
+		this.authors.put(name.toLowerCase(), newAuthor);
 		return newAuthor;
 	}
 	
