@@ -19,7 +19,9 @@
        </properties>
        <body>
    			<xsl:if test="@name != 'index'">
-		   		<a href="index{$ext}">Back to Index Page</a><br/>
+   				<section name="">
+                	<p><a href="index{$ext}">Back to Index Page</a></p>
+                </section>
 		 	</xsl:if>
 	     	<xsl:apply-templates select="pager"/>
 	     	<xsl:apply-templates select="report"/>

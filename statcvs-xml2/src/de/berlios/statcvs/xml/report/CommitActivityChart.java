@@ -52,6 +52,7 @@ import de.berlios.statcvs.xml.output.ReportSettings;
  *
  * @author Anja Jentzsch 
  * @author Tammo van Lessen
+ * @author Steffen Pingel
  */
 public class CommitActivityChart extends AbstractCombinedChart {
 
@@ -60,25 +61,28 @@ public class CommitActivityChart extends AbstractCombinedChart {
      * @param defaultFilename
      * @param defaultSubtitle
      */
-    public CommitActivityChart(CvsContent content, ReportSettings settings) {
+    public CommitActivityChart(CvsContent content, ReportSettings settings) 
+    {
         super(settings, "commitactivity%1.png", I18n.tr("Commit Activity%1"));
 		
-
 		Grouper grouper = settings.getGrouper(new AuthorGrouper());
 		Map seriesByGroup = new HashMap();
 
 		XYSeries series = createXYSeries(grouper.getName() + " " + I18n.tr("(All)"), 
-				content.getRevisions().iterator());
+										 settings.getRevisionIterator(content));
 		XYDataset dataset = new XYSeriesCollection(series);
 		addPlot(createPlot(dataset, series.getName()));
 		
 		Iterator it = settings.getRevisionIterator(content);
 		while (it.hasNext()) {
 			CvsRevision rev = (CvsRevision)it.next();
-			if (seriesByGroup.get(grouper.getGroup(rev)) == null) {
-				seriesByGroup.put(grouper.getGroup(rev), new XYSeries(grouper.getName(grouper.getGroup(rev))));				
+			Object group = grouper.getGroup(rev);
+			XYSeries groupSeries = (XYSeries)seriesByGroup.get(group);
+			if (groupSeries == null) {
+				groupSeries = new XYSeries(grouper.getName(group));
+				seriesByGroup.put(group, groupSeries);				
 			}
-			addToXYSeries((XYSeries)seriesByGroup.get(grouper.getGroup(rev)), rev);
+			addToXYSeries(groupSeries, rev);
 		}
 
 		

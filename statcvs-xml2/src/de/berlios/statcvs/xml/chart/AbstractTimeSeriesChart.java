@@ -80,7 +80,13 @@ public class AbstractTimeSeriesChart extends AbstractChart {
 		
 		// the 4th color is yellow which has almost no contrast to the white 
 		// background color, therefore we use a different color
+		plot.getRenderer().setSeriesPaint(0, Color.red);
+		plot.getRenderer().setSeriesPaint(1, Color.blue);
+		plot.getRenderer().setSeriesPaint(2, Color.green);
 		plot.getRenderer().setSeriesPaint(3, Color.magenta);
+		plot.getRenderer().setSeriesPaint(4, Color.orange);
+		plot.getRenderer().setSeriesPaint(5, Color.cyan);
+		plot.getRenderer().setSeriesPaint(6, Color.pink);	
 	}
 
 	protected void addSymbolicNames(Iterator it) 
