@@ -3,7 +3,7 @@
   <pomVersion>3</pomVersion>
   <name>StatCVS-XML</name>
   <id>statcvs-xml</id>
-  <currentVersion>0.9.1</currentVersion>
+  <currentVersion>0.9.2</currentVersion>
   <organization>
     <name>StatCvs-XML Team</name>
     <url>http://statcvs-xml.berlios.de/</url>
