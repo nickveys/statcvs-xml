@@ -21,7 +21,7 @@ package de.berlios.statcvs.xml.chart;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.Pie3DPlot;
+import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.data.DefaultPieDataset;
 import org.jfree.util.Rotation;
 
@@ -53,10 +53,12 @@ public abstract class AbstractPieChart extends AbstractChart {
 			true,
 			false);
 
-		Pie3DPlot plot = (Pie3DPlot)chart.getPlot();
+		PiePlot3D plot = (PiePlot3D)chart.getPlot();
 		plot.setStartAngle(270);
 		plot.setDirection(Rotation.CLOCKWISE);
 		plot.setForegroundAlpha(0.5f);
+		//plot.setDepthFactor(0.2);
+		plot.setDepthFactor(0.01);
 
 		setChart(chart);
 	}

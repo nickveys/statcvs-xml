@@ -27,13 +27,13 @@ import java.util.logging.Logger;
 
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.Spacer;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.ui.HorizontalAlignment;
 import org.jfree.ui.RectangleEdge;
+import org.jfree.ui.Spacer;
 
 import de.berlios.statcvs.xml.output.ReportSettings;
 import de.berlios.statcvs.xml.util.StringHelper;

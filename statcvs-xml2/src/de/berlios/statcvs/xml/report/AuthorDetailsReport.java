@@ -26,8 +26,6 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
-import com.sun.corba.se.internal.Interceptors.PICurrent;
-
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
