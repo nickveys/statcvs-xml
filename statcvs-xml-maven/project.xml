@@ -22,7 +22,7 @@
 <!--  <extend>${basedir}/../project.xml</extend> -->
 <pomVersion>3</pomVersion>
   <id>maven-statcvs-plugin</id>
-  <name>Maven StatCvs Plug-in</name>
+  <name>Maven StatCvs Plugin</name>
   <currentVersion>2.4</currentVersion>
   <description/>
   <shortDescription>Provides CVS statistics</shortDescription>
