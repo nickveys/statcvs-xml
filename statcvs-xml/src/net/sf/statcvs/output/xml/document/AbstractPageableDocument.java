@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractPageableDocument.java,v $
-	$Date: 2003-07-04 15:17:27 $ 
+	$Date: 2003-07-04 21:52:34 $ 
 */
 package net.sf.statcvs.output.xml.document;
 
@@ -42,9 +42,8 @@ public abstract class AbstractPageableDocument extends StatCvsDocument implement
 	/**
 	 * @param filename
 	 */
-	public AbstractPageableDocument(String title, String filename, int itemsPerPage) {
+	public AbstractPageableDocument(String title, String filename) {
 		super(title, filename);
-		setItemsPerPage(itemsPerPage);
 	}
 
 	/**

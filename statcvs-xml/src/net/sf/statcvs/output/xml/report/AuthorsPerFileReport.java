@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorsPerFileReport.java,v $
-	$Date: 2003-06-24 22:52:51 $ 
+	$Date: 2003-07-04 21:52:34 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -34,6 +34,8 @@ import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.FilesRevisionCountComparator;
 import net.sf.statcvs.output.ConfigurationOptions;
 import net.sf.statcvs.output.WebRepositoryIntegration;
+import net.sf.statcvs.output.xml.OutputSettings;
+import net.sf.statcvs.util.IntegerMap;
 
 import org.jdom.Element;
 
@@ -44,22 +46,20 @@ import org.jdom.Element;
  */
 public class AuthorsPerFileReport extends ReportElement {
 
-	public static final int MAX_ITEMS = 20;
+	public static final int MAX_ITEMS = OutputSettings.getInstance().get("authors.perfile.maxitems", 20);
 	private CvsContent content;
 	
 	/**
 	 * 
 	 */
 	public AuthorsPerFileReport(CvsContent content) {
-		//super(I18n.tr("Authors per File (TOP {0})", new Integer(MAX_ITEMS)));
-		super(I18n.tr("Authors per File"));
+		super(I18n.tr("Authors per File (TOP {0})", new Integer(MAX_ITEMS)));
 		this.content = content;
 		createReport();		
 	}
 
 	private void createReport() {
-		//TODO: Sorting and limitting to MAX_ITEMS!!
-		Element filesEl = new Element("files");
+		IntegerMap filesMap = new IntegerMap();
 		
 		List files = content.getFiles();
 		Collections.sort(files, new FilesRevisionCountComparator());
@@ -70,25 +70,31 @@ public class AuthorsPerFileReport extends ReportElement {
 				continue;
 			}
 
-			Element fileEl = new Element("file");
-			
-			WebRepositoryIntegration webRepository = ConfigurationOptions.getWebRepository();
-			fileEl.setAttribute("name", file.getFilenameWithPath());
-			
-			if (webRepository != null) {
-				fileEl.setAttribute("url", webRepository.getFileViewUrl(file));				
-			}
-
-			int authorsCount = 0;
 			Iterator authors = content.getAuthors().iterator();
 			while (authors.hasNext()) {
 				Author author = (Author) authors.next();
 				if (file.hasAuthor(author)) {
-					authorsCount++;
+					filesMap.inc(file);
 				}
 			}
-			fileEl.setAttribute("authors", ""+authorsCount);
+		}
+		
+		Element filesEl = new Element("files");		
+		Iterator fIt = filesMap.iteratorSortedByValueReverse();
+		int count = 0;
+		while (fIt.hasNext() && count < MAX_ITEMS) {
+			CvsFile file = (CvsFile)fIt.next();
+			
+			Element fileEl = new Element("file");
+			fileEl.setAttribute("name", file.getFilenameWithPath());
+			
+			WebRepositoryIntegration webRepository = ConfigurationOptions.getWebRepository();
+			if (webRepository != null) {
+				fileEl.setAttribute("url", webRepository.getFileViewUrl(file));				
+			}
+			fileEl.setAttribute("authors", ""+filesMap.get(file));
 			filesEl.addContent(fileEl); 
+			count++;
 		}
 		addContent(new Element("authorsPerFile").addContent(filesEl));
 	}

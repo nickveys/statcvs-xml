@@ -1,4 +1,3 @@
-
 /*
 	StatCvs - CVS statistics generation 
 	Copyright (C) 2002  Lukasz Pekacki <lukasz@pekacki.de>
@@ -19,21 +18,16 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Formatter.java,v $
-	$Date: 2003-06-20 10:17:07 $
+	$Date: 2003-07-04 21:52:34 $
 */
 package net.sf.statcvs.util;
 
-import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.StringTokenizer;
 
-
 /**
  * Helper class providing static methods for formatting different number and
  * date formats.
-*/
+ */
 public class Formatter
 {
 

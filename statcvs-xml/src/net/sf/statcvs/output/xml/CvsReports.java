@@ -18,11 +18,18 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsReports.java,v $
-	$Date: 2003-06-28 11:12:27 $ 
+	$Date: 2003-07-04 21:52:34 $ 
 */
-package net.sf.statcvs.output.xml.report;
+package net.sf.statcvs.output.xml;
 
 import net.sf.statcvs.model.CvsContent;
+import net.sf.statcvs.output.xml.report.AuthorsPerFileReport;
+import net.sf.statcvs.output.xml.report.AuthorsReport;
+import net.sf.statcvs.output.xml.report.DirectorySizesReport;
+import net.sf.statcvs.output.xml.report.LargestFilesReport;
+import net.sf.statcvs.output.xml.report.ModulesTreeReport;
+import net.sf.statcvs.output.xml.report.MostRevisionsReport;
+import net.sf.statcvs.output.xml.report.ReportElement;
 
 /**
  * 

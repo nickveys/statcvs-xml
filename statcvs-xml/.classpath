@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<classpath>
+  <classpathentry kind="src" path="src">
+  </classpathentry>
+  <classpathentry kind="src" path="tests-src">
+  </classpathentry>
+  <classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar">
+  </classpathentry>
+  <classpathentry kind="var" rootpath="JRE_SRCROOT" path="JRE_LIB" sourcepath="JRE_SRC">
+  </classpathentry>
+  <classpathentry kind="var" path="MAVEN_REPO/ant/jars/ant-1.5.jar">
+  </classpathentry>
+  <classpathentry kind="var" path="MAVEN_REPO/jdom/jars/jdom-b9.jar">
+  </classpathentry>
+  <classpathentry kind="var" path="MAVEN_REPO/jfreechart/jars/jfreechart-0.9.8.jar">
+  </classpathentry>
+  <classpathentry kind="var" path="MAVEN_REPO/jcommon/jars/jcommon-0.8.2.jar">
+  </classpathentry>
+  <classpathentry kind="lib" path="target/test-classes">
+  </classpathentry>
+  <classpathentry kind="output" path="target/classes">
+  </classpathentry>
+</classpath>
