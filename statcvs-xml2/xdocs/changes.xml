@@ -7,7 +7,7 @@
   <body>
 	<release version="0.9.2" date="2004-03-16">
       <action dev="vanto" type="update">
-		BR tags has been replaced by DIV tags to work around weird
+		BR tags have been replaced by DIV tags to work around weird
 		jelly behaviour that inserts whitespaces between an opening
 		and closing BR tag causing most browsers to print an
 		additional line break.
