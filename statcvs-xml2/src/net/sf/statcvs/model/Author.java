@@ -16,39 +16,35 @@
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-    
-	$RCSfile$
-	$Date$
 */
 package net.sf.statcvs.model;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
- * Represents an author of one or more revisions in a repository.
+ * Represents an author of one or more {@link CvsRevision}s in a repository.
+ * 
+ * TODO: Rename to <tt>Login</tt>
  * 
  * @author Richard Cyganiak <richard@cyganiak.de>
  * @version $Id$
  */
 public class Author implements Comparable {
-	private String name;
-	private SortedSet revisions = new TreeSet();
-	private Set directories = new HashSet();
+	private final String name;
+	private final SortedSet revisions = new TreeSet();
+	private final SortedSet directories = new TreeSet();
 
 	/**
-	 * Creates a new author
-	 * @param name the author's name
+	 * Creates a new author.
+	 * @param name the author's login name
 	 */
 	public Author(String name) {
 		this.name = name;
 	}
 
 	/**
-	 * adds a revision for this author; called by {@link CvsRevision} constructor
+	 * Adds a revision for this author; called by {@link CvsRevision} constructor
 	 * @param revision a revision committed by this author
 	 */
 	protected void addRevision(CvsRevision revision) {
@@ -57,30 +53,33 @@ public class Author implements Comparable {
 	}
 	
 	/**
-	 * @return the author's name
+	 * Returns the author's login name.
+	 * @return the author's login name
 	 */
 	public String getName() {
 		return name;
 	}
 	
 	/**
-	 * Returns a list of {@link CvsRevision}s for this author
-	 * @return all revisions of this author, sorted from oldest to newest
+	 * Returns all {@link CvsRevision}s of this author, sorted from oldest
+	 * to most recent.
+	 * @return all revisions of this author
 	 */
 	public SortedSet getRevisions() {
 		return revisions;
 	}
 
 	/**
-	 * Returns a Set of all {@link Directory}s the author has ever committed a
-	 * change to
-	 * @return directories as a Set of <tt>Directory</tt> objects
+	 * Returns all {@link Directory}s the author
+	 * has committed a change to, sorted by name.
+	 * @return a set of <tt>Directory</tt> objects
 	 */
-	public Collection getDirectories() {
+	public SortedSet getDirectories() {
 		return directories;
 	}
 
 	/**
+	 * Compares the instance to another author, using their login names.
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(Object o) {
@@ -88,7 +87,7 @@ public class Author implements Comparable {
 	}
 	
 	/**
-	 * @see java.lang.Object#toString()
+	 * {@inheritDoc}
 	 */
 	public String toString() {
 		return name + "(" + revisions.size() + " revisions)";

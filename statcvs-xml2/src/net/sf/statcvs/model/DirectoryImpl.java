@@ -23,28 +23,26 @@
 package net.sf.statcvs.model;
 
 /**
- * A concrete directory in a directory tree. Implementation of the
- * {@link Directory} interface.
+ * A concrete subdirectory in a directory tree. To create an instance of
+ * this class, call {@link Directory#createSubdirectory}.
  * 
- * @author Richard Cyganiak <rcyg@gmx.de>
+ * @author Richard Cyganiak <richard@cyganiak.de>
  * @version $Id$
  */
-public class DirectoryImpl extends Directory {
-
+class DirectoryImpl extends Directory {
 	private Directory parent;
 	private String name;
 
 	/**
+	 * Use {@link Directory#createSubdirectory} to create instances of
+	 * this class!
 	 * Creates a new <tt>Directory</tt> with the given parent and name
 	 * @param parent the parent directory
 	 * @param name the directory's name without path or slashes
 	 */
-	public DirectoryImpl(Directory parent, String name) {
+	DirectoryImpl(Directory parent, String name) {
 		this.parent = parent;
 		this.name = name;
-		if (!parent.getSubdirectories().contains(this)) {
-			parent.addSubdirectory(this);
-		}
 	}
 
 	/**

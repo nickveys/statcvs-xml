@@ -23,13 +23,22 @@
 package net.sf.statcvs.model;
 
 /**
- * The root of a tree of <tt>Directory</tt> objects
+ * The root of a tree of <tt>Directory</tt> objects. To create an instance
+ * of this class, call {@link Directory#createRoot}.
  * 
- * @author Richard Cyganiak <rcyg@gmx.de>
+ * @author Richard Cyganiak <richard@cyganiak.de>
  * @version $Id$
  */
-public class DirectoryRoot extends Directory {
+class DirectoryRoot extends Directory {
 
+	/**
+	 * Use {@link Directory#createRoot} to construct instances of this class.
+	 *
+	 */
+	DirectoryRoot() {
+		// no code, we just want the Javadoc comment
+	}
+	
 	/**
 	 * @see net.sf.statcvs.model.Directory#getName()
 	 */
