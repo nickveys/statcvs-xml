@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: TimeLineChart.java,v $
-	$Date: 2003-07-06 21:26:39 $ 
+	$Date: 2003-12-05 12:52:55 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -28,9 +28,8 @@ import java.util.Iterator;
 
 import net.sf.statcvs.I18n;
 import net.sf.statcvs.Settings;
-
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.axis.HorizontalDateAxis;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.XYStepRenderer;
 import org.jfree.data.XYDataset;
@@ -76,7 +75,7 @@ public class TimeLineChart extends AbstractChart {
 		//getChart().getPlot().setSeriesPaint(colors);
 		
 		XYPlot plot = getChart().getXYPlot();
-		HorizontalDateAxis axis = (HorizontalDateAxis) plot.getDomainAxis();
+		ValueAxis axis = plot.getDomainAxis();
 		axis.setVerticalTickLabels(true);
 		plot.setRenderer(new XYStepRenderer());
 	}

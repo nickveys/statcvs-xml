@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: LocChart.java,v $
-	$Date: 2003-07-24 00:40:06 $ 
+	$Date: 2003-12-05 12:52:55 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -46,8 +46,8 @@ import net.sf.statcvs.util.IntegerMap;
 
 import org.jfree.chart.annotations.XYLineAnnotation;
 import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.axis.VerticalNumberAxis;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RefineryUtilities;
 
 /**
@@ -171,8 +171,8 @@ public class LocChart extends TimeLineChart {
 			Date date = (Date)tagMap.get(tag);
 			
 			double x = date.getTime();
-			double y1 = ((VerticalNumberAxis) xyplot.getVerticalValueAxis()).getMinimumAxisValue();
-			double y2 = ((VerticalNumberAxis) xyplot.getVerticalValueAxis()).getMaximumAxisValue();
+			double y1 = xyplot.getRangeAxis().getMinimumAxisValue();
+			double y2 = xyplot.getRangeAxis().getMaximumAxisValue();
 			xyplot.addAnnotation(new TagAnnotation(tag, x, y1,y2));
 		}
 	}
@@ -197,14 +197,14 @@ public class LocChart extends TimeLineChart {
 		 */
 		public void draw(Graphics2D g2, Rectangle2D dataArea,
 						 ValueAxis domainAxis, ValueAxis rangeAxis) {
-			super.draw(g2, dataArea, domainAxis, rangeAxis);
+			super.draw(g2, getChart().getXYPlot(), dataArea, domainAxis, rangeAxis);
 
 			Font font = new Font("SansSerif", Font.PLAIN, 9);
 			FontRenderContext frc = g2.getFontRenderContext();
 			Rectangle2D labelBounds = font.getStringBounds(tag, frc);
 			// TODO Check why font metric calculation works not properly 
-			float baseX = (float) domainAxis.translateValueToJava2D(this.x, dataArea)-2;
-			float baseY = (float) rangeAxis.translateValueToJava2D(y, dataArea)+(float)labelBounds.getMaxX()+14;
+			float baseX = (float) domainAxis.translateValueToJava2D(this.x, dataArea, RectangleEdge.BOTTOM) - 2;
+			float baseY = (float) rangeAxis.translateValueToJava2D(y, dataArea, RectangleEdge.LEFT)+(float)labelBounds.getMaxX()+14;
 			g2.setPaint(Color.DARK_GRAY);
 			RefineryUtilities.drawRotatedString(tag, g2, baseX, baseY, -Math.PI/2);
 		}

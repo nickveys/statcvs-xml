@@ -18,17 +18,16 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractBarChart.java,v $
-	$Date: 2003-07-06 21:26:39 $ 
+	$Date: 2003-12-05 12:52:55 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
 import net.sf.statcvs.Settings;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.HorizontalCategoryAxis3D;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.DefaultCategoryDataset;
 
 /**
@@ -55,11 +54,12 @@ public abstract class AbstractBarChart extends AbstractChart {
 	 */
 	private void createChart() {
 		// create the chart...
-		JFreeChart chart = ChartFactory.createVerticalBarChart3D(
+		JFreeChart chart = ChartFactory.createBarChart3D(
 												  Settings.getProjectName(),  // chart title
 												  "no desc",    // domain axis label
 												  "no desc",       // range axis label
 												  dataset,       // data
+												  PlotOrientation.HORIZONTAL,
 												  true,          // include legend
 												  true,          // tooltips
 												  false          // urls
@@ -70,8 +70,7 @@ public abstract class AbstractBarChart extends AbstractChart {
 
 	public void setCategoryAxisLabel(String text) {
 		CategoryPlot plot = getChart().getCategoryPlot();
-		HorizontalCategoryAxis3D axis = (HorizontalCategoryAxis3D) plot.getDomainAxis();
-		axis.setLabel(text);
+		plot.getDomainAxis().setLabel(text);
 	}
 
 	public void setValueAxisLabel(String text) {

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ModuleActivityChart.java,v $
-	$Date: 2003-07-07 11:11:05 $ 
+	$Date: 2003-12-05 12:52:55 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -43,18 +43,16 @@ import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.model.RevisionIterator;
 import net.sf.statcvs.model.RevisionSortIterator;
 import net.sf.statcvs.util.IntegerMap;
-
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.HorizontalColorBarAxis;
-import org.jfree.chart.axis.HorizontalDateAxis;
-import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.ColorBar;
+import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.axis.SymbolicAxis;
 import org.jfree.chart.axis.Tick;
 import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.axis.VerticalColorBarAxis;
-import org.jfree.chart.axis.VerticalSymbolicAxis;
 import org.jfree.chart.plot.ContourPlot;
 import org.jfree.data.ContourDataset;
 import org.jfree.data.DefaultContourDataset;
+import org.jfree.ui.RectangleEdge;
 
 /**
  * ModuleChangesChart
@@ -69,10 +67,10 @@ public class ModuleActivityChart extends AbstractChart {
 	private ValueAxis xAxis = null;
     
 	/** The y-axis. */
-	private VerticalSymbolicAxis yAxis = null;
+	private AlignedVerticalSymbolicAxis yAxis = null;
     
 	/** The z-axis. */
-	private NumberAxis zAxis = null;
+	private ColorBar zAxis = null;
 
 	/** The ratio. */
 	private static double ratio = 0.0;
@@ -90,7 +88,7 @@ public class ModuleActivityChart extends AbstractChart {
 		String yAxisLabel = I18n.tr("Modules");
 		String zAxisLabel = I18n.tr("Commit Activity (%)");
 
-		xAxis = new HorizontalDateAxis(xAxisLabel);
+		xAxis = new DateAxis(xAxisLabel);
 		//xAxis = new HorizontalNumberAxis(xAxisLabel);
 		
 		
@@ -101,22 +99,18 @@ public class ModuleActivityChart extends AbstractChart {
 		}
 		yAxis = new AlignedVerticalSymbolicAxis(yAxisLabel, ax);
 
-		if (false) {
-			zAxis = new VerticalColorBarAxis(zAxisLabel);
-		} else {
-			zAxis = new HorizontalColorBarAxis(zAxisLabel);
-		}
+		zAxis = new ColorBar(zAxisLabel);
 
 		//yAxis.setAutoRangeIncludesZero(false);
-		zAxis.setAutoRangeIncludesZero(false);
+		//zAxis.setAutoRangeIncludesZero(false);
 
 		yAxis.setInverted(true);
 
 		yAxis.setLowerMargin(0.0);
 		yAxis.setUpperMargin(0.0);
 
-		zAxis.setInverted(false);
-		zAxis.setTickMarksVisible(true);
+		//zAxis.setInverted(false);
+		//zAxis.setTickMarksVisible(true);
 
 		ContourDataset data = createDataset();
 		ContourPlot plot = new ContourPlot(data, xAxis, yAxis, zAxis);
@@ -201,7 +195,7 @@ public class ModuleActivityChart extends AbstractChart {
 		return 640;
 	}
 
-	private class AlignedVerticalSymbolicAxis extends VerticalSymbolicAxis {
+	private class AlignedVerticalSymbolicAxis extends SymbolicAxis {
 
 		private String longestStr = "";
 		private List symbolicGridLineList = null;
@@ -223,7 +217,7 @@ public class ModuleActivityChart extends AbstractChart {
 				Rectangle2D plotArea, Rectangle2D dataArea,
 				int location) {
 			
-			getTicks().clear();
+			//getTicks().clear();
 
 			Font tickLabelFont = getTickLabelFont();
 			g2.setFont(tickLabelFont);
@@ -235,7 +229,7 @@ public class ModuleActivityChart extends AbstractChart {
 			if (count <= ValueAxis.MAXIMUM_TICK_COUNT) {
 				for (int i = 0; i < count; i++) {
 					double currentTickValue = lowestTickValue + (i * size);
-					double yy = translateValueToJava2D(currentTickValue, dataArea);
+					double yy = translateValueToJava2D(currentTickValue, dataArea, RectangleEdge.BOTTOM);
 					String tickLabel;
 					NumberFormat formatter = getNumberFormatOverride();
 					if (formatter != null) {
@@ -250,8 +244,8 @@ public class ModuleActivityChart extends AbstractChart {
 					float x = (float) (dataArea.getX()
 									 - tickLabelBounds.getWidth() - getTickLabelInsets().right);
 					float y = (float) (yy + (lm.getAscent() / 2));
-					Tick tick = new Tick(new Double(currentTickValue), tickLabel, x, y);
-					getTicks().add(tick);
+					//Tick tick = new Tick(new Double(currentTickValue), tickLabel, x, y);
+					//getTicks().add(tick);
 				}
 			}
 		}

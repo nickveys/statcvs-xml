@@ -63,11 +63,11 @@
      </dependency>
      <dependency>
       <id>jfreechart</id>
-      <version>0.9.8</version>
+      <version>0.9.14</version>
      </dependency>
      <dependency>
       <id>jcommon</id>
-      <version>0.8.2</version>
+      <version>0.8.9</version>
     </dependency>
   </dependencies>
 

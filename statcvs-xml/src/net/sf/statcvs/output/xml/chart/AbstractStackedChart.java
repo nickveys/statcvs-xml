@@ -18,17 +18,17 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractStackedChart.java,v $
-	$Date: 2003-07-06 21:26:39 $ 
+	$Date: 2003-12-05 12:52:55 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
 import net.sf.statcvs.Settings;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.DefaultCategoryDataset;
 
 /**
@@ -54,11 +54,12 @@ public abstract class AbstractStackedChart extends AbstractChart {
 	 */
 	private void createChart() {
 		// create the chart...
-		JFreeChart chart = ChartFactory.createStackedVerticalBarChart3D(
+		JFreeChart chart = ChartFactory.createStackedBarChart3D(
 												  Settings.getProjectName(),  // chart title
 												  "no desc",    // domain axis label
 												  "no desc",       // range axis label
 												  dataset,       // data
+												  PlotOrientation.VERTICAL,
 												  true,          // include legend
 												  true,          // tooltips
 												  false          // urls

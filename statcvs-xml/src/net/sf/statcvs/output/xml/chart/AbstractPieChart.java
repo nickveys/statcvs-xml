@@ -18,16 +18,17 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractPieChart.java,v $
-	$Date: 2003-07-06 21:26:39 $ 
+	$Date: 2003-12-05 12:52:55 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
 import net.sf.statcvs.Settings;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.Pie3DPlot;
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.DefaultPieDataset;
+import org.jfree.util.Rotation;
 
 /**
  * AbstractPieChart
@@ -61,7 +62,7 @@ public abstract class AbstractPieChart extends AbstractChart {
 
 		Pie3DPlot plot = (Pie3DPlot) chart.getPlot();
 		plot.setStartAngle(270);
-		plot.setDirection(Pie3DPlot.CLOCKWISE);
+		plot.setDirection(Rotation.CLOCKWISE);
 		plot.setForegroundAlpha(0.5f);
 
 		setChart(chart);

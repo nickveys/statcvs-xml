@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorsActivityChart.java,v $
-	$Date: 2003-06-28 01:34:55 $ 
+	$Date: 2003-12-05 12:52:55 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -37,7 +37,6 @@ import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.RevisionIterator;
 
-import org.jfree.chart.axis.HorizontalCategoryAxis;
 import org.jfree.chart.plot.CategoryPlot;
 
 /**
@@ -64,8 +63,7 @@ public class AuthorsActivityChart extends AbstractStackedChart {
 		plot.getRenderer().setSeriesPaint(REMOVING, Color.red);
 		plot.getRenderer().setSeriesPaint(CHANGING, Color.yellow);
 		plot.getRenderer().setSeriesPaint(ADDING, Color.green);
-		HorizontalCategoryAxis domainAxis = (HorizontalCategoryAxis) plot.getDomainAxis();
-		domainAxis.setVerticalCategoryLabels(true);
+		plot.getDomainAxis().setVerticalCategoryLabels(true);
 		
 		Collection auts = content.getAuthors();
 		Iterator it = auts.iterator();
