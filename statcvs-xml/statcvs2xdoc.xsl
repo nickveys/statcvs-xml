@@ -104,7 +104,7 @@
               <xsl:call-template name="func:make-link">
 				<xsl:with-param name="text">
 				   <xsl:value-of select="@directory"/>
-                   <xsl:value-of select="@name"/><xsl:value-of select="@revision"/>
+                   <xsl:value-of select="@name"/><xsl:text> </xsl:text><xsl:value-of select="@revision"/>
 				</xsl:with-param>
 				<xsl:with-param name="url" select="@url"/>
               </xsl:call-template>
