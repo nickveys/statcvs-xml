@@ -18,6 +18,8 @@
  */
 package de.berlios.statcvs.xml;
 
+import java.util.logging.Logger;
+
 import net.sf.statcvs.output.ChoraIntegration;
 import net.sf.statcvs.output.CvswebIntegration;
 import net.sf.statcvs.output.ViewCvsIntegration;
@@ -30,6 +32,8 @@ import net.sf.statcvs.output.WebRepositoryIntegration;
  * @author Tammo van Lessen
  */
 public class WebRepositoryFactory {
+	
+	private static final Logger logger = Logger.getLogger("de.berlios.statcvs.xml.WebRepositoryFactory");
 	
 	public static WebRepositoryIntegration getInstance(String url) {
 		if (url.indexOf("cvs.php") != -1) {
@@ -44,6 +48,8 @@ public class WebRepositoryFactory {
 			// viewcvs
 			return new ViewCvsIntegration(url);		
 		}
+		
+		logger.info("Could not recognize typo of web repository. Web repository integration disabled.");
 		return null;	
 	}
 }
