@@ -192,7 +192,7 @@ public class FileBuilder {
             } else {
                 processFirstRevisionOnBranch(previousData, previousLOC, file, beginOfLogDate);
 				// FIX: need to find out at what revision currentData's branch acctually starts 
-				currentLOC = 0;
+				currentLOC = getFinalLOC();
             }
 		}
 
