@@ -377,23 +377,55 @@
   <xsl:template match="row">
      <tr><xsl:apply-templates /></tr>
   </xsl:template>  
-  
-  <xsl:template match="row/*">
+
+  <xsl:template match="row/author">
     <td>
-    <xsl:choose>
-  		<xsl:when test="@url!=''">
-              <xsl:element name="a">
-                <xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute>
-                <xsl:value-of select="."/>
-              </xsl:element>
-		</xsl:when>
-		<xsl:otherwise>
-			<xsl:value-of select="."/> 
-			<xsl:if test="@percent!=''">
-     			(<xsl:value-of select="@percent"/>%)
-     		</xsl:if>
-		</xsl:otherwise>
-	</xsl:choose>
+        <xsl:call-template name="func:make-link">
+			<xsl:with-param name="text" select="@name"/>
+			<xsl:with-param name="url" select="ds:getAuthorFilename(@name)"/>
+        </xsl:call-template>
+     </td>
+  </xsl:template>
+
+  <xsl:template match="row/directory">
+    <td>
+        <xsl:call-template name="func:make-link">
+			<xsl:with-param name="text" select="@name"/>
+			<xsl:with-param name="url" select="ds:getDirectoryFilename(@name)"/>
+        </xsl:call-template>
+     </td>
+  </xsl:template>
+
+  <xsl:template match="row/link">
+    <td>
+        <xsl:call-template name="func:make-link">
+			<xsl:with-param name="text" select="@value"/>
+			<xsl:with-param name="url" select="@url"/>
+        </xsl:call-template>
+     </td>
+  </xsl:template>
+
+  <xsl:template match="row/module">
+    <td>
+        <xsl:call-template name="func:make-link">
+			<xsl:with-param name="text" select="@name"/>
+			<xsl:with-param name="url" select="ds:getModuleFilename(@name)"/>
+        </xsl:call-template>
+     </td>
+  </xsl:template>
+  
+  <xsl:template match="row/number">
+    <td>
+		<xsl:value-of select="@value"/> 
+		<xsl:if test="@percentage != ''">
+			(<xsl:value-of select="@percentage"/>%)
+     	</xsl:if>
+     </td>
+  </xsl:template>
+
+  <xsl:template match="row/string">
+    <td>
+		<xsl:value-of select="@value"/> 
      </td>
   </xsl:template>
 
