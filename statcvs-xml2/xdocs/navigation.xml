@@ -17,23 +17,22 @@
 	    <item name="Concepts" href="/manual/concepts.html"/>
 	    <item name="Settings" href="/manual/settings.html"/>
       </item>
-	  <item name="Maven Plugin" href="/maven-plugin/"/>
+	  <item name="Download" href="http://developer.berlios.de/project/showfiles.php?group_id=872"/>
 	</menu>
 
     <menu name="Sample Output">
-	  <item name="StatCvs-XML (released)" href="/statcvs/index.html"/>
+	  <item name="StatCvs-XML 0.9.1" href="/statcvs/index.html"/>
 	  <item name="StatCvs-XML (latest)" href="/statcvs-xml/index.html"/>
 	  <item name="StatCvs-XML (html)" href="/statcvs-xml-html/index.html"/>
 	</menu>
 
-	<menu name="Download">
-	  <item name="StatCvs-XML" href="http://developer.berlios.de/project/showfiles.php?group_id=872"/>
-	  <item name="Maven Plugin" href="http://developer.berlios.de/project/showfiles.php?group_id=872"/>
+	<menu name="Development">
+	  <item name="Issue Tracker" href="http://developer.berlios.de/bugs/?group_id=872"/>
+	  <item name="Project Reports" href="/maven-reports.html"/>
 	</menu>
 
-	<menu name="Development">
-	  <item name="Bugtracker" href="http://developer.berlios.de/bugs/?group_id=872"/>
-	  <item name="Project Reports" href="/maven-reports.html"/>
+	<menu name="Related">
+	  <item name="Maven Plugin" href="/maven-plugin/"/>
 	</menu>
 
   </body>

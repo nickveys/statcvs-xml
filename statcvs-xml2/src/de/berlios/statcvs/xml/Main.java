@@ -56,7 +56,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * 
  * @author Steffen Pingel
  * @author Tammo van Lessen
- * @version $Id: Main.java,v 1.24 2004-03-06 15:14:02 squig Exp $
+ * @version $Id: Main.java,v 1.25 2004-03-06 15:58:09 squig Exp $
  */
 public class Main {
 
@@ -88,7 +88,7 @@ public class Main {
 		try {
 			ReportSettings settings = readSettings(args);
 			generateSuite(settings);
-			System.out.println(I18n.tr("Done generating reports in {0}", settings.getOutputPath()));
+			System.out.println(I18n.tr("Done. Generated reports in {0}.", settings.getOutputPath()));
 		} catch (InvalidCommandLineException e) {
 			System.err.println(e.getMessage());
 			printProperUsageAndExit();

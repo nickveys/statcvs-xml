@@ -45,7 +45,7 @@
 		machines without a graphical display.
       </action>
     </release>
-	<release version="0.9" date="in CVS">
+	<release version="0.9.0" date="2003-09-17">
       <action dev="vanto" type="add">
 		First release based on StatCvs 0.13.
       </action>
