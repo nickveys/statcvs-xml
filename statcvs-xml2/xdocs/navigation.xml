@@ -27,7 +27,7 @@
 	<menu name="Development">
 	  <item name="Bugtracker" href="http://developer.berlios.de/bugs/?group_id=872"/>
 	  <item name="Project Reports" href="/maven-reports.html"/>
-	  <item name="StatCvs" href="/statcvs-xml/index.html"/>
+	  <item name="StatCvs" href="/statcvs/index.html"/>
 	</menu>
 
   </body>

@@ -25,7 +25,7 @@
 
   <repository>
     <connection>
-      scm:cvs:pserver:anonymous@cvs.berlios.de:/cvsroot/statcvs-xml:statcvs-xml
+      scm:cvs:pserver:anonymous@cvs.berlios.de:/cvsroot/statcvs-xml:statcvs-xml2
     </connection>
     <developerConnection>scm:cvs:ext:${maven.username}@cvs.sf.net:/cvsroot/statcvs-xml:statcvs-xml</developerConnection>
     <url>
@@ -37,15 +37,6 @@
   </versions>
 
   <developers>
-
-    <developer>
-      <name>Steffen Pingel</name>
-      <id>squig</id>
-      <roles>
-      	<role>Developer</role>
-      </roles>
-    </developer>
-
     <developer>
       <name>Tammo van Lessen</name>
       <id>vanto</id>
@@ -53,7 +44,13 @@
 	    <role>Developer</role>
       </roles>
     </developer>
-
+    <developer>
+      <name>Steffen Pingel</name>
+      <id>squig</id>
+      <roles>
+      	<role>Developer</role>
+      </roles>
+    </developer>
   </developers>
 
   <dependencies>
@@ -106,12 +103,12 @@
     <report>maven-changes-plugin</report>
 <!--	    <report>maven-changelog-plugin</report> -->
 <!--    <report>maven-clover-plugin</report> -->
-<!--    <report>maven-developer-activity-plugin</report>
-    <report>maven-file-activity-plugin</report>
+<!--    <report>maven-developer-activity-plugin</report> -->
+<!--    <report>maven-file-activity-plugin</report> -->
     <report>maven-license-plugin</report>
     <report>maven-javadoc-plugin</report>
     <report>maven-jxr-plugin</report>
-    <report>maven-pmd-plugin</report> -->
+<!--    <report>maven-pmd-plugin</report> -->
 <!--	<report>maven-statcvs-xml-plugin</report> -->
     <report>maven-statcvs-plugin</report>
 <!--    <report>maven-junit-report-plugin</report> -->
