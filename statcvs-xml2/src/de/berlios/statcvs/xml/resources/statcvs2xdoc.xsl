@@ -229,7 +229,7 @@
   <xsl:template match="row/link">
     <td>
         <xsl:call-template name="func:make-link">
-			<xsl:with-param name="text" select="@value"/>
+			<xsl:with-param name="text" select="."/>
 			<xsl:with-param name="url" select="@url"/>
         </xsl:call-template>
      </td>
@@ -246,7 +246,7 @@
   
   <xsl:template match="row/number">
     <td>
-		<xsl:value-of select="@value"/> 
+		<xsl:value-of select="."/> 
 		<xsl:if test="@percentage != ''">
 			(<xsl:value-of select="@percentage"/>%)
      	</xsl:if>
@@ -255,7 +255,7 @@
 
   <xsl:template match="row/string">
     <td>
-		<xsl:value-of select="@value"/> 
+		<xsl:value-of select="."/> 
      </td>
   </xsl:template>
 

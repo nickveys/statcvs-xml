@@ -147,7 +147,7 @@ public class TableElement extends Element
 		{
 			Element number = new Element("number");
 			number.setAttribute("key", key);
-			number.setAttribute("value", "" + value);
+			number.setText("" + value);
 			if (settings.getBoolean("showPercent", true)) {
 				number.setAttribute("percentage", Formatter.formatNumber(percentage, 1));
 			}		
@@ -159,7 +159,7 @@ public class TableElement extends Element
 		{
 			Element number = new Element("number");
 			number.setAttribute("key", key);
-			number.setAttribute("value", "" + value);
+			number.setText("" + value);
 			
 			addContent(number);
 			return this;
@@ -169,7 +169,7 @@ public class TableElement extends Element
 		{
 			Element number = new Element("number");
 			number.setAttribute("key", key);
-			number.setAttribute("value", Formatter.formatNumber(value, 2));
+			number.setText(Formatter.formatNumber(value, 2));
 			if (settings.getBoolean("showPercent", true)) {			
 				number.setAttribute("percentage", Formatter.formatNumber(percentage, 1));
 			}
@@ -182,7 +182,7 @@ public class TableElement extends Element
 		{
 			Element number = new Element("number");
 			number.setAttribute("key", key);
-			number.setAttribute("value", Formatter.formatNumber(value, 2));
+			number.setText(Formatter.formatNumber(value, 2));
 			
 			addContent(number);
 			return this;
@@ -190,7 +190,8 @@ public class TableElement extends Element
 		
 		public RowElement addString(String key, String value) 
 		{
-			addContent(new Element("string").setAttribute("key", key).setAttribute("value", value));
+			addContent(new Element("string").setAttribute("key", key)
+						.addContent(new CDATA(value)));
 			return this;
 		}
 		
@@ -198,8 +199,8 @@ public class TableElement extends Element
 		{
 			addContent(new Element("link")
 							.setAttribute("key", key)
-							.setAttribute("value", value)
-							.setAttribute("url", url));
+							.setAttribute("url", url)
+							.setText(value));
 			return this;
 		}
 		
@@ -341,7 +342,7 @@ public class TableElement extends Element
         public RowElement addPercent(String key, double percent) {
 			Element number = new Element("number");
 			number.setAttribute("key", key);
-			number.setAttribute("value", Formatter.formatNumber(percent, 1));
+			number.addContent(new CDATA(Formatter.formatNumber(percent, 1)));
 			
 			addContent(number);
 			return this;
