@@ -18,8 +18,11 @@
          <title><xsl:value-of select="@title"/></title>
        </properties>
        <body>
-	     <xsl:apply-templates select="pager"/>
-	     <xsl:apply-templates select="report"/>
+   			<xsl:if test="@name != 'index'">
+		   		<a href="index{$ext}">Back to Index Page</a><br/>
+		 	</xsl:if>
+	     	<xsl:apply-templates select="pager"/>
+	     	<xsl:apply-templates select="report"/>
        </body>
     </document>
   </xsl:template>

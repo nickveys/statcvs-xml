@@ -1,9 +1,5 @@
 <suite>
   
-  <document  filename="progress" title="Module Development">
-    <report class="ActivityProgressionChart"/>
-  </document>
-
   <document  filename="author%1" title="Author Statistics%1" foreach="author">
     <report class="LocByAuthorChart"/>
     <report class="SizeChart" groupby="module"/>
@@ -46,9 +42,10 @@
   <document  filename="module_stats" title="Module Statistics">
     <report class="SizeChart" groupby="module"/>
     <report class="LocChart" groupby="module"/>
+    <report class="ActivityProgressionChart" groupby="module"/>
     <report class="CommitTable" groupby="module" orderby="loc"/>
   </document>
-  
+    
   <document filename="commitlog" title="Commit Log">
   	<report class="CommitLogTable" paging="true" limit="100"/>
   </document>

@@ -1,4 +1,4 @@
-- AbstractChart.setup(settings)
-  + showLegend
-  + showCredit
-- Grouper.getGroups(CvsContent, ReportSettings settings)
+- Farbpalette
+- Link auf Index Dokument
+- CommitProgressionChart
+

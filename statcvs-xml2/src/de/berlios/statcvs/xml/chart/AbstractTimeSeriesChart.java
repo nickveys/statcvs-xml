@@ -19,6 +19,7 @@
 */
 package de.berlios.statcvs.xml.chart;
 
+import java.awt.Color;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -76,6 +77,10 @@ public class AbstractTimeSeriesChart extends AbstractChart {
 		ValueAxis axis = plot.getDomainAxis();
 		axis.setVerticalTickLabels(true);
 		plot.setRenderer(new XYStepRenderer());
+		
+		// the 4th color is yellow which has almost no contrast to the white 
+		// background color, therefore we use a different color
+		plot.getRenderer().setSeriesPaint(3, Color.magenta);
 	}
 
 	protected void addSymbolicNames(Iterator it) 
