@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="StatCvs-XML" href="http://statcvs-xml.berlios.net">
+  
+  <title>StatCvs-XML</title>
+  
+  <body>
+
+	<links>
+	  <item name="Project Page" href="http://berlios.de/projects/statcvs-xml/"/>
+	  <item name="Project Stats" href="http://berlios.de/project/stats/?group_id="/>
+	</links>
+
+	<menu name="General Information">
+	  <item name="Overview" href="/index.html"/>
+	</menu>
+	
+	<menu name="Development">
+	  <item name="Project Reports" href="/maven-reports.html"/>
+	</menu>
+	
+  </body>
+  
+</project>
