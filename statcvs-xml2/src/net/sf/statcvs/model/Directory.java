@@ -109,7 +109,7 @@ public abstract class Directory implements Comparable {
 		Iterator iterator = files.iterator();
 		while (iterator.hasNext()) {
 			CvsFile file = (CvsFile) iterator.next();
-			result.addAll(file.getRevisions());
+			result.addAll(file.getAllRevisions());
 		}
 		return result;
 	}

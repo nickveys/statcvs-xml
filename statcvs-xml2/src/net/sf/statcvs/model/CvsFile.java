@@ -136,6 +136,15 @@ public class CvsFile implements Comparable {
 		return this.revisions;
 	}
 
+	public SortedSet getAllRevisions() {
+		SortedSet allRevisions = new TreeSet();
+		for (Iterator it = revisionsByBranchName.values().iterator(); it.hasNext();) {
+			SortedSet branchRevisions = (SortedSet)it.next();
+			allRevisions.addAll(branchRevisions);
+		}
+		return allRevisions;
+	}
+
 	/**
 	 * Returns the list of {@link CvsRevision}s of this file on the named
 	 * branch, sorted from earliest to most recent (by date) across all

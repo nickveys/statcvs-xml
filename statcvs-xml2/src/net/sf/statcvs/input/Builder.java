@@ -189,6 +189,7 @@ public class Builder implements CvsLogBuilder {
 				continue;
 			}
 			result.addFile(file);
+			// FIXME: should output the accurate count here
 			logger.finer("adding " + file.getFilenameWithPath()
 					+ " (" + file.getRevisions().size() + " revisions)");			
 		}

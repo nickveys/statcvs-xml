@@ -53,7 +53,7 @@ public class CvsContent {
 	 */
 	public void addFile(CvsFile file) {
 		files.add(file);
-		Iterator it = file.getRevisions().iterator();
+		Iterator it = file.getAllRevisions().iterator();
 		while (it.hasNext()) {
 			CvsRevision revision = (CvsRevision) it.next();
 			revisions.add(revision);
