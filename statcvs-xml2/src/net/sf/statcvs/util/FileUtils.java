@@ -30,11 +30,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
-import net.sf.statcvs.output.ConfigurationOptions;
-
 /**
  * Some helpful file functions
- * TODO: Remove redundancy and dependency on ConfigurationOptions, write tests
+ * TODO: Remove redundancy, write tests
  * @author Lukasz Pekacki
  * @version $Id$
  */
@@ -79,15 +77,6 @@ public class FileUtils {
         }
         fis.close();
         fos.close();
-    }
-
-    /**
-     * Return the full path to the specified filename
-     * @param filename desired name of file
-     * @return String the full path to the specified filename
-     */
-    public static String getFilenameWithDirectory(String filename) {
-        return ConfigurationOptions.getOutputDir() + filename;
     }
 
     /**

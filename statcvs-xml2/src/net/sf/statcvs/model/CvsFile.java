@@ -19,6 +19,7 @@
 */
 package net.sf.statcvs.model;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
@@ -27,7 +28,9 @@ import java.util.TreeSet;
 /**
  * Represents one versioned file in the {@link CvsContent Repository},
  * including its name, {@link Directory} and {@link CvsRevision} list.
- *
+ * Revisions can be created using the <tt>addXXXRevision</tt> factory
+ * methods. Revisions can be created in any order.
+ * 
  * TODO: Rename class to something like VersionedFile, getCurrentLinesOfCode() to getCurrentLines(), maybe getFilenameXXX, isDead() to isDeleted()
  *  
  * @author Manuel Schulze
@@ -51,17 +54,6 @@ public class CvsFile implements Comparable {
 		this.directory = directory;
 		if (directory != null) {
 			directory.addFile(this);
-		}
-	}
-
-	/**
-	 * Adds a revision to this file. Revisions can be added in any order.
-	 * @param revision a revision of this file
-	 */
-	protected void addRevision(CvsRevision revision) {
-		revisions.add(revision);
-		if (revision.getAuthor() != null) {
-			authors.add(revision.getAuthor());
 		}
 	}
 
@@ -176,4 +168,82 @@ public class CvsFile implements Comparable {
 		return filename.compareTo(((CvsFile) other).filename);
 	}
 
+	/**
+	 * Adds an initial revision to the file. An initial revision is either
+	 * the first revision of the file, or a re-add after the file was
+	 * deleted.
+	 * @param revisionNumber the revision number, for example "1.1"
+	 * @param author the login from which the change was committed
+	 * @param date the time when the change was committed
+	 * @param comment the commit message
+	 * @param lines the number of lines of the new file
+	 */
+	public CvsRevision addInitialRevision(String revisionNumber, Author author,
+									Date date, String comment, int lines) {
+		CvsRevision result = new CvsRevision(this, revisionNumber,
+				CvsRevision.TYPE_CREATION, author, date, comment,
+				lines, lines, 0);
+		addRevision(result);
+		return result;
+	}
+	
+	/**
+	 * Adds a change revision to the file.
+	 * @param revisionNumber the revision number, for example "1.1"
+	 * @param author the login from which the change was committed
+	 * @param date the time when the change was committed
+	 * @param comment the commit message
+	 * @param lines the number of lines in the file after the change
+	 * @param linesDelta the change in the number of lines
+	 * @param replacedLines number of lines that were removed and replaced by others
+	 */
+	public CvsRevision addChangeRevision(String revisionNumber, Author author,
+								  Date date, String comment, int lines,
+								  int linesDelta, int replacedLines) {
+		CvsRevision result = new CvsRevision(this, revisionNumber,
+				CvsRevision.TYPE_CHANGE, author, date, comment,
+				lines, linesDelta, replacedLines);
+		addRevision(result);
+		return result;
+	}
+
+	/**
+	 * Adds a deletion revision to the file.
+	 * @param revisionNumber the revision number, for example "1.1"
+	 * @param author the login from which the change was committed
+	 * @param date the time when the change was committed
+	 * @param comment the commit message
+	 * @param lines the number of lines in the file before it was deleted
+	 */
+	public CvsRevision addDeletionRevision(String revisionNumber, Author author,
+									Date date, String comment, int lines) {
+		CvsRevision result = new CvsRevision(this, revisionNumber,
+				CvsRevision.TYPE_DELETION, author, date, comment,
+				0, -lines, 0);
+		addRevision(result);
+		return result;
+	}
+	
+	/**
+	 * Adds a "begin of log" revision to the file. This kind of revision
+	 * only marks the beginning of the log timespan if the file was
+	 * already present in the repository at this time. It is not an actual
+	 * revision committed by an author.
+	 * @param date the begin of the log
+	 * @param lines the number of lines in the file at that time
+	 */
+	public CvsRevision addBeginOfLogRevision(Date date, int lines) {
+		CvsRevision result = new CvsRevision(this, "0.0",
+				CvsRevision.TYPE_BEGIN_OF_LOG, null, date, null,
+				lines, 0, 0);
+		addRevision(result);
+		return result;
+	}
+
+	private void addRevision(CvsRevision revision) {
+		revisions.add(revision);
+		if (revision.getAuthor() != null) {
+			authors.add(revision.getAuthor());
+		}
+	}
 }

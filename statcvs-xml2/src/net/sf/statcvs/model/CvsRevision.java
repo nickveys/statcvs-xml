@@ -23,8 +23,10 @@ import java.util.Date;
 
 /**
  * One revision of a {@link CvsFile}. That can be an initial revision
- * (checkin), a change, a deletion, or a re-add, as specified by the
- * <code>type</code> field.
+ * (checkin), a change, a deletion, or a re-add. Revisions are created
+ * using the methods {@link CvsFile#addInitialRevision},
+ * {@link CvsFile#addChangeRevision} and
+ * {@link CvsFile#addDeletionRevision}.
  *
  * TODO: Replace type code with hierarchy
  * TODO: Rename class to Revision, getAuthor() to getLogin(), isDead() to isDeletion()
@@ -74,7 +76,9 @@ public class CvsRevision implements Comparable {
 
 	/**
 	 * Creates a new revision of a file with the
-	 * specified revision number.
+	 * specified revision number. Should not be called directly. Instead,
+	 * {@link CvsFile#addInitialRevision} and its sister methods should
+	 * be used.
 	 * @param file CvsFile that belongs to this revision
 	 * @param revisionNumber revision number, for example "1.1"
 	 * @param type a <tt>TYPE_XXX</tt> constant
@@ -85,7 +89,7 @@ public class CvsRevision implements Comparable {
 	 * @param linesDelta by how much did the number of lines change, compared to the previous revision?
 	 * @param linesReplaced How many lines were removed and replaced by other lines, without the delta changing?
  	 */
-	public CvsRevision(CvsFile file, String revisionNumber, int type,
+	CvsRevision(CvsFile file, String revisionNumber, int type,
 			Author author, Date date, String comment, int lines, int linesDelta, int linesReplaced) {
 		this.file = file;
 		this.revisionNumber = revisionNumber;
@@ -96,9 +100,6 @@ public class CvsRevision implements Comparable {
 		this.lines = lines;
 		this.linesDelta = linesDelta;
 		this.linesReplaced = linesReplaced;
-		if (file != null) {
-			file.addRevision(this);
-		}
 		if (author != null) {
 			author.addRevision(this);
 		}
