@@ -456,16 +456,16 @@ public class ReportSettings extends Hashtable {
 		}
 		
 		if (getString("webRepository") != null) {
-			repository = WebRepositoryFactory.getInstance(getString("webRepository"));
+			repository = WebRepositoryFactory.getInstance(getString("webRepository").trim());
 		} 
 		else if (getString("viewcvs") != null) {
-			repository = new ViewCvsIntegration(getString("viewcvs"));
+			repository = new ViewCvsIntegration(getString("viewcvs").trim());
 		} 
 		else if (getString("cvsweb") != null) {
-			repository = new CvswebIntegration(getString("cvsweb"));
+			repository = new CvswebIntegration(getString("cvsweb").trim());
 		} 
 		else if (getString("chora") != null) {
-			repository = new ChoraIntegration(getString("chora"));
+			repository = new ChoraIntegration(getString("chora").trim());
 		}
 		
 		if (repository != null) {
