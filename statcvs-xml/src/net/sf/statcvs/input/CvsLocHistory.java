@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsLocHistory.java,v $ 
-	Created on $Date: 2003-07-06 22:39:44 $ 
+	Created on $Date: 2003-07-06 23:38:27 $ 
 */
 package net.sf.statcvs.input;
 
@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -55,7 +54,6 @@ public class CvsLocHistory {
 	
 	//private String filename;
 	private Map fileLocMap = new HashMap();	
-	private Date lastUpdated;
 	private File workingDir;
 	private boolean loaded = false;
 		
@@ -68,7 +66,7 @@ public class CvsLocHistory {
 	}
 	
 	public void load(String module) {
-		if (loaded) return;
+		if (loaded) {return;} 
 		try {
 			String filename = Main.getSettingsPath()+module+".hist";
 			FileInputStream in = new FileInputStream(filename);
@@ -99,7 +97,7 @@ public class CvsLocHistory {
 	}
 	
 	public void save(String module) {
-		if (!loaded) return;
+		if (!loaded) {return;}
 		FileOutputStream out;
 		try {
 			String filename = Main.getSettingsPath()+module+".hist";
@@ -134,6 +132,8 @@ public class CvsLocHistory {
 				Process p = rt.exec(cmd, null, tmpdir);
 		 		p.waitFor();
 			} catch (Exception e) {
+				logger.warning("Could not query cvs, aborting...");
+				return;
 			}
 		   
 			RepositoryFileManager repoman = new RepositoryFileManager(tmpdir.getAbsolutePath());
@@ -158,15 +158,15 @@ public class CvsLocHistory {
 	}
 	
 	public int getLinesOfCode(CvsFile file) {
-		if (!loaded) return -1;
+		if (!loaded) {return 0;} 
 		// return 0 because we need a second run after hist generation
-		if (Settings.getGenerateHistory()) return 0;
+		if (Settings.getGenerateHistory()) {return 0;}
 		int lineCount = 0;
 		Integer loc = (Integer)fileLocMap.get(file.getFilenameWithPath());
 		if (loc == null) {
-			if (file.getLatestRevision().isInitialRevision()) {
+			/*if (file.getLatestRevision().isInitialRevision()) {
 				// TODO: Get local loc count... oder auch nicht
-			}
+			}*/
 			try {
 				logger.info("History: LOC count unknown, asking cvs: "+file.getFilenameWithPath());
 				Process cvs = Runtime.getRuntime().exec("cvs -q update -p -r 1.1 "+file.getFilenameWithPath(), 

@@ -18,15 +18,16 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: RevisionIteratorSummary.java,v $ 
-	Created on $Date: 2003-07-06 21:26:39 $ 
+	Created on $Date: 2003-07-06 23:38:27 $ 
 */
 package net.sf.statcvs.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 /**
  * Utility class which provides useful information
@@ -37,11 +38,12 @@ import java.util.Vector;
  * 
  * @author Anja Jentzsch
  * @author Richard Cyganiak
- * @version $Id: RevisionIteratorSummary.java,v 1.2 2003-07-06 21:26:39 vanto Exp $
+ * @version $Id: RevisionIteratorSummary.java,v 1.3 2003-07-06 23:38:27 vanto Exp $
  */
 public class RevisionIteratorSummary {
 
-	private Vector buffer = new Vector();
+	private List buffer = new ArrayList();
+	private int lineValue = 0;
 	
 	/**
 	 * Creates a new <code>RevisionIteratorSummary</code>,
@@ -54,7 +56,9 @@ public class RevisionIteratorSummary {
 	public RevisionIteratorSummary(RevisionIterator source) {
 		source.reset();
 		while (source.hasNext()) {
-			buffer.add(source.next());
+			CvsRevision each = (CvsRevision) source.next();
+			lineValue += each.getLineValue();
+			buffer.add(each);
 		}
 		source.reset();
 	}
@@ -140,13 +144,6 @@ public class RevisionIteratorSummary {
 	 * @return int number of lines added in the change set
 	 */
 	public int getLineValue() {
-		// remove this messy stuff!
-		int result = 0;
-		Iterator it = buffer.iterator();
-		while (it.hasNext()) {
-			CvsRevision each = (CvsRevision) it.next();
-			result += each.getLineValue();
-		}
-		return result;
+		return lineValue;
 	}
 }

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Settings.java,v $
-	$Date: 2003-07-06 21:26:39 $ 
+	$Date: 2003-07-06 23:38:27 $ 
 */
 package net.sf.statcvs;
 
@@ -38,16 +38,12 @@ import net.sf.statcvs.util.FileUtils;
  * can read all parameter values from here.
  * 
  * @author jentzsch
- * @version $Id: Settings.java,v 1.1 2003-07-06 21:26:39 vanto Exp $
+ * @version $Id: Settings.java,v 1.2 2003-07-06 23:38:27 vanto Exp $
  */
 public class Settings {
 
 	private static boolean generateHistory;
 	private static boolean useHistory;
-	private static final String LOGGING_CONFIG_DEFAULT = "logging.properties";
-	private static final String LOGGING_CONFIG_VERBOSE = "logging-verbose.properties";
-	private static final String LOGGING_CONFIG_DEBUG = "logging-debug.properties";
-
 	private static String logFileName = null;
 	private static String checkedOutDirectory = null;
 	private static String projectTitle = null;
