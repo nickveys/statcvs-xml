@@ -15,6 +15,11 @@
     </section>
 -->
 	<release version="0.9.4" date="CVS">
+      <action dev="vanto" type="update">
+		The Imagemap in the Software Evolution Chart is now disabled by default 
+		and can be enabled by the setting-directive in statcvs.xml 
+		(key="evolution.EvolutionMatrixChart.showImagemap")
+      </action>
       <action dev="vanto" type="fix">
 		Bug #1815 (Null Pointer Exception in Software Evolution Chart) has been 
 		fixed.

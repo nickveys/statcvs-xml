@@ -25,5 +25,6 @@
       <setting key="Model">**/model/*</setting>
     </modules>
     <setting key="commitlog.MostCommonCommentsTable.limit">10</setting>
+    <setting key="evolution.EvolutionMatrixChart.showImagemap">true</setting>
   </settings>
 </statcvs>
