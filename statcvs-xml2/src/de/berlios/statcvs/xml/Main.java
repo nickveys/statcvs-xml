@@ -50,11 +50,11 @@ import de.berlios.statcvs.xml.util.FileHelper;
 
 /**
  * Runs StatCvs-XML. Parses the command line parameter, intializes the logger 
- * and generates the reports.    
+ * and generates the reports.  
  * 
  * @author Steffen Pingel
  * @author Tammo van Lessen
- * @version $Id: Main.java,v 1.29 2004-03-30 16:05:26 squig Exp $
+ * @version $Id: Main.java,v 1.30 2004-03-30 16:19:35 squig Exp $
  */
 public class Main {
 

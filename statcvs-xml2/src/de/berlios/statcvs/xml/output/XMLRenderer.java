@@ -11,6 +11,7 @@ import javax.xml.transform.TransformerException;
 
 import net.sf.statcvs.model.CvsContent;
 
+import org.jdom.output.EscapeStrategy;
 import org.jdom.output.Format;
 import org.jdom.transform.JDOMResult;
 import org.jdom.transform.JDOMSource;
@@ -62,11 +63,12 @@ public class XMLRenderer implements DocumentRenderer {
 
 	public static Format createDefaultFormat()
 	{
-		Format format = Format.getRawFormat();
+		Format format = Format.getCompactFormat();
 		format.setEncoding("UTF-8");
-		format.setTextMode(Format.TextMode.NORMALIZE);
-		format.setIndent("  ");
+		//format.setTextMode(Format.TextMode.NORMALIZE);
+		//format.setIndent("  ");
 		//format.setNewlines(true);
+		//format.setExpandEmptyElements(false);
 		return format;
 	}
 	
