@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Changes</title>
+    <author email="vanto@users.berlios.de">Tammo van Lessen</author>
+  </properties>
+
+  <body>
+	<release version="1.2" date="in CVS">
+      <action dev="vanto" type="add">
+		First Release.
+      </action>
+    </release>
+  </body>
+</document>
