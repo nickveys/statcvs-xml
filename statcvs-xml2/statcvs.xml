@@ -14,8 +14,8 @@
     <width>640</width>
     <height>480</height>
     <modules type="map">
-      <Report>**/report/*</Report>
-      <Output>**/output/*</Output>
+      <setting key="Report">**/report/*</setting>
+      <setting key="Output">**/output/*</setting>
     </modules>
     <tags>test1</tags>
   </settings>

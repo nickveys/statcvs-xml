@@ -455,8 +455,8 @@ public class ReportSettings extends Hashtable {
 			return repository;
 		}
 		
-		if (getString("weburl") != null) {
-			repository = WebRepositoryFactory.getInstance(getString("weburl"));
+		if (getString("webRepository") != null) {
+			repository = WebRepositoryFactory.getInstance(getString("webRepository"));
 		} 
 		else if (getString("viewcvs") != null) {
 			repository = new ViewCvsIntegration(getString("viewcvs"));
