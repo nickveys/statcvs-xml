@@ -18,15 +18,12 @@
  */
 package de.berlios.statcvs.xml.output;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
-
-import org.jdom.output.Format;
 
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.util.FileUtils;
@@ -38,42 +35,9 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * 
  * @author Tammo van Lessen
  */
-public class HTMLRenderer extends XMLRenderer {
+public class PHPRenderer  {
 
-	private static Logger logger
-		= Logger.getLogger("net.sf.statcvs.output.XMLRenderer");
-	private ReportSettings settings;
-
-	public HTMLRenderer(ReportSettings settings, Transformer transformer, File outputPath) 
-	{
-		super(transformer, outputPath);
-
-		this.settings = settings;
-
-		String ext = (String)transformer.getParameter("ext");
-		setExtension((ext != null) ? ext : ".html");
-		
-		Format format = createDefaultFormat();
-		format.setOmitDeclaration(true);
-		format.setOmitEncoding(true);
-		
-		XMLOutputter xout = new HTMLOutputter(format);
-		setOutputter(xout);
-	}
-
-	/**
-	 * Copies the required resources.
-	 */
-	public void postRender()
-	{
-		super.postRender();
-		
-		String filename = settings.getString("customCss");
-		if (filename != null) {
-			FileHelper.copyResource(filename, getOutputPath());
-		}
-		FileHelper.copyResource("resources/statcvs.css", getOutputPath());
-	}
+	private static Logger logger = Logger.getLogger("net.sf.statcvs.output.PHPRenderer");
 
 	/**
 	 * Invoked by Main.
@@ -94,7 +58,7 @@ public class HTMLRenderer extends XMLRenderer {
 		}			
 
 		// set stylesheet parameters
-		transformer.setParameter("ext", ".html");
+		transformer.setParameter("ext", ".php");
 		String filename = settings.getString("customCss");
 		if (filename != null) {
 			transformer.setParameter

@@ -15,6 +15,9 @@
     </section>
 -->
 	<release version="0.9.4" date="CVS">
+	  <action dev="vanto" type="add">
+		PHPRenderer has been added.
+	  </action>
 	  <action dev="vanto" type="update">
 	  	New setting added: html-xsl allows you to define an alternative xsl-
 	  	stylesheet for html generatation.
