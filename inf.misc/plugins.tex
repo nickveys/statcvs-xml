@@ -41,21 +41,22 @@
 
 \section{Source Plugins}
 \subsection{Dokumentation}
-\frame{
+\frame[all:1]{
   \frametitle{Source Code Dokumentation}
   
-  JavaDoc Plugin
+  {\bf JavaDoc Plugin}
   \begin{itemize}
   \item Generiert JavaDoc Dokumentation
-  \item Konfiguration (project.properties)
-    \begin{itemize}
-    \item \begin{alltt}maven.javadoc.links\\=http://java.sun.com/j2se/1.4.2/docs/api/\end{alltt}
-    \end{itemize}
   \end{itemize}
 
-  \vspace{1cm}
+  \begin{block}{Konfiguration (project.properties)}
+    \begin{alltt}maven.javadoc.links
+  =http://java.sun.com/j2se/1.4/docs/api/\end{alltt}
+  \end{block}
 
-  JXR Plugin
+  \vspace{0.5cm}
+
+  {\bf JXR Plugin}
   \begin{itemize}
   \item Generiert Querverbunde Sourcen 
   \item Auch als \emph{Cross-Reference} oder \emph{XRef} bekannt
@@ -73,15 +74,15 @@
   \item Konfiguration über eine Properties Datei
   \item Defekt im aktuellen Maven 1.0-rc1 Release
   \item CVS Version benutzt CheckStyle 3.3 anstatt 2.1 
-  \item Konfiguration (project.properties)
-    \begin{itemize}
-    \item \begin{alltt}maven.checkstyle.format=(sun|turbine|avalon)\end{alltt}
-    \item \begin{alltt}maven.checkstyle.properties=mystyle.properties\end{alltt}
-    \end{itemize}
   \end{itemize}
+  
+  \begin{block}{Konfiguration (project.properties)}
+    \begin{alltt}maven.checkstyle.format=(sun|turbine|avalon)\\
+maven.checkstyle.properties=mystyle.properties\end{alltt}
+  \end{block}
 }
 
-\frame{
+\frame[all:1]{
   \frametitle{Style Guide Checking}
 
   {\bf Jalopy Plugin}
@@ -96,99 +97,101 @@
   \end{itemize}
 
   \begin{block}{Konfiguration (project.properties)}
-	\begin{alltt}maven.jalopy.style=mystyle.xml\end{alltt}
+    \begin{alltt}maven.jalopy.style=mystyle.xml\end{alltt}
   \end{block}
 }
 
-\frame{
+\frame[all:1]{
   \frametitle{Source Code Metriken}
   
-   PMD Plugin
-   \begin{itemize}
-   \item Prüft den Source Code anhand von Regeln auf potientielle Fehler
-   \item Findet unter anderem
-     \begin{itemize}
-     \item Unbenutzte Variablen
-     \item Leere catch-Blöcke
-     \item Leere if-Anweisungen, 
-     \item Duplizierte import Anweisungen
-     \item Nicht benutzte private Methoden
-     \end{itemize}
-   \item Anpassung über vordefinierte Regeldateien
-   \item Konfiguration (project.properties)
-     \begin{itemize}
-     \item \begin{alltt}maven.pmd.rulesetfiles\\
-         =\${plugin.resources}/rulesets/strings.xml,\\
-         \${plugin.resources}/rulesets/junit.xml\end{alltt}
-     \end{itemize}
-   \end{itemize}
-   
-   \emph{Je nach Anzahl der Fehler kann der Berichte sehr gross werden (z.B.
-   XNap mit ca. 65.000 SLOC: 508 kb).}
+  {\bf PMD Plugin}
+  \begin{itemize}
+  \item Prüft den Source Code anhand von Regeln auf potientielle Fehler
+  \item Findet unter anderem
+    \begin{itemize}
+    \item Unbenutzte Variablen
+    \item Leere catch-Blöcke
+    \item Leere if-Anweisungen, 
+    \item Duplizierte import Anweisungen
+    \item Nicht benutzte private Methoden
+    \end{itemize}
+  \item Anpassung über vordefinierte Regeldateien
+  \end{itemize}
+  
+  \begin{block}{Konfiguration (project.properties)}
+    \begin{alltt}maven.pmd.rulesetfiles
+  =\${plugin.resources}/rulesets/strings.xml,
+   \${plugin.resources}/rulesets/junit.xml\end{alltt}
+  \end{block}
 }
 
-\frame{
+\frame[all:1]{
   \frametitle{Source Code Metriken}  
 
-   JDepend Plugin
-   \begin{itemize}
-   \item Prüft die Entwurfs Qualität von Source Code anhand von Regeln
-   \item Misst die Erweiterbarkeit, Wiederverwenbarkeit und Wartbarkeit
-   \item Zeigt Metriken pro Packet an
-   \end{itemize}
+  {\bf JDepend Plugin}
+  \begin{itemize}
+  \item Prüft die Entwurfs Qualität von Source Code anhand von Regeln
+  \item Misst die 
+    \begin{itemize}
+    \item Erweiterbarkeit
+    \item Wiederverwenbarkeit
+    \item Wartbarkeit
+    \end{itemize}
+  \item Zeigt Metriken pro Packet an
+  \end{itemize}
+
+  \vspace{0.5cm}
  
-   \emph{Je nach Anzahl der Pakete und Fehler kann der Berichte sehr
-     gross werden (z.B. XNap mit ca. 65.000 SLOC: 742 kb).}
+  \emph{Je nach Anzahl der Pakete und Fehler kann der Berichte sehr
+    gross werden (z.B. XNap mit ca. 65.000 SLOC: 742 kb).}
 }
 
 \subsection{Test}
-\frame{
-  \frametitle{Test}
+\frame[all:1]{
+  \frametitle{Test und Überdeckung}
 
-  JUnit Report Plugin
+  {\bf JUnit Report Plugin}
   \begin{itemize}
   \item Erstellt einen Bericht über die Ausführung der Testfälle
   \end{itemize}
 
+  \vspace{0.5cm}
+  
+  {\bf Clover Plugin}
+  \begin{itemize}
+  \item Misst die Testüberdeckung
+  \item Automatische instrumentalisierung des Source Codes
+  \item Messung der Anweisungs- und Zweigüberdeckung
+  \item HTML Ausgabe im Frameset ähnlich JavaDoc
+  \item Frameset nicht in die Projekt Seite integriert
+  \item Clover ist nicht frei
+  \item Kostenlose Lizens für Open-Source Projekte auf Anfrage
+  \end{itemize}
 }
 
-\subsection{Testüberdeckung}
 \frame[all:1]{
   \frametitle{Testüberdeckung}
   
-   Clover
-   \begin{itemize}
-   \item Misst die Testüberdeckung
-   \item Automatische instrumentalisierung des Source Codes
-   \item Messung der Anweisungs- und Zweigüberdeckung
-   \item HTML Ausgabe im Frameset ähnlich JavaDoc
-   \item Frameset nicht in die Projekt Seite integriert
-   \item Clover ist nicht frei
-   \item Kostenlose Lizens für Open-Source Projekte auf Anfrage
-   \end{itemize}
-}
+  {\bf JCoverage Plugin}
+  \begin{itemize}
+  \item Funktionalität äquivalent zu Clover
+  \item GPL Version verfügbar
+  \item Unbrauchbare Standardkonfiguration
+  \item Fehler im aktuellen Maven 1.0-rc1 Release
+  \end{itemize}
 
-\frame[all:1]{
-  \frametitle{Testüberdeckung}
-
-   {\bf JCoverage Plugin}
-   \begin{itemize}
-   \item Unbrauchbare Standardkonfiguration
-   \item Fehler im aktuellen Maven 1.0-rc1 Release
-   \item Konfiguration (project.properties)
-     \begin{itemize}
-     \item \begin{alltt}maven.jcoverage.report.template=jcoverage\end{alltt}
-     \end{itemize}
-   \end{itemize}
+  \begin{block}{Konfiguration (project.properties)}
+    \begin{alltt}maven.jcoverage.report.template=jcoverage\end{alltt}
+  \end{block}
 
   \vspace{0.5cm}
-
+  
   {\bf GCover Plugin}
-   \begin{itemize}
-   \item Formatiert die Ausgabe von gcov als HTML Frameset
-   \item gcov kann Testüberdeckung für gcc Kompilate auswerten
-   \item Bisher nicht in Maven integriert
-   \end{itemize}
+  \begin{itemize}
+  \item Formatiert die Ausgabe von gcov als HTML Frameset
+  \item gcov kann Testüberdeckung für gcc Kompilate auswerten
+  \item Bisher nicht in Maven integriert
+  \end{itemize}
 }
 
 \section{SCM Plugins}
@@ -196,18 +199,18 @@
 \frame[all:1]{
   \frametitle{Commit Log Plugins}
 
-  ChangeLog Plugin
+  {\bf ChangeLog Plugin}
   \begin{itemize}
   \item Zeigt den SCM Commit Log als Bericht an
   \item Fügt Links auf die jeweiligen Revisionen in ViewCVS ein
   \item Unterstützt mehrere Soure Control Management Werkzeuge
-	\begin{itemize}
-	\item CVS
-	\item Perforce
-	\item StarTeam
-	\item IBM Rational ClearCase 
-	\item Subversion
-	\end{itemize}
+    \begin{itemize}
+    \item CVS
+    \item Perforce
+    \item StarTeam
+    \item IBM Rational ClearCase 
+    \item Subversion
+    \end{itemize}
   \end{itemize}
 }
 
@@ -218,10 +221,10 @@
   {\bf Developer Activity Plugin}
   \begin{itemize}
   \item Zeigt zu jedem Entwickler
-	\begin{itemize}
-	\item Anzahl Commits
-	\item Anzahl der geänderten Dateien
-	\end{itemize}
+    \begin{itemize}
+    \item Anzahl Commits
+    \item Anzahl der geänderten Dateien
+    \end{itemize}
   \item Unterstützt nur CVS
   \end{itemize}
 
@@ -240,14 +243,14 @@
   {\bf StatCvs Plugin}
   \begin{itemize}
   \item Erzeugt Metriken aus dem CVS Log
-	\begin{itemize}
-	\item Anzahl der Lines of Code pro Autor
-	\item CVS Commit Log (ähnlich dem ChangeLog Plugin)
-	\item Anzahl der Dateien
-	\item Grösse der Dateien
-	\item Grösse der Module
-	\item Aktivität in den Modulen
-	\end{itemize}
+    \begin{itemize}
+    \item Anzahl der Lines of Code pro Autor
+    \item CVS Commit Log (ähnlich dem ChangeLog Plugin)
+    \item Anzahl der Dateien
+    \item Grösse der Dateien
+    \item Grösse der Module
+    \item Aktivität in den Modulen
+    \end{itemize}
   \item Graphische Darstellung mit Charts
   \item Basiert auf StatCvs-XML
   \item Unterstützt nur CVS
@@ -260,7 +263,7 @@
 \frame[all:1]{
   \frametitle{Standard Plugins}
 
-  License Plugin
+  {\bf License Plugin}
   \begin{itemize}
   \item Zeigt die Lizenz in einer Rahmen an
   \item Konfiguration (project.properties)
@@ -271,7 +274,7 @@
 
   \vspace{0.5cm}
 
-  Changes Plugin
+  {\bf Changes Plugin}
   \begin{itemize}
   \item Zeigt eine Versions Historie an
   \item Konfiguration über eine XML Datei
@@ -282,21 +285,25 @@
 \frame[all:1]{
   \frametitle{Noch mehr Plugins}
 
-  Ant Plugins
+  {\bf Ant Plugins}
   \begin{itemize}
   \item Erzeugt eine build.xml Datei für Ant
   \item Hilfreich für builds, wenn Maven nicht verfübgar ist
   \end{itemize}
 
-  Console Plugin
+  \vspace{0.5cm}
+
+  {\bf Console Plugin}
   \begin{itemize}
   \item Konsoleneingabe zum Aufruf von Goals
   \item Schnelles sukessives Aufrufen von Goals
   \item Unzureichende Speicherfreigabe führt nach mehrmaligem Goal
     Aufruf zu OutOfMemory exception
   \end{itemize}
+
+  \vspace{0.5cm}
   
-  Eclipse Plugin [eclipse]
+  {\bf Eclipse Plugin} [eclipse]
   \begin{itemize}
   \item Generierung von Eclipse Projekt Dateien
   \item Berücksichtigung aller Dependencies
@@ -308,17 +315,21 @@
 \frame[all:1]{
   \frametitle{Noch mehr Plugins}
 
-  Plugin Plugin
+  {\bf Plugin Plugin}
   \begin{itemize}
   \item Deployment von Maven Plugins
   \end{itemize}   
 
-  Release Plugin
+  \vspace{0.5cm}
+
+  {\bf Release Plugin}
   \begin{itemize}
   \item Erzeugt vollständige Release Tarballs und zip Dateien
   \end{itemize}
 
-  Uberjar Plugin
+  \vspace{0.5cm}
+
+  {\bf Uberjar Plugin}
   \begin{itemize}
   \item Erzeugt ein Jar mit allen Dependencies
   \end{itemize}
