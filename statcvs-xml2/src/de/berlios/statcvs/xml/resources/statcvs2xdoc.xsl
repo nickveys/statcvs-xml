@@ -182,6 +182,21 @@
 	</xsl:if>    
   </xsl:template>  
 
+  <xsl:template name="func:lf2br">
+ 	<xsl:param name="text"/>
+	<xsl:choose>
+		<xsl:when test="contains($text,'#10;')">
+			<xsl:value-of select="substring-before($text,'#10;')"/><br/>
+			<xsl:call-template name="func:lf2br">
+				<xsl:with-param name="text" select="substring-after($text,'#10;')"/>
+			</xsl:call-template>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="$text"/>
+		</xsl:otherwise>
+	</xsl:choose>
+  </xsl:template>
+  
   <xsl:template match="row">
      <tr><xsl:apply-templates /></tr>
   </xsl:template>  
@@ -197,7 +212,11 @@
 
   <xsl:template match="row/commit">
        <td><div>      		
-		  <b><xsl:value-of select="comment"/></b>
+		  <b><xsl:call-template name="func:lf2br">
+				<xsl:with-param name="text" select="comment"/>
+			</xsl:call-template>
+		  </b>
+<!--		  <b><xsl:value-of select="comment"/></b> -->
 		  (<xsl:value-of select="@changedfiles"/><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('Files changed')"/>,
 		  <xsl:value-of select="@changedlines"/><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('Lines changed')"/>)</div>
 		  <!-- <br/> -->
