@@ -50,7 +50,7 @@ public class LocByAuthorChart extends LocChart {
 		Iterator it = content.getAuthors().iterator();
 		while (it.hasNext()) {
 			Author author = (Author)it.next();
-			addTimeSeries(author.getName(), author.getRevisions().iterator());
+			addTimeSeries(settings.getFullname(author), author.getRevisions().iterator());
 			if (author == highlightAuthor) {
 				// make line thicker
 				getChart().getXYPlot().getRenderer().setSeriesStroke(i, new BasicStroke(2,BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
