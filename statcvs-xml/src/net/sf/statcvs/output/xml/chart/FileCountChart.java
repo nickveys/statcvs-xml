@@ -18,7 +18,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: FileCountChart.java,v $
-	$Date: 2003-06-27 18:15:46 $
+	$Date: 2003-06-27 18:34:33 $
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -42,7 +42,7 @@ public class FileCountChart extends TimeLineChart {
 		List files = content.getFiles();
 		TimeLine fileCount = new FileCountTimeLineReport(files).getTimeLine();
 		setRangeLabel(fileCount.getRangeLabel());
-		setTimeLine(fileCount);
+		addTimeLine(fileCount);
 		getChart().setLegend(null);
 		placeTitle();
 	}

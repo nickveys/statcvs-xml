@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsCharts.java,v $
-	$Date: 2003-06-27 18:15:46 $ 
+	$Date: 2003-06-27 18:34:33 $ 
 */package net.sf.statcvs.output.xml.report;
 
 import java.util.HashMap;
@@ -41,6 +41,7 @@ public class CvsCharts {
 
 	private Map userActByHourCharts = new HashMap();
 	private Map userActByDayCharts = new HashMap();
+	private Map userDirSizesCharts = new HashMap();
 	private AbstractChart fileCountChart;
 	private AbstractChart fileSizeChart;
 	private AbstractChart dirSizeChart;
@@ -78,6 +79,15 @@ public class CvsCharts {
 			dirSizeChart = new DirectorySizesChart(content);
 		}
 		return (dirSizeChart.isRendered())?dirSizeChart:null;
+	}
+
+	public AbstractChart getDirectorySizesChart(Author author) {
+		AbstractChart dsc = (AbstractChart)userDirSizesCharts.get(author);
+		if (dsc == null) {
+			dsc = new DirectorySizesChart(author);
+			userDirSizesCharts.put(author, dsc);
+		}
+		return (dsc.isRendered())?dsc:null;
 	}
 
 	public AbstractChart getLocPerAuthorChart() {
@@ -122,10 +132,6 @@ public class CvsCharts {
 		return (abd.isRendered())?abd:null;
 	}
 
-	public AbstractChart getCodeDistributionChart(Author author) {
-		// TODO
-		return null;
-	}
 /*	private String[] categoryNamesHours = new String[] { "0", "1", "2", "3", "4", "5", "6", "7", 
 		"8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", 
 		"20", "21",	"22", "23" };

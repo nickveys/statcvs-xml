@@ -68,7 +68,7 @@ public class TimeLineChart extends AbstractChart {
 		plot.setRenderer(new XYStepRenderer());
 	}
 
-	void setTimeLine(TimeLine timeLine) {
+	void addTimeLine(TimeLine timeLine) {
 		TimeSeries result =
 				new TimeSeries("!??!SERIES_LABEL!??!", Millisecond.class);
 		Iterator it = timeLine.getDataPoints().iterator();

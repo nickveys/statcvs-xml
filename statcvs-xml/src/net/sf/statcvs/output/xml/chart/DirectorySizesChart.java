@@ -76,7 +76,7 @@ public class DirectorySizesChart extends AbstractPieChart {
 	public DirectorySizesChart(Author author) {
 		super("module_sizes_" 
 			+ XMLSuite.escapeAuthorName(author.getName()) + ".png",
-			I18n.tr("Module Sizes"));
+			I18n.tr("Module Sizes for",0,1)+author.getName());
 		
 		List directories = new ArrayList(author.getDirectories()); 
 		Collections.sort(directories);
@@ -95,6 +95,7 @@ public class DirectorySizesChart extends AbstractPieChart {
 		}
 
 		setValues(dirSizes);
+		placeTitle();
 	}
 
 	/**
