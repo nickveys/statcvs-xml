@@ -28,9 +28,7 @@
     <menu name="Overview">
       <item href="/goals.html" name="Goals"/>
       <item href="/properties.html" name="Properties"/>
+      <item name="Download" href="http://developer.berlios.de/project/showfiles.php?group_id=872"/>
     </menu>
-	<menu name="Download">
-	  <item name="Maven StatCvs Plugin" href="http://developer.berlios.de/project/showfiles.php?group_id=872"/>
-	</menu>
   </body>
 </project>
