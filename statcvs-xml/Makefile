@@ -36,4 +36,4 @@ tags :
 
 run : 
 	/usr/local/j2sdk1.4.1_01/jre/bin/java -classpath $(CP) net.sf.statcvs.Main \
-	  cvs.log ~/projects/studium -output-dir out -output-suite xdoc
+	  studium.cvslog ~/projects/studium -output-dir xdocs/statcvs -output-suite xdoc

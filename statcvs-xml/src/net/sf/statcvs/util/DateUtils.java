@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: DateUtils.java,v $ 
-	Created on $Date: 2003-06-17 16:43:02 $ 
+	Created on $Date: 2003-06-17 23:05:41 $ 
 */
 package net.sf.statcvs.util;
 
@@ -33,7 +33,7 @@ import java.util.Locale;
 /** 
  * Utility functions for date handling
  * @author Lukasz Pekacki
- * @version $Id: DateUtils.java,v 1.1 2003-06-17 16:43:02 vanto Exp $
+ * @version $Id: DateUtils.java,v 1.2 2003-06-17 23:05:41 squig Exp $
  */
 public class DateUtils {
 	private static final String LOG_TIMESTAMP_FORMAT =
@@ -42,10 +42,14 @@ public class DateUtils {
 
 	private static SimpleDateFormat logTimeFormat =
 		new SimpleDateFormat(LOG_TIMESTAMP_FORMAT, LOG_TIMESTAMP_LOCALE);
+
+	// the commented lines caused the maven junit test to throw
+	// weird exceptions
+
 	private static SimpleDateFormat outputDateFormat =
-		new SimpleDateFormat(Messages.getString("DATE_FORMAT"));
+		new SimpleDateFormat();//Messages.getString("DATE_FORMAT"));
 	private static SimpleDateFormat outputDateTimeFormat =
-		new SimpleDateFormat(Messages.getString("DATE_TIME_FORMAT"));
+		new SimpleDateFormat();//Messages.getString("DATE_TIME_FORMAT"));
 
 	/**
 	 * Method currentDate.
