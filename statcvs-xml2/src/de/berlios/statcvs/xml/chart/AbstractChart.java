@@ -52,8 +52,6 @@ public abstract class AbstractChart {
 	private String filename;
 	private String subtitle;
 	private JFreeChart chart;
-	private int width;
-	private int height;
 
 	private ReportSettings settings;
 
@@ -64,8 +62,6 @@ public abstract class AbstractChart {
 		setFilename(settings.getString("filename", (defaultFilename == null) ? "chart" + ++chartNumber + ".png" : defaultFilename),
 			settings.getFilenameId());
 		setSubtitle(settings.getString("subtitle", defaultSubtitle), settings.getSubtitlePostfix());
-		this.width = ("*".equals(settings.getString("width"))) ? getPreferredWidth() : settings.getInt("width", getPreferredWidth());
-		this.height = ("*".equals(settings.getString("heigth"))) ? getPreferredHeigth() : settings.getInt("height", getPreferredHeigth());
 	}
 	
 	/** 
@@ -155,6 +151,9 @@ public abstract class AbstractChart {
 	
 	public void save(File outputPath) throws IOException 
 	{
+		int width = ("*".equals(settings.getString("width"))) ? getPreferredWidth() : settings.getInt("width", getPreferredWidth());
+		int height = ("*".equals(settings.getString("heigth"))) ? getPreferredHeigth() : settings.getInt("height", getPreferredHeigth());
+
 		save(new File(outputPath, filename), width, height);	
 	}
 	

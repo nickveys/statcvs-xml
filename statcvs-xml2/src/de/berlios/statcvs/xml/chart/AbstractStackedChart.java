@@ -56,4 +56,9 @@ public abstract class AbstractStackedChart extends AbstractChart {
 			false));          // urls
 	}
 
+	public int getPreferredHeigth()
+	{
+		return 19 * dataset.getRowCount() + 110;
+	}
+	
 }
