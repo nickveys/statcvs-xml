@@ -16,6 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
 package de.berlios.statcvs.xml;
 
 import java.io.File;
@@ -44,7 +45,6 @@ import org.jdom.input.SAXBuilder;
 
 import de.berlios.statcvs.xml.output.DocumentRenderer;
 import de.berlios.statcvs.xml.output.DocumentSuite;
-import de.berlios.statcvs.xml.output.HTMLRenderer;
 import de.berlios.statcvs.xml.output.ReportSettings;
 import de.berlios.statcvs.xml.util.FileHelper;
 
@@ -53,7 +53,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.14 2004-02-27 14:07:20 squig Exp $
+ * @version $Id: Main.java,v 1.15 2004-02-27 17:30:39 vanto Exp $
  */
 public class Main {
 	private static String projectName;

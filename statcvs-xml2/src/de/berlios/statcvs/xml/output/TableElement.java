@@ -1,8 +1,5 @@
 package de.berlios.statcvs.xml.output;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.jdom.Element;
 
 /**
