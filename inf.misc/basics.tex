@@ -3,8 +3,134 @@
 %Maven was initially developed for buiding Turbine, Maven matured into an open source software engineering platform, The core functionality is automated project building, distribution and website creation 
 %an easy way to publish project information and a way to share JARs across several projects.
 
+\frame{
+    \frametitle{Apache Maven}
+    \begin{itemize}
+        \item Build-Werzeug mit Projektverständnis
+        \item in Java entwickelt
+        \item gestartet von Jason van Zyl als Subprojekt von Apache Turbine
+        \item inziwschen Toplevel-Projekt bei der ASF
+        \item Basiert auf Jelly (XML Scripting Engine) %vorher antbasiert
+        \item Plugin-Architektur %java halt
+    \end{itemize}
+    
+}
+
+\frame{
+    \frametitle{Konzepte}
+    \begin{itemize}
+        \item Goals (=Targets)
+        \item Projekt-Metainformationen im sog. POM
+        \item Anpassung sämtlicher Parameter.
+        \item Verwaltung aller Projekt-Dependencies in einem Repository
+    \end{itemize}
+}
+
+\subsection{Verzeichnisstruktur}
+\frame[all:1]{
+    \frametitle{Verzeichnisstruktur}
+    Maven wünscht sich eine besondere Projektgliederung
+    \scriptsize\begin{alltt}
+statcvs-xml
+  + src
+    - conf
+    + java
+      - ...
+    + test
+      - ...
+    - resources
+    - (webapp)
+  + target
+    + docs
+    - ...
+  + xdocs
+    - images
+    - styles
+    \end{alltt}
+}
+
+\subsection{Goals}
+\frame[all:1]{
+    \frametitle{Goals}
+    \begin{itemize}
+        \item Goals sind Funktionen im Buildprozess.
+        \item in Jelly-XML definiert.
+        \item Jedes Goal hat ein Pre- und Post-Goal
+        \item Definition in maven.xml
+        \item Start von der Konsole
+        \item Start aus anderen Goals heraus
+    \end{itemize}
+    \begin{Beispiel}
+        \begin{alltt}
+<goal name="site-update" description="Updates the web site automatically">
+    <cvs command="-q update -Pd"/>
+    <attainGoal name="clean"/>
+    <attainGoal name="site:deploy"/>
+</goal>
+        \end{alltt}
+    \end{Beispiel}
+}
+
+\subsection[POM]{Project Object Model}
+\frame{
+    \frametitle{Project Object Model}
+    \begin{itemize}
+        \item Jedes Projekt hat sein eigenes POM
+        \item Beschreibt das Projekt (Metainformationen)
+        \item Projekt-Abhängigkeiten zu Libraries
+        \item Definition des Build-Prozesses
+    \end{itemize}
+}
+
+\subsection{Properties}
+\frame{
+    \frametitle{Konfigurierbarkeit}
+    (Fast) alle Build- und Plugin-Parameter lassen sich anpassen.
+    \begin{itemize}
+        \item Definition in Property-Files
+        \item{Vererbung der Properties
+            \begin{enumerate}
+                \item \begin{alltt}plugin.properties\end{alltt}
+                \item \begin{alltt}\${maven.home}/bin/driver.properties\end{alltt}
+                \item \begin{alltt}\${project.home}/project.properties\end{alltt}
+                \item \begin{alltt}\${project.home}/build.properties\end{alltt}
+                \item \begin{alltt}\${user.home}/build.properties\end{alltt}
+            \end{enumerate}
+        }
+    \end{itemize}
+    Lokale Anpassungen nur in den letzten beiden!
+}
+
+\subsection[xdoc]{Dokumentation}
+\frame[all:1]{
+    \frametitle{Dokumentation}
+    Sämtliche Projektdokumentation in \bf{xdoc}
+    \begin{itemize}
+        \item Erweitertes (X)HTML
+        \item muss well-formed sein
+        \item kann jedoch nicht validiert werden
+        \item ermöglicht einfache Gliederung
+    \end{itemize}
+    \begin{Beispiel}
+        \scriptsize\begin{alltt}
+<document>
+  <properties>
+    <title>Overview</title>
+  </properties>
+  <body>
+    <section name="Overview">
+      <p>The project goal is to develop a graphical user interface
+         for programming a CPLD. The software is written in C++ and 
+         based on QT.
+      </p>
+      ...
+        \end{alltt}
+    \end{Beispiel}
+}
+
 \section{Installation}
 \frame{
+    \frametitle{Installation}
 maven genapp
 Verzeichnisstruktur
 }
