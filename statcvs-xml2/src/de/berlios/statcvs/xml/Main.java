@@ -43,6 +43,7 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import de.berlios.statcvs.xml.output.CSVOutputter;
 import de.berlios.statcvs.xml.output.DocumentRenderer;
 import de.berlios.statcvs.xml.output.DocumentSuite;
 import de.berlios.statcvs.xml.output.ReportSettings;
@@ -54,7 +55,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * 
  * @author Steffen Pingel
  * @author Tammo van Lessen
- * @version $Id: Main.java,v 1.31 2004-06-02 17:39:31 vanto Exp $
+ * @version $Id: Main.java,v 1.32 2004-07-27 02:45:37 squig Exp $
  */
 public class Main {
 
@@ -86,7 +87,8 @@ public class Main {
 		try {
 			long startTime = System.currentTimeMillis();
 			ReportSettings settings = readSettings(args);
-			generateSuite(settings);
+			CvsContent content = generateContent(settings);
+			generateSuite(settings, content);
 			long endTime = System.currentTimeMillis();
 			System.out.println(I18n.tr("Done ({0}s). Generated reports in {1}.", new Long((endTime - startTime) / 1000),settings.getOutputPath()));
 		} catch (InvalidCommandLineException e) {
@@ -210,7 +212,7 @@ public class Main {
 	 * @throws LogSyntaxException if the logfile contains unexpected syntax
 	 * @throws IOException if the log file can not be read
 	 */
-	public static void generateSuite(ReportSettings settings) 
+	public static CvsContent generateContent(ReportSettings settings) 
 		throws IOException, LogSyntaxException, EmptyRepositoryException
 	{
 		FilePatternMatcher includeMatcher = null;
@@ -237,13 +239,16 @@ public class Main {
 			settings.put("projectName", builder.getProjectName());
 		}
 		new CvsLogfileParser(logReader, builder).parse();
-		CvsContent content = builder.createCvsContent();
-
+		return builder.createCvsContent();
+	}
+	
+	public static void generateSuite(ReportSettings settings, CvsContent content) 
+		throws IOException
+	{
 		File outDir = settings.getOutputPath();
 		if (!outDir.exists() && !outDir.mkdirs()) {
 			throw new IOException(I18n.tr("Could not create output directory: {0}", outDir.getAbsolutePath()));
 		}
-
 
 		logger.info("Generating report for " + settings.getProjectName()
 					+ " into " + outDir.getAbsolutePath());
@@ -253,6 +258,14 @@ public class Main {
 //		}
 		if (settings.getWebRepository() != null) {
 			logger.info("Assuming web repository is " + settings.getWebRepository().getName());
+		}
+		
+		// special hack to generate comma-separated-value a file
+		if ("csv".equals(settings.getString("suite"))) {
+			File outFile = new File(outDir, settings.getProjectName() + "-loc.csv");
+			logger.info("Creating CSV file " + outFile.getAbsolutePath());
+			CSVOutputter.generate(settings, content, outFile);
+			return;
 		}
 		
 		String rendererClassname = settings.getRendererClassname();
