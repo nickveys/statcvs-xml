@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLRenderer.java,v $
-	$Date: 2004-02-17 16:36:52 $ 
+	$Date: 2004-02-17 16:40:00 $ 
 */
 package de.berlios.statcvs.xml.output;
 
@@ -38,6 +38,7 @@ import net.sf.statcvs.util.FileUtils;
 import org.jdom.transform.JDOMResult;
 import org.jdom.transform.JDOMSource;
 
+import de.berlios.statcvs.xml.Settings;
 import de.berlios.statcvs.xml.util.FileHelper;
 
 /**
