@@ -28,6 +28,12 @@
   </properties>
 
   <body>
+	<release version="2.2" date="2004-03-16">
+      <action dev="squig" type="update">
+		The dependency on StatCvs-XML has been updated to version
+		0.9.2.
+      </action>
+    </release>
 	<release version="2.1" date="2004-03-07">
       <action dev="squig" type="add">
 		The history feature has been rewritten. The plugin now checks
