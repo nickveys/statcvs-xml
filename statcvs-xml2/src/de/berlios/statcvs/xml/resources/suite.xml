@@ -1,5 +1,6 @@
 <suite>
 
+<!--
   <document  filename="test1" title="Test1">
     <report class="CommitTable" groupby="author"/>
     <report class="LocChart" groupby="author" filename="loc_authors.png"/>
@@ -16,12 +17,13 @@
     <report class="AvgFilesizeChart" filename="avgsize.png"/>    
     <report class="AvgFilesizeChart" groupby="directory" filename="avgsize_directory.png"/>
   </document>
+-->
 
   <document  filename="author%1" title="Author Statistics%1" foreach="author">
-    <report class="LocByAuthorChart"/>
+    <report class="LocChart" groupby="author"/>
     <report class="ModuleSizesChart"/>
-    <report class="ActivityByDayChart"/>        
-    <report class="ActivityByHourChart"/>        
+    <report class="CommitChart" groupby="day"/>        
+    <report class="CommitChart" groupby="hour"/>        
   </document>
 
   <document  filename="directory%1" title="Directory Statistics%1" foreach="directory">
@@ -40,22 +42,22 @@
 
   <document  filename="authors" title="Author Statistics">
     <report class="LocByAuthorChart" filename="loc_per_author.png"/>
-    <report class="ActivityByDayChart"/>    
-    <report class="ActivityByHourChart"/>
+    <report class="CommitChart" groupby="day"/>
+    <report class="CommitChart" groupby="hour"/>
     <report class="AuthorsActivityChart"/>
   </document>
 
   <document  filename="file_stats" title="File Statistics">
     <report class="FileCountChart"/>    
-    <report class="AvgFileSizeChart"/>
+    <report class="AvgFilesizeChart"/>
     <report class="SizePerFileTable"/>
-    <report class="AuthorsPerFileTable"/>
+    <report class="AuthorCountTable" groupby="file"/>
     <report class="RevisionsPerFileTable"/>
   </document>
   
   <document  filename="module_stats" title="Module Statistics">
-    <report class="ModuleSizesChart"/>
-    <report class="LocByModuleChart"/>
+    <report class="SizeChart" groupby="module"/>
+    <report class="LocChart" groupby="module"/>
   </document>
     
   <document filename="index" title="CVS Statistics">

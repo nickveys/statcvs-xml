@@ -55,6 +55,7 @@ public class ReportSettings extends Hashtable {
 		{
 			if (o instanceof CvsRevision) {
 				context.getVars().put("rev", o);
+				context.getVars().put("date", ((CvsRevision)o).getDate());
 			}
 
 			try {
@@ -439,25 +440,38 @@ public class ReportSettings extends Hashtable {
 		// add childern as key value pairs
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element setting = (Element)it.next();
-			// foreach has a special meaning and should not be overiden here
-			if (!setting.getName().startsWith(PRIVATE_SETTING_PREFIX)) {
-				this.put(setting.getName(), getValue(setting));
+			Object key = getKey(setting); 
+			if (key != null) {
+				this.put(key, getValue(setting));
 			}
 		}
 	}
 
+	private Object getKey(Element setting)
+	{
+		String key = setting.getName(); 
+		if ("setting".equals(key)) {
+			// this is a special value to allow spaces in setting keys
+			key = setting.getAttributeValue("key");
+		}
+		return (key != null && !key.startsWith(PRIVATE_SETTING_PREFIX)) ? key : null;
+	}
+	
 	private Object getValue(Element setting)
 	{
 		if ("map".equals(setting.getAttributeValue("type"))) {
 			Map map = new HashMap();
 			for (Iterator it = setting.getChildren().iterator(); it.hasNext();) {
 				Element child = (Element)it.next();
-				map.put(child.getName(), getValue(child));
+				Object key = getKey(child); 
+				if (key != null) {
+					map.put(key, getValue(child));
+				}
 			}
 			return map;
 		}
 		else {
-			return setting.getText();
+			return (setting.getText() == null) ? "" : setting.getText();
 		}
 	}
 	
@@ -491,6 +505,7 @@ public class ReportSettings extends Hashtable {
 			}
 		} 
 		catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
