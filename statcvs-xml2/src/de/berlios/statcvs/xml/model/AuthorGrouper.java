@@ -33,6 +33,8 @@ import de.berlios.statcvs.xml.output.TableElement.RowElement;
  */
 public class AuthorGrouper extends Grouper {
 
+	public Author dummyAuthor;
+
 	public AuthorGrouper()
 	{
 		super("author", I18n.tr("Author"));
@@ -45,7 +47,16 @@ public class AuthorGrouper extends Grouper {
 
 	public Object getGroup(CvsRevision rev) 
 	{
-		return rev.getAuthor();
+		if (rev.getAuthor() != null) {
+			return rev.getAuthor();
+		}
+		else {
+			// assert rev.isBeginOfLog();
+			if (dummyAuthor == null) {
+				dummyAuthor = new Author("(Unknown)");
+			}
+			return dummyAuthor;
+		}
 	}
 
 	/**

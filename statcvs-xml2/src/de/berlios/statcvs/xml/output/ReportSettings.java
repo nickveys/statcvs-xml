@@ -19,9 +19,9 @@
 package de.berlios.statcvs.xml.output;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -508,7 +508,7 @@ public class ReportSettings extends Hashtable {
 	private Object getValue(Element setting)
 	{
 		if ("map".equals(setting.getAttributeValue("type"))) {
-			Map map = new HashMap();
+			Map map = new LinkedHashMap();
 			for (Iterator it = setting.getChildren().iterator(); it.hasNext();) {
 				Element child = (Element)it.next();
 				Object key = getKey(child); 
