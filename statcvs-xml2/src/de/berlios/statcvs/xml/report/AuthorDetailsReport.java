@@ -94,7 +94,7 @@ public class AuthorDetailsReport {
 					picFile = settings.getAuthorPic(author, DEFAULT_PIC);
 					File pf = new File(picFile);
 					
-					if (!pf.exists()) {
+					if (!pf.exists() && !picFile.equals(DEFAULT_PIC)) {
 						logger.warning("author picture "+picFile+" not found. Using dummy instead.");
 						picFile = DEFAULT_PIC;
 						pf = new File(picFile); 

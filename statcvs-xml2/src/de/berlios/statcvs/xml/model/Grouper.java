@@ -21,6 +21,7 @@ package de.berlios.statcvs.xml.model;
 
 import java.util.Iterator;
 
+import net.sf.statcvs.model.Commit;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.CvsRevision;
@@ -67,6 +68,11 @@ public abstract class Grouper {
 		throw new IllegalStateException(I18n.tr("Grouping revisions not possible"));
 	}
 
+	public Object getGroup(Commit commit) 
+	{
+		throw new IllegalStateException(I18n.tr("Grouping commits not possible"));
+	}
+	
 	public String getID() 
 	{
 		return id;

@@ -53,6 +53,7 @@
   </document>
     
   <document filename="commitlog" title="Commit Log">
+	<report class="MostCommonCommentsTable" limit="5"/>
   	<report class="CommitLogTable" paging="true" limit="100"/>
   </document>
     

@@ -44,7 +44,7 @@ import de.berlios.statcvs.xml.output.TextElement;
  * for all authors or in a for-each environment.
  * 
  * @author Tammo van Lessen
- * @version $Id: AuthorOfTheMonthReport.java,v 1.3 2004-03-07 19:31:15 vanto Exp $
+ * @version $Id: AuthorOfTheMonthReport.java,v 1.4 2004-03-16 15:55:28 vanto Exp $
  */
 public class AuthorOfTheMonthReport {
 
@@ -95,7 +95,7 @@ public class AuthorOfTheMonthReport {
 					table.addRow().addString("month", month)
 								  .addAuthor(author)
 								  .addPercent("activity", 
-											activityByAuthor.getPercent(author));
+											activityByAuthor.getPercentOfMaximum(author));
 					count++;	
 				}
 			}
