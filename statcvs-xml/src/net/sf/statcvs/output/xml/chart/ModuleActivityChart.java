@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ModuleActivityChart.java,v $
-	$Date: 2003-07-06 21:26:39 $ 
+	$Date: 2003-07-07 11:11:05 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -191,6 +191,14 @@ public class ModuleActivityChart extends AbstractChart {
 		}
 		oDoubleZ[0] = new Double(0.0);				
 		return new DefaultContourDataset(getTitle(), oDateX, oDoubleY, oDoubleZ);		
+	}
+
+	public int getPreferedHeight() {
+		return 480 * (content.getDirectories().size()/35);
+	}
+
+	public int getPreferedWidth() {
+		return 640;
 	}
 
 	private class AlignedVerticalSymbolicAxis extends VerticalSymbolicAxis {

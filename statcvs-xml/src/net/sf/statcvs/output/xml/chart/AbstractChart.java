@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractChart.java,v $
-	$Date: 2003-07-06 21:26:39 $ 
+	$Date: 2003-07-07 11:11:05 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -148,4 +148,11 @@ public abstract class AbstractChart {
 		return (chart != null);
 	}
 
+	public int getPreferedHeight() {
+		return 0;
+	}
+	
+	public int getPreferedWidth() {
+		return 0;
+	}
 }

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLRenderer.java,v $
-	$Date: 2003-07-06 22:39:44 $ 
+	$Date: 2003-07-07 11:11:05 $ 
 */
 package net.sf.statcvs.output;
 
@@ -61,7 +61,10 @@ public class XMLRenderer implements DocumentRenderer {
 	public XMLRenderer(Transformer transformer) {
 		this.transformer = transformer;
 		setExtension(".xml");
-		setOutputter(new XMLOutputter());
+
+		XMLOutputter xout = new XMLOutputter();
+		xout.setEncoding("ISO-8859-1");
+		setOutputter(xout);
 
 		if (transformer != null) {
 			logger.info("Using transformer "+transformer.getClass().getName());
@@ -165,7 +168,13 @@ public class XMLRenderer implements DocumentRenderer {
 		if (charts != null) { 
 			for (int i = 0; i < charts.length; i++) {
 				if (charts[i] != null)
-					charts[i].save();				
+					if ((charts[i].getPreferedHeight() != 0)
+						&& (charts[i].getPreferedWidth() != 0)) {
+						charts[i].save(charts[i].getPreferedWidth()
+								 ,charts[i].getPreferedHeight());
+					} else {
+						charts[i].save();
+					}
 			}
 		}
 	}

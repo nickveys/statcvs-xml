@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsFileBlockParser.java,v $ 
-	Created on $Date: 2003-07-06 21:26:39 $ 
+	Created on $Date: 2003-07-07 11:11:05 $ 
 */
 
 package net.sf.statcvs.input;
@@ -38,7 +38,7 @@ import net.sf.statcvs.util.LookaheadReader;
  * 
  * @author Anja Jentzsch
  * @author Richard Cyganiak
- * @version $Id: CvsFileBlockParser.java,v 1.5 2003-07-06 21:26:39 vanto Exp $
+ * @version $Id: CvsFileBlockParser.java,v 1.6 2003-07-07 11:11:05 vanto Exp $
  */
 public class CvsFileBlockParser {
 
@@ -64,6 +64,8 @@ public class CvsFileBlockParser {
 	public void parse() throws LogSyntaxException, IOException {
 		String rcsFile = parseSingleLine(logReader.getCurrentLine(), "RCS file: ");
 		String workingFile = parseSingleLine(logReader.getNextLine(), "Working file: ");
+		
+		builder.buildSetModuleName(CvsLogUtils.getModuleName(rcsFile, workingFile));
 		// initialize history
 		if (Settings.getUseHistory()) {
 			CvsLocHistory.getInstance().load(CvsLogUtils.getModuleName(rcsFile, workingFile));

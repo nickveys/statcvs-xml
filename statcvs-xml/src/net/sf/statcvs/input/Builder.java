@@ -18,7 +18,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Builder.java,v $
-	$Date: 2003-07-06 21:26:39 $
+	$Date: 2003-07-07 11:11:05 $
 */
 package net.sf.statcvs.input;
 
@@ -54,7 +54,7 @@ import net.sf.statcvs.util.FileUtils;
  * for each author name and path.</p>
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: Builder.java,v 1.5 2003-07-06 21:26:39 vanto Exp $
+ * @version $Id: Builder.java,v 1.6 2003-07-07 11:11:05 vanto Exp $
  */
 public class Builder {
 
@@ -66,6 +66,8 @@ public class Builder {
 	private RepositoryFileManager repositoryFileManager;
 
 	private boolean ignoreCurrentFile;
+	
+	private String currentModuleName = null;
 
 	private String currentFileName;
 	private boolean currentFileBinary;
@@ -99,7 +101,7 @@ public class Builder {
 	 * are in a valid state.
 	 */
 	public void finish() {
-		cvsContent = new CvsContent(Settings.getProjectName(), files);
+		cvsContent = new CvsContent(currentModuleName, files);
 	}
 	
 	/**
@@ -152,6 +154,12 @@ public class Builder {
 		currentSymbolicNames = null;
 	}
 
+	public void buildSetModuleName(String moduleName) {
+		if (currentModuleName == null) {
+			currentModuleName = moduleName;
+		}
+	}
+	
 	/**
 	 * Sets the symbolic names map for the current file
 	 * @param date the date
