@@ -1,0 +1,17 @@
+Tracing von (Open-Source) Projekten mit Maven
+
+How to Mavenize your project in 5 Minutes
+
+Maven ist ein Werkzeug der Apache Software Foundation, das den
+Entwickler bei Routine Aufgaben unterstützt und mit wenig Aufwand
+Projekt Tracing ermöglicht. Kurz gesagt: Für ein Open-Source Projekt
+wird ein Editor, ein Compiler und Maven benötitgt.
+
+Wir möchten mit dem Vortrag einen Einblick in Maven geben und unsere
+praktischen Erfahrungen schildern:
+
+ - Installation von Maven
+ - Building und Releasing mit Maven
+ - Erstellen von Projekt Dokumentation
+ - Erhebung von Projekt und Prozess Metriken
+
