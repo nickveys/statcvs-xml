@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractChart.java,v $
-	$Date: 2004-02-17 16:40:00 $ 
+	$Date: 2004-02-20 16:17:10 $ 
 */
 package de.berlios.statcvs.xml.chart;
 
@@ -28,9 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import net.sf.statcvs.util.FileUtils;
-
-import org.jdom.Element;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.Spacer;
@@ -39,8 +36,8 @@ import org.jfree.ui.HorizontalAlignment;
 import org.jfree.ui.RectangleEdge;
 
 import de.berlios.statcvs.xml.Settings;
-import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
+import de.berlios.statcvs.xml.output.StringHelper;
 
 /**
  * AbstractChart
@@ -96,9 +93,17 @@ public abstract class AbstractChart {
 	 * @param filename file name
 	 */
 	public void setFilename(String filename) {
-		this.filename = filename;
+		this.filename = StringHelper.escapeFilename(filename);
 	}
 	
+	/**
+	 * @param string
+	 * @param string2
+	 */
+	public void setFilename(String filename, String subst) {
+		setFilename(filename.replaceAll("%1", subst));
+	}
+
 	/**
 	 * create chart with titles and credit information
 	 */

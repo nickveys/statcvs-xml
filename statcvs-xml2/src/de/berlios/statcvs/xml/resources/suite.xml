@@ -6,7 +6,7 @@
 
   <document filename="index">
     <report class="LocChart"/>
-    <report class="AuthorsReport"/>
+    <report class="AuthorsTable"/>
   </document>
 
   <document foreach="author">

@@ -18,13 +18,18 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: TimeLineChart.java,v $
-	$Date: 2004-02-15 18:56:13 $ 
+	$Date: 2004-02-20 16:17:10 $ 
 */
 package de.berlios.statcvs.xml.chart;
 
 import java.awt.Color;
 import java.awt.Paint;
+import java.util.Date;
 import java.util.Iterator;
+
+import net.sf.statcvs.model.CvsContent;
+import net.sf.statcvs.model.CvsRevision;
+import net.sf.statcvs.model.SymbolicName;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.axis.ValueAxis;
@@ -46,14 +51,14 @@ import de.berlios.statcvs.xml.output.ReportSettings;
  */
 public class TimeLineChart extends AbstractChart {
 
-	private String rangeLabel;
 	private TimeSeriesCollection tsc;
 	
 	/**
 	 * @param filename
 	 * @param title
 	 */
-	public TimeLineChart(ReportSettings settings, String filename, String title) 
+	public TimeLineChart(ReportSettings settings, String filename, String title, 
+						String rangeLabel) 
 	{
 		super(settings, filename, title);
 
@@ -74,7 +79,6 @@ public class TimeLineChart extends AbstractChart {
 			true,
 			false));
 		
-
 		//getChart().getPlot().setSeriesPaint(colors);
 		
 		XYPlot plot = getChart().getXYPlot();
@@ -83,21 +87,42 @@ public class TimeLineChart extends AbstractChart {
 		plot.setRenderer(new XYStepRenderer());
 	}
 
-	protected void addTimeLine(TimeLine timeLine) 
+	protected void addSymbolicNames(CvsContent content) 
 	{
-		TimeSeries result
-			= new TimeSeries(timeLine.getTitle(), Millisecond.class);
-		Iterator it = timeLine.getDataPoints().iterator();
-		while (it.hasNext()) {
-			TimePoint timePoint = (TimePoint)it.next();
-			result.add(new Millisecond(timePoint.getDate()), timePoint.getValue());
+		XYPlot xyplot = getChart().getXYPlot();
+        
+		Iterator symIt = content.getSymbolicNames().iterator();
+		while (symIt.hasNext()) {
+			SymbolicName sn = (SymbolicName)symIt.next();
+			xyplot.addAnnotation(new SymbolicNameAnnotation(sn));
 		}
-		tsc.addSeries(result);
+	}
+
+	protected void addTimeSeries(TimeSeries series)
+	{
+		tsc.addSeries(series);
 	}
 	
-	protected void setRangeLabel(String rl) 
+	protected TimeSeries createTimeSeries(String title, Iterator it, RevisionVisitor visitor) 
 	{
-		this.rangeLabel = rl;
+		TimeSeries result = new TimeSeries(title, Millisecond.class);
+		int value = 0;
+		Date currentDate = null;
+		while (it.hasNext()) {
+			CvsRevision rev = (CvsRevision)it.next();
+			value = visitor.visit(rev);
+			if (currentDate == null) {
+				currentDate = rev.getDate();
+			}
+			else if (!rev.getDate().equals(currentDate)) {
+				result.add(new Millisecond(currentDate), value);
+				currentDate = rev.getDate();
+			}
+		}
+		if (currentDate != null) {
+			result.add(new Millisecond(currentDate), value);
+		}
+		return result;
 	}
 
 }

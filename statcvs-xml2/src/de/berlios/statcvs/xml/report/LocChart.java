@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: LocChart.java,v $
-	$Date: 2004-02-20 15:02:34 $ 
+	$Date: 2004-02-20 16:17:10 $ 
 */
 package de.berlios.statcvs.xml.report;
 
@@ -35,10 +35,12 @@ import net.sf.statcvs.model.SymbolicName;
 import net.sf.statcvs.util.IntegerMap;
 
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.time.Millisecond;
+import org.jfree.data.time.TimeSeries;
 
 import de.berlios.statcvs.xml.I18n;
-import de.berlios.statcvs.xml.chart.*;
-import de.berlios.statcvs.xml.chart.TimeLine;
+import de.berlios.statcvs.xml.chart.RevisionVisitor;
+import de.berlios.statcvs.xml.chart.SymbolicNameAnnotation;
 import de.berlios.statcvs.xml.chart.TimeLineChart;
 import de.berlios.statcvs.xml.output.ChartReportElement;
 import de.berlios.statcvs.xml.output.ReportElement;
@@ -55,69 +57,45 @@ public class LocChart extends TimeLineChart {
 	
 	public LocChart(CvsContent content, ReportSettings settings) 
 	{
-		super(settings, "loc.png", I18n.tr("Lines Of Code"));
+		super(settings, "loc.png", I18n.tr("Lines Of Code"), I18n.tr("Lines"));
+
 	    this.content = content;
         	
-		addTimeLine(calculate(settings.getRevisionIterator(content)));
-		setupLocChart();
-		getChart().setLegend(null);
+		addTimeSeries("LOC", settings.getRevisionIterator(content));
+		setupLocChart(false);
 	}
 
 	public LocChart(CvsContent content, ReportSettings settings, Directory dir) 
 	{
-		super(settings, null, I18n.tr("Lines Of Code for {0}", dir.toString()));
+		super(settings, null, I18n.tr("Lines Of Code for {0}", dir.toString()), 
+			I18n.tr("Lines"));
+
         this.content = content;
         
-		TimeLine locTL = calculate(settings.getRevisionIterator(content));
-		locTL.addTimePoint(content.getFirstDate(), 0);
-		locTL.addTimePoint(content.getLastDate(), dir.getCurrentLOC());
-		addTimeLine(locTL);
-		setupLocChart();
-		getChart().setLegend(null);
+		addTimeSeries("LOC", settings.getRevisionIterator(content));
+		setupLocChart(false);
 	}
 	
 
-	public LocChart(CvsContent content, ReportSettings settings, Author author)
+	public LocChart(CvsContent content, ReportSettings settings, Author highlightAuthor)
 	{
-		super(settings, "loc_" + author.getName() +".png", I18n.tr("Lines Of Code (per Author)"));
+		super(settings, null, I18n.tr("Lines Of Code (per Author)"), I18n.tr("Lines"));
         this.content = content;
         
-		// init timelines per author
-		Iterator authorsIt = content.getAuthors().iterator();
-		Map authorTimeLineMap = new HashMap();
-		IntegerMap authorsLoc = new IntegerMap();
-		while (authorsIt.hasNext()) {
-			Author aut = (Author) authorsIt.next();
-			TimeLine locTL = new TimeLine(aut.getName());
-			locTL.setInitialValue(0);
-			authorTimeLineMap.put(aut, locTL);
+		// add a time line for each author
+		int i = 0;
+		Iterator it = content.getAuthors().iterator();
+		while (it.hasNext()) {
+			Author author = (Author)it.next();
+			addTimeSeries(author.getName(), author.getRevisions().iterator());
+			if (author.equals(highlightAuthor)) {
+				// make line thicker
+				getChart().getXYPlot().getRenderer().setSeriesStroke(i, new BasicStroke(2,BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
+			}
+			++i;
 		}
 
-		// fill timelines and symbolic names map
-		Iterator allRevs = content.getRevisions().iterator();
-		while (allRevs.hasNext()) {
-			CvsRevision rev = (CvsRevision)allRevs.next();
-			TimeLine timeline = (TimeLine) authorTimeLineMap.get(rev.getAuthor());
-			authorsLoc.addInt(rev.getAuthor(), rev.getLinesOfCodeChange());
-			timeline.addTimePoint(rev.getDate(), authorsLoc.get(rev.getAuthor()));
-		}
-		
-		// create chart
-		Iterator it = authorTimeLineMap.keySet().iterator();
-		int i = 0;
-		while (it.hasNext()) {
-			Author aut = (Author)it.next();
-			addTimeLine((TimeLine)authorTimeLineMap.get(aut));
-			if (author != null) {
-//				setFilename("loc_"+AuthorDocument.escapeAuthorName(author.getName())+".png");
-				// make line thicker
-				if (author.equals(aut)) {
-					getChart().getXYPlot().getRenderer().setSeriesStroke(i, new BasicStroke(2,BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
-				}
-			}
-			i++;
-		}
-		setupLocChart();		
+		setupLocChart(true);		
 	}
 
 	public static ReportElement generate(CvsContent content, ReportSettings settings)
@@ -126,44 +104,43 @@ public class LocChart extends TimeLineChart {
 		Object o = settings.get("foreach");
 		if (o instanceof Author) {
 			chart = new LocChart(content, settings, (Author)o);
+			chart.setFilename("loc_%1.png", ((Author)o).getName());			
 		}
 		else if (o instanceof Directory) {
 			chart = new LocChart(content, settings, (Directory)o);
+			chart.setFilename("loc_%1.png", ((Directory)o).getPath());
 		}
 		else {
 			chart = new LocChart(content, settings);
 		}
-		 
+		
 		return new ChartReportElement(chart.getTitle(), chart);
 	}
 
-	private void setupLocChart() {
-		setRangeLabel(I18n.tr("Lines"));
-		makeTagAnnotations();
-		placeTitle();
+	protected void addTimeSeries(String title, Iterator it)
+	{
+		TimeSeries series = createTimeSeries(title, it, new LOCCalculator());
+		series.add(new Millisecond(content.getFirstDate()), 0);
+		addTimeSeries(series);
 	}
 	
-	private TimeLine calculate(Iterator it) 
+	private void setupLocChart(boolean showLegend) 
+	{
+		addSymbolicNames(content);
+		placeTitle();
+		if (!showLegend) {
+			getChart().setLegend(null);			
+		}
+	}
+	
+	public static class LOCCalculator implements RevisionVisitor
 	{
 		int loc = 0;
-		TimeLine locTL = new TimeLine(null);
-		while (it.hasNext()) {
-			CvsRevision rev = (CvsRevision) it.next();
-			loc += rev.getLinesOfCodeChange();	
-			locTL.addTimePoint(rev.getDate(), loc);
+		public int visit(CvsRevision rev)
+		{
+			loc += rev.getLinesDelta();
+			return loc;
 		}
-		return locTL;
-	}
-
-	private void makeTagAnnotations() 
-	{
-		XYPlot xyplot = getChart().getXYPlot();
-        
-        Iterator symIt = content.getSymbolicNames().iterator();
-        while (symIt.hasNext()) {
-            SymbolicName sn = (SymbolicName)symIt.next();
-            xyplot.addAnnotation(new SymbolicNameAnnotation(sn));
-        }
 	}
 
 }

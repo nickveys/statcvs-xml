@@ -20,7 +20,7 @@ import de.berlios.statcvs.xml.util.Formatter;
  * @author Steffen Pingel
  * @author Tammo van Lessen
  */
-public class AuthorsReport {
+public class AuthorsTable {
 
 	public static ReportElement generate(CvsContent content, ReportSettings settings)
 	{
