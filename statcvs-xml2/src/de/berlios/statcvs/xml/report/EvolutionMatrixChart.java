@@ -459,6 +459,7 @@ public class EvolutionMatrixChart extends AbstractChart {
 		 * 
 		 * Counts the replaces line for each revision between oldV and thisV
 		 * and divides it by the linecount of thisVs revision.
+ 		 * thisV must have the higher revision.
 		 */
 		public double getChangedScore(Version oldV, Version thisV)
 		{
@@ -473,7 +474,7 @@ public class EvolutionMatrixChart extends AbstractChart {
 					revCount++;	
 				}
 			}
-			return (double)change / revCount;
+			return (double)change / getRevision(thisV).getLines();
 		}
 		
 		/**
