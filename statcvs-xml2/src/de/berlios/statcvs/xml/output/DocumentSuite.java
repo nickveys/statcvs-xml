@@ -135,7 +135,6 @@ public class DocumentSuite {
 					document.getRootElement().addContent(re);
 				}
 			}
-			logger.info(i+":"+document.getTitle());
 			
 			renderer.render(document);
 		}

@@ -45,14 +45,14 @@
     <report class="CommitChart" groupby="day"/>
     <report class="CommitChart" groupby="hour"/>
     <report class="AuthorsActivityChart"/>
-  </document>
+  </document> -->
 
   <document  filename="file_stats" title="File Statistics">
     <report class="FileCountChart"/>    
     <report class="AvgFilesizeChart"/>
     <report class="CommitTable" groupby="file" orderby="loc"/>
     <report class="CommitTable" groupby="file" orderby="revisions"/>
-    <report class="AuthorCountTable" groupby="file"/>
+    <report class="AuthorCountTable" groupby="file" paging="true" itemsPerPage="4"/>
   </document>
   
   <document  filename="module_stats" title="Module Statistics">
