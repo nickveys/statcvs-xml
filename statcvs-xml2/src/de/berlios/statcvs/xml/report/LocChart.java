@@ -18,17 +18,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: LocChart.java,v $
-	$Date: 2004-02-15 18:56:13 $ 
+	$Date: 2004-02-18 18:33:28 $ 
 */
 package de.berlios.statcvs.xml.report;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.font.FontRenderContext;
-import java.awt.geom.Rectangle2D;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -37,15 +31,13 @@ import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
+import net.sf.statcvs.model.SymbolicName;
 import net.sf.statcvs.util.IntegerMap;
 
-import org.jfree.chart.annotations.XYLineAnnotation;
-import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RefineryUtilities;
 
 import de.berlios.statcvs.xml.I18n;
+import de.berlios.statcvs.xml.chart.*;
 import de.berlios.statcvs.xml.chart.TimeLine;
 import de.berlios.statcvs.xml.chart.TimeLineChart;
 import de.berlios.statcvs.xml.output.ChartReportElement;
@@ -58,12 +50,14 @@ import de.berlios.statcvs.xml.output.ReportSettings;
  * @author Tammo van Lessen
  */
 public class LocChart extends TimeLineChart {
-	private Map tagMap = new HashMap();
+    
+    private CvsContent content;
 	
 	public LocChart(CvsContent content, ReportSettings settings) 
 	{
 		super(settings, "loc.png", I18n.tr("Lines Of Code"));
-		
+	    this.content = content;
+        	
 		addTimeLine(calculate(settings.getRevisionIterator(content)));
 		setupLocChart();
 		getChart().setLegend(null);
@@ -72,7 +66,8 @@ public class LocChart extends TimeLineChart {
 	public LocChart(CvsContent content, ReportSettings settings, Directory dir) 
 	{
 		super(settings, null, I18n.tr("Lines Of Code for {0}", dir.toString()));
-		
+        this.content = content;
+        
 		TimeLine locTL = calculate(settings.getRevisionIterator(content));
 		locTL.addTimePoint(content.getFirstDate(), 0);
 		locTL.addTimePoint(content.getLastDate(), dir.getCurrentLOC());
@@ -84,8 +79,9 @@ public class LocChart extends TimeLineChart {
 
 	public LocChart(CvsContent content, ReportSettings settings, Author author)
 	{
-		super(settings, "loc_per_author.png", I18n.tr("Lines Of Code (per Author)"));
-
+		super(settings, "loc_" + author.getName() +".png", I18n.tr("Lines Of Code (per Author)"));
+        this.content = content;
+        
 		// init timelines per author
 		Iterator authorsIt = content.getAuthors().iterator();
 		Map authorTimeLineMap = new HashMap();
@@ -101,7 +97,6 @@ public class LocChart extends TimeLineChart {
 		Iterator allRevs = content.getRevisions().iterator();
 		while (allRevs.hasNext()) {
 			CvsRevision rev = (CvsRevision)allRevs.next();
-			updateSymbolicNamesMap(rev);
 			TimeLine timeline = (TimeLine) authorTimeLineMap.get(rev.getAuthor());
 			if (!rev.getFile().isBinary()) {
 				authorsLoc.addInt(rev.getAuthor(), rev.getLinesOfCodeChange());
@@ -156,7 +151,6 @@ public class LocChart extends TimeLineChart {
 		TimeLine locTL = new TimeLine(null);
 		while (it.hasNext()) {
 			CvsRevision rev = (CvsRevision) it.next();
-			updateSymbolicNamesMap(rev);
 			if (!rev.getFile().isBinary()) {
 				loc += rev.getLinesOfCodeChange();	
 				//loc = rev.getEffectiveLinesOfCode();
@@ -166,66 +160,15 @@ public class LocChart extends TimeLineChart {
 		return locTL;
 	}
 
-	private void updateSymbolicNamesMap(CvsRevision rev) 
-	{
-//		String[] symnames = rev.getSymbolicNames();
-//		if (symnames.length != 0) {
-//			for (int i=0; i < symnames.length; i++) {
-//				Date lastDate = (Date)tagMap.get(symnames[i]);
-//				if ((lastDate == null) || (lastDate.before(rev.getDate()))) {
-//					tagMap.put(symnames[i], rev.getDate());
-//				}
-//			}
-//		}
-	}
-
 	private void makeTagAnnotations() 
 	{
 		XYPlot xyplot = getChart().getXYPlot();
-		Iterator tagIt = tagMap.keySet().iterator();
-		while (tagIt.hasNext()) {
-			String tag = (String)tagIt.next();
-			Date date = (Date)tagMap.get(tag);
-			
-			double x = date.getTime();
-			double y1 = xyplot.getRangeAxis().getMinimumAxisValue();
-			double y2 = xyplot.getRangeAxis().getMaximumAxisValue();
-			xyplot.addAnnotation(new TagAnnotation(tag, x, y1,y2));
-		}
+        
+        Iterator symIt = content.getSymbolicNames().iterator();
+        while (symIt.hasNext()) {
+            SymbolicName sn = (SymbolicName)symIt.next();
+            xyplot.addAnnotation(new SymbolicNameAnnotation(sn));
+        }
 	}
 
-	private class TagAnnotation extends XYLineAnnotation {
-
-		private double x;
-		private double y;
-		private String tag;
-
-		public TagAnnotation(String tag, double x, double y1, double y2) {
-			super(x, y1, x, y2, 
-				new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, new float[] {3.5f}, 0.0f), 
-				Color.GRAY);
-			this.tag = tag;
-			this.x = x;
-			this.y = y2;
-		}
-		
-		/**
-		 * @see org.jfree.chart.annotations.XYAnnotation#draw(java.awt.Graphics2D, java.awt.geom.Rectangle2D, org.jfree.chart.axis.ValueAxis, org.jfree.chart.axis.ValueAxis)
-		 */
-		public void draw(Graphics2D g2, Rectangle2D dataArea,
-						 ValueAxis domainAxis, ValueAxis rangeAxis) {
-			super.draw(g2, getChart().getXYPlot(), dataArea, domainAxis, rangeAxis);
-
-			Font font = new Font("SansSerif", Font.PLAIN, 9);
-			FontRenderContext frc = g2.getFontRenderContext();
-			Rectangle2D labelBounds = font.getStringBounds(tag, frc);
-			// TODO Check why font metric calculation works not properly 
-			float baseX = (float) domainAxis.translateValueToJava2D(this.x, dataArea, RectangleEdge.BOTTOM) - 2;
-			float baseY = (float) rangeAxis.translateValueToJava2D(y, dataArea, RectangleEdge.LEFT)+(float)labelBounds.getMaxX()+14;
-			g2.setPaint(Color.DARK_GRAY);
-			RefineryUtilities.drawRotatedString(tag, g2, baseX, baseY, -Math.PI/2);
-		}
-	}
-
-	
 }
