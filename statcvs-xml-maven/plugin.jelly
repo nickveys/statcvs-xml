@@ -14,13 +14,30 @@
   xmlns:log="jelly:log">
 
   <!--==================================================================-->
-  <!-- Goal to checks for JDK 1.4                                       -->
+  <!-- Goal to check for JDK 1.4 and to initialize variables            -->
   <!--==================================================================-->
   <goal name="statcvs:init">
     <ant:available property="jdk14" classname="java.lang.CharSequence"/>
     <j:if test="${jdk14 != 'true'}">
       <ant:fail>The StatCvs plugin requires JDK 1.4+</ant:fail>
     </j:if>
+
+        <j:set var="statcvs.logfile" 
+            value="${maven.build.dir}/statcvs.log"/>
+        <ant:property name="statcvs.repository" value="${basedir}"/>
+		<j:set var="history" value="${statcvs.history}"/>
+
+		<!-- parse cvs connection string by calling scm plugin -->
+		<attainGoal name="scm:validate"/>
+		<j:set var="cvs.root" value="${pom.getPluginContext('maven-scm-plugin').getVariable('maven.scm.cvs.root')}"/>
+		<j:set var="cvs.rsh" value="${pom.getPluginContext('maven-scm-plugin').getVariable('maven.scm.cvs.rsh')}"/>
+		<j:set var="cvs.quiet" value="${pom.getPluginContext('maven-scm-plugin').getVariable('maven.scm.cvs.quiet')}"/>
+		<j:set var="cvs.module" value="${pom.getPluginContext('maven-scm-plugin').getVariable('maven.scm.cvs.module')}"/>
+
+        <j:if test="${history}">
+          <j:set var="statcvs.repository" 
+              value="${maven.build.dir}/statcvs/${cvs.module}"/>
+        </j:if>
   </goal>
  
   <!--==================================================================-->
@@ -38,26 +55,11 @@
     <j:choose>
       <j:when test="${maven.mode.online}">
         <ant:mkdir dir="${maven.build.dir}"/>
-        <j:set var="statcvs.logfile" 
-            value="${maven.build.dir}/statcvs.log"/>
-        <ant:property name="statcvs.repository" value="${basedir}"/>
-		<j:set var="history" value="${statcvs.history}"/>
-
-		<!-- parse cvs connection string by calling scm plugin -->
-		<attainGoal name="scm:validate"/>
-		<j:set var="cvs.root" value="${pom.getPluginContext('maven-scm-plugin').getVariable('maven.scm.cvs.root')}"/>
-		<j:set var="cvs.rsh" value="${pom.getPluginContext('maven-scm-plugin').getVariable('maven.scm.cvs.rsh')}"/>
-		<j:set var="cvs.quiet" value="${pom.getPluginContext('maven-scm-plugin').getVariable('maven.scm.cvs.quiet')}"/>
-		<j:set var="cvs.module" value="${pom.getPluginContext('maven-scm-plugin').getVariable('maven.scm.cvs.module')}"/>
-
 
         <j:if test="${history}">
 		  <!-- checkout or update repository of 1.1 revisions 
                and create cvs log from there, that includes 
 			   information about all files (including deleted files) -->
-
-          <j:set var="statcvs.repository" 
-              value="${maven.build.dir}/statcvs/${cvs.module}"/>
 
 		  <util:available file="${statcvs.repository}">
             <j:set var="repositoryPresent" value="true"/>
@@ -100,6 +102,18 @@
 			cvsRoot="${cvs.root}"/>
 			<!-- failonerror="true"/> -->
 
+		<attainGoal name="statcvs:generate-xdoc"/>
+      </j:when>
+      <j:otherwise>
+        <ant:echo>StatCvs can obtain statistics in the online-mode only.</ant:echo>
+      </j:otherwise>
+    </j:choose>
+  </goal>
+
+  <!--==================================================================-->
+  <!-- Goal to create cvs log and to generate reports                   -->
+  <!--==================================================================-->
+  <goal name="statcvs:generate-xdoc" prereqs="statcvs:init">
         <!-- create directories for documents --> 
         <property name="maven.docs.dest" 
             value="${pom.getPluginContext('maven-xdoc-plugin').getVariable('maven.docs.dest')}"/>
@@ -147,12 +161,6 @@
             <include name="**/*.png"/>
           </fileset>
         </copy>
-
-      </j:when>
-      <j:otherwise>
-        <ant:echo>StatCvs can obtain statistics in the online-mode only.</ant:echo>
-      </j:otherwise>
-    </j:choose>
   </goal>
 
   <!--==================================================================-->

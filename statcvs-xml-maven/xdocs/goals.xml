@@ -1,16 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*
+ * Copyright 2001-2004 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ -->
+
 
 <document>
   <properties>
-    <title>Maven StatCvs-XML Plug-in Goals</title>
+    <title>Maven StatCvs Plug-in Goals</title>
     <author email="dion@apache.org">dIon Gillard</author>
+    <author email="vmassol@apache.org">Vincent Massol</author>
+    <author>Steffen Pingel</author>
   </properties>
   <body>
     <goals>
       <goal>
         <name>statcvs</name>
-        <description>Generates CVS statistics for the current CVS project.</description>
+        <description>
+          Fetch cvs log using repository defined in pom and generate
+          CVS statistics for the current CVS project. You'll need to
+          run <code>maven xdoc</code> (or <code>maven site</code>) to
+          render the StatCvs reports as HTML (they are rendered as
+          XML).
+        </description>
+      </goal>
+      <goal>
+        <name>statcvs:generate</name>
+        <description>
+          Same as <code>maven statcvs</code> (see above).
+        </description>
+      </goal>
+      <goal>
+        <name>statcvs:generate-xdoc</name>
+        <description>
+          Only generate statistics from already existant cvs log file
+          (due to a prior invokation of the statcvs goal). 
+        </description>
       </goal>
     </goals>
+    <section name="Automatic report generation">
+      <p>
+        In order to automaticall generate StatCvs reports when you generate
+        your project's web site with <code>maven site</code>, add the
+        following to your <code>project.xml</code>:
+      </p>
+<source><![CDATA[
+  <reports>
+    [...]
+    <report>maven-statcvs-plugin</report>
+    [...]
+  </reports>
+]]></source>
+    </section>
   </body>
 </document>

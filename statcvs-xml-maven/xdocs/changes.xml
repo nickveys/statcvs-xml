@@ -3,6 +3,7 @@
   <properties>
     <title>Changes</title>
     <author email="vanto@users.berlios.de">Tammo van Lessen</author>
+    <author>Steffen Pingel</author>
   </properties>
 
   <body>
@@ -17,6 +18,10 @@
       </action>
       <action dev="squig" type="update">
 		The documentation has been updated.
+      </action>
+      <action dev="squig" type="update">
+		Split up generate goal into two, to allow for calling
+		StatCvs-XML without updating the cvs log
       </action>
       <action dev="squig" type="fix">
 		The CVS connection string is now parsed from the pom.
