@@ -18,8 +18,9 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsCharts.java,v $
-	$Date: 2003-07-04 12:51:08 $ 
-*/package net.sf.statcvs.output.xml.report;
+	$Date: 2003-07-05 17:50:39 $ 
+*/
+package net.sf.statcvs.output.xml;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +35,6 @@ import net.sf.statcvs.output.xml.chart.AvgFileSizeChart;
 import net.sf.statcvs.output.xml.chart.DirectorySizesChart;
 import net.sf.statcvs.output.xml.chart.FileCountChart;
 import net.sf.statcvs.output.xml.chart.LocChart;
-import net.sf.statcvs.output.xml.chart.LocPerAuthorChart;
 import net.sf.statcvs.output.xml.chart.ModuleActivityChart;
 
 /**
@@ -104,7 +104,8 @@ public class CvsCharts {
 
 	public AbstractChart getLocPerAuthorChart() {
 		if (locPerAuthorChart == null) {
-			locPerAuthorChart = new LocPerAuthorChart(content);
+			Author author = null;
+			locPerAuthorChart = new LocChart(content, author);
 		}
 		return (locPerAuthorChart.isRendered())?locPerAuthorChart:null;
 	}
@@ -112,7 +113,7 @@ public class CvsCharts {
 	public AbstractChart getLocPerAuthorChart(Author author) {
 		AbstractChart lpa = (AbstractChart)userLocCharts.get(author);
 		if (lpa == null) {
-			lpa = new LocPerAuthorChart(content, author);
+			lpa = new LocChart(content, author);
 			userLocCharts.put(author, lpa);
 		}
 		return (lpa.isRendered())?lpa:null;
