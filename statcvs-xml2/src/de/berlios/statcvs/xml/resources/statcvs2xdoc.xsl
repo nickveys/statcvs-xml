@@ -107,13 +107,13 @@
     <xsl:param name="text"/>
     <xsl:param name="localurl"/>
 	<xsl:choose>
-		<xsl:when test="$url!=''">
+		<xsl:when test="$url">
               <xsl:element name="a">
                 <xsl:attribute name="href"><xsl:value-of select="$url"/></xsl:attribute>
                 <xsl:value-of select="$text"/>
               </xsl:element>
 		</xsl:when>
-		<xsl:when test="$localurl!=''">
+		<xsl:when test="$localurl">
               <xsl:element name="a">
                 <xsl:attribute name="href"><xsl:value-of select="$localurl"/><xsl:value-of select="$ext"/></xsl:attribute>
                 <xsl:value-of select="$text"/>
