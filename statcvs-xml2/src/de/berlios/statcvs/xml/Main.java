@@ -53,7 +53,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.12 2004-02-26 16:25:29 squig Exp $
+ * @version $Id: Main.java,v 1.13 2004-02-26 16:45:48 squig Exp $
  */
 public class Main {
 	private static String projectName;
@@ -230,7 +230,7 @@ public class Main {
 			logger.info("Assuming web repository is " + settings.getWebRepository().getName());
 		}
 		
-		String rendererClassname = settings.getString("renderer", HTMLRenderer.class.getName());
+		String rendererClassname = settings.getRendererClassname();
 		logger.info("Creating suite using " + rendererClassname);
 		DocumentRenderer renderer;
 		try {

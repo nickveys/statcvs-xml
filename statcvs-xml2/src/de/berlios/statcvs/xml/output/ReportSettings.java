@@ -15,6 +15,9 @@ import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.model.SymbolicName;
+import net.sf.statcvs.output.ChoraIntegration;
+import net.sf.statcvs.output.CvswebIntegration;
+import net.sf.statcvs.output.ViewCvsIntegration;
 import net.sf.statcvs.output.WebRepositoryIntegration;
 
 import org.apache.commons.jexl.Expression;
@@ -24,6 +27,8 @@ import org.apache.commons.jexl.JexlHelper;
 import org.jdom.Element;
 
 import de.berlios.statcvs.xml.I18n;
+import de.berlios.statcvs.xml.InvalidCommandLineException;
+import de.berlios.statcvs.xml.WebRepositoryFactory;
 import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.util.ScriptHelper;
 
@@ -323,6 +328,23 @@ public class ReportSettings extends Hashtable {
 	{
 		return this.getString("projectName", "");
 	}
+
+	public String getRendererClassname()
+	{
+		String renderer = getString("renderer", "html");
+		if (renderer.equals("html")) {
+			return HTMLRenderer.class.getName();
+		}
+		else if (renderer.equals("xdoc")) {
+			return XDocRenderer.class.getName();
+		}
+		else if (renderer.equals("xml")) {
+			return XMLRenderer.class.getName();
+		}
+		else {
+			return renderer;
+		}
+	}
 		
 	public Iterator getRevisionIterator(CvsContent content)
 	{
@@ -384,7 +406,29 @@ public class ReportSettings extends Hashtable {
 
 	public WebRepositoryIntegration getWebRepository()
 	{
-		return (WebRepositoryIntegration)this.get("_webRepository");
+		WebRepositoryIntegration repository = (WebRepositoryIntegration)this.get("_webRepository");
+		if (repository != null) {
+			return repository;
+		}
+		
+		if (getString("weburl") != null) {
+			repository = WebRepositoryFactory.getInstance(getString("weburl"));
+		} 
+		else if (getString("viewcvs") != null) {
+			repository = new ViewCvsIntegration(getString("viewcvs"));
+		} 
+		else if (getString("cvsweb") != null) {
+			repository = new CvswebIntegration(getString("cvsweb"));
+		} 
+		else if (getString("chora") != null) {
+			repository = new ChoraIntegration(getString("chora"));
+		}
+		
+		if (repository != null) {
+			uberSettings.put("_webRepository", repository);
+		}
+		
+		return repository;
 	}
 
 	/**

@@ -33,7 +33,7 @@ import de.berlios.statcvs.xml.output.XDocRenderer;
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.7 2004-02-26 16:25:29 squig Exp $
+ * @version $Id: CommandLineParser.java,v 1.8 2004-02-26 16:45:48 squig Exp $
  */
 public class CommandLineParser {
 
@@ -83,16 +83,7 @@ public class CommandLineParser {
 			}
 			settings.put("outputDir", popNextArg());
 		} else if (s.equals("renderer")) {
-			String arg = popNextArg();
-			if (arg.equals("html")) {
-				//settings.put("renderer", HTMLRenderer.class.getName());
-			}
-			else if (arg.equals("xdoc")) {
-				settings.put("renderer", XDocRenderer.class.getName());
-			}
-			else {
-				settings.put("renderer", arg);
-			}
+			settings.put("renderer", popNextArg());
 		} else if (s.equals("document-suite")) {
 			settings.put("documentSuite", popNextArg());
 		} else if (s.equals("use-history")) {
@@ -105,23 +96,23 @@ public class CommandLineParser {
 			if (args.isEmpty()) {
 				throw new InvalidCommandLineException("Missing argument for -weburl");
 			}
-			settings.put("_webRepository", WebRepositoryFactory.getInstance(popNextArg()));
+			settings.put("webRepository", popNextArg());
 		}
 		else if (s.equals("viewcvs")) {
 			if (args.isEmpty()) {
 				throw new InvalidCommandLineException("Missing argument for -viewcvs");
 			}
-			settings.put("_webRepository", new ViewCvsIntegration(popNextArg()));
+			settings.put("viewcvs", popNextArg());
 		} else if (s.equals("cvsweb")) {
 			if (args.isEmpty()) {
 				throw new InvalidCommandLineException("Missing argument for -cvsweb");
 			}
-			settings.put("_webRepository", new CvswebIntegration(popNextArg()));
+			settings.put("cvsweb", popNextArg());
 		} else if (s.equals("chora")) {
 			if (args.isEmpty()) {
 				throw new InvalidCommandLineException("Missing argument for -chora");
 			}
-			settings.put("_webRepository", new ChoraIntegration(popNextArg()));
+			settings.put("chora", popNextArg());
 		} else if (s.equals("include")) {
 			if (args.isEmpty()) {
 				throw new InvalidCommandLineException("Missing argument for -include");
