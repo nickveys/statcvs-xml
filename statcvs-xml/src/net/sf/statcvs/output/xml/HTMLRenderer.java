@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: HTMLRenderer.java,v $
-	$Date: 2003-07-05 01:09:15 $ 
+	$Date: 2003-07-05 10:17:42 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -77,10 +77,12 @@ public class HTMLRenderer extends XMLRenderer {
 	public static void generate(CvsContent content) 
 		throws IOException 
 	{
-		StreamSource source = new StreamSource("statcvs2html.xsl");
+		StreamSource source = new StreamSource
+			(Main.class.getClassLoader().getResource("statcvs2html.xsl").toString());
 		Transformer transformer;
  		try {
-			transformer = TransformerFactory.newInstance().newTransformer(source);
+			transformer 
+				= TransformerFactory.newInstance().newTransformer(source);
 			transformer.setParameter("ext", ".html");
 			DocumentSuite.generate(content, new HTMLRenderer(transformer));
 		} catch (TransformerConfigurationException e) {

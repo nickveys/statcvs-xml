@@ -38,7 +38,8 @@ jar:
 	rm -rf tmp
 	mkdir tmp
 	make JAVAC_OPTS="$(JAVAC_OPTS) -d tmp" all 
-	cp README *.xsl tmp/
+	cp README tmp/
+	cp *.xsl tmp/
 	(cd src/; tar -cf - $(SRC_DIST)) | tar -C tmp/ -xf -
 	for i in $(LIBS); do \
 	  unzip -d tmp/ $$i; \
