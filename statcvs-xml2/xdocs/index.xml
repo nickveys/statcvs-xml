@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+  <document>
+
+	<properties>
+	  <title>About</title>
+	</properties>
+
+	<body>
+
+	  <section name="About">
+
+		<p>
+          StatCvs-XML adds xml output to StatCvs. Please see the <a
+          href="http://statcvs.sf.net/">StatCvs Homepage</a> for more
+          information. 
+		</p>
+
+        <p>
+          Once the XML extensions are finished and accepted into the
+          StatCvs main branch, this project page will be closed.
+        </p>
+
+	  </section>
+	  
+	</body>
+  </document>
+  
