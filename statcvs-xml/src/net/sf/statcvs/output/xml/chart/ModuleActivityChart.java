@@ -18,10 +18,16 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ModuleActivityChart.java,v $
-	$Date: 2003-07-04 12:51:08 $ 
+	$Date: 2003-07-04 23:09:55 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineMetrics;
+import java.awt.geom.Rectangle2D;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,6 +47,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.HorizontalColorBarAxis;
 import org.jfree.chart.axis.HorizontalDateAxis;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.Tick;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.axis.VerticalColorBarAxis;
 import org.jfree.chart.axis.VerticalSymbolicAxis;
@@ -61,7 +68,7 @@ public class ModuleActivityChart extends AbstractChart {
 	private ValueAxis xAxis = null;
     
 	/** The y-axis. */
-	private ValueAxis yAxis = null;
+	private VerticalSymbolicAxis yAxis = null;
     
 	/** The z-axis. */
 	private NumberAxis zAxis = null;
@@ -91,7 +98,7 @@ public class ModuleActivityChart extends AbstractChart {
 		for (int i=0; i < dirs.size(); i++) {
 			ax[i] = (String)((Directory)dirs.get(i)).getPath();
 		}
-		yAxis = new VerticalSymbolicAxis(yAxisLabel, ax);
+		yAxis = new AlignedVerticalSymbolicAxis(yAxisLabel, ax);
 
 		if (false) {
 			zAxis = new VerticalColorBarAxis(zAxisLabel);
@@ -183,5 +190,61 @@ public class ModuleActivityChart extends AbstractChart {
 		}
 		oDoubleZ[0] = new Double(0.0);				
 		return new DefaultContourDataset(getTitle(), oDateX, oDoubleY, oDoubleZ);		
+	}
+
+	private class AlignedVerticalSymbolicAxis extends VerticalSymbolicAxis {
+
+		private String longestStr = "";
+		private List symbolicGridLineList = null;
+		
+		public AlignedVerticalSymbolicAxis(String title, String[] syms) {
+			super(title, syms);
+			// find longest string
+			for (int i = 0; i < syms.length; i++) {
+				if (longestStr.length() < syms[i].length()) {
+					longestStr = syms[i];
+				}
+			}
+		}
+
+		/**
+		 * @see org.jfree.chart.axis.Axis#refreshTicks(java.awt.Graphics2D, java.awt.geom.Rectangle2D, java.awt.geom.Rectangle2D, int)
+		 */
+		public void refreshTicks(Graphics2D g2,
+				Rectangle2D plotArea, Rectangle2D dataArea,
+				int location) {
+			
+			getTicks().clear();
+
+			Font tickLabelFont = getTickLabelFont();
+			g2.setFont(tickLabelFont);
+
+			double size = getTickUnit().getSize();
+			int count = calculateVisibleTickCount();
+			double lowestTickValue = calculateLowestVisibleTickValue();
+
+			if (count <= ValueAxis.MAXIMUM_TICK_COUNT) {
+				for (int i = 0; i < count; i++) {
+					double currentTickValue = lowestTickValue + (i * size);
+					double yy = translateValueToJava2D(currentTickValue, dataArea);
+					String tickLabel;
+					NumberFormat formatter = getNumberFormatOverride();
+					if (formatter != null) {
+						tickLabel = formatter.format(currentTickValue);
+					}
+					else {
+						tickLabel = valueToString(currentTickValue);
+					}
+					FontRenderContext frc = g2.getFontRenderContext();
+					Rectangle2D tickLabelBounds = tickLabelFont.getStringBounds(longestStr, frc);
+					LineMetrics lm = tickLabelFont.getLineMetrics(tickLabel, frc);
+					float x = (float) (dataArea.getX()
+									 - tickLabelBounds.getWidth() - getTickLabelInsets().right);
+					float y = (float) (yy + (lm.getAscent() / 2));
+					Tick tick = new Tick(new Double(currentTickValue), tickLabel, x, y);
+					getTicks().add(tick);
+				}
+			}
+		}
 	}
 }
