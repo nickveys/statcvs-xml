@@ -122,7 +122,10 @@ statcvs-xml
 
 \frame{
     \frametitle{Plugin-Architektur}
-	{\bf Everything is a plugin}\\
+	{\bf Everything is a plugin}
+
+	\vspace{0.5cm}
+
 	Plugins sind konfigurierbare Goal-Bibliotheken.
     \begin{itemize}
 	  \item Jedes Plugin besteht aus einer plugin.jelly Datei
@@ -153,11 +156,14 @@ statcvs-xml
 
 \frame{
     \frametitle{Repositories}
-	Maven übernimmt die Verwaltung aller abhängigen Bibliotheken.
+	Maven übernimmt die Verwaltung aller im Projekt verwendeten Bibliotheken.
+
+	\vspace{0.5cm}
+
 	\begin{itemize}
 	  \item Nomenklatur: \$\{artifactId\}-\$\{version\}
-	  \item Automatische Auflösung der Dependencies
-	  \item Automatischer Download aus dem Remote Repository in das
+%	  \item Automatische Auflösung der Dependencies
+	  \item Automatischer Download aus dem remote Repository in das
 	  lokale Repository
 	  \item Ergänzung des Classpaths
 	\end{itemize}
@@ -200,31 +206,27 @@ statcvs-xml
     {\bf Jar Plugin}
     \begin{tabular}{rl}
      jar:jar & Erzeugt aus den im POM angegebenen Sourcen und\\
-     & Resourcen ein jar (z.B. statcvs-xml-1.0.jar)\\
+     & Resourcen ein Jar (z.B. statcvs-xml-1.0.jar)\\
 
 	 jar:snapshot & Erzeugt ein Snapshot-Jar ohne Version, dafür mit\\
      & Datum (z.B. statcvs-xml-20040204.140000.jar)\\
 
 	 jar:install & (Erzeugt und) Deponiert das Jar im lokalen Repository
     \end{tabular}
-
+	% TODO: MainClass
 	\vspace{0.5cm}
 
-	\emph{Alle Jar-Dateien werden im ./targets Verzeichnis abgelegt}
+	\emph{Alle Jar-Dateien werden im ./targets Verzeichnis abgelegt.}
 }
 
 \frame{
     \frametitle{Release erstellen}
-	Auch beim Erstellen von Releases hilft Maven. Es werden Source-
-    und Binary-Tarballs und -zips erstellt. Diese enthalten auch die
-    JavaDocs.
-
-	\vspace{0.5cm}
 
 	{\bf Distribution Plugin}
+
     \begin{tabular}{rl}
-     dist & Kompiliert die Sourcen und erzeugt die Source- und Binary-\\
-     & Distributionen (z.B. statcvs-xml-1.0.tar.gz)\\
+     dist & Kompiliert die Sourcen und erzeugt die Source- und\\
+	 & Binary-Distributionen (z.B. statcvs-xml-1.0.tar.gz)\\
 
 	 dist:build-src & Erzeugt eine Source-Distribution\\
 	 dist:build-bin & Erzeugt eine Binary-Distribution\\
@@ -243,18 +245,16 @@ statcvs-xml
 	
 	{\bf XDoc Plugin}
     \begin{tabular}{rl}
-	  xdoc & Erzeugt aus den xdoc-Dateien im ./xdocs-Verzeichnis \\
-	  & (rekursiv) HTML-Dokumente
+	  xdoc & Erzeugt aus den xdoc-Dateien HTML-Dokumente
 	\end{tabular}
 
 	\vspace{0.5cm}
 
 	{\bf Site Plugin}
     \begin{tabular}{rl}
-	  site & Siehe site:generate\\
-	  site:generate & Generiert die Reports der aktivierten Plugins\\
-	  site:deploy & Generiert und deployed die HTML-Projektdokumentation \\
-	  & auf den im POM angegebenen Server (per ssh)\\
+	  site & Generiert die Reports der aktivierten Plugins\\
+	  site:deploy & Generiert und kopiert die Projektdokumentation \\
+	  & per ssh auf den im POM angegebenen Webserver\\
 	  site:fsdeploy & wie site:deploy, allerdings lokal im Filesystem
 	\end{tabular}
 }
