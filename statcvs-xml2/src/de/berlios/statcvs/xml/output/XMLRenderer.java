@@ -38,7 +38,7 @@ public class XMLRenderer implements DocumentRenderer {
 		setExtension(".xml");
 
 		XMLOutputter xout = new XMLOutputter();
-		xout.setEncoding("ISO-8859-1");
+		xout.setEncoding("UTF-8");
 		setOutputter(xout);
 
 //		if (transformer != null) {
