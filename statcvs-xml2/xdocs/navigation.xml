@@ -18,6 +18,7 @@
 	    <item name="Settings" href="/manual/settings.html"/>
 	    <item name="Document Suite" href="/manual/suite.html"/>
       </item>
+	  <item name="License" href="/license.html"/>
 	  <item name="Download" href="http://developer.berlios.de/project/showfiles.php?group_id=872"/>
 	</menu>
 
@@ -28,7 +29,9 @@
 	</menu>
 
 	<menu name="Development">
+	  <item name="CVS repository" href="/cvs-usage.html"/>
 	  <item name="Issue Tracker" href="http://developer.berlios.de/bugs/?group_id=872"/>
+	  <item name="Mailing Lists" href="/mail-lists.html"/>
 	  <item name="Project Reports" href="/maven-reports.html"/>
 	</menu>
 

@@ -5,6 +5,16 @@
   </properties>
 
   <body>
+
+    <section name="Maven plugin changes">
+      <ul>
+        <li>
+        	<a href="/maven-plugin/changes.html">maven-statcvs-plugin</a>
+        </li>
+      </ul>
+    </section>
+
+
 	<release version="0.9.3" date="in CVS">
       <action dev="vanto" type="add">
 		Software Evolution Matrix Chart has been added. It shows up the file 
