@@ -1,0 +1,45 @@
+\section[Tracing]{Project Tracing}
+\frame{
+    \frametitle{Verfolgung von Projekten}
+    Tracing ist bestandteil der Dokumentation von Projekten. Prozessdoku.
+    OpenSource: Erfolgreiche OS-Projekte brauchen 4 Dinge: Projekt, Code, Dokumentation, Community.
+    Apache Way of Life.
+    Häufigster Fehler: keine Doku.
+    Lehrbuchmodell: schreibt die Dokumentation schon vor.
+    Dokumentation ist aufwendig, deshalb automatisieren.
+}
+
+\frame{
+    \frametitle{Erfolgreiche Projekte}
+    Erfolgreiche Projekte brauchen 4 Dinge:
+    \begin{itemize}
+        \item das Projekt (bildet den Rahmen)
+        \item den Quellcode (klar!)
+        \item \alert<2>{ausführliche Dokumentation (!!)}
+        \item eine Community / einen Kunden.
+    \end{itemize}
+    \vspace{0.5cm}
+    \invisible<1>{Zur Dokumentation gehören
+    \begin{itemize}
+        \item Beschreibung der Schnittstellen (API Dokumentation)
+        \item Ergebnisse der Unit-Tests inkl. Messung der Testüberdeckung
+        \item Erhebung und Visualisierung von Metriken
+        \item Produktdokumentation (Handbücher, Online-Hilfe etc.)
+    \end{itemize}}
+}
+
+\frame{
+    \frametitle{Automatisierter Buildprozess}
+    Autmatisches Build größerer Projekte mit Ant und Make.
+    Nachteile:
+    \begin{itemize}
+        \item{Targets können nicht zwischen Projekten geteilt werden}
+        \item{Builddateien fast identisch}
+        \item{Kein Scripting möglich (keine Loops/Conditionals)}
+        \item{Verwendung von 3rd-Party-Tools (z.B. javadoc) relativ umständlich}
+        \item{Keine Auflösung von Library-Dependencies (Jar-Hölle)}
+    \end{itemize}
+    \vspace{0.5cm}
+    \large{\bf{Lösung:} Apache Maven}
+}
+
