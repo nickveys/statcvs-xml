@@ -32,10 +32,10 @@
   </goal>
   
   <goal name="maven-statcvs-xml-plugin:report">
-    <attainGoal name="statcvs"/>
+    <attainGoal name="statcvs-xml"/>
   </goal>
   
-  <goal name="statcvs"
+  <goal name="statcvs-xml"
     description="Generate CVS statistics for the current CVS project">
 
     <available property="jdk14" classname="java.lang.CharSequence"/>
