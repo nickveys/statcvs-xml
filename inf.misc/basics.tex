@@ -34,16 +34,16 @@
         \item Download von http://maven.apache.org/start/download.html
         \item Entpacken (z.B. nach /usr/share/maven-1.0rc1)
         \item Umgebungsvariablen anpassen 
-		  \begin{itemize}
+          \begin{itemize}
           \item \verb+$MAVEN_HOME=/usr/share/maven-1.0rc1+
           \item \verb+$PATH+ erweitern um \verb+$MAVEN_HOME/bin+
           \end{itemize}
         \item (Optional) Lokales Repository erstellen 
-		  \begin{itemize}
+          \begin{itemize}
           \item \begin{alltt}\$MAVEN_HOME/bin/install_repo.sh \\  \$HOME/.maven/repository \end{alltt} 
             %\item Windows: \begin{alltt}\%MAVEN_HOME\%install_repo.bat \%HOME\%\.maven\repository\end{alltt}
           \end{itemize}
-	\end{enumerate}
+    \end{enumerate}
 }
 
 \subsection{Projekt anlegen}
@@ -85,8 +85,8 @@ statcvs-xml
 \frame{
     \frametitle{Projekt Object Model (POM)}
 
-	Das POM wird in der Datei project.xml im Projektverzeichnis
-	definiert und enthält Projekt-Metadaten:
+    Das POM wird in der Datei project.xml im Projektverzeichnis
+    definiert und enthält Projekt-Metadaten:
 
     \begin{itemize}
     \item Projektname, -version, -beschreibung, -lizenz
@@ -122,23 +122,23 @@ statcvs-xml
 
 \frame{
     \frametitle{Plugin-Architektur}
-	{\bf Everything is a plugin}
+    {\bf Everything is a plugin}
 
-	\vspace{0.5cm}
+    \vspace{0.5cm}
 
-	Plugins sind konfigurierbare Goal-Bibliotheken.
+    Plugins sind konfigurierbare Goal-Bibliotheken.
     \begin{itemize}
-	  \item Jedes Plugin besteht aus einer plugin.jelly Datei
-	  \item plugin.properties setzt die Plugin-Defaultwerte
-	  \item maven.xml wird durch alle plugin.jelly Dateien ergänzt
-	\end{itemize}
+      \item Jedes Plugin besteht aus einer plugin.jelly Datei
+      \item plugin.properties setzt die Plugin-Defaultwerte
+      \item maven.xml wird durch alle plugin.jelly Dateien ergänzt
+    \end{itemize}
     \vspace{0.5cm}
 }
 
 \subsection[Properties]{Properties}
 \frame{
     \frametitle{Konfigurierbarkeit}
-    (Fast) alle Build- und Plugin-Parameter lassen sich anpassen.
+    (Fast) alle Plugin-Parameter lassen sich anpassen.
     \begin{itemize}
         \item Definition in Property-Files
         \item{Vererbung der Properties
@@ -156,17 +156,16 @@ statcvs-xml
 
 \frame{
     \frametitle{Repositories}
-	Maven übernimmt die Verwaltung aller im Projekt verwendeten Bibliotheken.
+    Maven übernimmt die Verwaltung aller im Projekt verwendeten Bibliotheken.
 
-	\vspace{0.5cm}
+    \vspace{0.5cm}
 
-	\begin{itemize}
-	  \item Nomenklatur: \$\{artifactId\}-\$\{version\}
-%	  \item Automatische Auflösung der Dependencies
-	  \item Automatischer Download aus dem remote Repository in das
-	  lokale Repository
-	  \item Ergänzung des Classpaths
-	\end{itemize}
+    \begin{itemize}
+%     \item Automatische Auflösung der Dependencies
+      \item Automatischer Download aus dem remote Repository in das
+      lokale Repository
+      \item Ergänzung des Classpaths
+    \end{itemize}
 }
 
 \frame[all:1]{
@@ -196,67 +195,69 @@ statcvs-xml
 \subsection[Build]{Build}
 \frame{
     \frametitle{Buildprozess starten}
-	
+    
     {\bf Java Plugin}
+
     \begin{tabular}{rr}
      java:compile & Kompiliert die im POM angegebenen Sourcen
     \end{tabular}
 
-	\vspace{0.5cm}
+    \vspace{0.5cm}
     {\bf Jar Plugin}
+
     \begin{tabular}{rl}
      jar:jar & Erzeugt aus den im POM angegebenen Sourcen und\\
      & Resourcen ein Jar (z.B. statcvs-xml-1.0.jar)\\
 
-	 jar:snapshot & Erzeugt ein Snapshot-Jar ohne Version, dafür mit\\
+     jar:snapshot & Erzeugt ein Snapshot-Jar ohne Version, dafür mit\\
      & Datum (z.B. statcvs-xml-20040204.140000.jar)\\
 
-	 jar:install & (Erzeugt und) Deponiert das Jar im lokalen Repository
+     jar:install & (Erzeugt und) Deponiert das Jar im lokalen Repository
     \end{tabular}
-	% TODO: MainClass
-	\vspace{0.5cm}
+    % TODO: MainClass
+    \vspace{0.5cm}
 
-	\emph{Alle Jar-Dateien werden im ./targets Verzeichnis abgelegt.}
+    \emph{Alle Jar-Dateien werden im ./targets Verzeichnis abgelegt.}
 }
 
 \frame{
     \frametitle{Release erstellen}
 
-	{\bf Distribution Plugin}
+    {\bf Distribution Plugin}
 
     \begin{tabular}{rl}
      dist & Kompiliert die Sourcen und erzeugt die Source- und\\
-	 & Binary-Distributionen (z.B. statcvs-xml-1.0.tar.gz)\\
+     & Binary-Distributionen (z.B. statcvs-xml-1.0.tar.gz)\\
 
-	 dist:build-src & Erzeugt eine Source-Distribution\\
-	 dist:build-bin & Erzeugt eine Binary-Distribution\\
+     dist:build-src & Erzeugt eine Source-Distribution\\
+     dist:build-bin & Erzeugt eine Binary-Distribution\\
     \end{tabular}
 
-	\vspace{0.5cm}
+    \vspace{0.5cm}
 
-	\emph{Alle Ergebnisse werden im ./targets/distributions
-	  Verzeichnis abgelegt.}
+    \emph{Alle Ergebnisse werden im ./targets/distributions
+      Verzeichnis abgelegt.}
 }
 
 
 \subsection[Doc]{Dokumentation erstellen}
 \frame{
     \frametitle{Dokumentation erstellen und deployen}
-	
-	{\bf XDoc Plugin}
+    
+    {\bf XDoc Plugin}
     \begin{tabular}{rl}
-	  xdoc & Erzeugt aus den xdoc-Dateien HTML-Dokumente
-	\end{tabular}
+      xdoc & Erzeugt aus den xdoc-Dateien HTML-Dokumente
+    \end{tabular}
 
-	\vspace{0.5cm}
+    \vspace{0.5cm}
 
-	{\bf Site Plugin}
+    {\bf Site Plugin}
     \begin{tabular}{rl}
-	  site & Generiert die Reports der aktivierten Plugins\\
-	  site:deploy & Generiert und kopiert die Projektdokumentation \\
-	  & per ssh auf den im POM angegebenen Webserver\\
-	  site:fsdeploy & wie site:deploy, allerdings lokal im Filesystem
-	\end{tabular}
+      site & Generiert die Reports der aktivierten Plugins\\
+      site:deploy & Generiert und kopiert die Projektdokumentation \\
+      & per ssh auf den im POM angegebenen Webserver\\
+      site:fsdeploy & wie site:deploy, allerdings lokal im Filesystem
+    \end{tabular}
 }
 
 
