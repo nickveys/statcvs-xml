@@ -24,9 +24,6 @@ import java.util.Iterator;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.util.IntegerMap;
-
-import org.jdom.Element;
-
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.model.FileGrouper;
 import de.berlios.statcvs.xml.model.Grouper;
@@ -61,7 +58,7 @@ public class AuthorCountTable {
 			filesMap.addInt(group, file.getAuthors().size());
 		}
 		
-		Element table = new TableElement(new String[] { grouper.getName(), I18n.tr("Authors") });		
+		TableElement table = new TableElement(settings, new String[] { grouper.getName(), I18n.tr("Authors") });		
 		
 		Iterator fIt = filesMap.iteratorSortedByValueReverse();
 		int maxItems = settings.getLimit();
@@ -69,10 +66,11 @@ public class AuthorCountTable {
 		while (fIt.hasNext() && count < maxItems) {
 			Object group = fIt.next();
 			
-			Element row = new Element("row");
+			/*Element row = new Element("row");
 			row.addContent(grouper.createElement(group, settings));
 			row.addContent(new Element("td").addContent(filesMap.get(group) + ""));
-			table.addContent(row);
+			table.addContent(row);*/
+			table.addRow().addGroup(grouper, group).addInteger("count", filesMap.get(group));
 			
 			count++;
 		}

@@ -24,12 +24,9 @@ import java.util.Iterator;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.CvsRevision;
-import net.sf.statcvs.output.WebRepositoryIntegration;
-
-import org.jdom.Element;
-
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.output.ReportSettings;
+import de.berlios.statcvs.xml.output.TableElement.RowElement;
 
 /**
  * @author Steffen Pingel
@@ -41,17 +38,9 @@ public class FileGrouper extends Grouper {
 		super("file", I18n.tr("File"));
 	}
 
-	public Element createElement(Object group, ReportSettings settings)
+	public void addElement(Object group, RowElement row)
 	{
-		CvsFile file = (CvsFile)group;
-		Element element = new Element("file");
-		element.setAttribute("name", file.getFilenameWithPath());
-			
-		WebRepositoryIntegration webRepository = settings.getWebRepository();
-		if (webRepository != null) {
-			element.setAttribute("url", webRepository.getFileViewUrl(file));				
-		}
-		return element;
+		row.addFile((CvsFile)group);
 	}
 
 	/**

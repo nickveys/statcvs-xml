@@ -25,11 +25,9 @@ import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
-
-import org.jdom.Element;
-
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.output.ReportSettings;
+import de.berlios.statcvs.xml.output.TableElement.RowElement;
 
 /**
  * @author Steffen Pingel
@@ -49,9 +47,9 @@ public abstract class Grouper {
 		this.name = name;
 	}
 
-	public Element createElement(Object group, ReportSettings settings)
+	public void addElement(Object group,  RowElement row)
 	{
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Object getGroup(Directory directory) 

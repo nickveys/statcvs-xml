@@ -1,10 +1,13 @@
 package de.berlios.statcvs.xml.output;
 
 import net.sf.statcvs.model.Author;
+import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.Directory;
+import net.sf.statcvs.output.WebRepositoryIntegration;
 
 import org.jdom.Element;
 
+import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.util.Formatter;
 
 /**
@@ -113,6 +116,20 @@ public class TableElement extends Element {
 		public RowElement addAuthor(Author author) 
 		{
 			addContent(new Element("author").setAttribute("name", author.getName()));
+			return this;
+		}
+		
+		public RowElement addFile(CvsFile file)
+		{
+			WebRepositoryIntegration webRepository = settings.getWebRepository(); 
+								
+			return addLink("file", file.getFilenameWithPath(),
+					(webRepository == null) ? "" : webRepository.getFileViewUrl(file));
+		}
+		
+		public RowElement addGroup(Grouper grouper, Object group)
+		{
+			grouper.addElement(group, this);
 			return this;
 		}
 	}
