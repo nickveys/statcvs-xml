@@ -62,6 +62,8 @@ public class DocumentSuite {
 
 	private static Map filenameByAuthorName = new Hashtable();
 
+	private static Map filenameByModuleName= new Hashtable();
+
 	private static Map documentTitleByFilename = new LinkedHashMap();
 
 	private static Logger logger = Logger.getLogger(DocumentSuite.class.getName());
@@ -104,14 +106,10 @@ public class DocumentSuite {
 			else if ("report".equals(element.getName())) {
 				Report report = createReport(element, documentSettings);
 				
-				if (report.getPageCount() != 0) {
+				if (report != null && report.getPageCount() != 0) {
 					reports.add(report);
 					maxPages = Math.max(report.getPageCount(), maxPages);
 				}
-				
-				/*if (report != null) {
-					document.getRootElement().addContent(report);
-				}*/
 			}
 		}
 		
@@ -278,6 +276,7 @@ public class DocumentSuite {
 				ReportSettings settings = new ReportSettings(defaultSettings);
 				settings.setForEach(new ForEachModule(module));
 				StatCvsDocument doc = createDocument(element, renderer, settings);
+				filenameByModuleName.put(module.getName(), doc.getFilename());
 			}
 		}
 		else {
@@ -310,6 +309,11 @@ public class DocumentSuite {
 	public static String getDirectoryFilename(String path)
 	{
 		return (String)filenameByDirectoryPath.get(path);
+	}
+
+	public static String getModuleFilename(String module)
+	{
+		return (String)filenameByModuleName.get(module);
 	}
 
 	public static Map getDocuments()

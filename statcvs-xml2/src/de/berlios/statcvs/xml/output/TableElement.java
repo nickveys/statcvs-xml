@@ -102,9 +102,18 @@ public class TableElement extends Element
 
 	public class RowElement extends Element
 	{
+		int columnCount = 0;
+		
 		public RowElement()
 		{
 			super("row");
+		}
+		
+		public Element addContent(Element element)
+		{
+			return (settings.getString("showColumns", "123456789").indexOf(Integer.toString(++columnCount)) != -1)
+				? super.addContent(element)
+				: null;
 		}
 		
 		public RowElement addInteger(String key, int value, double percentage)

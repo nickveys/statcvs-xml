@@ -86,7 +86,8 @@ public class LocChart extends AbstractTimeSeriesChart {
 
 	public static Report generate(CvsContent content, ReportSettings settings)
 	{
-		return new Report(new ChartReportElement(new LocChart(content, settings)));
+		LocChart chart = new LocChart(content, settings);
+		return (chart.hasData()) ? new Report(new ChartReportElement(chart)) : null;
 	}
 
 	protected void addTimeSeries(String title, Iterator it)

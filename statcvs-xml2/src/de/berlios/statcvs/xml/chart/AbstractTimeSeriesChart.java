@@ -146,6 +146,17 @@ public class AbstractTimeSeriesChart extends AbstractChart {
 		return timeSeriesByGroup;
 	}
 
+	public boolean hasData()
+	{
+		for (Iterator it = tsc.getSeries().iterator(); it.hasNext();) {
+			TimeSeries series = (TimeSeries)it.next();
+			if (series.getItemCount() <= 1) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static class DateTimeSeries extends TimeSeries {
 
 		private int currentValue;
