@@ -330,7 +330,7 @@ public class TableElement extends Element
         public RowElement addPercent(String key, double percent) {
 			Element number = new Element("number");
 			number.setAttribute("key", key);
-			number.setAttribute("percentage", Formatter.formatNumber(percent, 1));
+			number.setAttribute("value", Formatter.formatNumber(percent, 1));
 			
 			addContent(number);
 			return this;

@@ -18,11 +18,16 @@
          <title><xsl:value-of select="@title"/></title>
        </properties>
        <body>
-   			<xsl:if test="@name != 'index'">
-   				<section name="">
-                	<p><a href="index{$ext}">Back to Index Page</a></p>
-                </section>
-		 	</xsl:if>
+       		<xsl:choose>
+   				<xsl:when test="@name != 'index'">
+   					<section name="{@title}">
+                		<p><a href="index{$ext}">Back to Index Page</a></p>
+                	</section>
+		 		</xsl:when>
+				<xsl:otherwise>
+<!--					<section name="StatCvs-XML Report"/> -->
+				</xsl:otherwise>
+			</xsl:choose>
 	     	<xsl:apply-templates select="pager"/>
 	     	<xsl:apply-templates select="report"/>
        </body>
@@ -81,6 +86,10 @@
 
   <xsl:template match="img">
     <p align="center"><img src="{@src}"/></p>
+  </xsl:template>
+
+  <xsl:template match="text">
+    <xsl:value-of select="."/><br/>
   </xsl:template>
 
   <xsl:template match="period">

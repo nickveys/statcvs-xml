@@ -85,8 +85,9 @@ public class MonthYearGrouper extends Grouper {
     public Object getGroup(CvsRevision rev) {
 		cal.setTime(rev.getDate());
 		
-		StringBuffer month = new StringBuffer();
-		month.append((String)monthNames.get(cal.get(Calendar.MONTH)))
+		String monthName = (String)monthNames.get(cal.get(Calendar.MONTH));
+		StringBuffer month = new StringBuffer(monthName.length() + 5);
+		month.append(monthName)
 			 .append(" ")
 			 .append(df.format(cal.getTime()));
 			 

@@ -22,6 +22,7 @@ import java.util.Date;
 
 import net.sf.statcvs.model.CvsContent;
 import de.berlios.statcvs.xml.I18n;
+import de.berlios.statcvs.xml.Main;
 import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
@@ -40,7 +41,7 @@ public class GeneralReport {
 		ReportElement root = new ReportElement(settings, I18n.tr("General"));
 		TextElement text = new TextElement(settings, "generalinfo")
 			.addPeriod(I18n.tr("Summary Period"), content.getFirstDate(), content.getLastDate())
-			.addPeriod(I18n.tr("Generated"), new Date())
+			.addText(I18n.tr("Generated: {0} by StatCvs-XML {1}", new Date(), Main.VERSION))
 			.addValue("devcount", content.getAuthors().size(), I18n.tr("Developers"))
 			.addValue("filecount", content.getFiles().size(), I18n.tr("Files"))
 			.addValue("devcount", content.getRevisions().size(), I18n.tr("Revisions"))

@@ -19,8 +19,8 @@
 
 package de.berlios.statcvs.xml.report;
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import net.sf.statcvs.model.Author;
@@ -44,7 +44,7 @@ import de.berlios.statcvs.xml.output.TextElement;
  * for all authors or in a for-each environment.
  * 
  * @author Tammo van Lessen
- * @version $Id: AuthorOfTheMonthReport.java,v 1.1 2004-03-06 18:55:36 vanto Exp $
+ * @version $Id: AuthorOfTheMonthReport.java,v 1.2 2004-03-06 19:52:08 squig Exp $
  */
 public class AuthorOfTheMonthReport {
 
@@ -54,7 +54,7 @@ public class AuthorOfTheMonthReport {
 		
 		Grouper grouper = new MonthYearGrouper();
 		
-		Map authorsByMonth = new HashMap();
+		Map authorsByMonth = new LinkedHashMap();
 		IntegerMap activityByAuthor;
 		
 		// calc data
@@ -81,7 +81,7 @@ public class AuthorOfTheMonthReport {
 		// type 1 - for all authors
 		if (settings.getForEachObject() == null) {
 			TableElement table = new TableElement(settings, new String[] { 
-				I18n.tr("Month"), I18n.tr("Author") });
+				I18n.tr("Month"), I18n.tr("Author"), I18n.tr("Score") });
 
 			it = authorsByMonth.keySet().iterator();
 			while (it.hasNext()  && count < maxItems) {

@@ -31,7 +31,9 @@
     <report class="CommitChart" groupby="day" title="Activity"/>
     <report class="CommitChart" groupby="hour" title=""/>
     <report class="CommitActivityChart" groupby="author"/>
+<!-- Disabled, until reviewed and fixed
     <report class="AuthorsActivityChart"/>
+-->
   </document>
 
   <document  filename="file_stats" title="File Statistics">

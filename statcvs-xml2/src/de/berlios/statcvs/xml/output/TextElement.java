@@ -70,6 +70,12 @@ public class TextElement extends Element {
 		return this;
 	}
 
+	public TextElement addText(String text)
+	{
+		addContent(new Element("text").addContent(text));
+		return this;
+	}
+
 	public class ListElement extends Element
 	{
 		
