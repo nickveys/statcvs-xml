@@ -34,8 +34,8 @@
        <td><xsl:value-of select="@author"/></td>
        <td>
 		  <p><xsl:value-of select="comment"/>
-		  (<xsl:value-of select="@changes"/> Files changed,
-		  <xsl:value-of select="@changedloc"/> Lines changed)
+		  (<xsl:value-of select="@changedfiles"/> Files changed,
+		  <xsl:value-of select="@changedlines"/> Lines changed)
 		  </p>
 		  <xsl:apply-templates select="files/file"/>
 		  
