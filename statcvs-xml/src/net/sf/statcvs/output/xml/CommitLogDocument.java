@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommitLogDocument.java,v $
-	$Date: 2003-06-17 19:00:55 $ 
+	$Date: 2003-06-17 19:36:24 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -42,9 +42,10 @@ public class CommitLogDocument extends AbstractPageableDocument {
 	 */
 	public CommitLogDocument(CvsContent content) {
 		super(new Element("report"), "commit_log", 5);
-		//Element rt = getRootElement();
-		//rt.addContent(new CommitLogElement(CommitLogElement.getCommitList(content)));
-		setPageableContent(new CommitLogElement(CommitLogElement.getCommitList(content)));
+		Element rt = getRootElement();
+		Element page = new CommitLogElement(CommitLogElement.getCommitList(content));
+		rt.addContent(page);
+		setPageableContent(page);
 	}
 
 	/**
