@@ -18,7 +18,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: TimeLineTest.java,v $
-	$Date: 2003-07-06 21:26:39 $
+	$Date: 2004-01-12 20:53:23 $
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -31,7 +31,7 @@ import junit.framework.TestCase;
  * Test cases for {@link TimeLine}
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: TimeLineTest.java,v 1.2 2003-07-06 21:26:39 vanto Exp $
+ * @version $Id: TimeLineTest.java,v 1.3 2004-01-12 20:53:23 squig Exp $
  */
 public class TimeLineTest extends TestCase {
 	private Date date1 = new Date(100000000);

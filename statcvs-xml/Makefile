@@ -10,12 +10,17 @@ JDEPENDS = src/net/sf/statcvs/Main.java $(shell find src -name "*Renderer.java")
            src/net/sf/statcvs/util/ConsoleOutErrHandler.java
 SRC_DIST = net/sf/statcvs/*.properties net/sf/statcvs/resources/*
 
+TEST_SRC = $(shell find tests-src/ -name "*.java")
+
 ifeq ($(shell test -r Makefile.local && echo "true"),true)
   include Makefile.local
 endif
 
 all : 
 	jikes -classpath $(CP) +D +Predundant-modifiers +F $(JDEPENDS) $(JAVAC_OPTS)
+
+all-tests : 
+	jikes -classpath $(CP) +D +Predundant-modifiers +F $(TEST_SRC) $(JAVAC_OPTS)
 
 dev : makefiles cvsignore tags 
 
@@ -67,6 +72,9 @@ html :
 	$(JAVA_HOME)/bin/java -classpath $(CP) net.sf.statcvs.Main \
 	  $(CVS_LOG) $(CVS_PATH) $(STATCVS_ARGS) -output-dir out-html \
 	  -output-suite html
+
+run-tests:
+	CLASSPATH=$(CP):tests-src/ PATH=$(JAVA_HOME)/bin:$(PATH) junit net.sf.statcvs.AllTests 
 
 xdoc : 
 	mkdir -p xdocs/statcvs
