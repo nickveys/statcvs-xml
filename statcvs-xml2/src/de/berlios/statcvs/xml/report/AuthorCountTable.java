@@ -67,17 +67,13 @@ public class AuthorCountTable {
 		while (fIt.hasNext() && count < maxItems) {
 			Object group = fIt.next();
 			
-			/*Element row = new Element("row");
-			row.addContent(grouper.createElement(group, settings));
-			row.addContent(new Element("td").addContent(filesMap.get(group) + ""));
-			table.addContent(row);*/
 			table.addRow().addGroup(grouper, group).addInteger("count", filesMap.get(group));
 			
 			count++;
 		}
 		
 		root.addContent(table);
-		return new Report(settings, root, table, "row");
+		return new Report(root, table);
 	}
 
 }

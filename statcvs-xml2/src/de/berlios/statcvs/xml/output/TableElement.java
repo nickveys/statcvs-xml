@@ -74,7 +74,7 @@ public class TableElement extends Element
 	 */
 	public Element getPage(int page) {
 		if (!settings.isPaging()) {
-			return this;	
+			return (Element)this.clone();	
 		} else {
 
 			int lower = page * settings.getItemsPerPage();

@@ -121,6 +121,7 @@ public class DocumentSuite {
 			ReportSettings localSettings = readAttributes(settings, root);
 			localSettings.setPageNr(i);
 			StatCvsDocument document = new StatCvsDocument(localSettings);
+			System.out.println(createPagerElement(i, maxPages));
 			document.getRootElement().addContent(createPagerElement(i, maxPages));
 			for (int r = 0; r < reports.size(); r++) {
 				ReportElement re = ((Report)reports.get(r)).getPage(i);
