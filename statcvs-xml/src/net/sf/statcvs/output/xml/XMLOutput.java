@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLOutput.java,v $
-	$Date: 2003-06-17 16:43:02 $ 
+	$Date: 2003-06-17 19:00:55 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -68,8 +68,19 @@ public class XMLOutput implements DocumentRenderer {
 	}
 
 	public void render(StatCvsDocument document) throws IOException {
+		
+		if (document instanceof Pageable) {
+			renderPages(document);
+		} else {
+			renderSingle(document);
+		}
+		
+	}
+
+	private void renderSingle(StatCvsDocument document) throws IOException {
 		FileWriter writer = new FileWriter
-			(FileUtils.getFilenameWithDirectory(document.getFilename()));
+			(FileUtils.getFilenameWithDirectory(document.getFilename()+".xml"));
+
 		try {
 			if (transformer != null) {
 				JDOMResult result = new JDOMResult();
@@ -87,7 +98,13 @@ public class XMLOutput implements DocumentRenderer {
 		}
 		finally {
 			writer.close();
-		}			
+		}					
 	}
-
+	
+	private void renderPages(StatCvsDocument document) throws IOException {
+		AbstractPageableDocument p = (AbstractPageableDocument)document;
+		for (int i=0; i < p.getPageCount(); i++) {
+			renderSingle(new StatCvsDocument(p.getPage(i), p.getFilename(i)));					
+		}
+	}
 }

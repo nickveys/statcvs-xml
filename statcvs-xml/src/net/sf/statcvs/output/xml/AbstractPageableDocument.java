@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractPageableDocument.java,v $
-	$Date: 2003-06-17 16:43:02 $ 
+	$Date: 2003-06-17 19:00:55 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -31,11 +31,13 @@ import org.jdom.Element;
  * 
  * @author Tammo van Lessen
  */
-public abstract class AbstractPageableDocument extends StatCvsDocument implements Pageable{
+public abstract class AbstractPageableDocument extends StatCvsDocument implements Pageable {
+
+	private String pContentName;
+
+	private List pContent;
 
 	private int itemsPerPage;
-	private List content = null;
-	private String rootElement = null;
 
 	/**
 	 * @param element
@@ -72,18 +74,29 @@ public abstract class AbstractPageableDocument extends StatCvsDocument implement
 	 * @see net.sf.statcvs.output.xml.Pageable#getPage(int)
 	 */
 	public Element getPage(int page) {
-		// dirty!
-		if ((content == null) || (page > getPageCount())) return new Element("nocontent");
-		Element element = new Element(rootElement);
-		element.setAttribute("page", Integer.toString(page));
-		element.setAttribute("totalPages", Integer.toString(getPageCount()));
-		List pageList;
-		if (content.size() < (page*itemsPerPage)+itemsPerPage) {
-			pageList = content.subList(page*itemsPerPage, content.size());
-		} else {
-			pageList = content.subList(page*itemsPerPage, (page*itemsPerPage)+itemsPerPage);	
+		Element element = new Element(this.getRootElement().getName());
+		List elCont = element.getContent();
+		elCont.add(getHeader());
+		
+		List pageList = null;// = new ArrayList();
+
+		if ((pContent != null) && (page < getPageCount())) {
+			element.setAttribute("page", ""+page+1);
+			element.setAttribute("totalPages", ""+getPageCount());
+			
+			if (pContent.size() < (page*itemsPerPage)+itemsPerPage) {
+				pageList = pContent.subList(page*itemsPerPage, pContent.size());
+			} else {
+				pageList = pContent.subList(page*itemsPerPage, (page*itemsPerPage)+itemsPerPage);	
+			}
 		}
-		element.setContent(pageList);
+		// this: elCont.add(pageList); make that element gets null, why?
+		// workaround:
+		for (int i=0; i < pageList.size(); i++) {
+			Element el = new Element("x");
+			elCont.add(((Element)pageList.get(i)).clone());//pageList.get(i));
+		}
+		elCont.add(getFooter());
 		return element;
 	}
 	
@@ -91,25 +104,19 @@ public abstract class AbstractPageableDocument extends StatCvsDocument implement
 	 * @see net.sf.statcvs.output.xml.Pageable#getPageCount()
 	 */
 	public int getPageCount() {
-		return content.size() / itemsPerPage;
+		return (int) Math.ceil((double)pContent.size() / (double)itemsPerPage);
 	}
 
-	/**
-	 * @see net.sf.statcvs.output.xml.Pageable#getHeader()
-	 */
 	public abstract Element getHeader();
-	
-	/**
-	 * @see net.sf.statcvs.output.xml.Pageable#getFooter()
-	 */
 	public abstract Element getFooter();
 
-	/**
-	 * @see net.sf.statcvs.output.xml.Pageable#setContent(org.jdom.Element)
-	 */
-	public void setContent(Element content) {
-		rootElement = content.getName();
-		this.content = content.getChildren();
+	public void setPageableContent(Element content) {
+		this.pContent = content.getChildren();
+		this.pContentName = content.getName();
+	}
+	
+	public String getFilename(int page) {
+		return (page == 0)?getFilename():getFilename()+"_"+page;
 	}
 
 }
