@@ -44,7 +44,7 @@ import de.berlios.statcvs.xml.output.TextElement;
  * for all authors or in a for-each environment.
  * 
  * @author Tammo van Lessen
- * @version $Id: AuthorOfTheMonthReport.java,v 1.5 2004-03-17 12:26:23 vanto Exp $
+ * @version $Id: AuthorOfTheMonthReport.java,v 1.6 2004-07-11 13:01:38 vanto Exp $
  */
 public class AuthorOfTheMonthReport {
 
@@ -53,6 +53,7 @@ public class AuthorOfTheMonthReport {
 		ReportElement root = new ReportElement(settings, I18n.tr("Author of the Month"));
 		
 		Grouper grouper = new MonthYearGrouper();
+		Author dummyAuthor = null;
 		
 		Map authorsByMonth = new LinkedHashMap();
 		IntegerMap activityByAuthor;
@@ -71,7 +72,14 @@ public class AuthorOfTheMonthReport {
 				authorsByMonth.put(group, activityByAuthor);
 			}
 			
-			activityByAuthor.addInt(rev.getAuthor(), rev.getNewLines());
+			if (rev.getAuthor() == null) {
+			    if (dummyAuthor == null) {
+			        dummyAuthor = new Author("(Unknown)");
+			    }
+			    activityByAuthor.addInt(dummyAuthor, rev.getNewLines());
+			} else {
+			    activityByAuthor.addInt(rev.getAuthor(), rev.getNewLines());
+			}
 		}
 		
 		// build report
