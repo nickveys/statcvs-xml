@@ -61,7 +61,7 @@
     <report class="GeneralReport"/>
     <report class="DocumentTable"/>
     <report class="LocChart"/>
-    <report class="CommitTable" groupby="author" showPercent="false" showColumns="1,2,3" title="Developers"/>
+    <report class="CommitTable" groupby="author" showPercent="false" showColumns="1,2,3" title="Developers" orderby="loc"/>
     <report class="DirectoryTree"/>
   </document>
 

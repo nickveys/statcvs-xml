@@ -44,7 +44,7 @@ import de.berlios.statcvs.xml.output.TextElement;
  * for all authors or in a for-each environment.
  * 
  * @author Tammo van Lessen
- * @version $Id: AuthorOfTheMonthReport.java,v 1.4 2004-03-16 15:55:28 vanto Exp $
+ * @version $Id: AuthorOfTheMonthReport.java,v 1.5 2004-03-17 12:26:23 vanto Exp $
  */
 public class AuthorOfTheMonthReport {
 
@@ -71,7 +71,7 @@ public class AuthorOfTheMonthReport {
 				authorsByMonth.put(group, activityByAuthor);
 			}
 			
-			activityByAuthor.addInt(rev.getAuthor(), rev.getLinesDelta());
+			activityByAuthor.addInt(rev.getAuthor(), rev.getNewLines());
 		}
 		
 		// build report
@@ -92,11 +92,12 @@ public class AuthorOfTheMonthReport {
 				Iterator authIt = activityByAuthor.iteratorSortedByValueReverse();
 				if (authIt.hasNext()) {
 					Author author = (Author)authIt.next();
+					// show only if 
 					table.addRow().addString("month", month)
 								  .addAuthor(author)
-								  .addPercent("activity", 
-											activityByAuthor.getPercentOfMaximum(author));
-					count++;	
+								  .addPercent("activity", activityByAuthor
+													.getPercent(author));
+						count++;
 				}
 			}
 			

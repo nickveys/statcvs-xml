@@ -30,6 +30,7 @@ import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.output.WebRepositoryIntegration;
 
+import org.jdom.CDATA;
 import org.jdom.Element;
 
 import de.berlios.statcvs.xml.I18n;
@@ -271,7 +272,8 @@ public class TableElement extends Element
 			}
 			comEl.setAttribute("changedlines", ""+locSum);
 
-			comEl.addContent(new Element("comment").setText(commit.getComment()));
+			//comEl.addContent(new Element("comment").setText(commit.getComment()));
+			comEl.addContent(new Element("comment").addContent(new CDATA(commit.getComment())));
 
 			Element files = new Element("files");
 			comEl.addContent(files);

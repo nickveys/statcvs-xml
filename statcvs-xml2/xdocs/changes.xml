@@ -18,6 +18,10 @@
 		The handling of empty section names in the html output has
 		been fixed. Empty sections headers are now omitted.
       </action>
+      <action dev="vanto" type="fix">
+		Exception in AuthorOfTheMonthReport has been fixed.
+		Now the author with the most new lines in this month scores.
+      </action>
     </release>
 	<release version="0.9.1" date="2004-03-07">
       <action dev="squig" type="add">
