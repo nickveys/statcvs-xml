@@ -170,14 +170,14 @@
 
   <goal name="maven-statcvs-xml-plugin:register" prereqs="statcvs-xml:init">
     <doc:registerReport 
-        name="StatCvs Report" 
+        name="StatCvs-XML Report" 
         pluginName="statcvs-xml"
         link="statcvs-xml/index"
         description="Show some statistics about the CVS repository"/>
   </goal>
 
   <goal name="maven-statcvs-xml-plugin:deregister" prereqs="statcvs-xml:init">
-    <doc:deregisterReport name="StatCvs Report"/>
+    <doc:deregisterReport name="StatCvs-XML Report"/>
   </goal>
 
   <goal name="statcvs-xml:report" prereqs="statcvs-xml"/>
