@@ -6,7 +6,7 @@
   </properties>
 
   <body>
-	<release version="2.1" date="2004-04-17">
+	<release version="2.1" date="2004-03-07">
       <action dev="squig" type="add">
 		History feature was rewritten. The plugin now checks out a
 		complete copy of all 1.1 revisions to the target directory.
@@ -20,6 +20,10 @@
       </action>
       <action dev="squig" type="fix">
 		The CVS connection string is now parsed from the pom.
+      </action>
+      <action dev="squig" type="fix">
+		The repository url is checked for an empty value and not
+		passed to StatCvs-XML in that case.
       </action>
     </release>
 	<release version="1.2" date="in CVS">
