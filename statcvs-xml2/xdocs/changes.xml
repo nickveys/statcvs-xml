@@ -24,13 +24,19 @@
 		The directory tree has been improved.
       </action>
       <action dev="vanto" type="fix">
-        B#1726 Exception in binary only directories.
+        Bug #1726 (Exception in binary only directories) has been
+        fixed.
       </action>
       <action dev="vanto" type="fix">
-        B#1728 Umlauts in Most Common Commitlog Comments Report.
+        Bug #1728 (Umlauts in Most Common Commitlog Comments Report) 
+        has been fixed.
       </action>
       <action dev="vanto" type="fix">
         Vertical alignment in table cells has been fixed (top instead center).
+      </action>
+      <action dev="squiq" type="fix">
+        Bug #1724 (ArrayIndexOutOfBoundsException (progression_by_module.png)) 
+        has been fixed.
       </action>
       
 	</release>
