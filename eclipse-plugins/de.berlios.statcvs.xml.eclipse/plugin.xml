@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin
+   id="de.berlios.statcvs.xml.eclipse"
+   name="StatCvs-XML Plug-in"
+   version="1.0.0"
+   provider-name="Steffen Pingel"
+   class="de.berlios.statcvs.xml.eclipse.StatCvsXMLPlugin">
+
+   <runtime>
+      <library name="statcvs-xml-plugin.jar">
+         <export name="*"/>
+      </library>
+      <library name="statcvs-xml.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.draw2d"/>
+      <import plugin="org.eclipse.ui.forms"/>
+      <import plugin="org.eclipse.ui.views"/>
+   </requires>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.eclipse.ui.resourcePerspective">
+         <view
+               id="de.berlios.statcvs.xml.eclipse.StatCvsXMLView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList"/>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="de.berlios.statcvs.xml.eclipse.StatCvsXMLView"
+            icon="icons/sample.gif"
+            id="de.berlios.statcvs.xml.eclipse.StatCvsXMLView"
+            name="StatCvs-XML"/>
+   </extension>
+
+</plugin>
