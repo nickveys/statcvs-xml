@@ -14,6 +14,16 @@
       </ul>
     </section>
 -->
+	<release version="0.9.5" date="2004-11-??">
+      <action dev="squig" type="fix">
+		Removed $ext reference from html xslt to fix html report
+		generation with Java 5.0.
+      </action>
+      <action dev="squig" type="add">
+		Added new command line parameter '-maven' to support parsing
+        of project.xml for fullnames and picture urls.
+      </action>
+	</release>
 	<release version="0.9.4" date="2004-08-06">
       <action dev="vanto" type="update">
 		Upgrade to JFreeChart 0.9.20.

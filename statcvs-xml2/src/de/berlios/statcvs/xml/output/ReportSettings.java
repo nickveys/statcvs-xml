@@ -626,6 +626,10 @@ public class ReportSettings extends Hashtable {
      * @return
      */
     public String getAuthorPic(Author author, String defaultPic) {
+        if (getBoolean("no-images", false)) {
+            return defaultPic;
+        }
+        
 		Object o = get("authorPics", null);
 		if (o instanceof Map) {
 			Map map = (Map)o;
