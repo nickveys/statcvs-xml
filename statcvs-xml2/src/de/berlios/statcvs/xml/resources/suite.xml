@@ -5,6 +5,7 @@
   </settings>
 
   <document filename="index">
+    <report class="LocChart"/>
     <report class="AuthorsReport"/>
   </document>
 

@@ -50,13 +50,15 @@ public class DocumentSuite {
 	public StatCvsDocument createDocument(Element root, ReportSettings settings)
 	{
 		ReportSettings documentSettings = new ReportSettings(settings);
-		readProperties(documentSettings, root);
 		
 		// generate reports
 		StatCvsDocument document = new StatCvsDocument(documentSettings, root.getAttributeValue("filename"), root.getAttributeValue("title"));
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element element = (Element)it.next();
-			if ("report".equals(element.getName())) {
+			if ("settings".equals(element.getName())) {
+				readProperties(documentSettings, element);
+			}
+			else if ("report".equals(element.getName())) {
 				ReportElement report = createReport(document, element);
 				if (report != null) {
 					document.getRootElement().addContent(report);
@@ -73,8 +75,13 @@ public class DocumentSuite {
 	private ReportElement createReport(StatCvsDocument document, Element root) 
 	{
 		ReportSettings reportSettings = new ReportSettings(document.getSettings());
-		readProperties(reportSettings, root);
-				
+		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
+			Element element = (Element)it.next();
+			if ("settings".equals(element.getName())) {
+				readProperties(reportSettings, element);
+			}
+		}
+		
 		String className = root.getAttributeValue("class");
 		if (className != null) {
 			if (className.indexOf(".") == -1) {
@@ -98,12 +105,13 @@ public class DocumentSuite {
 	public void generate(DocumentRenderer renderer) 
 		throws IOException 
 	{
-		readProperties(defaultSettings, suite.getRootElement());
-		
 		// generate documents
 		for (Iterator it = suite.getRootElement().getChildren().iterator(); it.hasNext();) {
 			Element element = (Element)it.next();
-			if ("document".equals(element.getName())) {
+			if ("settings".equals(element.getName())) {
+				readProperties(defaultSettings, element);
+			}
+			else if ("document".equals(element.getName())) {
 				renderDocument(renderer, element);
 			}
 		}
@@ -150,15 +158,10 @@ public class DocumentSuite {
 	 */ 	
 	public void readProperties(ReportSettings properties, Element root)
 	{
+		// add childern as key value pairs
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
-			Element element = (Element)it.next();
-			if ("settings".equals(element.getName())) {
-				// add childern as key value pairs
-				for (Iterator it2 = element.getChildren().iterator(); it2.hasNext();) {
-					Element setting = (Element)it2.next();
-					properties.put(setting.getName(), setting.getText());
-				}
-			}
+			Element setting = (Element)it.next();
+			properties.put(setting.getName(), setting.getText());
 		}
 	}
 	

@@ -57,17 +57,21 @@
   </developers>
 
   <dependencies>
-     <dependency>
+    <dependency>
       <id>jdom</id>
       <version>b9</version>
-     </dependency>
-     <dependency>
+    </dependency>
+    <dependency>
       <id>jfreechart</id>
       <version>0.9.16</version>
-     </dependency>
-     <dependency>
+    </dependency>
+    <dependency>
       <id>jcommon</id>
       <version>0.9.1</version>
+    </dependency>
+    <dependency>
+      <id>commons-jexl</id>
+      <version>1.0-beta-1</version>
     </dependency>
   </dependencies>
 
