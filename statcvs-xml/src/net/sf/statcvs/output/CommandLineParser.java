@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommandLineParser.java,v $
-	Created on $Date: 2003-07-04 15:17:27 $ 
+	Created on $Date: 2003-07-04 20:03:58 $ 
 */
 package net.sf.statcvs.output;
 
@@ -34,7 +34,7 @@ import net.sf.statcvs.output.xml.XMLRenderer;
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.4 2003-07-04 15:17:27 vanto Exp $
+ * @version $Id: CommandLineParser.java,v 1.5 2003-07-04 20:03:58 vanto Exp $
  */
 public class CommandLineParser {
 
@@ -113,21 +113,27 @@ public class CommandLineParser {
 				throw new ConfigurationException("Missing argument for -notes");
 			}
 			ConfigurationOptions.setNotesFile(popNextArg());
-		} else if (s.equals("viewcvs")) {
+		} else if (s.equals("weburl")) {
+			if (args.isEmpty()) {
+				throw new ConfigurationException("Missing argument for -weburl");
+			}
+			ConfigurationOptions.setWebRepository(WebRepositoryFactory.getInstance(popNextArg()));
+		}
+		else if (s.equals("viewcvs")) {
 			if (args.isEmpty()) {
 				throw new ConfigurationException("Missing argument for -viewcvs");
 			}
-			ConfigurationOptions.setViewCvsURL(popNextArg());
+			ConfigurationOptions.setWebRepository(new ViewCvsIntegration(popNextArg()));
 		} else if (s.equals("cvsweb")) {
 			if (args.isEmpty()) {
 				throw new ConfigurationException("Missing argument for -cvsweb");
 			}
-			ConfigurationOptions.setCvswebURL(popNextArg());
+			ConfigurationOptions.setWebRepository(new CvswebIntegration(popNextArg()));
 		} else if (s.equals("chora")) {
 			if (args.isEmpty()) {
 				throw new ConfigurationException("Missing argument for -chora");
 			}
-			ConfigurationOptions.setChoraURL(popNextArg());
+			ConfigurationOptions.setWebRepository(new ChoraIntegration(popNextArg()));
 		} else if (s.equals("include")) {
 			if (args.isEmpty()) {
 				throw new ConfigurationException("Missing argument for -include");

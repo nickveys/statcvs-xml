@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ConfigurationOptions.java,v $
-	$Date: 2003-07-04 15:17:27 $ 
+	$Date: 2003-07-04 20:03:58 $ 
 */
 package net.sf.statcvs.output;
 
@@ -36,7 +36,7 @@ import net.sf.statcvs.util.FileUtils;
  * can read all parameter values from here.
  * 
  * @author jentzsch
- * @version $Id: ConfigurationOptions.java,v 1.2 2003-07-04 15:17:27 vanto Exp $
+ * @version $Id: ConfigurationOptions.java,v 1.3 2003-07-04 20:03:58 vanto Exp $
  */
 public class ConfigurationOptions {
 
@@ -199,34 +199,11 @@ public class ConfigurationOptions {
 	}
 
 	/**
-	 * Sets the URL to a <a href="http://viewcvs.sourceforge.net/">ViewCVS</a>
-	 * web-based CVS browser. This must be the URL at which the checked-out
-	 * module's root can be viewed in ViewCVS.
-	 * @param url URL to a ViewCVS repository
+	 * Sets a configured WebRepositoy instance 	 
+	 * @param repo a WebRepositoryIntegration instance
 	 */
-	public static void setViewCvsURL(String url) {
-		ConfigurationOptions.webRepository = new ViewCvsIntegration(url);
-	}
-
-	/**
-	 * Sets the URL to a 
-	 * <a href="http://www.freebsd.org/projects/cvsweb.html">cvsweb</a>
-	 * web-based CVS browser. This must be the URL at which the checked-out
-	 * module's root can be viewed in cvsweb.
-	 * @param url URL to a cvsweb repository
-	 */
-	public static void setCvswebURL(String url) {
-		ConfigurationOptions.webRepository = new CvswebIntegration(url);
-	}
-
-	/**
-	 * Sets the URL to a <a href="http://www.horde.org/chora/">Chora</a>
-	 * web-based CVS browser. This must be the URL at which the checked-out
-	 * module's root can be viewed in Chora.
-	 * @param url URL to a cvsweb repository
-	 */
-	public static void setChoraURL(String url) {
-		ConfigurationOptions.webRepository = new ChoraIntegration(url);
+	public static void setWebRepository(WebRepositoryIntegration repo) {
+		ConfigurationOptions.webRepository = repo;
 	}
 
 	/**

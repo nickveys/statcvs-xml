@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Main.java,v $ 
-	Created on $Date: 2003-07-04 17:21:51 $ 
+	Created on $Date: 2003-07-04 20:04:18 $ 
 */
 package net.sf.statcvs;
 
@@ -46,7 +46,7 @@ import net.sf.statcvs.output.xml.OutputSettings;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.8 2003-07-04 17:21:51 vanto Exp $
+ * @version $Id: Main.java,v 1.9 2003-07-04 20:04:18 vanto Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -95,7 +95,7 @@ public class Main {
 		System.out.println(
 		//max. 80 chars
 		//         12345678901234567890123456789012345678901234567890123456789012345678901234567890
-				  "Usage: java -jar statcvs.jar [options] <logfile> <directory>\n"
+				  "Usage: java -jar statcvs-xml.jar [options] <logfile> <directory>\n"
 				+ "\n"
 				+ "Required parameters:\n"
 				+ "  <logfile>          path to the cvs logfile of the module\n"
@@ -107,11 +107,17 @@ public class Main {
 				+ "  -include <pattern> include only files matching pattern, e.g. **/*.c;**/*.h\n"
 				+ "  -exclude <pattern> exclude matching files, e.g. tests/**;docs/**\n"
 				+ "  -title <title>     Project title to be used in reports\n"
-				+ "  -viewcvs <url>     integrate with ViewCVS installation at <url>\n"
+				+ "  -weburl <url>      integrate with web repository installation at <url>\n"
 				+ "  -verbose           print extra progress information\n"
-				  + "  -output-suite [class] use the xml renderer\n"
+				+ "  -output-suite [class] use the xml renderer\n"
 				+ "\n"
-				+ "Full options list: http://statcvs.sf.net/manual");
+				+ "If statcvs cannot recognize the type of your web repository, please use the"
+				+ "following switches:"
+				+ "  -viewcvs <url>     integrate with viewcvs installation at <url>"
+				+ "  -cvsweb <url>      integrate with cvsweb installation at <url>"
+				+ "  -chora <url>       integrate with chora installation at <url>"
+				+ "\n");
+				//+ "Full options list: http://statcvs.sf.net/manual");
 		System.exit(1);
 	}
 
