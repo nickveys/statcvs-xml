@@ -3,19 +3,17 @@
 <project name="Maven StatCvs-XML Plug-in">
   <title>Maven StatCvs-XML Plug-in</title>
   <body>
-    <links>
-      <item href="http://statcvs-xml.berlios.de/" name="StatCvs-XML">
-      </item>
-    </links>
     <menu name="Overview">
       <item href="/goals.html" name="Goals">
       </item>
       <item href="/properties.html" name="Properties">
       </item>
     </menu>
-    <menu name="Development">
-      <item href="/changes-report.html" name="Changes">
-      </item>
-    </menu>
+	<menu name="Download">
+	  <item name="StatCvs-XML Plug-in" href="http://developer.berlios.de/project/showfiles.php?group_id=872"/>
+	</menu>
+    <links>
+      <item href="http://statcvs-xml.berlios.de/" name="StatCvs-XML"/>
+    </links>
   </body>
 </project>

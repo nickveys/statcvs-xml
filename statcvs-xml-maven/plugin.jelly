@@ -13,6 +13,9 @@
   xmlns:doc="doc"
   xmlns:log="jelly:log">
 
+  <!--==================================================================-->
+  <!-- Goal to checks for JDK 1.4                                       -->
+  <!--==================================================================-->
   <goal name="statcvs-xml:init">
     <ant:available property="jdk14" classname="java.lang.CharSequence"/>
     <j:if test="${jdk14 != 'true'}">
@@ -20,9 +23,15 @@
     </j:if>
   </goal>
  
+  <!--==================================================================-->
+  <!-- Default goal                                                     -->
+  <!--==================================================================-->
   <goal name="statcvs-xml" prereqs="statcvs-xml:generate"
       description="Generate CVS statistics for the current CVS project"/>
 
+  <!--==================================================================-->
+  <!-- Goal to create cvs log and to generate reports                   -->
+  <!--==================================================================-->
   <goal name="statcvs-xml:generate" prereqs="statcvs-xml:init"
       description="Generate CVS statistics for the current CVS project">
 
@@ -34,6 +43,7 @@
         <ant:property name="statcvs.repository" value="${basedir}"/>
 		<j:set var="history" value="${statcvs.history}"/>
 
+		<!-- parse cvs connection string by calling scm plugin -->
 		<attainGoal name="scm:validate"/>
 		<j:set var="cvs.root" value="${pom.getPluginContext('maven-scm-plugin').getVariable('maven.scm.cvs.root')}"/>
 		<j:set var="cvs.rsh" value="${pom.getPluginContext('maven-scm-plugin').getVariable('maven.scm.cvs.rsh')}"/>
@@ -42,6 +52,10 @@
 
 
         <j:if test="${history}">
+		  <!-- checkout or update repository of 1.1 revisions 
+               and create cvs log from there, that includes 
+			   information about all files (including deleted files) -->
+
           <j:set var="statcvs.repository" 
               value="${maven.build.dir}/statcvs-xml/${cvs.module}"/>
 
@@ -86,6 +100,7 @@
 			cvsRoot="${cvs.root}"/>
 			<!-- failonerror="true"/> -->
 
+        <!-- create directories for documents --> 
         <property name="maven.docs.dest" 
             value="${pom.getPluginContext('maven-xdoc-plugin').getVariable('maven.docs.dest')}"/>
         <property name="maven.gen.docs" 
@@ -93,6 +108,7 @@
         <ant:mkdir dir="${maven.docs.dest}/statcvs-xml"/>
         <ant:mkdir dir="${maven.gen.docs}/statcvs-xml"/>
 
+		<!-- run statcvs-xml -->
 		<j:set var="include" value="${statcvs.include}"/>
 		<j:set var="exclude" value="${statcvs.exclude}"/>
         <ant:java classname="de.berlios.statcvs.xml.Main" fork="true">
@@ -103,9 +119,6 @@
 		    <ant:arg line="-verbose"/> 
           </j:if>
           <ant:arg line="-weburl ${pom.repository.url}"/>
-          <j:if test="${history}">
-            <ant:arg line="-use-history"/>
-          </j:if>
           <j:if test="${!empty(include)}">
             <ant:arg line="-include '${include}'"/>
           </j:if>
@@ -124,7 +137,7 @@
           </ant:classpath>
         </ant:java>
 
-        <!-- Copy images  -->
+        <!-- copy images  -->
         <copy todir="${maven.docs.dest}/statcvs-xml" overwrite="yes" 
             filtering="no">
           <fileset dir="${maven.gen.docs}/statcvs-xml">
@@ -139,6 +152,9 @@
     </j:choose>
   </goal>
 
+  <!--==================================================================-->
+  <!-- Goal to register as report                                       -->
+  <!--==================================================================-->
   <goal name="maven-statcvs-xml-plugin:register" prereqs="statcvs-xml:init">
     <doc:registerReport 
         name="StatCvs-XML Report" 
@@ -147,10 +163,16 @@
         description="Show some statistics about the CVS repository"/>
   </goal>
 
+  <!--==================================================================-->
+  <!-- Goal to deregister as report                                     -->
+  <!--==================================================================-->
   <goal name="maven-statcvs-xml-plugin:deregister" prereqs="statcvs-xml:init">
     <doc:deregisterReport name="StatCvs-XML Report"/>
   </goal>
 
+  <!--==================================================================-->
+  <!-- Goal to call goal to generate report                             -->
+  <!--==================================================================-->
   <goal name="statcvs-xml:report" prereqs="statcvs-xml"/>
 
 </project>

@@ -6,6 +6,22 @@
   </properties>
 
   <body>
+	<release version="2.1" date="2004-04-17">
+      <action dev="squig" type="add">
+		History feature was rewritten. The plugin now checks out a
+		complete copy of all 1.1 revisions to the target directory.
+      </action>
+      <action dev="squig" type="update">
+		Property for include was fixed and property for exclude was
+		added. 
+      </action>
+      <action dev="squig" type="update">
+		The documentation has been updated.
+      </action>
+      <action dev="squig" type="fix">
+		The CVS connection string is now parsed from the pom.
+      </action>
+    </release>
 	<release version="1.2" date="in CVS">
       <action dev="vanto" type="add">
 		First Release.

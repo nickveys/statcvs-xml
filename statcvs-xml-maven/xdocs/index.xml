@@ -1,0 +1,20 @@
+<document>
+
+  <properties>
+    <title>Maven StatCvs-XML Plugin</title>
+  </properties>
+
+  <body>
+    <section name="Maven SCM Plugin">
+      <p>
+       A plugin to generate statistics about CVS usage using <a
+       href="http://statcvs-xml.berlios.de/">StatCvs-XML</a>. The
+       output is highly customizable through an XML file. Please see
+       the <a
+       href="http://statcvs-xml.berlios.de/manual/">StatCvs-XML</a> manual
+       for more information.
+      </p>
+    </section>
+  </body>
+
+</document>

@@ -3,7 +3,6 @@
 <document>
   <properties>
     <title>Maven StatCvs-XML Plug-in Properties</title>
-    <author email="dion@apache.org">dIon Gillard</author>
   </properties>
   <body>
     <section name="Maven StatCvs-XML Plug-in Settings">
@@ -12,6 +11,56 @@
           <th>Property</th>
           <th>Optional?</th>
           <th>Description</th>
+        </tr>
+        <tr>
+          <td>statcvs.history</td>
+          <td>true</td>
+          <td>
+            Default value is <code>false</code>. When set to
+            <code>true</code>, the plugin will check out a complete
+            copy of all 1.1 revisions of the repository defined in the
+            pom to the target directory and fetch the cvs log from
+            there. This will enable StatCvs to correctly determine the
+            lines of code for deleted files and directories. 
+          </td>
+        </tr>
+        <tr>
+          <td>statcvs.verbose</td>
+          <td>true</td>
+          <td>
+            Default value is <code>true</code>. When set to
+            <code>false</code>, less output will be generated.
+          </td>
+        </tr>
+        <tr>
+          <td>statcvs.title</td>
+          <td>true</td>
+          <td>
+            Default value is <code>${pom.name}</code>. The title that
+            will be printed on top of each graph.
+          </td>
+        </tr>
+        <tr>
+          <td>statcvs.include</td>
+          <td>true</td>
+          <td>
+            Default is none. Determines the files to consider when
+            generating the report. Uses ant style file-pattern
+            matching. Separate multiple expressions by
+            semi-colons, i.e. to only include source files in a C++
+            project: <code>src/**/*.cpp;src/**/*.h</code>
+          </td>
+        </tr>
+        <tr>
+          <td>statcvs.exclude</td>
+          <td>true</td>
+          <td>
+            Default is none. Determines the files not to consider when
+            generating the report. Uses ant style file-pattern
+            matching. Separate multiple expressions by semi-colons,
+            i.e. to exclude Java source files located below src/net:
+            <code>src/net/**/*.java</code>
+          </td>
         </tr>
       </table>
     </section>
