@@ -16,32 +16,21 @@
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-    
-	$RCSfile$ 
-	Created on $Date$ 
 */
 package net.sf.statcvs.model;
 
 import java.util.Date;
 
 /**
- * Object which contains information about one revision of a file.
- * 
- * <p>Everytime an author checks his code into a repository the revision
- * number he was working on, is incremented. Revision numbers have an odd
- * number of periods. And on each forked revision an even integer is appended to
- * the original revision (e.g. Rev 1.3 forks to 1.3.2.1 :-). The 0 is not
- * used for revision
- * numbering. It has a special meaning in the cvs branching mechanism. These are
- * the so called &quot;magic branches&quot;.</p>
+ * One revision of a {@link CvsFile}. That can be an initial revision
+ * (checkin), a change, a deletion, or a re-add, as specified by the
+ * <code>type</code> field.
  *
  * TODO: Replace type code with hierarchy
+ * TODO: Rename class to Revision, getAuthor() to getLogin(), isDead() to isDeletion()
  * 
- * TODO: give linesAdded, linesRemoved and linesOfCode intuitive
- *       semantics (and not the strange semantics of cvs log)
- *
  * @author Manuel Schulze
- * @author Richard Cyganiak <rcyg@gmx.de>
+ * @author Richard Cyganiak <richard@cyganiak.de>
  * @version $Id$
  */
 public class CvsRevision implements Comparable {
@@ -73,40 +62,40 @@ public class CvsRevision implements Comparable {
 	 */
 	public static final int TYPE_BEGIN_OF_LOG = 5;
 
-	private CvsFile file;
-	private String revision;
-	private int type;
-	private Author author;
-	private Date date;
-	private String comment;
-	private int linesAdded;
-	private int linesRemoved;
-	private int linesOfCode;
+	private final CvsFile file;
+	private final String revisionNumber;
+	private final int type;
+	private final Author author;
+	private final Date date;
+	private final String comment;
+	private final int lines;
+	private final int linesReplaced;
+	private final int linesDelta;
 
 	/**
 	 * Creates a new revision of a file with the
 	 * specified revision number.
 	 * @param file CvsFile that belongs to this revision
-	 * @param revision revision number, for example "1.1"
+	 * @param revisionNumber revision number, for example "1.1"
 	 * @param type a <tt>TYPE_XXX</tt> constant
 	 * @param author the author of the revision
 	 * @param date the date of the revision
 	 * @param comment the author's comment
-	 * @param added number of lines added
-	 * @param removed number of lines removed
-	 * @param currentLOC number of lines in the file; if the revision is a deletion, then number of lines before
-	 */
-	public CvsRevision(CvsFile file, String revision, int type,
-			Author author, Date date, String comment, int added, int removed, int currentLOC) {
+	 * @param lines number of lines; 0 for deletions
+	 * @param linesDelta by how much did the number of lines change, compared to the previous revision?
+	 * @param linesReplaced How many lines were removed and replaced by other lines, without the delta changing?
+ 	 */
+	public CvsRevision(CvsFile file, String revisionNumber, int type,
+			Author author, Date date, String comment, int lines, int linesDelta, int linesReplaced) {
 		this.file = file;
-		this.revision = revision;
+		this.revisionNumber = revisionNumber;
 		this.type = type;
 		this.author = author;
 		this.date = date;
 		this.comment = comment;
-		this.linesAdded = added;
-		this.linesRemoved = removed;
-		this.linesOfCode = currentLOC;
+		this.lines = lines;
+		this.linesDelta = linesDelta;
+		this.linesReplaced = linesReplaced;
 		if (file != null) {
 			file.addRevision(this);
 		}
@@ -117,108 +106,91 @@ public class CvsRevision implements Comparable {
 
 	/**
 	 * Returns the revision number.
-	 * @return String
+	 * @return the revision number
 	 */
-	public String getRevision() {
-		return revision;
+	public String getRevisionNumber() {
+		return revisionNumber;
 	}
 
 	/**
-	 * Returns the author
-	 * @return the author of this revision
+	 * Returns the author of this revision.
+	 * @return the author
 	 */
 	public Author getAuthor() {
 		return author;
 	}
 
 	/**
-	 * Returns the comment.
-	 * @return String
+	 * Returns the comment for this revision.
+	 * @return the comment
 	 */
 	public String getComment() {
 		return comment;
 	}
 
 	/**
-	 * Returns the date.
-	 * @return Date
+	 * Returns the date of this revision.
+	 * @return the date
 	 */
 	public Date getDate() {
 		return date;
 	}
 
 	/**
-	 * Returns the number of added lines.
-	 * @return int
-	 */
-	public int getLinesAdded() {
-		if (file.isBinary()) {
-			return 0;
-		}
-		return linesAdded;
-	}
-
-	/**
-	 * Returns the number of removed lines.
-	 * @return int
-	 */
-	public int getLinesRemoved() {
-		if (file.isBinary()) {
-			return 0;
-		}
-		return linesRemoved;
-	}
-
-	/**
-	 * Returns the lines of code value for this revision. This is the
-	 * number of code lines the file contained in this revision, or
-	 * 0 for binary files. Deleted files still keep their lines of
-	 * code value.
+	 * Returns the number of lines for this revision. This is 0 for
+	 * dead revisions.
 	 * 
-	 * @return the number of code lines
+	 * @return the number of lines
 	 */
-	public int getLinesOfCode() {
-		return linesOfCode;
-	}
-
-	/**
-	 * Returns the lines of code value for this revision. This is the
-	 * number of code lines the file contained in this revision, or
-	 * 0 for binary files and dead files.
-	 * 
-	 * @return the number of code lines
-	 */
-	public int getEffectiveLinesOfCode() {
-		if (isDead()) {
-			return 0;
-		}
-		return linesOfCode;
+	public int getLines() {
+		return lines;
 	}
 
 	/**
 	 * Returns by how many lines the line count changed with this
-	 * revision. Deletions return -<code>getLinesOfCode()</code>,
-	 * re-adds and initial revisions return <code>getLinesOfCode()</code>.
+	 * revision. Deletions return <code>-getLines()</code>,
+	 * re-adds and initial revisions return <code>getLines()</code>.
 	 * 
 	 * @return the line count change of this revision
 	 */
-	public int getLinesOfCodeChange() {
-		if (isInitialRevision()) {
-			return getLinesOfCode();
-		}
-		if (isDead()) {
-			return -getLinesOfCode();
-		}
-		return getLinesAdded() - getLinesRemoved();
+	public int getLinesDelta() {
+		return linesDelta;
 	}
 
+	/**
+	 * Returns the number of lines that were removed and replaced
+	 * by other lines in this revision. For example, if 5 lines were
+	 * added and 2 lines removed, this would be 3. If 1 line was added
+	 * and 1 was removed, it would be 1. If it was an initial revision
+	 * or a deletion, it would be 0.
+	 * 
+	 * @return the number of lines that were replaced by other lines.
+	 */
+	public int getReplacedLines() {
+		return linesReplaced;
+	}
+
+	/**
+	 * Returns the number of "new" lines in this revision. This is the
+	 * sum of added and changed lines. In other words, all the "original"
+	 * lines the author of this revision came up with.
+	 * @return lines changed or added
+	 */
+	public int getNewLines() {
+		if (getLinesDelta() > 0) {
+			return getLinesDelta() + getReplacedLines();
+		} else {
+			return getReplacedLines();
+		}
+	}
+	
 	/**
 	 * Returns the change of the file count caused by this revision.
 	 * This is 1 for initial revisions and re-adds, -1 for deletions,
 	 * and 0 for normal revisions.
 	 * @return the file count change of this revision
 	 */
-	public int getFileCountChange() {
+	public int getFileCountDelta() {
 		if (isInitialRevision()) {
 			return 1;
 		} else if (isDead()) {
@@ -227,17 +199,20 @@ public class CvsRevision implements Comparable {
 			return 0;
 		}
 	}
-				
+
 	/**
-	 * Returns <code>true</code> if this is the first revision for
-	 * @return <code>true</code> if this is the first revision for
-	 * this file.
+	 * Returns <code>true</code> if the file did not exist before this
+	 * revision and does exist afterwards. Possibly the file was deleted
+	 * before, or it never existed before.
+	 * 
+	 * @return <code>true</code> if the file did not exist before
 	 */
 	public boolean isInitialRevision() {
 		return type == TYPE_CREATION;
 	}
 
 	/**
+	 * Returns <tt>true</tt> if the file is deleted in this revision.
 	 * @return <code>true</code> if the file is deleted in this revision
 	 */
 	public boolean isDead() {
@@ -245,6 +220,10 @@ public class CvsRevision implements Comparable {
 	}
 
 	/**
+	 * Returns <tt>true</tt> if this is a revision
+	 * at the very beginning of the log timespan which is
+	 * only a container for the number of code lines at the beginning
+	 * of the log and not a real revision committed by an author.
 	 * @return <code>true</code> if this revision exists
 	 * only for StatCvs bookkeeping purposes
 	 */
@@ -253,56 +232,23 @@ public class CvsRevision implements Comparable {
 	}
 
 	/**
-	 * Returns a string representation of this objects content.
-	 * @return String representation
+	 * {@inheritDoc}
 	 */
 	public String toString() {
-		return this.author.getName() + " - " + this.revision;
+		return this.author.getName() + " - " + this.revisionNumber;
 	}
 
 	/**
-	 * Returns the {@link CvsFile} object of this revision.
-	 * @return the {@link CvsFile} object of this revision.
+	 * Returns the file which was changed by this revision.
+	 * @return the file
 	 */
 	public CvsFile getFile() {
 		return file;
 	}
 
 	/**
-	 * Returns the lines of code value of this revision. This is the sum
-	 * of lines changed and added in this revision.
-	 * @return lines changed or added
-	 */
-	public int getLineValue() {
-		if (file.isBinary()) {
-			return 0;
-		}
-		if (isInitialRevision()) {
-			return getLinesOfCode();
-		}
-		return getLinesAdded();
-	}
-	
-	/**
-	 * Returns the lines of code removing value of this revision.
-	 * This is the sum of lines changed and deleted in this revision.
-	 * TODO: Write test case for this and getLineValue() for the case
-	 * that a file is deleted and re-added
-	 * @return lines changed or deleted
-	 */
-	public int getRemovingValue() {
-		if (file.isBinary()) {
-			return 0;
-		}
-		if (isDead()) {
-			return getLinesOfCode();
-		}
-		return getLinesRemoved();
-	}
-	
-	/**
 	 * Returns the predecessor of this revision or <tt>null</tt> if it
-	 * is the first revision.
+	 * is the first revision for the file.
 	 * @return the predecessor of this revision
 	 */
 	public CvsRevision getPreviousRevision() {
@@ -327,7 +273,7 @@ public class CvsRevision implements Comparable {
 		if (result != 0) {
 			return result;
 		}
-		result = revision.compareTo(otherRevision.getRevision());
+		result = revisionNumber.compareTo(otherRevision.getRevisionNumber());
 		if (result != 0) {
 			return result;
 		}
@@ -341,5 +287,87 @@ public class CvsRevision implements Comparable {
 			return comment.compareTo(otherRevision.getComment());
 		}
 		return 1;
+	}
+	
+	//TODO: remove all deprecated methods when they are no longer used by StatCvs-XML
+
+	/**
+	 * @deprecated Use {@link #getLinesDelta()} and {@link #getLinesReplaced()} instead.
+	 */
+	public int getLinesAdded() {
+		if (isInitialRevision() && getPreviousRevision() != null) {
+			return 0;
+		}
+		return getNewLines();
+	}
+	
+	/**
+	 * @deprecated Use {@link #getLinesDelta()} and {@link #getLinesReplaced()} instead.
+	 */
+	public int getLinesRemoved() {
+		if (isDead()) {
+			return 0;
+		}
+		if (getLinesDelta() < 0) {
+			return -getLinesDelta() + getReplacedLines();
+		} else {
+			return getReplacedLines();
+		}
+	}
+	
+	/**
+	 * @deprecated Use {@link #getLines()} instead.
+	 */
+	public int getLinesOfCode() {
+		if (isDead() && getPreviousRevision() != null) {
+			return getPreviousRevision().getLines();
+		}
+		return getLines();
+	}
+	
+	/**
+	 * @deprecated Use {@link #getLines()} instead.
+	 */
+	public int getEffectiveLinesOfCode() {
+		return getLines();
+	}
+	
+	/**
+	 * @deprecated Use {@link #getLinesDelta()} instead.
+	 */
+	public int getLinesOfCodeChange() {
+		return getLinesDelta();
+	}
+	
+	/**
+	 * @deprecated Use {@link #getNewLines()} instead.
+	 */
+	public int getLineValue() {
+		return getNewLines();
+	}
+	
+	/**
+	 * @deprecated Use {@link #getReplacedLines()} and {@link #getLinesDelta} instead.
+	 */
+	public int getRemovingValue() {
+		if (getLinesDelta() > 0) {
+			return getReplacedLines();
+		} else {
+			return -getLinesDelta() + getReplacedLines();
+		}
+	}
+	
+	/**
+	 * @deprecated Use {@link #getFileCountDelta()} instead.
+	 */
+	public int getFileCountChange() {
+		return getFileCountDelta();
+	}
+	
+	/**
+	 * @deprecated Use {@link #getRevisionNumber()} instead.
+	 */
+	public String getRevision() {
+		return getRevisionNumber();
 	}
 }

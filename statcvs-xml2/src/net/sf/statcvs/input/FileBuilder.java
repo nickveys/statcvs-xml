@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.CvsRevision;
-import net.sf.statcvs.output.ConfigurationOptions;
 
 /**
  * <p>Builds a {@link CvsFile} with {@link CvsRevision}s from logging data.
@@ -62,7 +61,6 @@ public class FileBuilder {
 	private Builder builder;
 	private String name;
 	private boolean isBinary;
-	private boolean isInAttic;
 	private List revisions = new ArrayList();
 	private RevisionData lastAdded = null;
 
@@ -73,14 +71,12 @@ public class FileBuilder {
 	 * author and directory instances and line counts.
 	 * @param name the filename
 	 * @param isBinary Is this a binary file or not?
-	 * @param isInAttic Is this file in the attic?
 	 */
 	public FileBuilder(Builder builder,
-				String name, boolean isBinary, boolean isInAttic) {
+				String name, boolean isBinary) {
 		this.builder = builder;
 		this.name = name;
 		this.isBinary = isBinary;
-		this.isInAttic = isInAttic;
 		logger.fine("logging " + name);
 	}
 
@@ -116,7 +112,7 @@ public class FileBuilder {
 			return null;
 		}
 
-		CvsFile file = new CvsFile(name, builder.getDirectory(name), isBinary, isInAttic);
+		CvsFile file = new CvsFile(name, builder.getDirectory(name));
 
 		if (revisions.isEmpty()) {
 			buildBeginOfLogRevision(file, beginOfLogDate, getFinalLOC());
@@ -240,27 +236,52 @@ public class FileBuilder {
 	}
 
 	private void buildCreationRevision(CvsFile file, RevisionData data, int loc) {
-		new CvsRevision(file, data.getRevision(),
-				CvsRevision.TYPE_CREATION, builder.getAuthor(data.getAuthorName()),
-				data.getDate(), data.getComment(), data.getLinesAdded(), data.getLinesRemoved(), loc);
+		if (isBinary) {
+			new CvsRevision(file, data.getRevision(),
+					CvsRevision.TYPE_CREATION, builder.getAuthor(data.getAuthorName()),
+					data.getDate(), data.getComment(), 0, 0, 0);			
+		} else {
+			new CvsRevision(file, data.getRevision(),
+					CvsRevision.TYPE_CREATION, builder.getAuthor(data.getAuthorName()),
+					data.getDate(), data.getComment(), loc, loc, 0);
+		}
 	}
 
 	private void buildChangeRevision(CvsFile file, RevisionData data, int loc) {
-		new CvsRevision(file, data.getRevision(),
-				CvsRevision.TYPE_CHANGE, builder.getAuthor(data.getAuthorName()),
-				data.getDate(), data.getComment(), data.getLinesAdded(), data.getLinesRemoved(), loc);
+		if (isBinary) {
+			new CvsRevision(file, data.getRevision(),
+					CvsRevision.TYPE_CHANGE, builder.getAuthor(data.getAuthorName()),
+					data.getDate(), data.getComment(), 0, 0, 0);			
+		} else {
+			new CvsRevision(file, data.getRevision(),
+					CvsRevision.TYPE_CHANGE, builder.getAuthor(data.getAuthorName()),
+					data.getDate(), data.getComment(), 
+					loc, data.getLinesAdded() - data.getLinesRemoved(),
+					Math.min(data.getLinesAdded(), data.getLinesRemoved()));	
+		}
 	}
 
 	private void buildDeletionRevision(CvsFile file, RevisionData data, int loc) {
-		new CvsRevision(file, data.getRevision(),
-				CvsRevision.TYPE_DELETION, builder.getAuthor(data.getAuthorName()),
-				data.getDate(), data.getComment(), data.getLinesAdded(), data.getLinesRemoved(), loc);
+		if (isBinary) {
+			new CvsRevision(file, data.getRevision(),
+					CvsRevision.TYPE_DELETION, builder.getAuthor(data.getAuthorName()),
+					data.getDate(), data.getComment(), 0, 0, 0);
+		} else {
+			new CvsRevision(file, data.getRevision(),
+					CvsRevision.TYPE_DELETION, builder.getAuthor(data.getAuthorName()),
+					data.getDate(), data.getComment(), 0, -loc, 0);
+		}
 	}
 
 	private void buildBeginOfLogRevision(CvsFile file, Date beginOfLogDate, int loc) {
 		Date date = new Date(beginOfLogDate.getTime() - 60000);
-		new CvsRevision(file, "0.0",
-				CvsRevision.TYPE_BEGIN_OF_LOG, null, date, null, 0, 0, loc);
+		if (isBinary) {
+			new CvsRevision(file, "0.0",
+					CvsRevision.TYPE_BEGIN_OF_LOG, null, date, null, 0, 0, 0);
+		} else {
+			new CvsRevision(file, "0.0",
+					CvsRevision.TYPE_BEGIN_OF_LOG, null, date, null, loc, 0, 0);			
+		}
 	}
 
 	/**
@@ -271,7 +292,7 @@ public class FileBuilder {
 	 */
 	private boolean isFilteredFile() {
 		return name.startsWith("CVSROOT")
-				|| !ConfigurationOptions.matchesPatterns(name);
+				|| !builder.matchesPatterns(name);
 	}
 
 	/**

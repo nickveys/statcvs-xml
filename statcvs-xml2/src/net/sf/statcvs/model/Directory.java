@@ -16,75 +16,86 @@
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-    
-	$RCSfile$
-	$Date$
 */
 package net.sf.statcvs.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
- * Represents a directory in the module. A container for {@link CvsFile}s.
+ * Represents a directory in the {@link CvsContent Repository}, a
+ * container for {@link CvsFile}s and sub<tt>Directory</tt>s.
+ * A new root directory is created by {@link #createRoot}.
+ * The {@link #createSubdirectory} method creates new subdirectories.
  * 
- * @author Richard Cyganiak <rcyg@gmx.de>
+ * TODO: Rename getCurrentLOC to getCurrentLines or getCurrentLineCount
+ * 
+ * @author Richard Cyganiak <richard@cyganiak.de>
  * @version $Id$
  */
 public abstract class Directory implements Comparable {
-
-	private Collection files = new ArrayList();
-	private List directories = new ArrayList();
-	private boolean directoriesSorted = true;
+	private SortedSet files = new TreeSet();
+	private SortedSet directories = new TreeSet();
 
 	/**
-	 * Returns the directory's name without full path or any slashes, e.g. "src"
+	 * Factory method for creating a new root directory.
+	 * @return a new root directory
+	 */
+	public static Directory createRoot() {
+		return new DirectoryRoot();
+	}
+
+	/**
+	 * Factory method for creating a new subdirectory.
+	 * @param name the subdirectory's name
+	 * @return the subdirectory instance
+	 */
+	public Directory createSubdirectory(String name) {
+		Directory result = new DirectoryImpl(this, name);
+		directories.add(result);
+		return result;
+	}
+
+	/**
+	 * Returns the directory's name without full path or any slashes, 
+	 * for example "src".
 	 * @return the directory's name
 	 */
 	public abstract String getName();
 
 	/**
 	 * Returns the directory's full path with trailing slash,
-	 * for example "src/net/sf/statcvs/"
+	 * for example "src/net/sf/statcvs/".
 	 * @return the directory's path
 	 */
 	public abstract String getPath();
 
 	/**
 	 * Returns the directory's parent directory or <tt>null</tt> if it is the root
-	 * @return the directory's parent
+	 * @return the directory's parent.
 	 */
 	public abstract Directory getParent();
 
 	/**
+	 * Returns <tt>true</tt> if this is the root of the directory tree.
 	 * @return <tt>true</tt> if this is the root of the directory tree
 	 */
 	public abstract boolean isRoot();
 	
 	/**
-	 * @return the level of this directory in the directory tree.
-	 *         0 for the root.
+	 * Returns the level of this directory in the direcotry tree.
+	 * The root has level 0, its subdirectories have level 1, and so forth.
+	 * @return the level of this directory in the directory tree
 	 */
 	public abstract int getDepth();
 
 	/**
-	 * Adds a file to this directory
-	 * @param file a file in this directory
+	 * Returns all {@link CvsFile} objects in this directory, ordered
+	 * by filename. Files in subdirectories are not included.
+	 * @return the files in this directory
 	 */
-	public void addFile(CvsFile file) {
-		files.add(file);
-	}
-	
-	/**
-	 * Returns all {@link CvsFile} objects in this directory
-	 * @return the files in this directory, unordered
-	 */
-	public Collection getFiles() {
+	public SortedSet getFiles() {
 		return files;
 	}
 	
@@ -100,23 +111,15 @@ public abstract class Directory implements Comparable {
 			CvsFile file = (CvsFile) iterator.next();
 			result.addAll(file.getRevisions());
 		}
-		return result;		
+		return result;
 	}
 
 	/**
-	 * Adds a subdirectory to this directory.
-	 * @param dir an immediate subdirectory 
+	 * Returns a <tt>SortedSet</tt> of all immediate subdirectories,
+	 * ordered by name.
+	 * @return <tt>SortedSet</tt> of {@link Directory} objects
 	 */
-	public void addSubdirectory(Directory dir) {
-		directories.add(dir);
-		directoriesSorted = false;
-	}
-
-	/**
-	 * Returns a collection of all immediate subdirectories
-	 * @return collection of {@link Directory} objects
-	 */
-	public Collection getSubdirectories() {
+	public SortedSet getSubdirectories() {
 		return directories;
 	}
 
@@ -124,11 +127,10 @@ public abstract class Directory implements Comparable {
 	 * Returns a list of all subdirectories, including their subdirectories
 	 * and this directory itself. The list is preordered, beginning with this
 	 * directory itself.
-	 * @return list of {@link Directory} objects
+	 * @return <tt>SortedSet</tt> of {@link Directory} objects
 	 */
-	public List getSubdirectoriesRecursive() {
-		sortDirectories();
-		List result = new ArrayList();
+	public SortedSet getSubdirectoriesRecursive() {
+		SortedSet result = new TreeSet();
 		result.add(this);
 		Iterator it = directories.iterator();
 		while (it.hasNext()) {
@@ -139,10 +141,9 @@ public abstract class Directory implements Comparable {
 	}
 
 	/**
-	 * Returns the number of code lines in this directory. The returned number
+	 * Returns the number of lines in this directory. The returned number
 	 * will be for the current revisions of all files.
-	 * TODO: Write tests!
-	 * @return LOC in this directory
+	 * @return lines in this directory
 	 */
 	public int getCurrentLOC() {
 		int result = 0;
@@ -157,7 +158,6 @@ public abstract class Directory implements Comparable {
 	/**
 	 * Returns the number of files in this directory. Deleted files are not
 	 * counted.
-	 * TODO: Write tests!
 	 * @return number of files in this directory
 	 */
 	public int getCurrentFileCount() {
@@ -176,7 +176,6 @@ public abstract class Directory implements Comparable {
 	 * Returns <code>true</code> if all files in this directory and its
 	 * subdirectories are deleted, or if it doesn't have any files and
 	 * subdirectories at all.
-	 * TODO: Write tests!
 	 * @return <code>true</code> if the directory is currently empty
 	 */
 	public boolean isEmpty() {
@@ -197,17 +196,19 @@ public abstract class Directory implements Comparable {
 		return true;
 	}
 
-	private void sortDirectories() {
-		if (!directoriesSorted) {
-			Collections.sort(directories);
-			directoriesSorted = true;
-		}
-	}
-
 	/**
+	 * Compares this directory to another one, based on their full names.
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(Object o) {
 		return getPath().compareTo(((Directory) o).getPath());
+	}
+
+	/**
+	 * Adds a file to this directory.
+	 * @param file a file in this directory
+	 */
+	void addFile(CvsFile file) {
+		files.add(file);
 	}
 }
