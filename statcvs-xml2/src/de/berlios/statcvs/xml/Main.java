@@ -53,7 +53,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.11 2004-02-26 16:12:53 squig Exp $
+ * @version $Id: Main.java,v 1.12 2004-02-26 16:25:29 squig Exp $
  */
 public class Main {
 	private static String projectName;
@@ -69,9 +69,6 @@ public class Main {
 		System.out.println(I18n.tr("StatCvs-XML - CVS statistics generation")+"\n");
 		System.setProperty("java.awt.headless", "true");
 		
-		if (args.length == 0) {
-			printProperUsageAndExit();
-		}
 		if (args.length == 1) {
 			String arg = args[0].toLowerCase();
 			if (arg.equals("-h") || arg.equals("-help")) {

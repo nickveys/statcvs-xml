@@ -1,16 +1,4 @@
 <suite>
-  <settings>
-    <width>640</width>
-    <height>480</height>
-    <modules type="map">
-      <Report>**/report/*</Report>
-      <Output>**/output/*</Output>
-      <XNap_1.x>xnap/**</XNap_1.x>
-      <XNap_2.x>xnap2/**</XNap_2.x>
-      <XNap_3.x>xnap3/**</XNap_3.x>
-    </modules>
-    <tags>test1</tags>
-  </settings>
 
   <document  filename="test1" title="Test1">
     <report class="CommitTable" groupby="author"/>

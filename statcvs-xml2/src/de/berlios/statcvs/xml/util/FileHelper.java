@@ -14,7 +14,7 @@ import de.berlios.statcvs.xml.Main;
  * Provides static file helper methods.
  * 
  * @author Steffen Pingel
- * @version $Id: FileHelper.java,v 1.2 2004-02-26 16:12:53 squig Exp $
+ * @version $Id: FileHelper.java,v 1.3 2004-02-26 16:25:29 squig Exp $
  */
 public class FileHelper {
 
@@ -26,7 +26,7 @@ public class FileHelper {
 		InputStream in = FileHelper.getResourceAsStream(filename);
 		if (in != null) {
 			try {
-				FileUtils.copyFile(in, new File(outputPath, filename));
+				FileUtils.copyFile(in, new File(outputPath, FileUtils.getFilenameWithoutPath(filename)));
 				return true;
 			} 
 			catch (IOException e) {

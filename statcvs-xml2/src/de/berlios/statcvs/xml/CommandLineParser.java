@@ -33,7 +33,7 @@ import de.berlios.statcvs.xml.output.XDocRenderer;
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.6 2004-02-26 16:12:53 squig Exp $
+ * @version $Id: CommandLineParser.java,v 1.7 2004-02-26 16:25:29 squig Exp $
  */
 public class CommandLineParser {
 
@@ -68,7 +68,7 @@ public class CommandLineParser {
 				parseArgument(settings, currentArg);
 			}
 		}
-		checkForRequiredArgs();
+		//checkForRequiredArgs();
 	}
 
 	private String popNextArg() {
