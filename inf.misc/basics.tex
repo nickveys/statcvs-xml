@@ -68,22 +68,13 @@
 \frame[all:1]{
     \frametitle{Verzeichnisstruktur}
     Maven wünscht sich eine besondere Projektgliederung
-    \scriptsize\begin{alltt}
+    \begin{alltt}
 statcvs-xml
   + src
-    - conf
     + java
-      - ...
     + test
-      - ...
-    - resources
-    - (webapp)
-  + target
-    + docs
-    - ...
   + xdocs
-    - images
-    - styles
+
   - maven.xml
   - project.xml
   - project.properties
@@ -130,8 +121,14 @@ statcvs-xml
 
 \frame{
     \frametitle{Plugin-Architektur}
-    merging von maven.xml und properties
-    reports melden sich an
+	{\bf Everything is a plugin}\\
+	Plugins sind konfigurierbare Goal-Bibliotheken.
+    \begin{itemize}
+	  \item Jedes Plugin besteht aus einer plugin.jelly Datei
+	  \item plugin.properties setzt die Plugin-Defaultwerte
+	  \item maven.xml wird durch alle plugin.jelly Dateien ergänzt
+	\end{itemize}
+    \vspace{0.5cm}
 }
 
 \subsection[Properties]{Properties}
@@ -155,6 +152,14 @@ statcvs-xml
 
 \frame{
     \frametitle{Repositories}
+	Maven übernimmt die Verwaltung aller abhängigen Bibliotheken.
+	\begin{itemize}
+	  \item Nomenklatur: \$\{artifactId\}-\$\{version\}
+	  \item Automatische Auflösung der Dependencies
+	  \item Automatischer Download aus dem Remote Repository in das
+	  lokale Repository
+	  \item Ergänzung des Classpaths
+	\end{itemize}
 }
 
 \frame[all:1]{
@@ -184,30 +189,76 @@ statcvs-xml
 \subsection[Build]{Build}
 \frame{
     \frametitle{Buildprozess starten}
+	
+    {\bf Java Plugin}
+    \begin{tabular}{rr}
+     java:compile & Kompiliert die im POM angegebenen Sourcen
+    \end{tabular}
+
+	\vspace{0.5cm}
+    {\bf Jar Plugin}
+    \begin{tabular}{rl}
+     jar:jar & Erzeugt aus den im POM angegebenen Sourcen und\\
+     & Resourcen ein jar (z.B. statcvs-xml-1.0.jar)\\
+
+	 jar:snapshot & Erzeugt ein Snapshot-Jar ohne Version, dafür mit\\
+     & Datum (z.B. statcvs-xml-20040204.140000.jar)\\
+
+	 jar:install & (Erzeugt und) Deponiert das Jar im lokalen Repository
+    \end{tabular}
+
+	\vspace{0.5cm}
+
+	\emph{Alle Jar-Dateien werden im ./targets Verzeichnis abgelegt}
 }
 
-\subsection[Dist]{Release erstellen}
 \frame{
     \frametitle{Release erstellen}
+	Auch beim Erstellen von Releases hilft Maven. Es werden Source-
+    und Binary-Tarballs und -zips erstellt. Diese enthalten auch die
+    JavaDocs.
+
+	\vspace{0.5cm}
+
+	{\bf Distribution Plugin}
+    \begin{tabular}{rl}
+     dist & Kompiliert die Sourcen und erzeugt die Source- und Binary-\\
+     & Distributionen (z.B. statcvs-xml-1.0.tar.gz)\\
+
+	 dist:build-src & Erzeugt eine Source-Distribution\\
+	 dist:build-bin & Erzeugt eine Binary-Distribution\\
+    \end{tabular}
+
+	\vspace{0.5cm}
+
+	\emph{Alle Ergebnisse werden im ./targets/distributions
+	  Verzeichnis abgelegt.}
 }
 
-\frame{
-    \frametitle{Distribution deployen}
-}
 
 \subsection[Doc]{Dokumentation erstellen}
 \frame{
-    \frametitle{Dokumentation erstellen}
+    \frametitle{Dokumentation erstellen und deployen}
+	
+	{\bf XDoc Plugin}
+    \begin{tabular}{rl}
+	  xdoc & Erzeugt aus den xdoc-Dateien im ./xdocs-Verzeichnis \\
+	  & (rekursiv) HTML-Dokumente
+	\end{tabular}
+
+	\vspace{0.5cm}
+
+	{\bf Site Plugin}
+    \begin{tabular}{rl}
+	  site & Siehe site:generate\\
+	  site:generate & Generiert die Reports der aktivierten Plugins\\
+	  site:deploy & Generiert und deployed die HTML-Projektdokumentation \\
+	  & auf den im POM angegebenen Server (per ssh)\\
+	  site:fsdeploy & wie site:deploy, allerdings lokal im Filesystem
+	\end{tabular}
 }
 
-\frame{
-    \frametitle{Dokumentation deployen}
-}
 
-\subsection{cleanup}
-\frame{
-    \frametitle{Sauber machen}
-}
 
 
 % 3 Kerndateien
