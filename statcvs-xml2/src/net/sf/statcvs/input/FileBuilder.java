@@ -201,7 +201,9 @@ public class FileBuilder {
 				return builder.getLOC(name);
 			}
 		} catch (NoLineCountException e) {
-			logger.warning(e.getMessage());
+			if (!finalRevisionIsDead()) {
+				logger.warning(e.getMessage());
+			}
 			return approximateFinalLOC();
 		}
 	}

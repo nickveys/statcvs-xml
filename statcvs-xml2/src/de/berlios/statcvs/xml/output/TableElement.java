@@ -19,6 +19,7 @@
 package de.berlios.statcvs.xml.output;
 
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -302,6 +303,16 @@ public class TableElement extends Element
 			addContent(comEl);
 			return this;
 		}
+
+		/**
+		 * @param string
+		 * @param date
+		 */
+		public void addDate(String key, Date date) 
+		{
+			addString(key, Formatter.formatDate(date));
+		}
+		
 	}
 	
 }

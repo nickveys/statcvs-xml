@@ -1,8 +1,11 @@
 package de.berlios.statcvs.xml.model;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import net.sf.statcvs.model.Author;
+import net.sf.statcvs.model.Commit;
 import net.sf.statcvs.model.CvsContent;
 
 /**
@@ -22,6 +25,20 @@ public class ForEachAuthor extends ForEachObject {
 
 		this.author = author;
 	}
+
+//	public Iterator getCommitIterator(CvsContent content)
+//	{
+//		List commits = new LinkedList();
+//		Iterator it = content.getCommits().iterator();
+//		while (it.hasNext()) {
+//			Commit commit = (Commit) it.next();
+//			if (!author.equals(commit.getAuthor())) {
+//				continue;
+//			}
+//			commits.add(commit);
+//		}
+//		return commits.iterator();
+//	}
 
 	/**
 	 *  @see de.berlios.statcvs.xml.output.ForEachObject#getDirectoryIterator(net.sf.statcvs.model.CvsContent)

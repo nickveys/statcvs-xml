@@ -38,7 +38,7 @@ public class FileCountChart extends AbstractTimeSeriesChart {
 
 	public FileCountChart(CvsContent content, ReportSettings settings)
 	{
-		super(settings, "file_count.png", I18n.tr("File Count"), I18n.tr("LOC/File"));
+		super(settings, "file_count.png", I18n.tr("File Count"), I18n.tr("Files"));
 	
 		addTimeSeries(createTimeSeries(I18n.tr("File Count"), settings.getRevisionIterator(content), new Calculator()),
 					  content.getFirstDate(), 0);

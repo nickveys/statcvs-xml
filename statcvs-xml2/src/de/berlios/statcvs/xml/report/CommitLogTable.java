@@ -18,11 +18,10 @@
  */
 package de.berlios.statcvs.xml.report;
 
-import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.sf.statcvs.input.CommitListBuilder;
 import net.sf.statcvs.model.Commit;
 import net.sf.statcvs.model.CvsContent;
 import de.berlios.statcvs.xml.I18n;
@@ -46,15 +45,16 @@ public class CommitLogTable {
 												I18n.tr("Author"),
 												I18n.tr("File/Message")});
 		
-		DateFormat df = DateFormat.getDateTimeInstance();
-
-		List commits = new ArrayList(content.getCommits());
+		CommitListBuilder builder 
+			= new CommitListBuilder(settings.getRevisionIterator(content));
+		List commits = builder.createCommitList();
 		Collections.reverse(commits);
 		
-		for (int i = 0; i < commits.size(); i++) {
+		int maxItems = settings.getLimit();
+		for (int i = 0; i < commits.size() && i < maxItems; i++) {
 			Commit commit = (Commit)commits.get(i);
 			RowElement row = table.addRow();
-			row.addString("date", df.format(commit.getDate()));
+			row.addDate("date", commit.getDate());
 			row.addAuthor(commit.getAuthor());
 			row.addCommit(commit);
 		}

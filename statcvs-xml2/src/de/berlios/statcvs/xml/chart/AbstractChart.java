@@ -64,8 +64,8 @@ public abstract class AbstractChart {
 		setFilename(settings.getString("filename", (defaultFilename == null) ? "chart" + ++chartNumber + ".png" : defaultFilename),
 			settings.getFilenameId());
 		setSubtitle(settings.getString("subtitle", defaultSubtitle), settings.getSubtitlePostfix());
-		this.width = settings.getInt("width", 640);
-		this.height = settings.getInt("height", 480);
+		this.width = ("*".equals(settings.getString("width"))) ? getPreferredWidth() : settings.getInt("width", getPreferredWidth());
+		this.height = ("*".equals(settings.getString("heigth"))) ? getPreferredHeigth() : settings.getInt("height", getPreferredHeigth());
 	}
 	
 	/** 
@@ -110,6 +110,16 @@ public abstract class AbstractChart {
 	public void setFilename(String filename, String subst) 
 	{
 		setFilename(filename.replaceAll("%1", subst));
+	}
+
+	public int getPreferredHeigth()
+	{
+		return 480;
+	}
+
+	public int getPreferredWidth()
+	{
+		return 640;
 	}
 
 	/**
