@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ModulesTreeReport.java,v $
-	$Date: 2003-06-27 01:05:34 $ 
+	$Date: 2003-06-28 11:12:27 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -33,6 +33,7 @@ import net.sf.statcvs.Main;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.output.ConfigurationOptions;
+import net.sf.statcvs.output.xml.ModuleDocument;
 import net.sf.statcvs.util.FileUtils;
 
 import org.jdom.Element;
@@ -46,36 +47,32 @@ public class ModulesTreeReport extends ReportElement {
 
 	private static Logger logger
 		= Logger.getLogger("net.sf.statcvs.output.XMLOutput");
-	private CvsContent content;
 	/**
 	 * 
 	 */
 	public ModulesTreeReport(CvsContent content) {
 		super(I18n.tr("Repository Tree"));
-		this.content = content;
-		createReport();
-		// copy dir icon
-		try {
-			FileUtils.copyFile(
-					Main.class.getResourceAsStream("web-files/" + "folder.png"),
-					new File(ConfigurationOptions.getOutputDir() + "folder.png"));
-		} catch (FileNotFoundException e) {
-			logger.warning(e.getMessage());
-		} catch (IOException e) {
-			logger.warning(e.getMessage());
-		}
-
+		Iterator it = content.getDirectories().iterator();
+		createReport(it);
 	}
 	
 	/**
 	 * 
 	 */
-	private void createReport() {
+	public ModulesTreeReport(Directory dir) {
+		super(I18n.tr("Repository Tree"));
+		Iterator it = dir.getSubdirectoriesRecursive().iterator();
+		createReport(it);
+	}
+
+	/**
+	 * 
+	 */
+	private void createReport(Iterator directoryIt) {
 		Element modules = new Element("modulesTree");
 		
-		Iterator it = content.getDirectories().iterator();
-		while (it.hasNext()) {
-			Directory dir = (Directory) it.next();
+		while (directoryIt.hasNext()) {
+			Directory dir = (Directory) directoryIt.next();
 			Element module = new Element("module");
 			if (dir.isRoot()) {
 				module.setAttribute("name", I18n.tr("[root]"));
@@ -86,16 +83,19 @@ public class ModulesTreeReport extends ReportElement {
 			module.setAttribute("files", ""+dir.getCurrentFileCount());
 			module.setAttribute("loc", ""+dir.getCurrentLOC());
 
-			module.setAttribute("url",getModulePageUrl(dir.getPath()));
+			module.setAttribute("url",ModuleDocument.getModulePageUrl(dir));
 			modules.addContent(module);
 		}
 		addContent(modules);
-	}
-
-	public static String getModulePageUrl(String module) {
-		if (!module.startsWith("/")) {
-			module = "/" + module;
+		// copy dir icon
+		try {
+			FileUtils.copyFile(
+					Main.class.getResourceAsStream("web-files/" + "folder.png"),
+					new File(ConfigurationOptions.getOutputDir() + "folder.png"));
+		} catch (FileNotFoundException e) {
+			logger.warning(e.getMessage());
+		} catch (IOException e) {
+			logger.warning(e.getMessage());
 		}
-		return "module_"+module.substring(0, module.length() - 1).replaceAll("/", "_");
 	}
 }

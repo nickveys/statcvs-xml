@@ -18,7 +18,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: LocPerAuthorChart.java,v $
-	$Date: 2003-06-28 01:34:55 $
+	$Date: 2003-06-28 11:12:27 $
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -33,7 +33,7 @@ import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.RevisionIterator;
 import net.sf.statcvs.model.RevisionSortIterator;
-import net.sf.statcvs.output.xml.XMLSuite;
+import net.sf.statcvs.output.xml.AuthorDocument;
 import net.sf.statcvs.reportmodel.TimeLine;
 import net.sf.statcvs.util.IntegerMap;
 
@@ -79,7 +79,7 @@ public class LocPerAuthorChart extends TimeLineChart {
 			Author aut = (Author) it.next();
 			addTimeLine((TimeLine)authorTimeLineMap.get(aut));
 			if (author != null) {
-				setFilename("loc_"+XMLSuite.escapeAuthorName(author.getName())+".png");
+				setFilename("loc_"+AuthorDocument.escapeAuthorName(author.getName())+".png");
 				// make line thicker
 				if (author.equals(aut)) {
 					getChart().getXYPlot().getRenderer().setSeriesStroke(i, new BasicStroke(2));

@@ -17,8 +17,8 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
-	$RCSfile: XMLSuite.java,v $
-	$Date: 2003-06-24 19:18:59 $ 
+	$RCSfile: DocumentSuite.java,v $
+	$Date: 2003-06-28 11:12:27 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -27,18 +27,19 @@ import java.util.Iterator;
 
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
+import net.sf.statcvs.model.Directory;
 
 /**
  * XMLSuite
  * 
  * @author Tammo van Lessen
  */
-public class XMLSuite {
+public class DocumentSuite {
 
 	/**
 	 * 
 	 */
-	private XMLSuite()
+	private DocumentSuite()
 	{
 	}
 	
@@ -53,29 +54,14 @@ public class XMLSuite {
 		// author pages
 		for (Iterator i = content.getAuthors().iterator(); i.hasNext(); ) {
 			Author author = (Author)i.next();
-			renderer.render(new AuthorDocument(content, author,
-											   getAuthorPageFilename(author)));
+			renderer.render(new AuthorDocument(content, author));
 		}
-	}
 
-	/**
-	 * Escapes evil characters in author's names. E.g. "#" must be escaped
-	 * because for an author "my#name" a page "author_my#name.html" will be
-	 * created, and you can't link to that in HTML
-	 * @param authorName an author's name
-	 * @return a version safe for creation of files and URLs
-	 */
-	public static String escapeAuthorName(String authorName) {
-		return authorName.replaceAll("#", "_");
-	}
- 
+		// module pages
+		for (Iterator i = content.getDirectories().iterator(); i.hasNext(); ) {
+			Directory dir = (Directory)i.next();
+			renderer.render(new ModuleDocument(content, dir));
+		}
 
-	/**
-	 * @param author an author
-	 * @return filename for author's page
-	 */
-	public static String getAuthorPageFilename(Author author) {
-		return "user_" + escapeAuthorName(author.getName());
 	}
-
 }

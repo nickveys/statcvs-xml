@@ -17,29 +17,35 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
-	$RCSfile: LocReport.java,v $
-	$Date: 2003-06-24 17:40:11 $ 
+	$RCSfile: XDocRenderer.java,v $
+	$Date: 2003-06-28 11:12:27 $ 
 */
-package net.sf.statcvs.output.xml.report;
+package net.sf.statcvs.output.xml;
 
-import net.sf.statcvs.I18n;
+import java.io.*;
+
+import net.sf.statcvs.model.CvsContent;
+
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamSource;
 
 /**
- * 
- * 
+ * Writes xml files to disk.
+ *  
  * @author Steffen Pingel
  */
-public class LocReport extends ReportElement {
+public class XDocRenderer {
 
-	/**
-	 * 
-	 */
-	public LocReport() 
+	public static void generate(CvsContent content) 
+		throws IOException, TransformerException
 	{
-		super(I18n.tr("Lines Of Code"));
-
-
+		StreamSource source = new StreamSource("statcvs2xdoc.xsl");
+		Transformer transformer 
+			= TransformerFactory.newInstance().newTransformer(source);
+		transformer.setParameter("ext", ".html");
+		DocumentSuite.generate(content, new XMLRenderer(transformer));
 	}
 
 }
-

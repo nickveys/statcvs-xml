@@ -17,8 +17,8 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
-	$RCSfile: XMLOutput.java,v $
-	$Date: 2003-06-27 18:15:46 $ 
+	$RCSfile: XMLRenderer.java,v $
+	$Date: 2003-06-28 11:12:27 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -42,7 +42,7 @@ import org.jdom.transform.JDOMSource;
  *  
  * @author Steffen Pingel
  */
-public class XMLOutput implements DocumentRenderer {
+public class XMLRenderer implements DocumentRenderer {
 
 	private static Logger logger
 		= Logger.getLogger("net.sf.statcvs.output.XMLOutput");
@@ -50,22 +50,26 @@ public class XMLOutput implements DocumentRenderer {
 	private XMLOutputter out;
 	private Transformer transformer;
 
-	public XMLOutput(Transformer transformer) {
+	public XMLRenderer(Transformer transformer) {
 		this.transformer = transformer;
 
 		out = new XMLOutputter();
 		out.setTextNormalize(true);
 		out.setIndent("  ");
 		out.setNewlines(true);
+		if (transformer != null) {
+			logger.info("Using transformer "+transformer.getClass().getName());
+		}
+		
 	}
 
-	public XMLOutput() {
+	public XMLRenderer() {
 		this(null);
 	}
 
 	public static void generate(CvsContent content) throws IOException
 	{
-		XMLSuite.generate(content, new XMLOutput());
+		DocumentSuite.generate(content, new XMLRenderer());
 	}
 
 	public void render(StatCvsDocument document) throws IOException {

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorsReport.java,v $
-	$Date: 2003-06-27 01:05:34 $ 
+	$Date: 2003-06-28 11:12:27 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -28,6 +28,7 @@ import net.sf.statcvs.I18n;
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
+import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.model.RevisionIterator;
 import net.sf.statcvs.util.Formatter;
 import net.sf.statcvs.util.IntegerMap;
@@ -44,7 +45,6 @@ public class AuthorsReport extends ReportElement {
 
 	private IntegerMap changesMap = new IntegerMap();
 	private IntegerMap linesMap = new IntegerMap();
-	private CvsContent content;
 	
 	/**
 	 * 
@@ -52,16 +52,32 @@ public class AuthorsReport extends ReportElement {
 	public AuthorsReport(CvsContent content) 
 	{
 		super(I18n.tr("Authors"));
-		this.content = content;
-		createReport();
+		RevisionIterator revs = content.getRevisionIterator();
+		createReport(revs);
 	}
 
 	/**
 	 * 
 	 */
-	private void createReport() {
+	public AuthorsReport(Directory dir) 
+	{
+		super(I18n.tr("Authors"));
+		RevisionIterator revs = dir.getRevisionIterator();
+		createReport(revs);
+	}
+
+	/**
+	 * 
+	 */
+	private void createReport(RevisionIterator revs) {
 		Element authors = new Element("authors");
-		RevisionIterator revs = content.getRevisionIterator();
+		
+		// exit and ignore if report contains no data
+		if (!revs.hasNext()) {
+			setName("ignore");
+			return;
+		}
+		
 		while (revs.hasNext()) {
 			CvsRevision rev = revs.next();
 			changesMap.addInt(rev.getAuthor(), 1);

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsCharts.java,v $
-	$Date: 2003-06-28 01:34:55 $ 
+	$Date: 2003-06-28 11:12:27 $ 
 */package net.sf.statcvs.output.xml.report;
 
 import java.util.HashMap;
@@ -26,6 +26,7 @@ import java.util.Map;
 
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
+import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.output.xml.chart.AbstractChart;
 import net.sf.statcvs.output.xml.chart.ActivityChart;
 import net.sf.statcvs.output.xml.chart.AuthorsActivityChart;
@@ -46,6 +47,7 @@ public class CvsCharts {
 	private Map userActByDayCharts = new HashMap();
 	private Map userDirSizesCharts = new HashMap();
 	private Map userLocCharts = new HashMap();
+	private Map moduleLocCharts = new HashMap();
 	private AbstractChart fileCountChart;
 	private AbstractChart fileSizeChart;
 	private AbstractChart dirSizeChart;
@@ -151,5 +153,14 @@ public class CvsCharts {
 			userActByDayCharts.put(author, abd);
 		}
 		return (abd.isRendered())?abd:null;
+	}
+
+	public AbstractChart getLocPerModuleChart(Directory directory) {
+		AbstractChart lpm = (AbstractChart)moduleLocCharts.get(directory);
+		if (lpm == null) {
+			lpm = new LocChart(directory);
+			moduleLocCharts.put(directory, lpm);
+		}
+		return (lpm.isRendered())?lpm:null;
 	}
 }

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommitLogReport.java,v $
-	$Date: 2003-06-27 01:05:34 $ 
+	$Date: 2003-06-28 11:12:27 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -35,6 +35,7 @@ import net.sf.statcvs.model.Commit;
 import net.sf.statcvs.model.CommitListBuilder;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
+import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.model.RevisionIterator;
 import net.sf.statcvs.model.RevisionSortIterator;
 import net.sf.statcvs.output.ConfigurationOptions;
@@ -82,14 +83,21 @@ public class CommitLogReport extends ReportElement {
 		List commits = new ArrayList
 			(new CommitListBuilder(revisionsIt).createCommitList());
 		Collections.reverse(commits);
+
+		// exit and ignore if report contains no data
+		if (commits.size() == 0) {
+			setName("ignore");
+			return;
+		}
 		
 		if ((maxCommits >= 0) && (maxCommits < commits.size())) {
+			setReportName(I18n.tr("Most Recent Commits (TOP {0})", new Integer(maxCommits)));
 			addCommits(commits.subList(0, maxCommits));
 		}
 		else {
 			addCommits(commits);
 		}
-		setReportName(I18n.tr("Most Recent Commits (TOP {0})", new Integer(maxCommits)));
+		
 	}
 
 	/**
@@ -118,12 +126,49 @@ public class CommitLogReport extends ReportElement {
 			= new CommitListBuilder(author.getRevisionIterator());
 		List commits = builder.createCommitList();
 		Collections.reverse(commits);
+		
+		// exit and ignore if report contains no data
+		if (commits.size() == 0) {
+			setName("ignore");
+			return;
+		}
+		
 		if ((maxCommits >= 0) && (maxCommits < commits.size())) {
+			setReportName(I18n.tr("Most Recent Commits (TOP {0})", new Integer(maxCommits)));
 			addCommits(commits.subList(0, maxCommits));
 		} else {
 			addCommits(commits);
 		}
-		setReportName(I18n.tr("Most Recent Commits (TOP {0})", new Integer(maxCommits)));
+	}
+
+	/**
+	 * Returns the top 'maxCommits' of Commits in the 
+	 * Directory
+	 * 
+	 * @param directory
+	 * @return
+	 */
+	public CommitLogReport(Directory dir, int maxCommits)
+	{
+		this();
+
+		CommitListBuilder builder 
+			= new CommitListBuilder(dir.getRevisionIterator());
+		List commits = builder.createCommitList();
+		Collections.reverse(commits);
+
+		// exit and ignore if report contains no data
+		if (commits.size() == 0) {
+			setName("ignore");
+			return;
+		}
+
+		if ((maxCommits >= 0) && (maxCommits < commits.size())) {
+			addCommits(commits.subList(0, maxCommits));
+			setReportName(I18n.tr("Most Recent Commits (TOP {0})", new Integer(maxCommits)));
+		} else {
+			addCommits(commits);
+		}
 	}
 
 	/**
@@ -134,13 +179,30 @@ public class CommitLogReport extends ReportElement {
 	 */
 	public CommitLogReport(Author author)
 	{
-		this();
+		this(author, -1);
 
-		CommitListBuilder builder 
+		/*CommitListBuilder builder 
 			= new CommitListBuilder(author.getRevisionIterator());
 		List commits = builder.createCommitList();
 		Collections.reverse(commits);
-		addCommits(commits);
+		addCommits(commits);*/
+	}
+
+	/**
+	 * Returns a List of Commits made in the Directory
+	 * 
+	 * @param author
+	 * @return
+	 */
+	public CommitLogReport(Directory dir)
+	{
+		this(dir, -1);
+
+		/*CommitListBuilder builder 
+			= new CommitListBuilder(dir.getRevisionIterator());
+		List commits = builder.createCommitList();
+		Collections.reverse(commits);
+		addCommits(commits); */
 	}
 
 	private void addCommits(List commits)
@@ -166,7 +228,7 @@ public class CommitLogReport extends ReportElement {
 			comEl.setAttribute("changedfiles", ""+commit.getChangeCount());						
 			comEl.setAttribute("changedlines", ""+locSum);
 			comEl.addContent(new Element("comment").setText(commit.getComment()));
-
+			//?comEl.addContent(new Element("comment").addContent(new CDATA(commit.getComment())));
 			comEl.addContent(createFilesElement(commit));
 			
 			commitsEl.addContent(comEl);

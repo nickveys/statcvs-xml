@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorDocument.java,v $ 
-	Created on $Date: 2003-06-28 01:34:55 $ 
+	Created on $Date: 2003-06-28 11:12:27 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -44,9 +44,10 @@ public class AuthorDocument extends StatCvsDocument {
 
 	/**
 	 */
-	public AuthorDocument(CvsContent content, Author author, String filename) {
+	public AuthorDocument(CvsContent content, Author author) {
 		super("User statistics for " 
-			  + content.getModuleName(), filename);
+			  + content.getModuleName(),
+			  getAuthorPageFilename(author));
 
 		this.content = content;
 		this.author = author;
@@ -127,6 +128,26 @@ public class AuthorDocument extends StatCvsDocument {
 			addContent
 				(new ChartElement(charts.getActivityByDayChart(author)));
 		}
+	}
+
+	/**
+	 * Escapes evil characters in author's names. E.g. "#" must be escaped
+	 * because for an author "my#name" a page "author_my#name.html" will be
+	 * created, and you can't link to that in HTML
+	 * @param authorName an author's name
+	 * @return a version safe for creation of files and URLs
+	 */
+	public static String escapeAuthorName(String authorName) {
+		return authorName.replaceAll("#", "_");
+	}
+ 
+
+	/**
+	 * @param author an author
+	 * @return filename for author's page
+	 */
+	public static String getAuthorPageFilename(Author author) {
+		return "user_" + escapeAuthorName(author.getName());
 	}
 
 }

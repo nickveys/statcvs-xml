@@ -13,6 +13,7 @@ import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.model.RevisionIterator;
+import net.sf.statcvs.output.xml.ModuleDocument;
 import net.sf.statcvs.util.Formatter;
 import net.sf.statcvs.util.IntegerMap;
 
@@ -61,7 +62,7 @@ public class DirectorySizesReport extends ReportElement {
 			Directory key = (Directory)it.next();
 			Element el = new Element("module");
 			// TODO: Add link to module page
-			el.setAttribute("url", ModulesTreeReport.getModulePageUrl(key.getPath()));
+			el.setAttribute("url", ModuleDocument.getModulePageUrl(key));
 			el.setAttribute("name", key.isRoot() ? "/" : key.getPath());
 			el.setAttribute("changes", ""+dirChanges.get(key));
 			el.setAttribute("lines", ""+dirLoC.get(key));

@@ -12,6 +12,7 @@
                 xmlns:func="http://statcvs-xml.berlios.de/functions"
                 xmlns:i18n="net.sf.statcvs.I18n">
 
+  <xsl:param name="ext"/>
   <xsl:template match="document">
     <document>
        <properties>
@@ -39,7 +40,7 @@
       	</tr>
 		<xsl:for-each select="author">
 	  	  <tr>
-       		<td><a href="user_{@name}.html"><xsl:value-of select="@name"/></a></td>
+       		<td><a href="user_{@name}{$ext}"><xsl:value-of select="@name"/></a></td>
        		<td>
           		<xsl:value-of select="@changes"/>
          		(<xsl:value-of select="@changesPercent"/>%)
@@ -59,7 +60,7 @@
 
   <xsl:template match="author">
 	 <tr>
-       <td><a href="user_{@name}.html"><xsl:value-of select="@name"/></a></td>
+       <td><a href="user_{@name}{$ext}"><xsl:value-of select="@name"/></a></td>
        <td>
          <xsl:value-of select="@loc"/>
          (<xsl:value-of select="@locPercent"/>)
@@ -144,13 +145,13 @@
      <xsl:if test="@current!=1">
          <xsl:element name="a">
              <!-- dont break the line -->
-             <xsl:attribute name="href"><xsl:value-of select="page[@nr=(../@current)-1]/@filename"/>.html</xsl:attribute>
+             <xsl:attribute name="href"><xsl:value-of select="page[@nr=(../@current)-1]/@filename"/><xsl:value-of select="$ext"/></xsl:attribute>
              <xsl:text>&lt;&lt;</xsl:text>
          </xsl:element>
      </xsl:if>
 	 <xsl:for-each select="page">
 		<xsl:if test="@nr != ../@current">
-		  <a href="{@filename}.html"><xsl:value-of select="@nr"/></a>
+		  <a href="{@filename}{$ext}"><xsl:value-of select="@nr"/></a>
 		</xsl:if>
 		<xsl:if test="@nr = ../@current">
 		  <xsl:value-of select="@nr"/>
@@ -159,7 +160,7 @@
      <xsl:if test="@current!=@total">
 	     <xsl:element name="a">
              <!-- dont break the line -->
-		     <xsl:attribute name="href"><xsl:value-of select="page[@nr=(../@current)+1]/@filename"/>.html</xsl:attribute>
+		     <xsl:attribute name="href"><xsl:value-of select="page[@nr=(../@current)+1]/@filename"/><xsl:value-of select="$ext"/></xsl:attribute>
 		     <xsl:text>&gt;&gt;</xsl:text>
 	     </xsl:element>
      </xsl:if>
@@ -167,7 +168,14 @@
   </xsl:template>
   
   <xsl:template name="link" match="link">
-    <a href="{@ref}.html"><xsl:apply-templates /></a>
+	<xsl:choose>
+	<xsl:when test="substring(@ref,string-length(@ref),1)='/'">
+	    <a href="{@ref}"><xsl:apply-templates /></a>
+	</xsl:when>
+	<xsl:otherwise>
+	    <a href="{@ref}{$ext}"><xsl:apply-templates /></a>
+	</xsl:otherwise>
+	</xsl:choose>	
   </xsl:template>
 
   <xsl:template match="img">
@@ -206,7 +214,9 @@
 		  <tr>
             <td>
               <xsl:call-template name="func:make-link">
-				<xsl:with-param name="url" select="@url"/>
+				<xsl:with-param name="url">
+				     <xsl:value-of select="@url"/><xsl:value-of select="$ext"/>
+				</xsl:with-param>
 				<xsl:with-param name="text" select="@name"/>
               </xsl:call-template>
             </td>
@@ -275,7 +285,9 @@
 		  </xsl:call-template>
 		  <img src="folder.png"/>
 		  <xsl:call-template name="func:make-link">
-		    <xsl:with-param name="url" select="@url"/>
+			<xsl:with-param name="url">
+			     <xsl:value-of select="@url"/><xsl:value-of select="$ext"/>
+			</xsl:with-param>
 		    <xsl:with-param name="text" select="@name"/>
 		  </xsl:call-template>
 		  </td>
@@ -298,6 +310,9 @@
     </xsl:copy>
   </xsl:template>
 
+  <!-- EMPTY reports/elements -->
+  <xsl:template name="ignore"/>
+  
   <!-- FUNCTIONS -->
   <xsl:template name="func:make-link">
     <xsl:param name="url"/>

@@ -18,15 +18,17 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: LocChart.java,v $
-	$Date: 2003-06-28 01:34:55 $ 
+	$Date: 2003-06-28 11:12:27 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
 import net.sf.statcvs.I18n;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
+import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.model.RevisionIterator;
 import net.sf.statcvs.model.RevisionSortIterator;
+import net.sf.statcvs.output.xml.ModuleDocument;
 import net.sf.statcvs.reportmodel.TimeLine;
 
 /**
@@ -35,13 +37,38 @@ import net.sf.statcvs.reportmodel.TimeLine;
  * @author Tammo van Lessen
  */
 public class LocChart extends TimeLineChart {
-
+	private TimeLine locTL = new TimeLine(null, I18n.tr("Lines"));
+	
 	public LocChart(CvsContent content) {
 		super("loc.png", I18n.tr("Line Of Code"));
-		TimeLine locTL = new TimeLine(null, I18n.tr("Lines"));
-		
 		RevisionIterator it
 			= new RevisionSortIterator(content.getRevisionIterator());
+		calculateTimeLine(it);
+		setRangeLabel(locTL.getRangeLabel());
+		addTimeLine(locTL);
+		getChart().setLegend(null);
+		placeTitle();
+	}
+
+	public LocChart(Directory dir) {
+		super("loc_"+ModuleDocument.escapeModuleName(dir)+".png", I18n.tr("Line Of Code for {0}", dir.getPath()));
+		
+		if (dir.getCurrentFileCount() == 0) {
+			setChart(null);
+			return;
+		}
+		
+		RevisionIterator it
+			= new RevisionSortIterator(dir.getRevisionIterator());
+		calculateTimeLine(it);
+		
+		setRangeLabel(locTL.getRangeLabel());
+		addTimeLine(locTL);
+		getChart().setLegend(null);
+		placeTitle();
+	}
+	
+	private void calculateTimeLine(RevisionIterator it) {
 		int loc = 0;
 		while (it.hasNext()) {
 			CvsRevision rev = (CvsRevision) it.next();
@@ -50,10 +77,6 @@ public class LocChart extends TimeLineChart {
 			}
 			locTL.addTimePoint(rev.getDate(), loc);
 		}
-		setRangeLabel(locTL.getRangeLabel());
-		addTimeLine(locTL);
-		getChart().setLegend(null);
-		placeTitle();
 	}
 
 }

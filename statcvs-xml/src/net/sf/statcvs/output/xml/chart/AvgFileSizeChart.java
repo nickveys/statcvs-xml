@@ -18,7 +18,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AvgFileSizeChart.java,v $
-	$Date: 2003-06-27 18:34:33 $
+	$Date: 2003-06-28 11:12:27 $
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -37,7 +37,7 @@ import net.sf.statcvs.reports.AvgFileSizeTimeLineReport;
 public class AvgFileSizeChart extends TimeLineChart {
 
 	public AvgFileSizeChart(CvsContent content) {
-		super("file_size.png", I18n.tr("File Size"));
+		super("file_size.png", I18n.tr("Average File Size"));
 	
 		List files = content.getFiles();
 		TimeLine avgFileSize = new AvgFileSizeTimeLineReport(files).getTimeLine();

@@ -15,7 +15,7 @@ import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.RevisionIterator;
-import net.sf.statcvs.output.xml.XMLSuite;
+import net.sf.statcvs.output.xml.AuthorDocument;
 
 /**
  * ActivityChart
@@ -59,15 +59,15 @@ public class ActivityChart extends AbstractBarChart {
 	
 	public ActivityChart(Author author, int type) {
 		this(author.getRevisionIterator(), type);
-		String authorName = XMLSuite.escapeAuthorName(author.getName());
+		String authorName = AuthorDocument.escapeAuthorName(author.getName());
 		switch (type) {
 			case BY_HOUR :
-				setChartTitle(I18n.tr("Activity by Hour for",0,1)+author.getName());
+				setChartTitle(I18n.tr("Activity by Hour for {0}",author.getName()));
 				setFilename("activity_time_"+authorName+".png");
 				setValuesByHour();
 				break;
 			case BY_DAY :
-				setChartTitle(I18n.tr("Activity by Day for",0,1)+author.getName());
+				setChartTitle(I18n.tr("Activity by Day for {0}",author.getName()));
 				setFilename("activity_day_"+authorName+".png");
 				setValuesByDay();
 				break;
