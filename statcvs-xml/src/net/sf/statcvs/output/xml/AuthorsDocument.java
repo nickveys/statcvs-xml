@@ -17,12 +17,14 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
-	$RCSfile: IndexDocument.java,v $ 
+	$RCSfile: AuthorsDocument.java,v $ 
 	Created on $Date: 2003-06-20 00:37:24 $ 
 */
 package net.sf.statcvs.output.xml;
 
-import net.sf.statcvs.I18n;
+import java.util.*;
+
+import net.sf.statcvs.*;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.RevisionIterator;
 import net.sf.statcvs.model.*;
@@ -43,23 +45,23 @@ import com.jrefinery.data.BasicTimeSeries;
  */
 public class IndexDocument extends StatCvsDocument {
 
-	private static final String LOC_IMAGE_FILENAME = "loc_small.png";
+	private Author author;
 	private CvsContent content;
 	
 	/**
 	 */
-	public IndexDocument(CvsContent content) {
-		super("Development statistics for " 
+	public IndexDocument(CvsContent content, Author author) {
+		super("User statistics for " 
 			  + content.getModuleName(), "index");
 
 		this.content = content;
+		this.author = author;
 
-		getRootElement().addContent
-			(new PeriodElement(I18n.tr("Summary Period"),
-							   content.getFirstDate(), content.getLastDate()));
-		getRootElement().addContent
-			(new PeriodElement(I18n.tr("Generated"),
-							   DateUtils.currentDate()));
+		getRootElement.addContent(new PeriodElement(aI18n.tr("Summary Period"),
+													content.getFirstDate(),
+													content.getLastDate()));
+		getRootElement.addContent(new PeriodElement(I18n.tr("Generated"),
+													DateUtils.currentDate()));
 		
 		getRootElement().addContent(createReportRefs());
 		getRootElement().addContent(createLOCReport());
@@ -156,7 +158,7 @@ public class IndexDocument extends StatCvsDocument {
 				double percent = (double)getLinesMap().get(author) 
 					/ getLinesMap().sum();
 				element.setAttribute("locPercent", 
-									 Formatter.formatPercent(percent));
+									 Formatter.formatNumber(percent, 1));
 				authors.addContent(element);
 			}
 

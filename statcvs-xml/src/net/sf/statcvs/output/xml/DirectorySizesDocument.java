@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: DirectorySizesDocument.java,v $ 
-	Created on $Date: 2003-06-19 23:56:28 $ 
+	Created on $Date: 2003-06-20 00:37:24 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -31,7 +31,7 @@ import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.model.RevisionIterator;
 import net.sf.statcvs.renderer.Chart;
 import net.sf.statcvs.renderer.PieChart;
-import net.sf.statcvs.util.IntegerMap;
+import net.sf.statcvs.util.*;
 
 import org.jdom.Element;
 
@@ -91,9 +91,10 @@ public class DirectorySizesDocument extends StatCvsDocument {
 			el.setAttribute("name", key.isRoot() ? "/" : key.getPath());
 			el.setAttribute("changes", ""+dirChanges.get(key));
 			el.setAttribute("lines", ""+dirLoC.get(key));
-			el.setAttribute("linesPerChange", ""+(double)dirLoC.get(key) / dirChanges.get(key));
-			el.setAttribute("changesPercent", ""+dirChanges.getPercent(key));
-			el.setAttribute("linesPercent", ""+dirLoC.getPercent(key));
+			el.setAttribute("linesPerChange", ""+
+							Formatter.formatNumber((double)dirLoC.get(key) / dirChanges.get(key), 1));
+			el.setAttribute("changesPercent", ""+Formatter.formatPercent(dirChanges.getPercent(key)));
+			el.setAttribute("linesPercent", ""+ Formatter.formatPercent(dirLoC.getPercent(key)));
 			list.addContent(el);			
 		}
 		return report;

@@ -2,6 +2,7 @@ JAVA_HOME =
 
 CVS_LOG = cvs.log
 CVS_PATH = .
+STATCVS_ARGS = -viewcvs http://janeway/cvsweb/studium/ -verbose
 
 LIBS = $(shell find lib/ -name "*.jar")
 CP = .:src:$(shell echo $(LIBS) | sed -e 's/ /:/g'):$(JAVA_HOME)/jre/lib/rt.jar
@@ -46,15 +47,20 @@ tags :
 cvs.log:
 	cvs log > cvs.log
 
+html : 
+	mkdir -p xdocs/statcvs
+	$(JAVA_HOME)/bin/java -classpath $(CP) net.sf.statcvs.Main \
+	  $(CVS_LOG) $(CVS_PATH) $(STATCVS_ARGS) -output-dir out
+
 xdoc : 
 	mkdir -p xdocs/statcvs
 	$(JAVA_HOME)/bin/java -classpath $(CP) net.sf.statcvs.Main \
-	  $(CVS_LOG) $(CVS_PATH) -output-dir xdocs/statcvs-xml -output-suite xdoc
+	  $(CVS_LOG) $(CVS_PATH) $(STATCVS_ARGS) -output-dir xdocs/statcvs-xml -output-suite xdoc
 
 xml : 
 	mkdir -p out-xml
 	$(JAVA_HOME)/bin/java -classpath $(CP) net.sf.statcvs.Main \
-	  $(CVS_LOG) $(CVS_PATH) -output-dir out-xml -output-suite 
+	  $(CVS_LOG) $(CVS_PATH) $(STATCVS_ARGS) -output-dir out-xml -output-suite 
 
 deploy :
 	make all

@@ -18,12 +18,14 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLSuite.java,v $
-	$Date: 2003-06-19 21:58:24 $ 
+	$Date: 2003-06-20 00:37:24 $ 
 */
 package net.sf.statcvs.output.xml;
 
 import java.io.*;
-import net.sf.statcvs.model.CvsContent;
+import java.util.*;
+
+import net.sf.statcvs.model.*;
 
 /**
  * XMLSuite
@@ -44,6 +46,33 @@ public class XMLSuite {
 		renderer.render(new CommitLogDocument(content));
 		renderer.render(new DirectorySizesDocument(content));
 		renderer.render(new IndexDocument(content));
+
+		// author pages
+		for (Iterator i = content.getAuthors().iterator(); i.hasNext(); ) {
+			Author author = (Author)i.next();
+			renderer.render(new AuthorDocument(content, author,
+											   getAuthorPageFilename(author)));
+		}
+	}
+
+	/**
+	 * Escapes evil characters in author's names. E.g. "#" must be escaped
+	 * because for an author "my#name" a page "author_my#name.html" will be
+	 * created, and you can't link to that in HTML
+	 * @param authorName an author's name
+	 * @return a version safe for creation of files and URLs
+	 */
+	public static String escapeAuthorName(String authorName) {
+		return authorName.replaceAll("#", "_");
+	}
+ 
+
+	/**
+	 * @param author an author
+	 * @return filename for author's page
+	 */
+	public static String getAuthorPageFilename(Author author) {
+		return "user_" + escapeAuthorName(author.getName());
 	}
 
 }

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ValueElement.java,v $
-	$Date: 2003-06-19 23:56:28 $ 
+	$Date: 2003-06-20 00:37:24 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -37,10 +37,21 @@ public class ValueElement extends Element {
 	 * @param description a description
 	 */
 	public ValueElement(String key, long value, String description) {
+		this(key, value + "", description);
+	}
+
+	/**
+	 * Sets the attributes.
+	 *
+	 * @param key the key of the value
+	 * @param value the value
+	 * @param description a description
+	 */
+	public ValueElement(String key, String value, String description) {
 		super("value");
 		
 		setAttribute("key", name);
-		setAttribute("value", value + "");
+		setAttribute("value", value);
 
 		setText(description);
 	}

@@ -25,6 +25,26 @@
 	</section>
   </xsl:template>
 
+  <xsl:template match="authors">
+     <table>
+        <tr>
+       	  <th>Author</th>
+          <th>Lines of code</th>
+      	</tr>
+		<xsl:apply-templates select="*"/>
+     </table>
+  </xsl:template>
+
+  <xsl:template match="author">
+	 <tr>
+       <td><a href="user_{@name}.html"><xsl:value-of select="@name"/></a></td>
+       <td>
+         <xsl:value-of select="@loc"/>
+         (<xsl:value-of select="@locPercent"/>%)
+       </td>
+     </tr>
+  </xsl:template>
+
   <xsl:template match="commit">
 	 <tr>
        <td><xsl:value-of select="@date"/></td>
