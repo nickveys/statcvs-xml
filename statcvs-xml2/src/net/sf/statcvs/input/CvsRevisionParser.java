@@ -38,6 +38,7 @@ import net.sf.statcvs.util.LookaheadReader;
  * 
  * @author Anja Jentzsch
  * @author Richard Cyganiak
+ * @author Felipe Hoffa (fix for parsing new cvs log date format)
  * @version $Id$
  */
 public class CvsRevisionParser {
@@ -59,10 +60,13 @@ public class CvsRevisionParser {
 
 	private static final String LOG_TIMESTAMP_FORMAT =
 		"yyyy/MM/dd HH:mm:ss zzz";
+	private static final String LOG_TIMESTAMP_FORMAT_NEW = 
+		"yyyy-MM-dd HH:mm:ss Z zzz";
 	private static final Locale LOG_TIMESTAMP_LOCALE = Locale.US;
 	private static SimpleDateFormat logTimeFormat =
 		new SimpleDateFormat(LOG_TIMESTAMP_FORMAT, LOG_TIMESTAMP_LOCALE);
-
+	private static SimpleDateFormat logTimeFormatNew = 
+		new SimpleDateFormat(LOG_TIMESTAMP_FORMAT_NEW, LOG_TIMESTAMP_LOCALE);
 	private LookaheadReader logReader;
 	private CvsLogBuilder builder;
 	private boolean fileDone = false;
@@ -204,7 +208,11 @@ public class CvsRevisionParser {
 	 */
 	private static Date convertFromLogTime(String modTime) {
 		try {
-			return logTimeFormat.parse(modTime);
+			if (modTime.indexOf('-') > 0) {
+				return logTimeFormatNew.parse(modTime);
+			} else {
+			    return logTimeFormat.parse(modTime);
+			}
 		} catch (ParseException e) {
 			// fallback is to return null
 			return null;

@@ -15,6 +15,14 @@
     </section>
 -->
 	<release version="0.9.4" date="CVS">
+      <action dev="vanto" type="update">
+		Bug #2011 Patch from Felipe Hoffa (fix for parsing new cvs log date format)
+		has been applied. Thanks.
+      </action>
+      <action dev="vanto" type="fix">
+		Bug #1973 (NullPointerException in Author Of The Month Report) has been 
+		fixed.
+      </action>
 	  <action dev="vanto" type="add">
 		PHPRenderer has been added.
 	  </action>
