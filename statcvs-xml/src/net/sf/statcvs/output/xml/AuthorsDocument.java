@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorsDocument.java,v $ 
-	Created on $Date: 2003-06-20 00:54:41 $ 
+	Created on $Date: 2003-06-20 10:17:07 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -46,10 +46,11 @@ import com.jrefinery.data.BasicTimeSeries;
 public class AuthorsDocument extends StatCvsDocument {
 
 	private CvsContent content;
-	
+	private RevisionIterator revIt;
+
 	/**
 	 */
-	public IndexDocument(CvsContent content) {
+	public AuthorsDocument(CvsContent content) {
 		super("User statistics for " 
 			  + content.getModuleName(), "authors");
 
@@ -64,25 +65,26 @@ public class AuthorsDocument extends StatCvsDocument {
 	public Chart[] getCharts() {
 		return new Chart[] {
 			createActivityByHourChart(), createActivityByDayChart(),
-			createCodeDistributionChart(),
+			createLOCPerAuthorChart(),
 		};
 	}
 
 	private Chart createActivityByHourChart()
 	{
-		Chart chart = createActivityChart(userRevs, Messages.getString("ACTIVITY_TIME_FOR_AUTHOR_TITLE") + " " 
-							+ author.getName(),	getActivityTimeChartFilename(), 
-							categoryNamesHours);
-		userRevs.reset();
+		Chart chart = createActivityChart
+			(revIt, Messages.getString("ACTIVITY_TIME_TITLE"),	
+			 "activity_time.png", getActivityTimeChartFilename(), 
+			 categoryNamesHours);
+		revIt.reset();
 		return chart;
 	}
 
 	private Chart createActivityByDayChart()
 	{
-		Chart chart = createActivityChart(userRevs, Messages.getString("ACTIVITY_DAY_FOR_AUTHOR_TITLE") + " " 
-							+ author.getName(),	getActivityDayChartFilename(), 
-							categoryNamesDays);
-		userRevs.reset();
+		Chart chart = createActivityChart
+			(revIt, Messages.getString("ACTIVITY_DAY_TITLE"),
+			 "activity_day.png", categoryNamesDays);
+		revIt.reset();
 		return chart;
 	}
 
@@ -92,23 +94,43 @@ public class AuthorsDocument extends StatCvsDocument {
 				title, fileName, categoryNames.length, categoryNames);
 	}
 
-	private Chart createCodeDistributionChart() {
-		int totalLinesOfCode = 0;
-		while (userRevs.hasNext()) {
-			CvsRevision rev = userRevs.next();
-			totalLinesOfCode += rev.getLineValue();
+	private boolean createLOCPerAuthorChart() {
+		Iterator authorsIt = content.getAuthors().iterator();
+		Map authorSeriesMap = new HashMap();
+		while (authorsIt.hasNext()) {
+			Author author = (Author) authorsIt.next();
+			authorSeriesMap.put(
+					author,
+					new LOCSeriesBuilder(author.getName(), false));
 		}
-		userRevs.reset();
-		if (totalLinesOfCode == 0) {
-			return null;
+		RevisionIterator allRevs = new RevisionSortIterator(content.getRevisionIterator());
+		while (allRevs.hasNext()) {
+			CvsRevision rev = allRevs.next();
+			LOCSeriesBuilder builder =
+					(LOCSeriesBuilder) authorSeriesMap.get(rev.getAuthor());
+			builder.addRevision(rev);
 		}
-		Chart chart = new PieChart(content, content.getModuleName(),
-				Messages.getString("PIE_CODEDISTRIBUTION_SUBTITLE") + " " + author.getName(),
-				getCodeDistributionChartFilename(),
-				author, PieChart.FILTERED_BY_USER);
-		userRevs.reset();
-		return chart;
+		List authors = new ArrayList(authorSeriesMap.keySet());
+		Collections.sort(authors);
+		List seriesList = new ArrayList();
+		authorsIt = authors.iterator();
+		while (authorsIt.hasNext()) {
+			Author author = (Author) authorsIt.next();
+			LOCSeriesBuilder builder = (LOCSeriesBuilder) authorSeriesMap.get(author);
+			BasicTimeSeries series = builder.getTimeSeries();
+			if (series != null) {
+				seriesList.add(series);
+			} 
+		}
+		if (seriesList.isEmpty()) {
+			return false;
+		}	 
+		String projectName = content.getModuleName();
+		String subtitle = Messages.getString("TIME_LOCPERAUTHOR_SUBTITLE");
+		new LOCChart(seriesList, projectName, subtitle, "loc_per_author.png", 640, 480);
+		return true;
 	}
+
 
 	private Element createAuthorsReport()
 	{
@@ -136,11 +158,14 @@ public class AuthorsDocument extends StatCvsDocument {
 				Author author = (Author) it.next();
 				Element element = new Element("author");
 				element.setAttribute("name", author.getName());
+				element.setAttribute("changes", changesMap.get(key));
 				element.setAttribute("loc", getLinesMap().get(author) + "");
 				double percent = (double)getLinesMap().get(author) 
 					/ getLinesMap().sum();
 				element.setAttribute("locPercent", 
 									 Formatter.formatNumber(percent, 1));
+				element.setAttribute("locPerChange", 
+									 Formatter.formatNumber(getLinesMap().get(author) / changesMap.get(key), 1));
 				authors.addContent(element);
 			}
 

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorDocument.java,v $ 
-	Created on $Date: 2003-06-20 00:37:24 $ 
+	Created on $Date: 2003-06-20 10:17:07 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -76,16 +76,14 @@ public class AuthorDocument extends StatCvsDocument {
 		long userChangeCount = summary.size();
 		long userLineCount = summary.getLineValue();
 
-		String val = userChangeCount 
-			+ " (" + Formatter.formatNumber
-			(userChangeCount * 1000 / totalChangeCount, 1) + "%)"; 
+		double percent = (double)userChangeCount * 100 / totalChangeCount;
 		getRootElement().addContent
-			(new ValueElement("totalChanges", val, I18n.tr("Total changes")));
-		val = userLineCount
-			+ " (" + Formatter.formatNumber
-			(userLineCount * 1000 / totalLineCount, 1) + "%)";
+			(new ValueElement("totalChanges", userChangeCount, percent,
+							  I18n.tr("Total changes")));
+		percent = (double)userLineCount * 100 / totalLineCount;
 		getRootElement().addContent
-			(new ValueElement("loc", val, I18n.tr("Lines of code")));
+			(new ValueElement("loc", userLineCount, percent, 
+							  I18n.tr("Lines of code")));
 
 		getRootElement().addContent(createModuleReport());
 		getRootElement().addContent(createActivityReport());
