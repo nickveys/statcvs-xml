@@ -74,6 +74,13 @@ public class SymbolicNameAnnotation implements XYAnnotation {
     public void draw(Graphics2D g2d, XYPlot xyPlot, Rectangle2D dataArea, ValueAxis domainAxis, ValueAxis rangeAxis) {
         PlotOrientation orientation = xyPlot.getOrientation();
         
+		// don't draw the annotation if symbolic names date is out of axis' bounds.
+		if (domainAxis.getUpperBound() < symbolicName.getDate().getTime()
+			|| domainAxis.getLowerBound() > symbolicName.getDate().getTime()) {
+		
+			return;
+		}
+		
         RectangleEdge domainEdge = Plot.resolveDomainAxisLocation(
                                             xyPlot.getDomainAxisLocation(),
                                             orientation);
