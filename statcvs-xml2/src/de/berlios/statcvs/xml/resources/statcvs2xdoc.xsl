@@ -30,120 +30,6 @@
 	</section>
   </xsl:template>
 
-  <xsl:template match="authors">
-     <table>
-        <tr>
-       	  <th><xsl:value-of select="i18n:tr('Author')"/></th>
-          <th><xsl:value-of select="i18n:tr('Commits')"/></th>
-          <th><xsl:value-of select="i18n:tr('Lines of Code')"/></th>
-          <th><xsl:value-of select="i18n:tr('Added Lines of Code')"/></th>
-          <th><xsl:value-of select="i18n:tr('Lines per Change')"/></th>
-      	</tr>
-		<xsl:for-each select="author">
-       	  <xsl:variable name="ref"><xsl:value-of select="ds:getAuthorFilename(@name)"/></xsl:variable>
-       	  <tr>
-       		<td><a href="{$ref}{$ext}"><xsl:value-of select="@name"/></a></td>
-       		<td>
-          		<xsl:value-of select="@commits"/>
-         		(<xsl:value-of select="@commitsPercent"/>%)
-       		</td>
-       		<td>
-          		<xsl:value-of select="@loc"/>
-         		(<xsl:value-of select="@locPercent"/>%)
-       		</td>
-       		<td>
-          		<xsl:value-of select="@locAdded"/>
-         		(<xsl:value-of select="@locAddedPercent"/>%)
-       		</td>
-       		<td>
-          		<xsl:value-of select="@locPerChange"/>
-       		</td>
-
-     	  </tr>
-		</xsl:for-each>
-     </table>
-  </xsl:template>
-
-  <xsl:template match="author">
-	 <tr>
-       <td><a href="user_{@name}{$ext}"><xsl:value-of select="@name"/></a></td>
-       <td>
-         <xsl:value-of select="@loc"/>
-         (<xsl:value-of select="@locPercent"/>)
-       </td>
-     </tr>
-  </xsl:template>
-
-  <xsl:template match="authorsPerFile">
-     <table>
-        <tr>
-       	  <th><xsl:value-of select="i18n:tr('File')"/></th>
-          <th><xsl:value-of select="i18n:tr('Authors')"/></th>
-      	</tr>
-		<xsl:for-each select="files/file">
-		  <tr>
-            <td>
-            <xsl:call-template name="func:make-link">
-				<xsl:with-param name="text" select="@name"/>
-				<xsl:with-param name="url" select="@url"/>
-            </xsl:call-template>
-			</td>
-		    <td><xsl:value-of select="@authors"/></td>
-		  </tr>
-		</xsl:for-each>
-     </table>
-  </xsl:template>
-
-  <xsl:template match="commit">
-	 <tr>
-       <td><xsl:value-of select="@date"/></td>
-       <td><xsl:value-of select="@author"/></td>
-       <td>
-		  <b><xsl:value-of select="comment"/></b>
-		  (<xsl:value-of select="@changedfiles"/><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('Files changed')"/>,
-		  <xsl:value-of select="@changedlines"/><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('Lines changed')"/>)
-		  <br/>
-		  <xsl:for-each select="files/file">
-              <!--<xsl:element name="a">
-                   <xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute>
-                   <xsl:value-of select="@directory"/>
-                   <xsl:value-of select="@name"/><xsl:text> </xsl:text><xsl:value-of select="@revision"/>
-              </xsl:element> -->
-              <xsl:call-template name="func:make-link">
-				<xsl:with-param name="text">
-				   <xsl:value-of select="@directory"/>
-                   <xsl:value-of select="@name"/><xsl:text> </xsl:text><xsl:value-of select="@revision"/>
-				</xsl:with-param>
-				<xsl:with-param name="url" select="@url"/>
-              </xsl:call-template>
-              
-              <xsl:if test="@action = 'added'">
-                <font color="green"><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('added')"/><xsl:text> </xsl:text><xsl:value-of select="@lines"/></font>
-              </xsl:if>
-              <xsl:if test="@action = 'deleted'">
-                <font color="red"><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('removed')"/></font>
-              </xsl:if>
-              <xsl:if test="@action = 'changed'">
-                 (+<xsl:value-of select="@added"/>
-                 -<xsl:value-of select="@removed"/>)
-              </xsl:if>
-              <br/>
-		  </xsl:for-each>
-       </td>
-     </tr>
-  </xsl:template>
-
-  <xsl:template match="commitlog">
-     <table>
-        <tr>
-       	  <th><xsl:value-of select="i18n:tr('Date')"/></th>
-          <th><xsl:value-of select="i18n:tr('Author')"/></th>
-       	  <th><xsl:value-of select="i18n:tr('File/Message')"/></th>
-      	</tr>
-		<xsl:apply-templates select="*"/>
-     </table>
-  </xsl:template>
-
   <xsl:template match="container">
 	<p>
 		<xsl:apply-templates select="*"/>
@@ -192,145 +78,12 @@
     <p align="center"><img src="{@src}"/></p>
   </xsl:template>
 
-  <xsl:template match="largestFiles">
-     <table>
-        <tr>
-       	  <th><xsl:value-of select="i18n:tr('File')"/></th>
-          <th><xsl:value-of select="i18n:tr('Lines of Code')"/></th>
-      	</tr>
-		<xsl:for-each select="files/file">
-		  <tr>
-            <td>
-            <xsl:call-template name="func:make-link">
-				<xsl:with-param name="text" select="@name"/>
-				<xsl:with-param name="url" select="@url"/>
-            </xsl:call-template>
-			</td>
-		    <td><xsl:value-of select="@loc"/></td>
-		  </tr>
-		</xsl:for-each>
-     </table>
-  </xsl:template>
-
-  <xsl:template match="fileActivity">
-     <table>
-        <tr>
-       	  <th><xsl:value-of select="i18n:tr('File')"/></th>
-          <th><xsl:value-of select="i18n:tr('Commits')"/></th>
-      	</tr>
-		<xsl:for-each select="files/file">
-		  <tr>
-            <td>
-            <xsl:call-template name="func:make-link">
-				<xsl:with-param name="text" select="@name"/>
-				<xsl:with-param name="url" select="@url"/>
-            </xsl:call-template>
-			</td>
-		    <td><xsl:value-of select="@commits"/></td>
-		  </tr>
-		</xsl:for-each>
-     </table>
-  </xsl:template>
-  
-  <xsl:template match="modules">
-     <table>
-        <tr>
-       	  <th><xsl:value-of select="i18n:tr('Directory')"/></th>
-          <th><xsl:value-of select="i18n:tr('Lines of Code')"/></th>
-          <th><xsl:value-of select="i18n:tr('Commits')"/></th>
-       	  <th><xsl:value-of select="i18n:tr('Lines per change')"/></th>
-      	</tr>
-		<xsl:for-each select="module">
-		  <tr>
-            <td>
-              <xsl:call-template name="func:make-link">
-				<xsl:with-param name="url">
-				     <xsl:value-of select="@url"/><xsl:value-of select="$ext"/>
-				</xsl:with-param>
-				<xsl:with-param name="text" select="@name"/>
-              </xsl:call-template>
-            </td>
-       	    <td>
-         	  <xsl:value-of select="@lines"/> 
-         	  (<xsl:value-of select="@linesPercent"/>%)
-       		</td>
-       		<td>
-         	  <xsl:value-of select="@commits"/>
-         	  (<xsl:value-of select="@commitsPercent"/>%)
-       		</td>
-       		<td><xsl:value-of select="@linesPerChange"/></td>
-     	  </tr>
-		</xsl:for-each>
-     </table>
-  </xsl:template>
-
-  <xsl:template match="mostRecentFiles">
-     <table>
-        <tr>
-       	  <th><xsl:value-of select="i18n:tr('File')"/></th>
-       	  <th><xsl:value-of select="i18n:tr('Revisions')"/></th>
-      	</tr>
-		<xsl:for-each select="files/file">
-		  <tr>
-            <td>
-            <xsl:call-template name="func:make-link">
-				<xsl:with-param name="text" select="@name"/>
-				<xsl:with-param name="url" select="@url"/>
-            </xsl:call-template>
-			</td>
-		    <td><xsl:value-of select="@revisions"/></td>
-		  </tr>
-		</xsl:for-each>
-     </table>
-  </xsl:template>
-
   <xsl:template match="period">
     <xsl:value-of select="@name"/>: <xsl:value-of select="@from"/>
 	<xsl:if test="@to"><xsl:text> </xsl:text>
       <xsl:value-of select="i18n:tr('to')"/><xsl:text> </xsl:text><xsl:value-of select="@to"/>
     </xsl:if>
     <br/>
-  </xsl:template>
-
-  <xsl:template match="reports">
-    <ul><xsl:apply-templates/></ul>
-  </xsl:template>
-
-  <xsl:template match="reports/link">
-	 <li><xsl:call-template name="link"/></li>
-  </xsl:template>
-
-  <xsl:template match="modulesTree">
-  	<table>
-  	  <tr>
-  		<th><xsl:value-of select="i18n:tr('Module')"/></th>
-  		<th><xsl:value-of select="i18n:tr('Files')"/></th>
-  		<th><xsl:value-of select="i18n:tr('Lines of code')"/></th>
-  	  </tr>
-	  <xsl:for-each select="module">
-		<tr>
-		  <td>
-		  <xsl:call-template name="func:spacer">
-		    <xsl:with-param name="num" select="@depth"/>
-		  </xsl:call-template>
-		  <xsl:choose>
-			<xsl:when test="@removed"><img src="folder-deleted.png"/></xsl:when>
-			<xsl:otherwise><img src="folder.png"/></xsl:otherwise>
-		  </xsl:choose>
-		  <xsl:call-template name="func:make-link">
-		    <xsl:with-param name="text" select="@name"/>
-			<xsl:with-param name="url">
-			<xsl:if test="not(@removed)">
-				<xsl:value-of select="ds:getDirectoryFilename(@ref)"/><xsl:value-of select="$ext"/>
-			</xsl:if>
-			</xsl:with-param>
-		  </xsl:call-template>
-		  </td>
-		  <td><xsl:value-of select="@files"/></td>
-  		  <td><xsl:value-of select="@loc"/></td>
-		</tr>
-	  </xsl:for-each>
-  	</table>
   </xsl:template>
   
   <xsl:template match="value">
@@ -393,6 +146,41 @@
 			<xsl:with-param name="localurl" select="ds:getAuthorFilename(@name)"/>
         </xsl:call-template>
      </td>
+  </xsl:template>
+
+  <xsl:template match="row/commit">
+       <td>
+		  <b><xsl:value-of select="comment"/></b>
+		  (<xsl:value-of select="@changedfiles"/><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('Files changed')"/>,
+		  <xsl:value-of select="@changedlines"/><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('Lines changed')"/>)
+		  <br/>
+		  <xsl:for-each select="files/file">
+              <!--<xsl:element name="a">
+                   <xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute>
+                   <xsl:value-of select="@directory"/>
+                   <xsl:value-of select="@name"/><xsl:text> </xsl:text><xsl:value-of select="@revision"/>
+              </xsl:element> -->
+              <xsl:call-template name="func:make-link">
+				<xsl:with-param name="text">
+				   <xsl:value-of select="@directory"/>
+                   <xsl:value-of select="@name"/><xsl:text> </xsl:text><xsl:value-of select="@revision"/>
+				</xsl:with-param>
+				<xsl:with-param name="url" select="@url"/>
+              </xsl:call-template>
+              
+              <xsl:if test="@action = 'added'">
+                <font color="green"><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('added')"/><xsl:text> </xsl:text><xsl:value-of select="@lines"/></font>
+              </xsl:if>
+              <xsl:if test="@action = 'deleted'">
+                <font color="red"><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('removed')"/></font>
+              </xsl:if>
+              <xsl:if test="@action = 'changed'">
+                 (+<xsl:value-of select="@added"/>
+                 -<xsl:value-of select="@removed"/>)
+              </xsl:if>
+              <br/>
+		  </xsl:for-each>
+       </td>
   </xsl:template>
 
   <xsl:template match="row/directory">

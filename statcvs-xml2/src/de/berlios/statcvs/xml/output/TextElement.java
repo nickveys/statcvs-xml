@@ -32,6 +32,7 @@ public class TextElement extends Element {
 		if (to != null) {
 			element.setAttribute("to", Formatter.formatDate(to));
 		}
+		addContent(element);
 		return this;
 	}
 
@@ -46,6 +47,7 @@ public class TextElement extends Element {
 		element.setAttribute("key", name);
 		element.setAttribute("value", value + "");
 		element.setText(description);
+		addContent(element);
 		return this;
 	}
 
@@ -57,8 +59,8 @@ public class TextElement extends Element {
 		element.setAttribute("value", value + "");
 		element.setAttribute("percentage", value + "");
 		element.setText(description);
+		addContent(element);
 		return this;
 	}
-
 
 }
