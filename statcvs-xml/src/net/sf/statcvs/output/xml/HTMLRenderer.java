@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: HTMLRenderer.java,v $
-	$Date: 2003-07-05 20:12:32 $ 
+	$Date: 2003-07-06 01:33:18 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -35,7 +35,6 @@ import javax.xml.transform.stream.StreamSource;
 import net.sf.statcvs.Main;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.output.ConfigurationOptions;
-import net.sf.statcvs.output.xml.document.*;
 import net.sf.statcvs.output.xml.util.HTMLOutputter;
 import net.sf.statcvs.output.xml.util.XMLOutputter;
 import net.sf.statcvs.util.FileUtils;
@@ -106,7 +105,7 @@ public class HTMLRenderer extends XMLRenderer {
 			
 			// set stylesheet parameters
 			transformer.setParameter("ext", ".html");
-			String filename = OutputSettings.getInstance().getCustomCss();
+			String filename = OutputSettings.getCustomCss();
 			if (filename != null) {
 				transformer.setParameter
 					("customCss", 

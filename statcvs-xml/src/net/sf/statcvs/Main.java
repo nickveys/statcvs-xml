@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Main.java,v $ 
-	Created on $Date: 2003-07-05 09:55:19 $ 
+	Created on $Date: 2003-07-06 01:33:18 $ 
 */
 package net.sf.statcvs;
 
@@ -31,6 +31,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import net.sf.statcvs.input.Builder;
+import net.sf.statcvs.input.CvsLocHistory;
 import net.sf.statcvs.input.CvsLogfileParser;
 import net.sf.statcvs.input.LogSyntaxException;
 import net.sf.statcvs.input.RepositoryFileManager;
@@ -46,7 +47,7 @@ import net.sf.statcvs.output.xml.OutputSettings;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.12 2003-07-05 09:55:19 vanto Exp $
+ * @version $Id: Main.java,v 1.13 2003-07-06 01:33:18 vanto Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -110,6 +111,8 @@ public class Main {
 				+ "  -weburl <url>      integrate with web repository installation at <url>\n"
 				+ "  -verbose           print extra progress information\n"
 				+ "  -output-suite [class] use the xml renderer\n"
+				+ "  -use-history       use history file for proper loc counts\n"
+				+ "  -generate-history  regenerates history file (use with 'use-history')\n"
 				+ "\n"
 				+ "If statcvs cannot recognize the type of your web repository, please use the\n"
 				+ "following switches:\n"
@@ -151,8 +154,18 @@ public class Main {
 		initLogger();
 		
 		CvsContent content = readLogFile();
+		boolean useHistory = ConfigurationOptions.getUseHistory();
+		boolean createHistory = ConfigurationOptions.getGenerateHistory();
+
+		if (useHistory && createHistory) {
+			CvsLocHistory hist = CvsLocHistory.getInstance();
+			hist.generate(content);
+			hist.save(content.getModuleName());
+			content = readLogFile();
+		}
+
+		CvsLocHistory.getInstance().save(content.getModuleName());
 		generateSuite(content);
-		
 		long endTime = System.currentTimeMillis();
 		long memoryUsedOnEnd = Runtime.getRuntime().totalMemory();
 		logger.info("runtime: " + (((double) endTime - startTime) / 1000) 

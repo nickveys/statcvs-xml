@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommandLineParser.java,v $
-	Created on $Date: 2003-07-04 21:33:31 $ 
+	Created on $Date: 2003-07-06 01:33:18 $ 
 */
 package net.sf.statcvs.output;
 
@@ -34,7 +34,7 @@ import net.sf.statcvs.output.xml.XMLRenderer;
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.6 2003-07-04 21:33:31 vanto Exp $
+ * @version $Id: CommandLineParser.java,v 1.7 2003-07-06 01:33:18 vanto Exp $
  */
 public class CommandLineParser {
 
@@ -102,6 +102,10 @@ public class CommandLineParser {
 					ConfigurationOptions.setOutputSuite(arg);
 				}
 			}
+		} else if (s.equals("generate-history")) {
+			ConfigurationOptions.setGenerateHistory(true);
+		} else if (s.equals("use-history")) {
+			ConfigurationOptions.setUseHistory(true);
 		} else if (s.equals("verbose")) {
 			ConfigurationOptions.setVerboseLogging();
 		} else if (s.equals("debug")) {

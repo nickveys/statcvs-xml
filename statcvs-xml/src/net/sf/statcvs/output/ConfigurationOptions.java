@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ConfigurationOptions.java,v $
-	$Date: 2003-07-04 20:03:58 $ 
+	$Date: 2003-07-06 01:33:18 $ 
 */
 package net.sf.statcvs.output;
 
@@ -36,10 +36,12 @@ import net.sf.statcvs.util.FileUtils;
  * can read all parameter values from here.
  * 
  * @author jentzsch
- * @version $Id: ConfigurationOptions.java,v 1.3 2003-07-04 20:03:58 vanto Exp $
+ * @version $Id: ConfigurationOptions.java,v 1.4 2003-07-06 01:33:18 vanto Exp $
  */
 public class ConfigurationOptions {
 
+	private static boolean generateHistory;
+	private static boolean useHistory;
 	private static final String LOGGING_CONFIG_DEFAULT = "logging.properties";
 	private static final String LOGGING_CONFIG_VERBOSE = "logging-verbose.properties";
 	private static final String LOGGING_CONFIG_DEBUG = "logging-debug.properties";
@@ -301,4 +303,19 @@ public class ConfigurationOptions {
 		ConfigurationOptions.outputSuite = outputSuite;
 	}
 
+	public static boolean getUseHistory() {
+		return useHistory;
+	}
+	
+	public static void setUseHistory(boolean b) {
+		useHistory = b;
+	}
+
+	public static void setGenerateHistory(boolean b) {
+		generateHistory = b;
+	}
+	
+	public static boolean getGenerateHistory() {
+		return generateHistory;
+	}
 }

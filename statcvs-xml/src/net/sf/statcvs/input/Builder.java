@@ -18,11 +18,12 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Builder.java,v $
-	$Date: 2003-07-05 16:30:33 $
+	$Date: 2003-07-06 01:33:18 $
 */
 package net.sf.statcvs.input;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -53,7 +54,7 @@ import net.sf.statcvs.util.FileUtils;
  * for each author name and path.</p>
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: Builder.java,v 1.2 2003-07-05 16:30:33 vanto Exp $
+ * @version $Id: Builder.java,v 1.3 2003-07-06 01:33:18 vanto Exp $
  */
 public class Builder {
 
@@ -183,13 +184,49 @@ public class Builder {
 			}
 		} 
 
-		calculateLinesOfCode(file);
-
+		if (ConfigurationOptions.getUseHistory()) {
+			calculateRealLinesOfCode(file);
+		} else {
+			calculateLinesOfCode(file);
+		}
+			
 		files.add(file);
 		logger.finer(file.getFilenameWithPath()
 				+ " (" + file.getRevisions().size() + " revisions)");
 	}
 	
+	private void calculateRealLinesOfCode(CvsFile file) {
+		if (file.isBinary()) {
+			Iterator it = file.getRevisionIterator();
+			while (it.hasNext()) {
+				CvsRevision revision = (CvsRevision) it.next();
+				revision.setLinesOfCode(0);
+			}
+			return;
+		}
+
+		int currentLinesOfCode = 0;
+
+		CvsRevision previous = null;
+		List revisions = file.getRevisions();
+		Collections.reverse(revisions);
+		for (int i=0; i<revisions.size(); i++) {
+			CvsRevision rev = (CvsRevision)revisions.get(i);
+			if (rev.isInitialRevision()) {
+				currentLinesOfCode = CvsLocHistory.getInstance().getLinesOfCode(file); 
+			} else {
+				currentLinesOfCode += rev.getLinesAdded();
+				currentLinesOfCode -= rev.getLinesRemoved();
+			}
+			if ((previous != null) && (previous.isDead())) {
+				if (!rev.isDead()) {
+					rev.setState(CvsRevision.STATE_RE_ADDED);
+				}
+			}
+			rev.setLinesOfCode(currentLinesOfCode);
+		}
+	}
+
 	/**
 	 * Starts building a new revision for the current file. The revisions
 	 * must be built in reverse chronological order, that is, build the
