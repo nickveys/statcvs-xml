@@ -185,10 +185,10 @@
   <xsl:template name="func:lf2br">
  	<xsl:param name="text"/>
 	<xsl:choose>
-		<xsl:when test="contains($text,'#10;')">
-			<xsl:value-of select="substring-before($text,'#10;')"/><br/>
+		<xsl:when test="contains($text,'&#xA;')">
+			<xsl:value-of select="substring-before($text,'&#xA;')"/><br/>
 			<xsl:call-template name="func:lf2br">
-				<xsl:with-param name="text" select="substring-after($text,'#10;')"/>
+				<xsl:with-param name="text" select="substring-after($text,'&#xA;')"/>
 			</xsl:call-template>
 		</xsl:when>
 		<xsl:otherwise>
