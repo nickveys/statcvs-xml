@@ -486,12 +486,18 @@ public class EvolutionMatrixChart extends AbstractChart {
 			int revCount = 0;
 			while (target != curr) {
 				curr = curr.getPreviousRevision();
-				if (curr != null) {
+				if (curr != null && (curr.getLines() != 0)) {
 					change += curr.getReplacedLines() / curr.getLines();
 					revCount++;	
 				}
 			}
-			return (double)change / getRevision(thisV).getLines();
+			if (getRevision(thisV).getLines() != 0) {
+				return (double)change / getRevision(thisV).getLines();	
+			} 
+			else {
+				return (change == 0)?0:1;
+			}
+			
 		}
 		
 		/**
