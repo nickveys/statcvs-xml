@@ -147,7 +147,10 @@ public class AbstractTimeSeriesChart extends AbstractChart {
 			
 			int value = visitor.visit(rev);
 			if (predicate == null || predicate.matches(rev)) {
-				series.add(rev.getDate(), value);
+				// dont add binary files
+				if (rev.getFile().getCurrentLinesOfCode() != 0) {
+					series.add(rev.getDate(), value);	
+				}
 			}
 		}
 		
