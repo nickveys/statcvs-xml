@@ -45,6 +45,22 @@
      </tr>
   </xsl:template>
 
+  <xsl:template match="authorsPerFile">
+     <table>
+        <tr>
+       	  <th>File</th>
+          <th>Authors</th>
+      	</tr>
+		<xsl:for-each select="files/file">
+		  <xsl:sort select="@authors" order="descending"/>
+		  <tr>
+		    <td><xsl:value-of select="@name"/></td>
+		    <td><xsl:value-of select="@authors"/></td>
+		  </tr>
+		</xsl:for-each>
+     </table>
+  </xsl:template>
+
   <xsl:template match="commit">
 	 <tr>
        <td><xsl:value-of select="@date"/></td>
@@ -123,6 +139,21 @@
     <p align="center"><img src="{@src}"/></p>
   </xsl:template>
 
+  <xsl:template match="largestFiles">
+     <table>
+        <tr>
+       	  <th>File</th>
+          <th>Lines of code</th>
+      	</tr>
+		<xsl:for-each select="files/file">
+		  <tr>
+		    <td><xsl:value-of select="@name"/></td>
+		    <td><xsl:value-of select="@loc"/></td>
+		  </tr>
+		</xsl:for-each>
+     </table>
+  </xsl:template>
+  
   <xsl:template match="modules">
      <table>
         <tr>
@@ -148,6 +179,21 @@
        </td>
        <td><xsl:value-of select="@linesPerChange"/></td>
      </tr>
+  </xsl:template>
+
+  <xsl:template match="mostRecentFiles">
+     <table>
+        <tr>
+       	  <th>File</th>
+          <th>Revisions</th>
+      	</tr>
+		<xsl:for-each select="files/file">
+		  <tr>
+		    <td><xsl:value-of select="@name"/></td>
+		    <td><xsl:value-of select="@revisions"/></td>
+		  </tr>
+		</xsl:for-each>
+     </table>
   </xsl:template>
 
   <xsl:template match="period">

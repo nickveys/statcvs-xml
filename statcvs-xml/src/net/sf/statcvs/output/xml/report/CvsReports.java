@@ -17,8 +17,8 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
-	$RCSfile: CvsReport.java,v $
-	$Date: 2003-06-24 17:40:11 $ 
+	$RCSfile: CvsReports.java,v $
+	$Date: 2003-06-24 19:18:59 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -29,14 +29,14 @@ import net.sf.statcvs.model.CvsContent;
  * 
  * @author Steffen Pingel
  */
-public class CvsReport {
+public class CvsReports {
 
 	private CvsContent content;
 
 	/**
 	 * 
 	 */
-	public CvsReport(CvsContent content) 
+	public CvsReports(CvsContent content) 
 	{
 		this.content = content;
 	}
@@ -45,6 +45,30 @@ public class CvsReport {
 	{
 		return new LocReport();
 	}
+	
+	public ReportElement getAuthorsPerFileReport()
+	{
+		return new AuthorsPerFileReport(content);
+	}
 
+	public ReportElement getMostRevisionsReport()
+	{
+		return new MostRevisionsReport(content);
+	}
+
+	public ReportElement getLargestFilesReport()
+	{
+		return new LargestFilesReport(content);
+	}
+
+	public ReportElement getFileCountReport()
+	{
+		return new FileCountReport(content);
+	}
+
+	public ReportElement getAvgFileSizeReport()
+	{
+		return new AverageFileSizeReport();
+	}
 }
 

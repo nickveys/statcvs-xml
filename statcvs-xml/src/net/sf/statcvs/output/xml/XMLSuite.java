@@ -18,14 +18,15 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLSuite.java,v $
-	$Date: 2003-06-20 10:21:03 $ 
+	$Date: 2003-06-24 19:18:59 $ 
 */
 package net.sf.statcvs.output.xml;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.Iterator;
 
-import net.sf.statcvs.model.*;
+import net.sf.statcvs.model.Author;
+import net.sf.statcvs.model.CvsContent;
 
 /**
  * XMLSuite
@@ -47,7 +48,8 @@ public class XMLSuite {
 		renderer.render(new CommitLogDocument(content));
 		renderer.render(new DirectorySizesDocument(content));
 		renderer.render(new IndexDocument(content));
-
+		renderer.render(new FileSizesDocument(content));
+		
 		// author pages
 		for (Iterator i = content.getAuthors().iterator(); i.hasNext(); ) {
 			Author author = (Author)i.next();

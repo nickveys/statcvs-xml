@@ -18,11 +18,20 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: LargestFilesReport.java,v $
-	$Date: 2003-06-24 17:40:11 $ 
+	$Date: 2003-06-24 19:18:59 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 import net.sf.statcvs.I18n;
+import net.sf.statcvs.model.CvsContent;
+import net.sf.statcvs.model.CvsFile;
+import net.sf.statcvs.model.FilesLocComparator;
+
+import org.jdom.Element;
 
 /**
  * 
@@ -31,15 +40,38 @@ import net.sf.statcvs.I18n;
  */
 public class LargestFilesReport extends ReportElement {
 
+	private CvsContent content;
+	
 	/**
 	 * 
 	 */
-	public LargestFilesReport() 
+	public LargestFilesReport(CvsContent content) 
 	{
 		super(I18n.tr("Largest Files"));
-
-
+		this.content = content;
+		createReport();
 	}
 
+	private void createReport() {
+		Element filesEl = new Element("files");
+		
+		List files = content.getFiles();
+		Collections.sort(files, new FilesLocComparator());
+		Iterator it = files.iterator();
+		while (it.hasNext()) {
+			CvsFile file = (CvsFile) it.next();
+			if (file.isBinary() || file.isDead()) {
+				continue;
+			}
+
+			Element fileEl = new Element("file");
+			fileEl.setAttribute("name", file.getFilenameWithPath());
+			fileEl.setAttribute("loc", ""+file.getCurrentLinesOfCode());
+			fileEl.setAttribute("revisions", ""+file.getRevisions().size());
+			filesEl.addContent(fileEl);
+		}
+
+		addContent(new Element("largestFiles").addContent(filesEl));
+	}
 }
 
