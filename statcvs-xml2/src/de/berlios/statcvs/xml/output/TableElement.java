@@ -50,12 +50,13 @@ public class TableElement extends Element
 	public TableElement(ReportSettings settings, String[] headers) 
 	{
 		super("table");
+		
 		this.settings = settings;
 		this.headers = headers;
 		
 		Element row = new Element("tr");
 		for (int i = 0; i < headers.length; i++) {
-			if (showColumn(i)) {
+			if (showColumn(i + 1)) {
 				row.addContent(new Element("th").addContent(headers[i]));
 			}
 		}

@@ -47,7 +47,7 @@ public class DirectoryTree {
 	 */
 	public static Report generate(CvsContent content, ReportSettings settings) 
 	{
-		ReportElement root = new DirectoryTreeElement(I18n.tr("Repository Tree"));
+		ReportElement root = new DirectoryTreeElement(settings, I18n.tr("Repository Tree"));
 		createReport(root, settings.getDirectoryIterator(content));
 		return new Report(root);
 	}
@@ -89,9 +89,9 @@ public class DirectoryTree {
 	public static class DirectoryTreeElement extends ReportElement
 	{
 	
-		public DirectoryTreeElement(String name)
+		public DirectoryTreeElement(ReportSettings settings, String name)
 		{
-			super(name);
+			super(settings, name);
 		}
 		
 		/**

@@ -126,7 +126,7 @@ public class DocumentSuite {
 			}
 
 			if (maxPages > 1) {
-				ReportElement pager = new ReportElement("");
+				ReportElement pager = new ReportElement();
 				pager.addContent(createPagerElement(i, maxPages, firstPage.getFilename()));
 				document.getRootElement().addContent(pager);
 			}

@@ -28,26 +28,25 @@ import org.jdom.Element;
  */
 public class ReportElement extends Element {
 
-	/**
-	 * Sets the attributes.
-	 *
-	 * @param name the name of the report
-	 */
-	public ReportElement(String name) 
+	private ReportElement(String name)
 	{
 		super("report");
 		
 		setAttribute("name", name);
 	}
-
-	public ReportElement(ReportSettings settings, String name)
+	
+	public ReportElement(ReportSettings settings, String defaultTitle)
 	{
-		this(name.replaceAll("%1", settings.getSubtitlePostfix()));
+		this(settings.getString("title", defaultTitle)
+			.replaceAll("%1", settings.getSubtitlePostfix()));
 	}
 	
-	public void setReportName(String name) 
+	/**
+	 * Creates a report without a title.
+	 */
+	public ReportElement()
 	{
-		setAttribute("name", name);
+		this("");
 	}
 	
 	public void saveResources(File outputPath) throws IOException

@@ -34,9 +34,9 @@ public class ChartReportElement extends ReportElement {
 
 	AbstractChart chart;
 
-	public ChartReportElement(String name, AbstractChart chart)
+	public ChartReportElement(ReportSettings settings, String defaultTitle, AbstractChart chart)
 	{
-		super(name);
+		super(settings, defaultTitle);
 		
 		this.chart = chart;
 	
@@ -47,7 +47,7 @@ public class ChartReportElement extends ReportElement {
 
 	public ChartReportElement(AbstractChart chart)
 	{
-		this(chart.getSubtitle(), chart);
+		this(chart.getSettings(), chart.getSubtitle(), chart);
 	}
 	
 	public void saveResources(File outputPath) throws IOException

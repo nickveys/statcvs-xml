@@ -23,7 +23,9 @@
 
 package de.berlios.statcvs.xml.util;
 
+import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.util.Date;
 
 /**
  * Helper class providing static methods for formatting different number and
@@ -135,4 +137,9 @@ public class Formatter
 		return s.toString();
     }
 
+	public static String formatDate(Date date)
+	{
+		return DateFormat.getInstance().format(date);
+	}
+	
 }
