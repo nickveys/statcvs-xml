@@ -22,13 +22,14 @@ package de.berlios.statcvs.xml;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Takes a command line, like given to the {@link net.sf.statcvs.Main#main} method,
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.10 2004-02-29 14:11:58 squig Exp $
+ * @version $Id: CommandLineParser.java,v 1.11 2004-03-01 21:21:12 squig Exp $
  */
 public class CommandLineParser {
 
@@ -84,9 +85,9 @@ public class CommandLineParser {
 		} else if (s.equals("use-history")) {
 			settings.put("useHistory", "true");
 		} else if (s.equals("verbose")) {
-			settings.put("verbose", "true");
+			settings.put("_logLevel", Level.INFO);
 		} else if (s.equals("debug")) {
-			settings.put("debug", "true"); 
+			settings.put("_logLevel", Level.FINEST); 
 		} else if (s.equals("weburl")) {
 			if (args.isEmpty()) {
 				throw new InvalidCommandLineException("Missing argument for -weburl");

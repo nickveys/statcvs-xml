@@ -55,7 +55,7 @@ public class CommitsOverTimeChart extends AbstractTimeSeriesChart {
         
         Grouper grouper = settings.getGrouper();
         if (grouper != null) {
-        	Map serieses = createTimeSerieses(grouper, settings.getRevisionIterator(content), new RevisionVisitorFactory(Calculator.class.getName()));
+        	Map serieses = createTimeSeries(grouper, settings.getRevisionIterator(content), new RevisionVisitorFactory(Calculator.class.getName()));
         	
         	Object feo = settings.getForEachObject();
         	

@@ -27,6 +27,8 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import net.sf.statcvs.input.Builder;
@@ -53,7 +55,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.17 2004-02-29 17:12:02 squig Exp $
+ * @version $Id: Main.java,v 1.18 2004-03-01 21:21:12 squig Exp $
  */
 public class Main {
 
@@ -79,7 +81,7 @@ public class Main {
 
 		try {
 			ReportSettings settings = readSettings(args);
-			initLogger();
+			initLogger((Level)settings.get("_logLevel"));
 			generateSuite(settings);
 		} catch (InvalidCommandLineException e) {
 			System.err.println(e.getMessage());
@@ -176,13 +178,20 @@ public class Main {
 		return settings;
 	}				
 
-	public static void initLogger() throws LogSyntaxException {
+	public static void initLogger(Level level) throws LogSyntaxException 
+	{
+		if (level == null) {
+			level = Level.OFF;
+		}
+		
 		ConsoleHandler ch = new ConsoleHandler();
 		ch.setFormatter(new LogFormatter());
-		//ch.setLevel(Settings.getLoggingLevel());
-		//LogManager.getLogManager().getLogger("net.sf.statcvs").addHandler(ch);
-		logger.addHandler(ch);
-		logger.setUseParentHandlers(false);
+		ch.setLevel(level);
+		
+		Logger.getLogger("net.sf.statcvs").addHandler(ch);
+		Logger.getLogger("net.sf.statcvs").setUseParentHandlers(false);
+		Logger.getLogger("de.berlios.statcvs.xml").addHandler(ch);
+		Logger.getLogger("de.berlios.statcvs.xml").setUseParentHandlers(false);
 	}
 
 	/**

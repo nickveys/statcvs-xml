@@ -17,7 +17,7 @@
     <settings>
       <inputFilter>util.atMostDaysOld(date, 30)</inputFilter> 
     </settings>
-    <report class="CommitActivityChart" groupby="author"/>
+    <report class="CommitActivityChart" groupby="author" filename="recent_commit_activity.png"/>
      <report class="CommitTable" groupby="author" showColumns="1,2,3,4"/>
     <report class="CommitTable" groupby="file" showColumns="1,2" showPercent="false"/>
   </document>

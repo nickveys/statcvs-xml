@@ -127,7 +127,7 @@ public class AbstractTimeSeriesChart extends AbstractChart {
 		return result;
 	}
 
-	protected Map createTimeSerieses(Grouper grouper, Iterator it, RevisionVisitorFactory factory) 
+	protected Map createTimeSeries(Grouper grouper, Iterator it, RevisionVisitorFactory factory) 
 	{
 		Hashtable timeSeriesByGroup = new Hashtable();
 		Hashtable visitorByGroup = new Hashtable();

@@ -101,6 +101,8 @@ public class FileBuilder {
 		}
 		this.revisions.add(data);
 		lastAdded = data;
+
+		locDelta += getLOCChange(data);
 	}
 	
 	/**

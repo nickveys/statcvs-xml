@@ -60,7 +60,7 @@ public class LocChart extends AbstractTimeSeriesChart {
         
         Grouper grouper = settings.getGrouper();
         if (grouper != null) {
-        	Map serieses = createTimeSerieses(grouper, settings.getRevisionIterator(content), new RevisionVisitorFactory(LOCCalculator.class.getName()));
+        	Map serieses = createTimeSeries(grouper, settings.getRevisionIterator(content), new RevisionVisitorFactory(LOCCalculator.class.getName()));
         	
         	Object feo = settings.getForEachObject();
         	
