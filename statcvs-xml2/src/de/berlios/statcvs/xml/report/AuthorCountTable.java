@@ -27,6 +27,7 @@ import net.sf.statcvs.util.IntegerMap;
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.model.FileGrouper;
 import de.berlios.statcvs.xml.model.Grouper;
+import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
 import de.berlios.statcvs.xml.output.TableElement;
@@ -42,9 +43,9 @@ public class AuthorCountTable {
 	/**
 	 * 
 	 */
-	public static ReportElement generate(CvsContent content, ReportSettings settings) 
+	public static Report generate(CvsContent content, ReportSettings settings) 
 	{
-		ReportElement root = new ReportElement(I18n.tr("Authors%1"));
+		ReportElement root = new ReportElement(settings, I18n.tr("Authors%1"));
 		Grouper grouper = settings.getGrouper(new FileGrouper());
 		
 		IntegerMap filesMap = new IntegerMap();
@@ -76,7 +77,7 @@ public class AuthorCountTable {
 		}
 		
 		root.addContent(table);
-		return root;
+		return new Report(settings, root, table, "row");
 	}
 
 }

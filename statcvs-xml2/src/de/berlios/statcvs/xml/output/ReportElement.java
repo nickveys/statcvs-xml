@@ -24,7 +24,9 @@ public class ReportElement extends Element {
 
 	public ReportElement(ReportSettings settings, String name)
 	{
-		this(name.replaceAll("%1", settings.getForeachId()));
+		this((settings.getForeachId() == null)
+				?name
+				:name.replaceAll("%1", settings.getForeachId()));
 	}
 	
 	public void setReportName(String name) 

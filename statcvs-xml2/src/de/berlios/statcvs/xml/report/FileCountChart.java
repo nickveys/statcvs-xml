@@ -25,7 +25,7 @@ import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.chart.AbstractTimeSeriesChart;
 import de.berlios.statcvs.xml.chart.RevisionVisitor;
 import de.berlios.statcvs.xml.output.ChartReportElement;
-import de.berlios.statcvs.xml.output.ReportElement;
+import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportSettings;
 
 /**
@@ -45,9 +45,9 @@ public class FileCountChart extends AbstractTimeSeriesChart {
 		setup(false);
 	}
 
-	public static ReportElement generate(CvsContent content, ReportSettings settings)
+	public static Report generate(CvsContent content, ReportSettings settings)
 	{
-		return new ChartReportElement(new FileCountChart(content, settings));
+		return new Report(new ChartReportElement(new FileCountChart(content, settings)));
 	}
 
 	public static class Calculator implements RevisionVisitor

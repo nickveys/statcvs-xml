@@ -29,6 +29,7 @@ import net.sf.statcvs.util.IntegerMap;
 import org.jdom.Element;
 
 import de.berlios.statcvs.xml.I18n;
+import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
 import de.berlios.statcvs.xml.util.Formatter;
@@ -41,11 +42,11 @@ import de.berlios.statcvs.xml.util.Formatter;
  */
 public class AuthorsTable {
 
-	public static ReportElement generate(CvsContent content, ReportSettings settings)
+	public static Report generate(CvsContent content, ReportSettings settings)
 	{
-		ReportElement root = new ReportElement(I18n.tr("Authors"));
+		ReportElement root = new ReportElement(settings, I18n.tr("Authors"));
 		createReport(root, settings.getRevisionIterator(content));
-		return root;
+		return new Report(root);
 	}
 	
 	/**

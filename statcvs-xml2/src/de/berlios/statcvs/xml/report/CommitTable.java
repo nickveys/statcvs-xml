@@ -30,6 +30,7 @@ import org.jdom.Element;
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.model.AuthorGrouper;
 import de.berlios.statcvs.xml.model.Grouper;
+import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
 import de.berlios.statcvs.xml.util.Formatter;
@@ -42,11 +43,11 @@ import de.berlios.statcvs.xml.util.Formatter;
  */
 public class CommitTable {
 
-	public static ReportElement generate(CvsContent content, ReportSettings settings)
+	public static Report generate(CvsContent content, ReportSettings settings)
 	{
-		ReportElement root = new ReportElement(I18n.tr("Commits%1"));
+		ReportElement root = new ReportElement(settings, I18n.tr("Commits%1"));
 		createReport(root, settings.getRevisionIterator(content), new AuthorGrouper());
-		return root;
+		return new Report(root);
 	}
 	
 	/**

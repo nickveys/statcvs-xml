@@ -29,6 +29,7 @@ import net.sf.statcvs.model.Directory;
 import org.jdom.Element;
 
 import de.berlios.statcvs.xml.I18n;
+import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
 import de.berlios.statcvs.xml.util.FileHelper;
@@ -44,11 +45,11 @@ public class DirectoryTree {
 	/**
 	 * 
 	 */
-	public static ReportElement generate(CvsContent content, ReportSettings settings) 
+	public static Report generate(CvsContent content, ReportSettings settings) 
 	{
 		ReportElement root = new DirectoryTreeElement(I18n.tr("Repository Tree"));
 		createReport(root, settings.getDirectoryIterator(content));
-		return root;
+		return new Report(root);
 	}
 	
 	/**

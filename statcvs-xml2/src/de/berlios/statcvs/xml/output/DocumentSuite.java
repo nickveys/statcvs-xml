@@ -3,9 +3,11 @@ package de.berlios.statcvs.xml.output;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -19,12 +21,15 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
-import de.berlios.statcvs.xml.model.*;
 import de.berlios.statcvs.xml.model.AuthorGrouper;
 import de.berlios.statcvs.xml.model.DayGrouper;
 import de.berlios.statcvs.xml.model.DirectoryGrouper;
 import de.berlios.statcvs.xml.model.FileGrouper;
+import de.berlios.statcvs.xml.model.ForEachAuthor;
+import de.berlios.statcvs.xml.model.ForEachDirectory;
+import de.berlios.statcvs.xml.model.ForEachModule;
 import de.berlios.statcvs.xml.model.HourGrouper;
+import de.berlios.statcvs.xml.model.Module;
 import de.berlios.statcvs.xml.model.ModuleGrouper;
 
 /**
@@ -64,31 +69,61 @@ public class DocumentSuite {
 
 	public StatCvsDocument createDocument(Element root, DocumentRenderer renderer, ReportSettings settings) throws IOException
 	{
-		StatCvsDocument document = new StatCvsDocument(readAttributes(settings, root));
+		//StatCvsDocument document = new StatCvsDocument(readAttributes(settings, root));
 
-		// generate reports
+		// collect reports
 		ReportSettings documentSettings = new ReportSettings(settings);
+		
+		List reports = new ArrayList();
+		int maxPages = 0;
+		
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element element = (Element)it.next();
 			if ("settings".equals(element.getName())) {
 				documentSettings.load(element);
 			}
 			else if ("report".equals(element.getName())) {
-				ReportElement report = createReport(document, element, documentSettings);
-				if (report != null) {
-					document.getRootElement().addContent(report);
+				Report report = createReport(element, documentSettings);
+				
+				if (report.getPageCount() != 0) {
+					reports.add(report);
+					maxPages = Math.max(report.getPageCount(), maxPages);
 				}
+				
+				/*if (report != null) {
+					document.getRootElement().addContent(report);
+				}*/
 			}
 		}
 		
-		renderer.render(document);
-		return document;
+		//render documents
+		StatCvsDocument firstPage = null;
+		
+		for (int i = 0; i < maxPages; i++) {
+			StatCvsDocument document = new StatCvsDocument(readAttributes(settings, root));
+			for (int r = 0; r < reports.size(); r++) {
+				ReportElement re = ((Report)reports.get(r)).getPage(i);
+				
+				if (re != null) {
+					document.getRootElement().addContent(re);
+				}
+			}
+			logger.info(i+":"+document.getTitle());
+			renderer.render(document);
+			
+			if (i == 0) {
+				firstPage = document;
+				logger.info("First:"+firstPage.getTitle());
+			}
+		}
+	
+		return firstPage;
 	}
 
 	/**
 	 * @param element
 	 */
-	private ReportElement createReport(StatCvsDocument document, Element root, ReportSettings documentSettings) 
+	private Report createReport(Element root, ReportSettings documentSettings) 
 	{
 		ReportSettings reportSettings = readAttributes(documentSettings, root);
 //		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
@@ -127,7 +162,7 @@ public class DocumentSuite {
 			try {
 				Class c = Class.forName(className);
 				Method m = c.getMethod("generate", new Class[] { CvsContent.class, ReportSettings.class });
-				ReportElement report = (ReportElement)m.invoke(null, new Object[] { content, reportSettings });
+				Report report = (Report)m.invoke(null, new Object[] { content, reportSettings });
 				return report;
 			}
 			catch (Exception e) {
@@ -174,9 +209,8 @@ public class DocumentSuite {
 				Author author = (Author)i.next();
 				ReportSettings settings = new ReportSettings(defaultSettings);
 				settings.setForEach(new ForEachAuthor(author));
-				StatCvsDocument doc = createDocument(element, settings);
+				StatCvsDocument doc = createDocument(element, renderer, settings);
 				filenameByAuthorName.put(author.getName(), doc.getFilename());
-				renderer.render(doc);
 			}
 		}
 		else if ("directory".equals(value)) {
@@ -185,9 +219,8 @@ public class DocumentSuite {
 				if (!dir.isEmpty()) {
 					ReportSettings settings = new ReportSettings(defaultSettings);
 					settings.setForEach(new ForEachDirectory(dir));
-					StatCvsDocument doc = createDocument(element, settings);
+					StatCvsDocument doc = createDocument(element, renderer, settings);
 					filenameByDirectoryPath.put(dir.getPath(), doc.getFilename());
-					renderer.render(doc);
 				}
 			}
 		}
@@ -197,8 +230,7 @@ public class DocumentSuite {
 				Module module = (Module)i.next();
 				ReportSettings settings = new ReportSettings(defaultSettings);
 				settings.setForEach(new ForEachModule(module));
-				StatCvsDocument doc = createDocument(element, settings);
-				renderer.render(doc);
+				StatCvsDocument doc = createDocument(element, renderer, settings);
 			}
 		}
 		else {

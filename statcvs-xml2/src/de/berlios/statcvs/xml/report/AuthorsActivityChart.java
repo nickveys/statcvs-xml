@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorsActivityChart.java,v $
-	$Date: 2004-02-21 20:32:05 $ 
+	$Date: 2004-02-28 21:46:04 $ 
 */
 package de.berlios.statcvs.xml.report;
 
@@ -41,7 +41,7 @@ import org.jfree.chart.plot.CategoryPlot;
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.chart.AbstractStackedChart;
 import de.berlios.statcvs.xml.output.ChartReportElement;
-import de.berlios.statcvs.xml.output.ReportElement;
+import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportSettings;
 
 /**
@@ -125,9 +125,9 @@ public class AuthorsActivityChart extends AbstractStackedChart {
 		setup(true);
 	}
 	
-	public static ReportElement generate(CvsContent content, ReportSettings settings)
+	public static Report generate(CvsContent content, ReportSettings settings)
 	{
-		return new ChartReportElement(new AuthorsActivityChart(content, settings));
+		return new Report(new ChartReportElement(new AuthorsActivityChart(content, settings)));
 	}
 
 }

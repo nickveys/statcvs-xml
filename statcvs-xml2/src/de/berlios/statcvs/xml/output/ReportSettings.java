@@ -296,6 +296,21 @@ public class ReportSettings extends Hashtable {
 		return getInt("limit", defaultValue);
 	}
 
+	public boolean isPaging()
+	{
+		return getBoolean("paging", false);
+	}
+	
+	public int getItemsPerPage()
+	{
+		return getItemsPerPage(20);
+	}
+	
+	public int getItemsPerPage(int defaultValue)
+	{
+		return getInt("itemsPerPage", defaultValue);
+	}
+
 	public List getModules(CvsContent content)
 	{
 		LinkedList modules = new LinkedList();

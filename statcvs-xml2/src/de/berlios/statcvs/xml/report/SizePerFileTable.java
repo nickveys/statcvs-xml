@@ -29,6 +29,7 @@ import net.sf.statcvs.util.IntegerMap;
 import org.jdom.Element;
 
 import de.berlios.statcvs.xml.I18n;
+import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
 
@@ -42,7 +43,7 @@ public class SizePerFileTable {
 	/**
 	 * 
 	 */
-	public static ReportElement generate(CvsContent content, ReportSettings settings) 
+	public static Report generate(CvsContent content, ReportSettings settings) 
 	{
 		ReportElement root = new ReportElement(I18n.tr("Size Per File"));
 
@@ -78,7 +79,7 @@ public class SizePerFileTable {
 		}
 
 		root.addContent(new Element("largestFiles").addContent(filesEl));
-		return root;
+		return new Report(root);
 	}
 }
 

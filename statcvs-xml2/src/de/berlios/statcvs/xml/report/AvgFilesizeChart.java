@@ -34,7 +34,7 @@ import de.berlios.statcvs.xml.chart.RevisionVisitor;
 import de.berlios.statcvs.xml.chart.RevisionVisitorFactory;
 import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.output.ChartReportElement;
-import de.berlios.statcvs.xml.output.ReportElement;
+import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportSettings;
 
 /**
@@ -74,9 +74,9 @@ public class AvgFilesizeChart extends AbstractTimeSeriesChart {
 		}
 	}
 
-	public static ReportElement generate(CvsContent content, ReportSettings settings)
+	public static Report generate(CvsContent content, ReportSettings settings)
 	{
-		return new ChartReportElement(new AvgFilesizeChart(content, settings));
+		return new Report(new ChartReportElement(new AvgFilesizeChart(content, settings)));
 	}
 
 	public static class Calculator implements RevisionVisitor

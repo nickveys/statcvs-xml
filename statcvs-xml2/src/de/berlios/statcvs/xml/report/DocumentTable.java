@@ -28,6 +28,7 @@ import org.jdom.Element;
 
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.output.DocumentSuite;
+import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
 
@@ -38,9 +39,9 @@ import de.berlios.statcvs.xml.output.ReportSettings;
  */
 public class DocumentTable {
 
-	public static ReportElement generate(CvsContent content, ReportSettings settings)
+	public static Report generate(CvsContent content, ReportSettings settings)
 	{
-		ReportElement root = new ReportElement(I18n.tr("Reports"));
+		ReportElement root = new ReportElement(settings, I18n.tr("Reports"));
 		Element list = new Element("reports");
 		root.addContent(list);
 		Map documentTitleByFilename = DocumentSuite.getDocuments();
@@ -51,7 +52,7 @@ public class DocumentTable {
 			element.setText((String)documentTitleByFilename.get(filename));
 			list.addContent(element);
 		}
-		return root;
+		return new Report(root);
 	}
 	
 }

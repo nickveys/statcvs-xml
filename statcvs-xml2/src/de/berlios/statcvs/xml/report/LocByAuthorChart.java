@@ -26,7 +26,7 @@ import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.output.ChartReportElement;
-import de.berlios.statcvs.xml.output.ReportElement;
+import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportSettings;
 
 /**
@@ -62,9 +62,9 @@ public class LocByAuthorChart extends LocChart {
 		setup(true);
 	}
 
-	public static ReportElement generate(CvsContent content, ReportSettings settings)
+	public static Report generate(CvsContent content, ReportSettings settings)
 	{
-		return new ChartReportElement(new LocByAuthorChart(content, settings));
+		return new Report(new ChartReportElement(new LocByAuthorChart(content, settings)));
 	}
 
 }
