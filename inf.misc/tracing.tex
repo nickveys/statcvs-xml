@@ -47,8 +47,9 @@
 \frame{
     \frametitle{Project Tracing}
     \begin{block}{Ziel}
-        Die Entwicklung bestimmter Projektparameter zu verfolgen.
-        Wo steht mein Projekt jetzt in diesem Moment?
+        Das Ziel von Project Tracing ist die Verfolgung bestimmter
+        Projektparameter: Wo steht mein Projekt jetzt in diesem
+        Moment?
     \end{block}
     
     \begin{itemize}
@@ -58,17 +59,18 @@
 }
 
 \frame{
-    \frametitle{Anatomie (eines Open-Source-Projekts)}
+    \frametitle{Anatomie eines Open-Source Projekts}
     \begin{columnsonlytextwidth}
     \begin{column}{5cm}
     \begin{itemize}
         \item Projekt ist ''nur'' die Hülle
-        \item Eigentlicher Kern \begin{itemize}
-            \item Code
+        \item The Apache Way of Life
+		  \begin{itemize}
+            \item Community
             \item Dokumentation
-            \item Community (Kunde)
+            \item Code
         \end{itemize}
-        \item Ohne diese 4 kann ein Projekt nicht erfolgreich sein.
+        \item Diese 4 Elemente machen erfolgreiche Projekte möglich
     \end{itemize}
     \end{column}
     \begin{column}{5cm}
@@ -78,17 +80,16 @@
 }
 
 \frame{
-    \frametitle{Project Tracing (in Open-Source-Projekten)}
+    \frametitle{Project Tracing in Open-Source Projekten}
     
     \begin{itemize}
-        \item Einheitliche Dokumentation
-        \item Architektur sichtbar machen
-        \item Wer hat als letztes Was Wo gemacht? (Collective File Ownership)
-        \item Qualitätssicherung durch Source-Metriken
-        \item Testüberdeckung
-        \item Überblick über die verwendeten Bibliotheken
+    \item Einheitliche Dokumentation
+    \item Architektur sichtbar machen
+    \item {\it Wer} hat als letztes {\it was, wo} gemacht?
+    \item Qualitätskontrolle durch Source-Metriken
+    \item Überblick über die verwendeten Bibliotheken
     \end{itemize}
     
-    Das alles, und noch viel mehr: Automatisch im Buildprozess. Mit {\bf Apache Maven}.
+    Das alles, und noch viel mehr: Mit {\bf Apache Maven} in den
+    Buildprozess integriert.
 }
-
