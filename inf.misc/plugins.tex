@@ -72,7 +72,6 @@
   \item Prüft den Source Code anhand von Regeln
   \item Bericht enthält Links auf Fehlerzeile im XRef
   \item Konfiguration über eine Properties Datei
-  \item Defekt im aktuellen Maven 1.0-rc1 Release
   \item CVS Version benutzt CheckStyle 3.3 anstatt 2.1 
   \end{itemize}
   
@@ -270,11 +269,11 @@ maven.checkstyle.properties=mystyle.properties\end{alltt}
   {\bf License Plugin}
   \begin{itemize}
   \item Zeigt die Lizenz in einer Rahmen an
-  \item Konfiguration (project.properties)
-    \begin{itemize}
-    \item \begin{alltt}maven.license.licenseFile=COPYING\end{alltt}
-    \end{itemize}
   \end{itemize}
+
+  \begin{block}{Konfiguration (project.properties)}
+    \begin{alltt}maven.license.licenseFile=COPYING\end{alltt}
+  \end{block}
 
   \vspace{0.5cm}
 
@@ -283,6 +282,15 @@ maven.checkstyle.properties=mystyle.properties\end{alltt}
   \item Zeigt eine Versions Historie an
   \item Konfiguration über eine XML Datei
   \end{itemize}
+
+  \begin{Beispiel}
+\begin{alltt}\scriptsize
+xsltproc changes.xsl xdocs/changes.xml | fold -s \
+  | perl -n -i -e 'print "    " if $_ =~ /^[A-Za-z]/ \
+                   && $_ !~ /^Version/;' -e 'print $_' \
+  > CHANGES
+\end{alltt}
+    \end{Beispiel}
 }
 
 \subsection{Mehr Plugins}
@@ -296,6 +304,15 @@ maven.checkstyle.properties=mystyle.properties\end{alltt}
   \end{itemize}
 
   \vspace{0.5cm}
+  
+  {\bf Eclipse Plugin} [eclipse]
+  \begin{itemize}
+  \item Generierung von Eclipse Projekt Dateien
+  \item Berücksichtigung aller Dependencies
+  \item Anlegen der MAVEN\_HOME Variable in Eclipse notwendig
+  \end{itemize}
+
+  \vspace{0.5cm}
 
   {\bf Console Plugin}
   \begin{itemize}
@@ -303,15 +320,6 @@ maven.checkstyle.properties=mystyle.properties\end{alltt}
   \item Schnelles sukessives Aufrufen von Goals
   \item Unzureichende Speicherfreigabe führt nach mehrmaligem Goal
     Aufruf zu OutOfMemory exception
-  \end{itemize}
-
-  \vspace{0.5cm}
-  
-  {\bf Eclipse Plugin} [eclipse]
-  \begin{itemize}
-  \item Generierung von Eclipse Projekt Dateien
-  \item Berücksichtigung aller Dependencies
-  \item Anlegen der MAVEN\_HOME Variable in Eclipse notwendig
   \end{itemize}
 }  
 
@@ -322,6 +330,7 @@ maven.checkstyle.properties=mystyle.properties\end{alltt}
   {\bf Plugin Plugin}
   \begin{itemize}
   \item Deployment von Maven Plugins
+  \item Maven ist sein eigenes Build Tool
   \end{itemize}   
 
   \vspace{0.5cm}
