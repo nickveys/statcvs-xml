@@ -97,7 +97,7 @@ public class FileBuilder {
 		if (!data.isOnTrunk()) {
 			return;
 		}
-		if (isBinary) {
+		if (isBinary && !data.isCreation()) {
 			data.setLines(0, 0);
 		}
 		this.revisions.add(data);

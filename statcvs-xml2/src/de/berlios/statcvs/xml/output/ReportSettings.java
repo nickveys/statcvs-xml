@@ -307,6 +307,16 @@ public class ReportSettings extends Hashtable {
 		}
 	}
 
+	public long getLong(Object key, long defaultValue) 
+	{
+		try {
+			return Long.parseLong(getString(key, defaultValue + ""));
+		}
+		catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
+
 	public int getLimit()
 	{
 		return getLimit(20);
