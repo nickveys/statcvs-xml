@@ -35,6 +35,7 @@ import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.chart.RevisionVisitor;
 import de.berlios.statcvs.xml.chart.AbstractTimeSeriesChart;
 import de.berlios.statcvs.xml.output.ChartReportElement;
+import de.berlios.statcvs.xml.output.ForEachObject;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
 
@@ -44,36 +45,38 @@ import de.berlios.statcvs.xml.output.ReportSettings;
  * @author Tammo van Lessen
  * @author Steffen Pingel
  */
-public class LocByAuthorChart extends LocChart {
+public class LocByObjectChart extends LocChart {
     
     private CvsContent content;
 	
-	public LocByAuthorChart(CvsContent content, ReportSettings settings)
+	public LocByObjectChart(CvsContent content, ReportSettings settings)
 	{
-		super(content, settings, I18n.tr("Lines Of Code (per Author)"));
+		super(content, settings, I18n.tr("Lines Of Code%1"));
 
 		Object highlightAuthor = settings.getForEachObject();
 				
 		// add a time line for each author
 		int i = 0;
-		Iterator it = content.getAuthors().iterator();
+		Iterator it = settings.getForEachIterator(content);
 		while (it.hasNext()) {
-			Author author = (Author)it.next();
-			addTimeSeries(author.getName(), author.getRevisions().iterator());
-			if (author == highlightAuthor) {
+			ForEachObject foreach = (ForEachObject)it.next();
+			settings.setForEach(foreach);
+			addTimeSeries(settings.getForeachId(), settings.getRevisionIterator(content));
+			if (foreach == highlightAuthor) {
 				// make line thicker
 				getChart().getXYPlot().getRenderer().setSeriesStroke(i, new BasicStroke(2,BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
 			}
 			++i;
 		}
-
+		settings.setForEach(null);
+		
 		addSymbolicNames(settings.getSymbolicNameIterator(content));
 		setup(true);
 	}
 
 	public static ReportElement generate(CvsContent content, ReportSettings settings)
 	{
-		return new ChartReportElement(new LocByAuthorChart(content, settings));
+		return new ChartReportElement(new LocByObjectChart(content, settings));
 	}
 
 }

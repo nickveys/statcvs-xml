@@ -5,17 +5,16 @@
     <modules type="map">
       <Report>**/report/*</Report>
       <Output>**/output/*</Output>
+      <XNap_1.x>xnap/**</XNap_1.x>
+      <XNap_2.x>xnap2/**</XNap_2.x>
+      <XNap_3.x>xnap3/**</XNap_3.x>
     </modules>
     <tags>test1</tags>
   </settings>
 
-  <document  filename="recent_activity" title="Recent Activity">
-    <settings>
-      <revisionFilter>util.atMostDaysOld(rev.getDate(), 1)</revisionFilter> 
-    </settings>
-    <report class="AuthorsTable"/>
-    <report class="FileActivityTable"/>
-    <report class="LocChart" filename="recent_loc.png"/>
+  <document  filename="test" title="Test">
+    <report class="LocByObjectChart" forall="author" filename="loc_authors.png"/>
+    <report class="LocByObjectChart" forall="directory" filename="loc_directories.png"/>
   </document>
 
   <document  filename="author%1" title="Author Statistics%1" foreach="author">
@@ -28,6 +27,15 @@
   <document  filename="directory%1" title="Directory Statistics%1" foreach="directory">
     <report class="LocChart"/>
     <report class="AuthorsTable"/>
+  </document>
+
+  <document  filename="recent_activity" title="Recent Activity">
+    <settings>
+      <revisionFilter>util.atMostDaysOld(rev.getDate(), 1)</revisionFilter> 
+    </settings>
+    <report class="AuthorsTable"/>
+    <report class="FileActivityTable"/>
+    <report class="LocChart" filename="recent_loc.png"/>
   </document>
 
   <document  filename="authors" title="Author Statistics">
@@ -47,6 +55,7 @@
   
   <document  filename="module_stats" title="Module Statistics">
     <report class="ModuleSizesChart"/>
+    <report class="LocByModuleChart"/>
   </document>
     
   <document filename="index" title="CVS Statistics">

@@ -151,8 +151,7 @@ public class DocumentSuite {
 			for (Iterator i = content.getAuthors().iterator(); i.hasNext();) {
 				Author author = (Author)i.next();
 				ReportSettings settings = new ReportSettings(defaultSettings);
-				settings.put("_foreachObject", author);
-				settings.put("_foreachId", author.getName());
+				settings.setForEach(new ForEachAuthor(author));
 				StatCvsDocument doc = createDocument(element, settings);
 				filenameByAuthorName.put(author.getName(), doc.getFilename());
 				renderer.render(doc);
@@ -163,12 +162,21 @@ public class DocumentSuite {
 				Directory dir = (Directory)i.next();
 				if (!dir.isEmpty()) {
 					ReportSettings settings = new ReportSettings(defaultSettings);
-					settings.put("_foreachObject", dir);
-					settings.put("_foreachId", dir.getPath());
+					settings.setForEach(new ForEachDirectory(dir));
 					StatCvsDocument doc = createDocument(element, settings);
 					filenameByDirectoryPath.put(dir.getPath(), doc.getFilename());
 					renderer.render(doc);
 				}
+			}
+		}
+		else if ("module".equals(value)) {
+			ModuleBuilder builder = new ModuleBuilder(defaultSettings.getModules(content), content.getRevisions().iterator());
+			for (Iterator i = builder.getModules().iterator(); i.hasNext();) {
+				Module module = (Module)i.next();
+				ReportSettings settings = new ReportSettings(defaultSettings);
+				settings.setForEach(new ForEachModule(module));
+				StatCvsDocument doc = createDocument(element, settings);
+				renderer.render(doc);
 			}
 		}
 		else {

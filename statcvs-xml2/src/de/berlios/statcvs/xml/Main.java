@@ -46,7 +46,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.8 2004-02-21 16:26:53 squig Exp $
+ * @version $Id: Main.java,v 1.9 2004-02-22 17:26:26 squig Exp $
  */
 public class Main {
 	private static String projectName;
@@ -161,7 +161,7 @@ public class Main {
 		boolean createHistory = Settings.getGenerateHistory();
 		String logfile = Settings.getLogFileName();
 		
-		String moduleName = getModuleName(logfile);
+//		String moduleName = getModuleName(logfile);
 
 //		CvsLocHistory hist = CvsLocHistory.getInstance();
 //		if (Settings.getUseHistory()) {
@@ -204,39 +204,39 @@ public class Main {
 	 * @param string
 	 * @return
 	 */
-	private static String getModuleName(String logfile) throws LogSyntaxException, IOException {
-		LookaheadReader logReader = new LookaheadReader(new FileReader(logfile));
-		
-		while (logReader.getCurrentLine().startsWith("? ")) {
-			logReader.getNextLine();
-		}
-		if (!logReader.isAfterEnd() && !"".equals(logReader.getCurrentLine())) {
-			throw new LogSyntaxException("expected '?' or empty line at line "
-					+ logReader.getLineNumber() + ", but found '"
-					+ logReader.getCurrentLine() + "'");
-		}
-		while (!logReader.isAfterEnd() && logReader.getCurrentLine().equals("")) {
-			logReader.getNextLine();
-		}
-
-		String line = logReader.getCurrentLine();
-		if (!line.startsWith("RCS file: ")) {
-			throw new LogSyntaxException(
-				"line " + logReader.getLineNumber() + ": expected '"
-						+ "RCS file: " + "' but found '" + line + "'");
-		}
-		String rcsFile = line.substring("RCS file: ".length());
-
-		line = logReader.getNextLine();
-		if (!line.startsWith("Working file: ")) {
-			throw new LogSyntaxException(
-				"line " + logReader.getLineNumber() + ": expected '"
-						+ "Working file: " + "' but found '" + line + "'");
-		}
-		String workingFile = line.substring("Working file: ".length());
-
-		return CvsLogUtils.getModuleName(rcsFile, workingFile);
-	}
+//	private static String getModuleName(String logfile) throws LogSyntaxException, IOException {
+//		LookaheadReader logReader = new LookaheadReader(new FileReader(logfile));
+//		
+//		while (logReader.getCurrentLine().startsWith("? ")) {
+//			logReader.getNextLine();
+//		}
+//		if (!logReader.isAfterEnd() && !"".equals(logReader.getCurrentLine())) {
+//			throw new LogSyntaxException("expected '?' or empty line at line "
+//					+ logReader.getLineNumber() + ", but found '"
+//					+ logReader.getCurrentLine() + "'");
+//		}
+//		while (!logReader.isAfterEnd() && logReader.getCurrentLine().equals("")) {
+//			logReader.getNextLine();
+//		}
+//
+//		String line = logReader.getCurrentLine();
+//		if (!line.startsWith("RCS file: ")) {
+//			throw new LogSyntaxException(
+//				"line " + logReader.getLineNumber() + ": expected '"
+//						+ "RCS file: " + "' but found '" + line + "'");
+//		}
+//		String rcsFile = line.substring("RCS file: ".length());
+//
+//		line = logReader.getNextLine();
+//		if (!line.startsWith("Working file: ")) {
+//			throw new LogSyntaxException(
+//				"line " + logReader.getLineNumber() + ": expected '"
+//						+ "Working file: " + "' but found '" + line + "'");
+//		}
+//		String workingFile = line.substring("Working file: ".length());
+//
+//		return CvsLogUtils.getModuleName(rcsFile, workingFile);
+//	}
 
 	public static void initLogger() throws LogSyntaxException {
 		ConsoleHandler ch = new ConsoleHandler();
@@ -309,7 +309,7 @@ public class Main {
 //		m.invoke(null, new Object[] { content });
 		
 		DocumentRenderer renderer = XDocRenderer.create(content, new File(Settings.getOutputDir()));
-		DocumentSuite suite = new DocumentSuite(FileHelper.getResource("resources/suite.xml"), content);
+		DocumentSuite suite = new DocumentSuite(FileHelper.getResource(Settings.getDocumentSuite()), content);
 		suite.generate(renderer, projectName);
 	}
 

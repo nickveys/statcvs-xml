@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Settings.java,v $
-	$Date: 2004-02-21 16:26:53 $ 
+	$Date: 2004-02-22 17:26:26 $ 
 */
 package de.berlios.statcvs.xml;
 
@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import net.sf.statcvs.output.WebRepositoryIntegration;
 import net.sf.statcvs.util.FilePatternMatcher;
 import net.sf.statcvs.util.FileUtils;
+import de.berlios.statcvs.xml.output.XMLRenderer;
 
 /**
  * Class for storing all command line parameters. The parameters
@@ -38,10 +39,11 @@ import net.sf.statcvs.util.FileUtils;
  * can read all parameter values from here.
  * 
  * @author jentzsch
- * @version $Id: Settings.java,v 1.6 2004-02-21 16:26:53 squig Exp $
+ * @version $Id: Settings.java,v 1.7 2004-02-22 17:26:26 squig Exp $
  */
 public class Settings {
 
+	private static String documentSuite = "resources/suite.xml";
 	private static boolean generateHistory;
 	private static boolean useHistory;
 	private static String logFileName = null;
@@ -58,7 +60,7 @@ public class Settings {
 
 	private static WebRepositoryIntegration webRepository = null;
 
-	private static String outputSuite = null;
+	private static String outputSuite = XMLRenderer.class.getName();
 
 	/**
 	 * Method getCheckedOutDirectory.
@@ -96,6 +98,11 @@ public class Settings {
 	public static String getOutputSuite()
 	{
 		return outputSuite;
+	}
+
+	public static String getDocumentSuite()
+	{
+		return documentSuite;
 	}
 
 	/**
@@ -264,6 +271,10 @@ public class Settings {
 
 	public static void setOutputSuite(String outputSuite) {
 		Settings.outputSuite = outputSuite;
+	}
+
+	public static void setDocumentSuite(String documentSuite) {
+		Settings.documentSuite = documentSuite;
 	}
 
 	public static boolean getUseHistory() {

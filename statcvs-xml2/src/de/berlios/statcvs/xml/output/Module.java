@@ -1,5 +1,8 @@
 package de.berlios.statcvs.xml.output;
 
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.util.FilePatternMatcher;
@@ -12,6 +15,7 @@ public class Module implements Comparable {
 	private String name;
 	private FilePatternMatcher matcher;
 	private Directory directory;
+	private SortedSet revisions = new TreeSet();
 
 	/**
 	 * @param string
@@ -48,6 +52,11 @@ public class Module implements Comparable {
 		return name;
 	}
 
+	public SortedSet getRevisions()
+	{
+		return revisions;
+	}
+
 	public boolean matches(CvsRevision rev)
 	{
 		if (directory != null && directory != rev.getFile().getDirectory()) {
@@ -57,6 +66,14 @@ public class Module implements Comparable {
 			return matcher.matches(rev.getFile().getFilenameWithPath());
 		}
 		return true;
+	}
+
+	/**
+	 * @param rev
+	 */
+	public void addRevision(CvsRevision rev) 
+	{
+		revisions.add(rev);
 	}
 
 }

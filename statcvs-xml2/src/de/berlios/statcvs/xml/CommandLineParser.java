@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommandLineParser.java,v $
-	Created on $Date: 2004-02-16 12:46:06 $ 
+	Created on $Date: 2004-02-22 17:26:26 $ 
 */
 package de.berlios.statcvs.xml;
 
@@ -38,7 +38,7 @@ import de.berlios.statcvs.xml.output.XMLRenderer;
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.3 2004-02-16 12:46:06 vanto Exp $
+ * @version $Id: CommandLineParser.java,v 1.4 2004-02-22 17:26:26 squig Exp $
  */
 public class CommandLineParser {
 
@@ -88,23 +88,20 @@ public class CommandLineParser {
 			}
 			Settings.setOutputDir(popNextArg());
 		} else if (s.equals("output-suite")) {
-			if (args.isEmpty()) {
-				Settings.setOutputSuite(XMLRenderer.class.getName());
-			}
-			else {
-				String arg = popNextArg();
+			String arg = popNextArg();
 //				if (arg.equals("html")) {
 //					Settings.setOutputSuite
 //						(HTMLRenderer.class.getName());
 //				}
 //				else 
-				if (arg.equals("xdoc")) {
-					Settings.setOutputSuite(XDocRenderer.class.getName());
-				}
-				else {
-					Settings.setOutputSuite(arg);
-				}
+			if (arg.equals("xdoc")) {
+				Settings.setOutputSuite(XDocRenderer.class.getName());
 			}
+			else {
+				Settings.setOutputSuite(arg);
+			}
+		} else if (s.equals("document-suite")) {
+			Settings.setDocumentSuite(popNextArg());
 		} else if (s.equals("generate-history")) {
 			Settings.setGenerateHistory(true);
 		} else if (s.equals("use-history")) {
