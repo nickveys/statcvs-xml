@@ -14,7 +14,10 @@
       </ul>
     </section>
 -->
-	<release version="0.9.5" date="2004-02-21">
+	<release version="0.9.5" date="2005-03-09">
+      <action dev="vanto" type="fix">
+		Convert line breaks in commit comments to html line breaks.
+      </action>
       <action dev="squig" type="fix">
 		Merged input layer changes from StatCvs that fix an out of
 		memory exception caused by an infinite loop.
