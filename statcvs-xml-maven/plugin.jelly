@@ -48,8 +48,13 @@
 
                     <echo>run statcvs-xml...</echo>
                     <property name="maven.docs.dest" value="${pom.getPluginContext('maven-xdoc-plugin').getVariable('maven.docs.dest')}"/>
+                    <property name="maven.gen.docs" value="${pom.getPluginContext('maven-xdoc-plugin').getVariable('maven.gen.docs')}"/>
+
+                    <mkdir dir="${maven.docs.dest}/statcvs-xml"/>
+                    <mkdir dir="${maven.gen.docs}/statcvs-xml"/>
+
                     <java classname="net.sf.statcvs.Main" fork="true">
-                        <arg line="-output-dir ${maven.docs.dest}"/> 
+                        <arg line="-output-dir ${maven.gen.docs}/statcvs-xml"/> 
                         <arg line="-output-suite net.sf.statcvs.output.xml.XDocRenderer"/> 
                         <arg line="-verbose"/> 
                         <arg line="-weburl http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml/"/>
@@ -64,6 +69,12 @@
                             <pathelement location="${plugin.getDependencyPath('xml-apis')}"/>
                         </classpath>
                     </java>
+                    <!-- Copy images  -->
+                    <copy todir="${maven.docs.dest}/statcvs-xml" overwrite="yes" filtering="no">
+                        <fileset dir="${maven.gen.docs}/statcvs-xml">
+                            <include name="**/*.png"/>
+                        </fileset>
+                    </copy>
                     </j:when>
                     <j:otherwise>
                         <echo>StatCvs-XML can obtain statistics in the online-mode only.</echo>

@@ -4,12 +4,12 @@
 <pomVersion>3</pomVersion>
   <id>maven-statcvs-xml-plugin</id>
   <name>Maven StatCvs-XML Plug-in</name>
-  <currentVersion>1.0</currentVersion>
+  <currentVersion>1.0-SNAPSHOT</currentVersion>
   <description/>
   <shortDescription>Provides CVS statistics</shortDescription>
   <logo>/images/statcvslogo.png</logo>
-  <url>http://statcvs-xml.berlios.de/maven-statcvs-xml-plugin/</url>
-  <siteDirectory>/home/groups/statcvs-xml/htdocs/maven-statcvs-xml-plugin/</siteDirectory>
+  <url>http://statcvs-xml.berlios.de/maven-plugin/</url>
+  <siteDirectory>/home/groups/statcvs-xml/htdocs/maven-plugin/</siteDirectory>
   <repository>
     <connection>scm:cvs:pserver:anonymous@cvs.berlios.de:/cvsroot/statcvs-xml:statcvs-xml/maven-statcvs-xml-plugin</connection>
     <url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/maven-statcvs-xml-plugin</url>
@@ -66,7 +66,7 @@
   <dependencies>
     <dependency>
       <id>statcvs-xml</id>
-      <version>0.9</version>
+      <version>0.9-SNAPSHOT</version>
       <properties>
         <classloader>root.maven</classloader>
       </properties>
