@@ -7,6 +7,8 @@ import java.util.Iterator;
 import org.jdom.Document;
 import org.jdom.Element;
 
+import de.berlios.statcvs.xml.util.StringHelper;
+
 /**
  * Represents a document.
  *  

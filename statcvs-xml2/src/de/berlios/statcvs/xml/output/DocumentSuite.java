@@ -19,6 +19,7 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import de.berlios.statcvs.xml.model.*;
 import de.berlios.statcvs.xml.model.AuthorGrouper;
 import de.berlios.statcvs.xml.model.DayGrouper;
 import de.berlios.statcvs.xml.model.DirectoryGrouper;

@@ -28,6 +28,7 @@ import org.jdom.Element;
 
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.WebRepositoryFactory;
+import de.berlios.statcvs.xml.model.*;
 import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.util.ScriptHelper;
 

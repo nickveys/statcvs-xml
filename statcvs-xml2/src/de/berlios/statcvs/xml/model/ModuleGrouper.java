@@ -25,7 +25,6 @@ import java.util.List;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import de.berlios.statcvs.xml.I18n;
-import de.berlios.statcvs.xml.output.Module;
 import de.berlios.statcvs.xml.output.ReportSettings;
 
 /**

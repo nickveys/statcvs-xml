@@ -36,7 +36,7 @@ import org.jfree.ui.HorizontalAlignment;
 import org.jfree.ui.RectangleEdge;
 
 import de.berlios.statcvs.xml.output.ReportSettings;
-import de.berlios.statcvs.xml.output.StringHelper;
+import de.berlios.statcvs.xml.util.StringHelper;
 
 /**
  * AbstractChart

@@ -22,6 +22,11 @@ public class ReportElement extends Element {
 		setAttribute("name", name);
 	}
 
+	public ReportElement(ReportSettings settings, String name)
+	{
+		this(name.replaceAll("%1", settings.getForeachId()));
+	}
+	
 	public void setReportName(String name) 
 	{
 		setAttribute("name", name);

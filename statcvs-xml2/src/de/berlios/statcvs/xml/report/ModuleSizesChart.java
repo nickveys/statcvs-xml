@@ -27,8 +27,8 @@ import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.util.IntegerMap;
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.chart.AbstractPieChart;
+import de.berlios.statcvs.xml.model.Module;
 import de.berlios.statcvs.xml.output.ChartReportElement;
-import de.berlios.statcvs.xml.output.Module;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
 

@@ -1,4 +1,4 @@
-package de.berlios.statcvs.xml.output;
+package de.berlios.statcvs.xml.model;
 
 import java.util.Iterator;
 

@@ -7,6 +7,7 @@ import net.sf.statcvs.output.WebRepositoryIntegration;
 
 import org.jdom.Element;
 
+import de.berlios.statcvs.xml.model.*;
 import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.util.Formatter;
 
