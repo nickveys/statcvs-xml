@@ -37,6 +37,7 @@ import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.model.DirectoryImpl;
 import net.sf.statcvs.model.DirectoryRoot;
+import net.sf.statcvs.model.SymbolicName;
 import net.sf.statcvs.util.FilePatternMatcher;
 import net.sf.statcvs.util.FileUtils;
 
@@ -51,6 +52,7 @@ import net.sf.statcvs.util.FileUtils;
  * for each author name and path. It also provides LOC count services.</p>
  * 
  * @author Richard Cyganiak <richard@cyganiak.de>
+ * @author Tammo van Lessen
  * @version $Id$
  */
 public class Builder implements CvsLogBuilder {
@@ -62,6 +64,8 @@ public class Builder implements CvsLogBuilder {
 
 	private final Map authors = new HashMap();
 	private final Map directories = new HashMap();
+    private final Map symbolicNames = new HashMap(); 
+    
 	private final List fileBuilders = new ArrayList();
 	
 	private FileBuilder currentFileBuilder = null;
@@ -102,12 +106,15 @@ public class Builder implements CvsLogBuilder {
 	 * @param filename the file's name with path, for example "path/file.txt"
 	 * @param isBinary <tt>true</tt> if it's a binary file
 	 * @param isInAttic <tt>true</tt> if the file is dead on the main branch
+     * @param revBySymnames maps revision (string) by symbolic name (string)
 	 */
-	public void buildFile(String filename, boolean isBinary, boolean isInAttic) {
+	public void buildFile(String filename, boolean isBinary, 
+                           boolean isInAttic, Map revBySymnames) {
 		if (currentFileBuilder != null) {
 			fileBuilders.add(currentFileBuilder);
 		}
-		currentFileBuilder = new FileBuilder(this, filename, isBinary, isInAttic);
+		currentFileBuilder = new FileBuilder(this, filename, isBinary, 
+                                             isInAttic, revBySymnames);
 	}
 
 	/**
@@ -197,6 +204,28 @@ public class Builder implements CvsLogBuilder {
 		return getDirectoryForPath(filename.substring(0, lastSlash + 1));
 	}
 	
+    /**
+     * Returns the {@link SymbolicName} with the given name or creates it
+     * if it does not yet exist.
+     * 
+     * @param name the symbolic name's name
+     * @return the corresponding symbolic name object
+     */
+    public SymbolicName getSymbolicName(String name)
+    {
+        SymbolicName sym = (SymbolicName)symbolicNames.get(name);
+        
+        if (sym != null) {
+            return sym;
+        } 
+        else {
+            sym = new SymbolicName(name);
+            symbolicNames.put(name, sym);
+            
+            return sym;            
+        }
+    }
+    
 	public int getLOC(String filename) throws NoLineCountException {
 		if (repositoryFileManager == null) {
 			throw new NoLineCountException("no RepositoryFileManager");

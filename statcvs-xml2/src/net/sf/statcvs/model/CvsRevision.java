@@ -23,6 +23,7 @@
 package net.sf.statcvs.model;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.SortedSet;
 
 /**
@@ -97,9 +98,11 @@ public class CvsRevision implements Comparable {
 	 * @param added number of lines added
 	 * @param removed number of lines removed
 	 * @param currentLOC number of lines in the file; if the revision is a deletion, then number of lines before
+     * @param symbolicNames list of symbolic names for this revision or null if this revision has no symbolic names
 	 */
 	public CvsRevision(CvsFile file, String revision, int type,
-			Author author, Date date, String comment, int added, int removed, int currentLOC) {
+			Author author, Date date, String comment, int added, int removed, 
+            int currentLOC, SortedSet symbolicNames) {
 		this.file = file;
 		this.revision = revision;
 		this.type = type;
@@ -109,12 +112,21 @@ public class CvsRevision implements Comparable {
 		this.linesAdded = added;
 		this.linesRemoved = removed;
 		this.linesOfCode = currentLOC;
+        this.symbolicNames = symbolicNames;
+        
 		if (file != null) {
 			file.addRevision(this);
 		}
 		if (author != null) {
 			author.addRevision(this);
 		}
+        
+        if (symbolicNames != null) {
+            Iterator it = symbolicNames.iterator();
+            while (it.hasNext()) {
+                ((SymbolicName)it.next()).addRevision(this);
+            }
+        }
 	}
 
 	/**
@@ -312,8 +324,11 @@ public class CvsRevision implements Comparable {
 	}
 
 	/**
-	 * Returns a list of {@link SymbolicName}s of this revision,
-	 * ordered from latest to oldest.
+	 * Returns a list of {@link SymbolicName}s of this revision or null if
+	 * the revision has no symbolic names. The list is ordered from 
+	 * latest to oldest.
+     *
+	 * @return list of symbolic names 
 	 */
 	public SortedSet getSymbolicNames()
 	{

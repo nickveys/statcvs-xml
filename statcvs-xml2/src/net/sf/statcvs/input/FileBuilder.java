@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import net.sf.statcvs.model.CvsFile;
@@ -53,6 +56,7 @@ import net.sf.statcvs.model.CvsRevision;
  * TODO: Move buildXXXRevision methods to CvsFile or CvsRevision
  * 
  * @author Richard Cyganiak <richard@cyganiak.de>
+ * @author Tammo van Lessen
  * @version $Id$
  */
 public class FileBuilder {
@@ -64,7 +68,7 @@ public class FileBuilder {
 	private boolean isInAttic;
 	private List revisions = new ArrayList();
 	private RevisionData lastAdded = null;
-
+    private Map revBySymnames;
 	/**
 	 * Creates a new <tt>FileBuilder</tt>.
 	 * 
@@ -74,12 +78,14 @@ public class FileBuilder {
 	 * @param isBinary Is this a binary file or not?
 	 * @param isInAttic Is this file in the attic?
 	 */
-	public FileBuilder(Builder builder,
-				String name, boolean isBinary, boolean isInAttic) {
+	public FileBuilder(Builder builder, String name, boolean isBinary, 
+                        boolean isInAttic, Map revBySymnames) {
 		this.builder = builder;
 		this.name = name;
 		this.isBinary = isBinary;
 		this.isInAttic = isInAttic;
+        this.revBySymnames = revBySymnames;
+        
 		logger.fine("logging " + name);
 	}
 
@@ -118,7 +124,7 @@ public class FileBuilder {
 		CvsFile file = new CvsFile(name, builder.getDirectory(name), isBinary, isInAttic);
 
 		if (revisions.isEmpty()) {
-			buildBeginOfLogRevision(file, beginOfLogDate, getFinalLOC());
+			buildBeginOfLogRevision(file, beginOfLogDate, getFinalLOC(), null);
 			return file;
 		}
 
@@ -127,36 +133,43 @@ public class FileBuilder {
 		int currentLOC = getFinalLOC();
 		RevisionData previousData;
 		int previousLOC;
-
+        SortedSet symbolicNames;
+        
 		while (it.hasNext()) {
 			previousData = currentData;
 			previousLOC = currentLOC;
 			currentData = (RevisionData) it.next();
 			currentLOC = previousLOC - getLOCChange(previousData);
 
-			if (previousData.isChangeOrRestore()) {
+            // symbolic names for previousData
+            symbolicNames = createSymbolicNamesCollection(previousData);
+
+            if (previousData.isChangeOrRestore()) {
 				if (currentData.isDeletion() || currentData.isAddOnSubbranch()) {
-					buildCreationRevision(file, previousData, previousLOC);
+					buildCreationRevision(file, previousData, previousLOC, symbolicNames);
 				} else {
-					buildChangeRevision(file, previousData, previousLOC);
+					buildChangeRevision(file, previousData, previousLOC, symbolicNames);
 				}
 			} else if (previousData.isDeletion()) {
-				buildDeletionRevision(file, previousData, previousLOC);
+				buildDeletionRevision(file, previousData, previousLOC, symbolicNames);
 			} else {
 				logger.warning("illegal state in "
 						+ file.getFilenameWithPath() + ":" + previousData.getRevision());
 			}
 		}
 
+        // symbolic names for currentData
+        symbolicNames = createSymbolicNamesCollection(currentData); 
+
 		int nextLinesOfCode = currentLOC - getLOCChange(currentData);
 		if (currentData.isCreation()) {
-			buildCreationRevision(file, currentData, currentLOC);
+			buildCreationRevision(file, currentData, currentLOC, symbolicNames);
 		} else if (currentData.isDeletion()) {
-			buildDeletionRevision(file, currentData, currentLOC);
-			buildBeginOfLogRevision(file, beginOfLogDate, nextLinesOfCode);
+			buildDeletionRevision(file, currentData, currentLOC, symbolicNames);
+			buildBeginOfLogRevision(file, beginOfLogDate, nextLinesOfCode, symbolicNames);
 		} else if (currentData.isChangeOrRestore()) {
-			buildChangeRevision(file, currentData, currentLOC);
-			buildBeginOfLogRevision(file, beginOfLogDate, nextLinesOfCode);
+			buildChangeRevision(file, currentData, currentLOC, symbolicNames);
+			buildBeginOfLogRevision(file, beginOfLogDate, nextLinesOfCode, symbolicNames);
 		} else if (currentData.isAddOnSubbranch()) {
 			// ignore
 		} else {
@@ -238,28 +251,28 @@ public class FileBuilder {
 		return data.getLinesAdded() - data.getLinesRemoved();
 	}
 
-	private void buildCreationRevision(CvsFile file, RevisionData data, int loc) {
+	private void buildCreationRevision(CvsFile file, RevisionData data, int loc, SortedSet symbolicNames) {
 		new CvsRevision(file, data.getRevision(),
 				CvsRevision.TYPE_CREATION, builder.getAuthor(data.getAuthorName()),
-				data.getDate(), data.getComment(), data.getLinesAdded(), data.getLinesRemoved(), loc);
+				data.getDate(), data.getComment(), data.getLinesAdded(), data.getLinesRemoved(), loc, symbolicNames);
 	}
 
-	private void buildChangeRevision(CvsFile file, RevisionData data, int loc) {
+	private void buildChangeRevision(CvsFile file, RevisionData data, int loc, SortedSet symbolicNames) {
 		new CvsRevision(file, data.getRevision(),
 				CvsRevision.TYPE_CHANGE, builder.getAuthor(data.getAuthorName()),
-				data.getDate(), data.getComment(), data.getLinesAdded(), data.getLinesRemoved(), loc);
+				data.getDate(), data.getComment(), data.getLinesAdded(), data.getLinesRemoved(), loc, symbolicNames);
 	}
 
-	private void buildDeletionRevision(CvsFile file, RevisionData data, int loc) {
+	private void buildDeletionRevision(CvsFile file, RevisionData data, int loc, SortedSet symbolicNames) {
 		new CvsRevision(file, data.getRevision(),
 				CvsRevision.TYPE_DELETION, builder.getAuthor(data.getAuthorName()),
-				data.getDate(), data.getComment(), data.getLinesAdded(), data.getLinesRemoved(), loc);
+				data.getDate(), data.getComment(), data.getLinesAdded(), data.getLinesRemoved(), loc, symbolicNames);
 	}
 
-	private void buildBeginOfLogRevision(CvsFile file, Date beginOfLogDate, int loc) {
+	private void buildBeginOfLogRevision(CvsFile file, Date beginOfLogDate, int loc, SortedSet symbolicNames) {
 		Date date = new Date(beginOfLogDate.getTime() - 60000);
 		new CvsRevision(file, "0.0",
-				CvsRevision.TYPE_BEGIN_OF_LOG, null, date, null, 0, 0, loc);
+				CvsRevision.TYPE_BEGIN_OF_LOG, null, date, null, 0, 0, loc, symbolicNames);
 	}
 
 	/**
@@ -294,4 +307,32 @@ public class FileBuilder {
 			return false;
 		}
 	}
+    
+    /**
+     * Creates a sorted set containing all symbolic name objects affected by 
+     * this revision.
+     * If this revision has no symbolic names, this method returns null.
+     * 
+     * @param revisionData this revision
+     * @return the sorted set or null
+     */
+    private SortedSet createSymbolicNamesCollection(RevisionData revisionData) 
+    {
+        SortedSet symbolicNames = null;
+
+        Iterator symIt = revBySymnames.keySet().iterator();
+        while (symIt.hasNext()) {
+            String symName = (String)symIt.next();
+            String rev = (String)revBySymnames.get(symName);
+            if (revisionData.getRevision().equals(rev)) {
+                if (symbolicNames == null) {
+                    symbolicNames = new TreeSet();
+                }
+                logger.fine("adding revision "+name+","+revisionData.getRevision()+" to symname "+symName);
+                symbolicNames.add(builder.getSymbolicName(symName));
+            }
+        }
+        
+        return symbolicNames;
+    }
 }

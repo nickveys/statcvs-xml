@@ -22,11 +22,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.reflect.Method;
+import java.util.Iterator;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
-
-import de.berlios.statcvs.xml.output.XDocRenderer;
 
 import net.sf.statcvs.input.Builder;
 import net.sf.statcvs.input.CvsLogfileParser;
@@ -34,16 +32,18 @@ import net.sf.statcvs.input.EmptyRepositoryException;
 import net.sf.statcvs.input.LogSyntaxException;
 import net.sf.statcvs.input.RepositoryFileManager;
 import net.sf.statcvs.model.CvsContent;
+import net.sf.statcvs.model.SymbolicName;
 import net.sf.statcvs.util.CvsLogUtils;
 import net.sf.statcvs.util.LogFormatter;
 import net.sf.statcvs.util.LookaheadReader;
+import de.berlios.statcvs.xml.output.XDocRenderer;
 
 /**
  * StatCvs Main Class; it starts the application and controls command-line
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.6 2004-02-17 19:07:22 squig Exp $
+ * @version $Id: Main.java,v 1.7 2004-02-18 15:38:11 vanto Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -168,7 +168,18 @@ public class Main {
 //		}
 
 		CvsContent content = readLogFile(logfile);
-		
+        
+        Iterator it = content.getSymbolicNames().iterator();
+        while (it.hasNext()) {
+            SymbolicName sym = (SymbolicName)it.next();
+            logger.info("symname: " + sym.toString());
+            //Iterator rit = sym.getRevisions().iterator();
+            //while (rit.hasNext()) {
+            //    CvsRevision rev = (CvsRevision)rit.next();
+            //    logger.info("  "+rev.getFile() + "," + rev);   
+            //}
+        }
+
 //		if (hist.isChanged()) {
 //			hist.save(moduleName);
 //		}

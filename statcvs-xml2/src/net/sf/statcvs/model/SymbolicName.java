@@ -1,7 +1,20 @@
 /*
- * statcvs-xml2
- * Created on 17.02.2004
+ *  StatCvs-XML - XML output for StatCvs.
  *
+ *  Copyright by Steffen Pingel, Tammo van Lessen.
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public License
+ *  version 2 as published by the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 package net.sf.statcvs.model;
 
@@ -18,8 +31,8 @@ import java.util.TreeSet;
  */
 public class SymbolicName implements Comparable{
 	
-	private String name;
-	private SortedSet revisions = new TreeSet();
+	private final String name;
+	private final SortedSet revisions = new TreeSet();
 	
 	/**
 	 * Creates a new symbolic name.
@@ -71,6 +84,9 @@ public class SymbolicName implements Comparable{
 	 */
 	public Date getDate()
 	{
+        if (revisions.isEmpty()) {
+            return null;
+        }
 		return ((CvsRevision)revisions.last()).getDate();
 	}
 
@@ -79,7 +95,36 @@ public class SymbolicName implements Comparable{
 	 */
 	public int compareTo(Object o) {
 		SymbolicName other = (SymbolicName)o;
-		return getDate().compareTo(other.getDate());
+        if (getDate() == null || other.getDate() == null) {
+            return getName().compareTo(other.getName());
+        }
+        int dateComp = getDate().compareTo(other.getDate()); 
+        return (dateComp != 0) ? dateComp
+                                : getName().compareTo(other.getName());
 	}
 	
+    
+    /**
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+        return name + "[" + getDate() + "] (" + revisions.size() + " revisions)"; 
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object obj) {
+        SymbolicName other = (SymbolicName)obj;
+        return ("" + getDate() + getName())
+                    .equals("" + other.getDate() + other.getName()); 
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        return ("" + getDate() + getName()).hashCode();
+    }
+
 }

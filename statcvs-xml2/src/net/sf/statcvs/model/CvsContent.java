@@ -37,6 +37,7 @@ import java.util.TreeSet;
  * a reference to a CvsFile object.
  * 
  * @author Manuel Schulze
+ * @author Tammo van Lessen
  * @see net.sf.statcvs.model.CvsFile
  * @version $Id$
  */
@@ -65,6 +66,11 @@ public class CvsContent {
 				authors.add(revision.getAuthor());
 			}
 			adjustStartAndEndDate(revision.getDate());
+            
+            // union symbolic names
+            if (revision.getSymbolicNames() != null) {
+                symbolicNames.addAll(revision.getSymbolicNames());
+            }
 		}
 		if (root == null) {
 			initRoot();

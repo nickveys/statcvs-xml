@@ -24,6 +24,8 @@
 package net.sf.statcvs.input;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import net.sf.statcvs.util.CvsLogUtils;
@@ -38,6 +40,7 @@ import net.sf.statcvs.util.LookaheadReader;
  * 
  * @author Anja Jentzsch
  * @author Richard Cyganiak
+ * @author Tammo van Lessen
  * @version $Id$
  */
 public class CvsFileBlockParser {
@@ -46,6 +49,7 @@ public class CvsFileBlockParser {
 	private CvsLogBuilder builder;
 	private boolean isLogWithoutSymbolicNames = false;
 	private boolean isFirstFile;
+    private Map revBySymNames = new HashMap();
 
 	/**
 	 * Default Constructor CvsFileBlockParser.
@@ -89,7 +93,7 @@ public class CvsFileBlockParser {
 		if (isFirstFile) {
 			builder.buildModule(CvsLogUtils.getModuleName(rcsFile, workingFile));
 		}
-		builder.buildFile(workingFile, isBinary, isInAttic);
+		builder.buildFile(workingFile, isBinary, isInAttic, revBySymNames);
 		if (CvsRevisionParser.FILE_DELIMITER.equals(logReader.getCurrentLine())) {
 			logReader.getNextLine();
 		} else {
@@ -137,10 +141,10 @@ public class CvsFileBlockParser {
 			line = logReader.getCurrentLine();
 		}
 		while (line != null && !line.startsWith("keyword substitution: ")) {
-			//TODO: Do something with tagName and tagRevision
-//			int firstColon = line.indexOf(':');
-//			String tagName = line.substring(1, firstColon);
-//			String tagRevision = line.substring(firstColon + 2);
+			int firstColon = line.indexOf(':');
+			String tagName = line.substring(1, firstColon);
+			String tagRevision = line.substring(firstColon + 2);
+            revBySymNames.put(tagName, tagRevision);
 			line = logReader.getNextLine();
 		}
 	}

@@ -19,6 +19,8 @@
 */
 package net.sf.statcvs.input;
 
+import java.util.Map;
+
 /**
  * <p>Interface for defining a Builder that constructs a data structure from
  * a CVS logfile. {@link CvsLogfileParser} takes an instance of this
@@ -36,6 +38,7 @@ package net.sf.statcvs.input;
  * are ordered by time, beginning with the <em>most recent</em>.</p>
  * 
  * @author Richard Cyganiak <richard@cyganiak.de>
+ * @author Tammo van Lessen
  * @version $Id$
  */
 public interface CvsLogBuilder {
@@ -55,8 +58,10 @@ public interface CvsLogBuilder {
 	 * for example "path/file.txt"
 	 * @param isBinary <tt>true</tt> if it's a binary file
 	 * @param isInAttic <tt>true</tt> if the file is dead on the main branch
+     * @param revBySymnames maps revision (string) by symbolic name (string)
 	 */
-	public abstract void buildFile(String filename, boolean isBinary, boolean isInAttic);
+	public abstract void buildFile(String filename, boolean isBinary, 
+                                     boolean isInAttic, Map revBySymnames);
 
 	/**
 	 * Adds a revision to the last file that was built.. The revisions are added in
