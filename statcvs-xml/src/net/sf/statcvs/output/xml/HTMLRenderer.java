@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: HTMLRenderer.java,v $
-	$Date: 2003-07-05 10:17:42 $ 
+	$Date: 2003-07-05 20:12:32 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -51,29 +51,49 @@ public class HTMLRenderer extends XMLRenderer {
 	private static Logger logger
 		= Logger.getLogger("net.sf.statcvs.output.XMLRenderer");
 
-	public HTMLRenderer(Transformer transformer) {
+	public HTMLRenderer(Transformer transformer) 
+	{
 		this.transformer = transformer;
+
 		setExtension(".html");
+
 		XMLOutputter xout = new HTMLOutputter();
 		xout.setEncoding("ISO-8859-1");
 		xout.setOmitDeclaration(true);
 		xout.setOmitEncoding(true);
 		setOutputter(xout);
+
+		try {
+			FileUtils.copyFile
+				(Main.class.getResourceAsStream("web-files/statcvs.css"),
+				 new File(ConfigurationOptions.getOutputDir() 
+						  + "statcvs.css"));
+		} 
+		catch (IOException e) {
+			logger.warning(e.getMessage());
+		}
 		
 		try {
-			String filename = OutputSettings.getCss();
-			FileUtils.copyFile
-				(Main.class.getResourceAsStream(filename),
-				 new File(ConfigurationOptions.getOutputDir() 
-						  + FileUtils.getFilenameWithoutPath(filename)));
-		} catch (IOException e) {
-			logger.warning(e.getMessage());		}
+			String filename = OutputSettings.getCustomCss();
+			if (filename != null) {
+				FileUtils.copyFile
+					(Main.class.getResourceAsStream(filename),
+					 new File(ConfigurationOptions.getOutputDir() 
+							  + FileUtils.getFilenameWithoutPath(filename)));
+			}
+		} 
+		catch (IOException e) {
+			logger.warning(e.getMessage());
+		}
 
 		if (transformer != null) {
 			logger.info("Using transformer "+transformer.getClass().getName());
 		}
 	}
 
+	/**
+	 * Invoked by Main.
+	 */
 	public static void generate(CvsContent content) 
 		throws IOException 
 	{
@@ -83,7 +103,16 @@ public class HTMLRenderer extends XMLRenderer {
  		try {
 			transformer 
 				= TransformerFactory.newInstance().newTransformer(source);
+			
+			// set stylesheet parameters
 			transformer.setParameter("ext", ".html");
+			String filename = OutputSettings.getInstance().getCustomCss();
+			if (filename != null) {
+				transformer.setParameter
+					("customCss", 
+					 FileUtils.getFilenameWithoutPath(filename));
+			}
+				
 			DocumentSuite.generate(content, new HTMLRenderer(transformer));
 		} catch (TransformerConfigurationException e) {
 			logger.warning(e.getMessageAndLocation());
@@ -91,11 +120,13 @@ public class HTMLRenderer extends XMLRenderer {
 			logger.warning(e.getMessage());
 		}
 	}
-	/**
-	 * @see net.sf.statcvs.output.xml.DocumentRenderer#render(net.sf.statcvs.output.xml.StatCvsDocument)
-	 */
-	public void render(StatCvsDocument document) throws IOException {
-		super.render(document);
-	}
+
+//  	/**
+//  	 * @see net.sf.statcvs.output.xml.DocumentRenderer#render(net.sf.statcvs.output.xml.StatCvsDocument)
+//  	 */
+//  	public void render(StatCvsDocument document) throws IOException 
+//  	{
+//  		super.render(document);
+//  	}
 
 }

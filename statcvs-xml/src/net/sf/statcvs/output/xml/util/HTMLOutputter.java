@@ -18,13 +18,15 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: HTMLOutputter.java,v $
-	$Date: 2003-07-05 13:57:03 $ 
+	$Date: 2003-07-05 20:12:32 $ 
 */
 package net.sf.statcvs.output.xml.util;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.jdom.DocType;
 import org.jdom.Document;
@@ -39,35 +41,34 @@ import org.jdom.Namespace;
 public class HTMLOutputter extends XMLOutputter {
 
 	/** Array of element tag names that never of end tags **/
-	private static final String[] elementsWithoutEndTags =
-		{"area",
-			"base",
-			"basefont",
-			"br",
-			"col",
-			"frame",
-			"hr",
-			"img",
-			"input",
-			"isindex",
-			"link",
-			"meta",
-			"param",			
-			//"li"
-		};
+	private static final Set elementsWithoutEndTags = new HashSet();
+	static {
+		elementsWithoutEndTags.add("area");
+		elementsWithoutEndTags.add("base");
+		elementsWithoutEndTags.add("basefont");
+		elementsWithoutEndTags.add("br");
+		elementsWithoutEndTags.add("col");
+		elementsWithoutEndTags.add("frame");
+		elementsWithoutEndTags.add("hr");
+		elementsWithoutEndTags.add("img");
+		elementsWithoutEndTags.add("input");
+		elementsWithoutEndTags.add("isindex");
+		elementsWithoutEndTags.add("link");
+		elementsWithoutEndTags.add("meta");
+		elementsWithoutEndTags.add("param");			
+	};
 
 	/**
 	 * @see org.jdom.output.XMLOutputter#printElement(org.jdom.Element, java.io.Writer, int, org.jdom.output.XMLOutputter.NamespaceStack)
 	 */
-	protected void printElement(Element element, Writer out,
-						int level,
-						NamespaceStack namespaces)
-					throws IOException {
-		
-		if (!isEmptyHtmlElement(element.getQualifiedName())) {
-			element.setNamespace(Namespace.NO_NAMESPACE);
-			super.printElement(element, out, level, namespaces); 
-		} else {
+	protected void printElement(Element element, Writer out, int level, NamespaceStack namespaces)
+		throws IOException 
+	{
+		// work around?
+		element.setNamespace(Namespace.NO_NAMESPACE);
+
+		if (elementsWithoutEndTags.contains(element.getQualifiedName())) {
+			// plain old html tag
 			out.write("<");
 			out.write(element.getQualifiedName());
 			List attributes = element.getAttributes();
@@ -75,6 +76,10 @@ public class HTMLOutputter extends XMLOutputter {
 				printAttributes(attributes, element, out, namespaces);
 			}
 			out.write(">");
+		} 
+		else {
+			super.printElement(element, out, level, namespaces); 
+		}
 
 			/*List content = element.getContent();
 			int start = skipLeadingWhite(content, 0);
@@ -113,26 +118,16 @@ public class HTMLOutputter extends XMLOutputter {
 				out.write(element.getQualifiedName());
 				out.write(">");
 			}*/
-		}
-		
-		
-	}
-
-	private boolean isEmptyHtmlElement(String elementName)
-	{
-		boolean aReturn = false;
-		for (int i = 0; !aReturn && i < elementsWithoutEndTags.length; i++)
-			aReturn = elementsWithoutEndTags[i].equals(elementName);
-		return aReturn;
 	}
 
 	/**
 	 * @see org.jdom.output.XMLOutputter#output(org.jdom.Document, java.io.Writer)
 	 */
-	public void output(Document document, Writer out) throws IOException {
-		DocType type     = new DocType("html", "-//W3C//DTD HTML 4.01//EN", 
-											 "http://www.w3.org/TR/html4/strict.dtd");
-
+	public void output(Document document, Writer out) throws IOException 
+	{
+		DocType type = new DocType("html", "-//W3C//DTD HTML 4.01//EN", 
+								   "http://www.w3.org/TR/html4/strict.dtd");
+		
 		document.setDocType(type);
 		super.output(document, out);
 	}

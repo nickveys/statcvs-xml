@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: MostRevisionsReport.java,v $
-	$Date: 2003-07-04 21:52:34 $ 
+	$Date: 2003-07-05 20:12:32 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -61,7 +61,9 @@ public class MostRevisionsReport extends ReportElement {
 		
 		List files = content.getFiles();
 		Collections.sort(files, new FilesRevisionCountComparator());
-		files = files.subList(0, MAX_ITEMS);
+		files = files.subList(0, (MAX_ITEMS < files.size()) 
+							  ? MAX_ITEMS
+							  : files.size());
 		Iterator it = files.iterator();
 		while (it.hasNext()) {
 			CvsFile file = (CvsFile) it.next();

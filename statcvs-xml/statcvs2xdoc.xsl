@@ -9,7 +9,8 @@
                 xmlns:func="http://statcvs-xml.berlios.de/functions"
                 xmlns:i18n="net.sf.statcvs.I18n"
 				xmlns:prefs="net.sf.statcvs.output.xml.OutputSettings"
-				xmlns:fileutils="net.sf.statcvs.util.FileUtils">
+				xmlns:fileutils="net.sf.statcvs.util.FileUtils"
+				exclude-result-prefixes="func i18n prefs fileutils">
 
   <xsl:param name="ext"/>
   <xsl:template match="document">

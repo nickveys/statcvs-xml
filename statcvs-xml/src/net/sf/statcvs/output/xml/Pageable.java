@@ -18,11 +18,13 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Pageable.java,v $
-	$Date: 2003-06-19 23:48:28 $ 
+	$Date: 2003-07-05 20:12:32 $ 
 */
 package net.sf.statcvs.output.xml;
 
 import org.jdom.Element;
+
+import net.sf.statcvs.output.xml.document.*;
 
 /**
  * Pageable
@@ -30,10 +32,24 @@ import org.jdom.Element;
  * @author Tammo van Lessen
  */
 public interface Pageable {
+
 	public void setItemsPerPage(int items);
+
 	public int getItemsPerPage();
-	public Element getPage(int page);
+
+	public StatCvsDocument getPage(int page);
+
 	public int getPageCount();
+
 	public String getFilename(int page);
-	public Element createPageTemplate();
+
+	/**
+	 * This method creates the whole document, which will be repeatet
+	 * on every page. the returned element will be the parent of the paged
+	 * content.
+	 *  
+	 * @return pages parent element
+	 */
+	public Page createPageTemplate();
+
 }

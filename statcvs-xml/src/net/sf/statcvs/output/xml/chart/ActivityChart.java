@@ -7,7 +7,7 @@
 package net.sf.statcvs.output.xml.chart;
 
 import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 import java.util.GregorianCalendar;
 
 import net.sf.statcvs.I18n;
@@ -116,6 +116,7 @@ public class ActivityChart extends AbstractBarChart {
 			Date date = rev.getDate();
 			Calendar cal = new GregorianCalendar();
 			cal.setTime(date);
+			cal.setTimeZone(TimeZone.getDefault());
 			int hour = cal.get(Calendar.HOUR_OF_DAY);
 			values[hour]++;
 		}

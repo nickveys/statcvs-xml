@@ -17,62 +17,40 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
-	$RCSfile: OutputSettings.java,v $
+	$RCSfile: Page.java,v $
 	$Date: 2003-07-05 20:12:32 $ 
 */
 package net.sf.statcvs.output.xml;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
-import java.util.logging.Logger;
+import org.jdom.Element;
+
+import net.sf.statcvs.output.xml.document.*;
 
 /**
- * Stores the output settings.
- *  
+ * Defines the requirements for classes that implement pages.
+ * 
  * @author Steffen Pingel
+ * @see Pageable
  */
-public class OutputSettings extends Properties {
+public class Page {
 
-	private static Logger logger
-		= Logger.getLogger("net.sf.statcvs.output.OutputSettings");
+	private StatCvsDocument document;
+	private Element contentRoot;
 
-	private static OutputSettings singleton = new OutputSettings();
-
-	private OutputSettings() {
-	}
-
-	public static OutputSettings getInstance() {
-		return singleton;
-	}
-
-	public int get(String key, int defaultValue)
+	public Page(StatCvsDocument document, Element contentRoot)
 	{
-		String value = getProperty(key);
-		if (value != null) {
-			try {
-				return Integer.parseInt(value);
-			}
-			catch (NumberFormatException e) {
-			}
-		}
-		return defaultValue;
+		this.document = document;
+		this.contentRoot = contentRoot;
 	}
 
-	public static String getCustomCss()
+	public StatCvsDocument getDocument()
 	{
-		return getInstance().getProperty("customCss", null);
+		return document;
 	}
 
-	public void read(String filename) throws IOException
+	public Element getContentRoot()
 	{
-		FileInputStream in = new FileInputStream(filename);
-		try {
-			load(in);
-		}
-		finally {
-			in.close();
-		}
+		return contentRoot;
 	}
-	
+
 }

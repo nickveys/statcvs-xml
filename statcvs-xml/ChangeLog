@@ -1,0 +1,5 @@
+2003-07-05  Steffen Pingel  <squig@users.sourceforge.net>
+
+	* src/net/sf/statcvs/output/xml/chart/ActivityChart.java: Added
+	local time zone conversion.
+
