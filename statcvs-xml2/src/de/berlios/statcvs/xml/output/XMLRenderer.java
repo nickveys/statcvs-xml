@@ -11,6 +11,7 @@ import javax.xml.transform.TransformerException;
 
 import net.sf.statcvs.model.CvsContent;
 
+import org.jdom.output.Format;
 import org.jdom.transform.JDOMResult;
 import org.jdom.transform.JDOMSource;
 
@@ -37,8 +38,7 @@ public class XMLRenderer implements DocumentRenderer {
 		
 		setExtension(".xml");
 
-		XMLOutputter xout = new XMLOutputter();
-		xout.setEncoding("UTF-8");
+		XMLOutputter xout = new XMLOutputter(createDefaultFormat());
 		setOutputter(xout);
 
 //		if (transformer != null) {
@@ -60,11 +60,19 @@ public class XMLRenderer implements DocumentRenderer {
 		return new XMLRenderer(settings.getOutputPath());
 	}
 
-	public void setOutputter(XMLOutputter outputter) {
-		out = outputter;
-		out.setTextNormalize(true);
-		out.setIndent("  ");
-		out.setNewlines(true);
+	public static Format createDefaultFormat()
+	{
+		Format format = Format.getRawFormat();
+		format.setEncoding("UTF-8");
+		format.setTextMode(Format.TextMode.NORMALIZE);
+		format.setIndent("  ");
+		//format.setNewlines(true);
+		return format;
+	}
+	
+	public void setOutputter(XMLOutputter outputter) 
+	{
+		this.out = outputter;
 	}
 	
 	public void setExtension(String ext) {

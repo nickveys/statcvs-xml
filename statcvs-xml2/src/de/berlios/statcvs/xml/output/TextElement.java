@@ -92,7 +92,9 @@ public class TextElement extends Element {
 	
 	public TextElement addText(String text)
 	{
-		addContent(new Element("text").addContent(text));
+		Element element = new Element("text");
+		element.addContent(text);
+		addContent(element);
 		return this;
 	}
 

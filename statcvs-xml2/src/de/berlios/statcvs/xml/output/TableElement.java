@@ -37,6 +37,7 @@ import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.model.Module;
 import de.berlios.statcvs.xml.util.Formatter;
+import de.berlios.statcvs.xml.util.StringHelper;
 
 /**
  * @author Steffen Pingel
@@ -61,7 +62,9 @@ public class TableElement extends Element
 			Element row = new Element("tr");
 			for (int i = 0; i < headers.length; i++) {
 				if (showColumn(i + 1)) {
-					row.addContent(new Element("th").addContent(headers[i]));
+					Element th = new Element("th");
+					th.addContent(headers[i]);
+					row.addContent(th);
 				}
 			}
 			addContent(row);
@@ -139,7 +142,7 @@ public class TableElement extends Element
 		public Element addContent(Element element)
 		{
 			return (showColumn(++columnCount))
-				? super.addContent(element)
+				? (Element)super.addContent(element)
 				: null;
 		}
 		
@@ -190,8 +193,10 @@ public class TableElement extends Element
 		
 		public RowElement addString(String key, String value) 
 		{
-			addContent(new Element("string").setAttribute("key", key)
-						.addContent(new CDATA(value)));
+			Element element = new Element("string");
+			element.setAttribute("key", key);
+			element.addContent(new CDATA(StringHelper.replaceNonXMLCharacters(value)));
+			addContent(element);
 			return this;
 		}
 		
@@ -200,7 +205,7 @@ public class TableElement extends Element
 			addContent(new Element("link")
 							.setAttribute("key", key)
 							.setAttribute("url", url)
-							.setText(value));
+							.setText(StringHelper.replaceNonXMLCharacters(value)));
 			return this;
 		}
 		
@@ -274,7 +279,9 @@ public class TableElement extends Element
 			comEl.setAttribute("changedlines", ""+locSum);
 
 			//comEl.addContent(new Element("comment").setText(commit.getComment()));
-			comEl.addContent(new Element("comment").addContent(new CDATA(commit.getComment())));
+			Element comment = new Element("comment");
+			comment.addContent(new CDATA(StringHelper.replaceNonXMLCharacters(commit.getComment())));
+			comEl.addContent(comment);
 
 			Element files = new Element("files");
 			comEl.addContent(files);

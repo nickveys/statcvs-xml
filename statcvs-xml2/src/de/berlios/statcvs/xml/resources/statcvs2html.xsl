@@ -7,7 +7,7 @@
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:output method="html" indent="yes" encoding="ISO-8859-1"/>
+  <xsl:output method="html" indent="yes" encoding="UTF-8"/>
   <xsl:param name="ext"/>
   <xsl:param name="customCss"/>
   <xsl:include href="statcvs2xdoc.xsl"/>
@@ -16,7 +16,7 @@
     <html>
        <head>
          <title><xsl:value-of select="@title"/></title>
-		 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+		 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		 <meta name="Generator" content="StatCvs-XML"/>
 	     <link rel="stylesheet" href="statcvs.css" type="text/css"/>
 		 <xsl:if test="$customCss != ''">

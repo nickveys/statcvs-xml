@@ -16,7 +16,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 package de.berlios.statcvs.xml;
 
 import java.io.File;
@@ -55,7 +54,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * 
  * @author Steffen Pingel
  * @author Tammo van Lessen
- * @version $Id: Main.java,v 1.28 2004-03-27 20:49:36 vanto Exp $
+ * @version $Id: Main.java,v 1.29 2004-03-30 16:05:26 squig Exp $
  */
 public class Main {
 

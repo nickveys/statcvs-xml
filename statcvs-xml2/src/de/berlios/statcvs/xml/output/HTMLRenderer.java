@@ -26,6 +26,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
+import org.jdom.output.Format;
+
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.util.FileUtils;
 import de.berlios.statcvs.xml.util.FileHelper;
@@ -50,10 +52,11 @@ public class HTMLRenderer extends XMLRenderer {
 
 		setExtension(".html");
 
-		XMLOutputter xout = new HTMLOutputter();
-		xout.setEncoding("ISO-8859-1");
-		xout.setOmitDeclaration(true);
-		xout.setOmitEncoding(true);
+		Format format = createDefaultFormat();
+		format.setOmitDeclaration(true);
+		format.setOmitEncoding(true);
+		
+		XMLOutputter xout = new HTMLOutputter(format);
 		setOutputter(xout);
 	}
 

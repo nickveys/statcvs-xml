@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLOutputter.java,v $
-	$Date: 2004-02-15 14:21:26 $ 
+	$Date: 2004-03-30 16:05:26 $ 
 */
 package de.berlios.statcvs.xml.output;
 
@@ -28,6 +28,7 @@ import java.io.Writer;
 import javax.xml.transform.Result;
 
 import org.jdom.ProcessingInstruction;
+import org.jdom.output.Format;
 
 /**
  * XMLOutputter
@@ -38,9 +39,13 @@ import org.jdom.ProcessingInstruction;
  */
 public class XMLOutputter extends org.jdom.output.XMLOutputter {
 
-
 	private boolean disableOutputEscaping;
 
+	public XMLOutputter(Format format)
+	{
+		super(format);
+	}
+	
 	/**
 	 * @see org.jdom.output.XMLOutputter#printProcessingInstruction(org.jdom.ProcessingInstruction, java.io.Writer)
 	 */
@@ -57,7 +62,7 @@ public class XMLOutputter extends org.jdom.output.XMLOutputter {
 			return;
 		}
 
-		super.printProcessingInstruction(pi, out);
+		super.printProcessingInstruction(out, pi);
 	}
 
 

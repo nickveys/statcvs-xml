@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: HTMLOutputter.java,v $
-	$Date: 2004-02-26 16:12:53 $ 
+	$Date: 2004-03-30 16:05:26 $ 
 */
 package de.berlios.statcvs.xml.output;
 
@@ -32,6 +32,7 @@ import org.jdom.DocType;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
+import org.jdom.output.Format;
 
 /**
  * HTMLOutputtter
@@ -58,6 +59,11 @@ public class HTMLOutputter extends XMLOutputter {
 		elementsWithoutEndTags.add("param");			
 	};
 
+	public HTMLOutputter(Format format)
+	{
+		super(format);
+	}
+	
 	/**
 	 * @see org.jdom.output.XMLOutputter#printElement(org.jdom.Element, java.io.Writer, int, org.jdom.output.XMLOutputter.NamespaceStack)
 	 */
@@ -73,12 +79,12 @@ public class HTMLOutputter extends XMLOutputter {
 			out.write(element.getQualifiedName());
 			List attributes = element.getAttributes();
 			if (attributes != null) {
-				printAttributes(attributes, element, out, namespaces);
+				printAttributes(out, attributes, element, namespaces);
 			}
 			out.write(">");
 		} 
 		else {
-			super.printElement(element, out, level, namespaces); 
+			super.printElement(out, element, level, namespaces); 
 		}
 
 			/*List content = element.getContent();
