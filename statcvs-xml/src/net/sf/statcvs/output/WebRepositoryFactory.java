@@ -22,11 +22,11 @@ public class WebRepositoryFactory {
 			// chora
 			return new ChoraIntegration(url);		
 		}
-		if (url.indexOf("cvsweb.cgi") != -1) {
+		if (url.indexOf("cvsweb") != -1) {
 			// cvsweb
 			return new CvswebIntegration(url);		
 		}
-		if (url.indexOf("viewcvs.cgi") != -1) {
+		if (url.indexOf("viewcvs") != -1) {
 			// viewcvs
 			return new ViewCvsIntegration(url);		
 		}

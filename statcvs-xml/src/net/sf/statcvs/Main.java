@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Main.java,v $ 
-	Created on $Date: 2003-07-05 01:36:40 $ 
+	Created on $Date: 2003-07-05 09:55:19 $ 
 */
 package net.sf.statcvs;
 
@@ -46,7 +46,7 @@ import net.sf.statcvs.output.xml.OutputSettings;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.11 2003-07-05 01:36:40 vanto Exp $
+ * @version $Id: Main.java,v 1.12 2003-07-05 09:55:19 vanto Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -113,9 +113,9 @@ public class Main {
 				+ "\n"
 				+ "If statcvs cannot recognize the type of your web repository, please use the\n"
 				+ "following switches:\n"
-				+ "  -viewcvs <url>     integrate with viewcvs installation at <url>"
-				+ "  -cvsweb <url>      integrate with cvsweb installation at <url>"
-				+ "  -chora <url>       integrate with chora installation at <url>"
+				+ "  -viewcvs <url>     integrate with viewcvs installation at <url>\n"
+				+ "  -cvsweb <url>      integrate with cvsweb installation at <url>\n"
+				+ "  -chora <url>       integrate with chora installation at <url>\n"
 				+ "\n");
 				//+ "Full options list: http://statcvs.sf.net/manual");
 		System.exit(1);
@@ -170,10 +170,6 @@ public class Main {
 		catch (IOException e) {
 			System.err.println("ERROR: Logging could not be initialized!");
 		}
-
-		logger.info("Generating report for " 
-					+ ConfigurationOptions.getProjectName()
-					+ " into " + ConfigurationOptions.getOutputDir());
 	}
 
 	/**
@@ -210,6 +206,10 @@ public class Main {
 	 * @throws Exception if somethings goes wrong
 	 */
 	public static void generateSuite(CvsContent content) throws Exception {	
+		logger.info("Generating report for " 
+					+ ConfigurationOptions.getProjectName()
+					+ " into " + ConfigurationOptions.getOutputDir());
+
 		if (ConfigurationOptions.getOutputSuite() == null) {
 			ConfigurationOptions.setOutputSuite(HTMLRenderer.class.getName());
 		}

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: TimeLineChart.java,v $
-	$Date: 2003-06-28 01:34:55 $ 
+	$Date: 2003-07-05 09:55:19 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -27,6 +27,7 @@ import java.awt.Paint;
 import java.util.Iterator;
 
 import net.sf.statcvs.I18n;
+import net.sf.statcvs.output.ConfigurationOptions;
 import net.sf.statcvs.reportmodel.TimeLine;
 import net.sf.statcvs.reportmodel.TimePoint;
 
@@ -66,7 +67,7 @@ public class TimeLineChart extends AbstractChart {
 		String domain = I18n.tr("Date");
 
 		setChart(ChartFactory.createTimeSeriesChart(
-			getTitle(), 
+			ConfigurationOptions.getProjectName(),
 			I18n.tr("Date"), rangeLabel,
 			(XYDataset)tsc, 
 			true,

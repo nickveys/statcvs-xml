@@ -18,9 +18,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractBarChart.java,v $
-	$Date: 2003-06-28 01:34:55 $ 
+	$Date: 2003-07-05 09:55:19 $ 
 */
 package net.sf.statcvs.output.xml.chart;
+
+import net.sf.statcvs.output.ConfigurationOptions;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -54,7 +56,7 @@ public abstract class AbstractBarChart extends AbstractChart {
 	private void createChart() {
 		// create the chart...
 		JFreeChart chart = ChartFactory.createVerticalBarChart3D(
-												  getTitle(),  // chart title
+												  ConfigurationOptions.getProjectName(),  // chart title
 												  "no desc",    // domain axis label
 												  "no desc",       // range axis label
 												  dataset,       // data

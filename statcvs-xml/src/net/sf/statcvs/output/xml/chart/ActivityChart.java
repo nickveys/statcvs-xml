@@ -62,12 +62,12 @@ public class ActivityChart extends AbstractBarChart {
 		String authorName = AuthorDocument.escapeAuthorName(author.getName());
 		switch (type) {
 			case BY_HOUR :
-				setChartTitle(I18n.tr("Activity by Hour for {0}",author.getName()));
+				setTitle(I18n.tr("Activity by Hour for {0}",author.getName()));
 				setFilename("activity_time_"+authorName+".png");
 				setValuesByHour();
 				break;
 			case BY_DAY :
-				setChartTitle(I18n.tr("Activity by Day for {0}",author.getName()));
+				setTitle(I18n.tr("Activity by Day for {0}",author.getName()));
 				setFilename("activity_day_"+authorName+".png");
 				setValuesByDay();
 				break;
@@ -78,7 +78,6 @@ public class ActivityChart extends AbstractBarChart {
 	public ActivityChart(RevisionIterator revIt, int type) {
 		super("null", "null");
 		this.revIt = revIt;
-
 		setCategoryAxisLabel(null);
 		setValueAxisLabel(I18n.tr("Commits"));
 		getChart().setLegend(null);
