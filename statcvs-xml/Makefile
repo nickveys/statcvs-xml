@@ -49,7 +49,7 @@ cvs.log:
 xdoc : 
 	mkdir -p xdocs/statcvs
 	$(JAVA_HOME)/bin/java -classpath $(CP) net.sf.statcvs.Main \
-	  $(CVS_LOG) $(CVS_PATH) -output-dir xdocs/statcvs -output-suite xdoc
+	  $(CVS_LOG) $(CVS_PATH) -output-dir xdocs/statcvs-xml -output-suite xdoc
 
 xml : 
 	mkdir -p out-xml
