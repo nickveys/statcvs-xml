@@ -10,6 +10,7 @@
 \usepackage[latin1]{inputenc}
 \usepackage{colortbl}
 \usepackage{listings}
+\usepackage{graphicx}
 \usepackage{alltt}
 \usepackage[T1]{fontenc}
 \usepackage{ae,aecompl}
@@ -32,7 +33,10 @@
   \vspace{0.5cm}
   \pgfuseimage{unilogo}\\
   \vspace{0.5cm}
-  Fachgruppe IT Projekt-Management}
+  Fachgruppe IT Projekt-Management\\
+  \vspace{0.5cm}
+  \includegraphics[height=1cm]{mavenlogo}
+}
 \date[inf.misc 2004]{inf.misc, 04.02.2004}
 
 %\logo{\pgfuseimage{unilogo}}
@@ -168,7 +172,7 @@
 
 \begin{document}
 
-\plainframe{\titlepage}
+\plainframe[all:1]{\titlepage}
 
 \section[Outline]{}
 \frame{
