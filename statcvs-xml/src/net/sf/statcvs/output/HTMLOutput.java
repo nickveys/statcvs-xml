@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: HTMLOutput.java,v $
-	$Date: 2003-06-17 16:43:02 $ 
+	$Date: 2003-06-17 23:59:52 $ 
 */
 package net.sf.statcvs.output;
 
@@ -59,7 +59,7 @@ import com.jrefinery.data.BasicTimeSeries;
  * This class creates HTML File output
  * 
  * @author Anja Jentzsch
- * @version $Id: HTMLOutput.java,v 1.1 2003-06-17 16:43:02 vanto Exp $
+ * @version $Id: HTMLOutput.java,v 1.2 2003-06-17 23:59:52 squig Exp $
  */
 public class HTMLOutput {
 

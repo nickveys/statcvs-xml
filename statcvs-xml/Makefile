@@ -34,6 +34,11 @@ makefiles :
 tags :
 	find -name "*.java" | xargs etags
 
-run : 
+xdoc : 
 	/usr/local/j2sdk1.4.1_01/jre/bin/java -classpath $(CP) net.sf.statcvs.Main \
 	  studium.cvslog ~/projects/studium -output-dir xdocs/statcvs -output-suite xdoc
+
+xml : 
+	/usr/local/j2sdk1.4.1_01/jre/bin/java -classpath $(CP) net.sf.statcvs.Main \
+	  studium.cvslog ~/projects/studium -output-dir out-xml -output-suite 
+

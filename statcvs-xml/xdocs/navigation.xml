@@ -17,7 +17,7 @@
 	
 	<menu name="Development">
 	  <item name="Project Reports" href="/maven-reports.html"/>
-	  <item name="StatCvs" href="/statcvs/commit_log.html"/>
+	  <item name="StatCvs" href="/statcvs/index.html"/>
 	</menu>
 	
   </body>
