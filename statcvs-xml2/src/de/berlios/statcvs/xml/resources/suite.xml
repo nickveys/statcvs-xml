@@ -21,8 +21,8 @@
     <settings>
       <inputFilter>util.atMostDaysOld(date, 30)</inputFilter> 
     </settings>
-    <report class="CommitsOverTimeChart"/>
-    <report class="CommitTable" groupby="author"/>
+    <report class="CommitActivityChart" groupby="author"/>
+     <report class="CommitTable" groupby="author"/>
     <report class="CommitTable" groupby="file"/>
   </document>
 

@@ -40,10 +40,13 @@ public class HTMLRenderer extends XMLRenderer {
 
 	private static Logger logger
 		= Logger.getLogger("net.sf.statcvs.output.XMLRenderer");
+	private ReportSettings settings;
 
-	public HTMLRenderer(Transformer transformer, File outputPath) 
+	public HTMLRenderer(ReportSettings settings, Transformer transformer, File outputPath) 
 	{
 		super(transformer, outputPath);
+
+		this.settings = settings;
 
 		setExtension(".html");
 
@@ -61,6 +64,10 @@ public class HTMLRenderer extends XMLRenderer {
 	{
 		super.postRender();
 		
+		String filename = settings.getString("customCss");
+		if (filename != null) {
+			FileHelper.copyResource(filename, getOutputPath());
+		}
 		FileHelper.copyResource("resources/statcvs.css", getOutputPath());
 	}
 
@@ -76,7 +83,7 @@ public class HTMLRenderer extends XMLRenderer {
 		try {
             transformer	= TransformerFactory.newInstance().newTransformer(source);
         } catch (Exception e) {
-			throw new IOException();
+			throw new IOException(e.getLocalizedMessage());
 		}			
 
 		// set stylesheet parameters
@@ -88,7 +95,7 @@ public class HTMLRenderer extends XMLRenderer {
 				 FileUtils.getFilenameWithoutPath(filename));
 		}
 		
-		return new HTMLRenderer(transformer, settings.getOutputPath());		
+		return new HTMLRenderer(settings, transformer, settings.getOutputPath());		
 	}
 
 }
