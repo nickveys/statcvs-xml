@@ -77,4 +77,33 @@ public class StringHelper {
         return false;
     }
 
+    /**
+     * Splits <code>text</code> at the last occurence of <code>separator</code>
+     * and returns the right part, excluding the separator. 
+     *
+     * @param text the haystack
+     * @param separator the needle
+     * @return text, if no occurence can be found; the empty string, if the last character is a seperator
+     */
+    public static String lastToken(String text, String separator) 
+    {
+    	if (separator == null) {
+    		throw new IllegalArgumentException("separator must not be null");
+    	}
+    	if (separator.length() == 0) {
+    		throw new IllegalArgumentException("separator must not be empty");
+    	}
+    	
+		int i = text.lastIndexOf(separator);
+		if (i == -1) {
+			return text;
+		}
+		else if (i == text.length() - 1) {
+			return "";
+		}
+		else {
+			return text.substring(i + separator.length(), text.length());
+		}
+    }
+
 }

@@ -27,6 +27,9 @@
 		and can be enabled by the setting-directive in statcvs.xml 
 		(key="evolution.EvolutionMatrixChart.showImagemap")
       </action>
+      <action dev="squig" type="update">
+		Added support for fetching urls for author pictures. 
+      </action>
       <action dev="vanto" type="fix">
 		Bug #1815 (Null Pointer Exception in Software Evolution Chart) has been 
 		fixed.

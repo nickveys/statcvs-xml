@@ -62,7 +62,7 @@ makefiles :
 	done
 
 tags :
-	find -name "*.java" | xargs etags
+	find src/ -name "*.java" | xargs etags
 
 cvs.log:
 	cvs log > cvs.log

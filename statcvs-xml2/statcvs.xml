@@ -9,7 +9,7 @@
     </authors>
     
     <authorPics type="map">
-      <setting key="squig">squig.png</setting>
+      <setting key="squig">http://steffenpingel.de/images/squig.png</setting>
       <setting key="vanto">vanto.png</setting>
     </authorPics>
     

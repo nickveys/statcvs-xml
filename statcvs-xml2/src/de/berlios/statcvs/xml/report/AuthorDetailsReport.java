@@ -21,12 +21,17 @@ package de.berlios.statcvs.xml.report;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.logging.Logger;
+
+import com.sun.corba.se.internal.Interceptors.PICurrent;
 
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
+import net.sf.statcvs.util.FileUtils;
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportElement;
@@ -34,6 +39,7 @@ import de.berlios.statcvs.xml.output.ReportSettings;
 import de.berlios.statcvs.xml.output.TableElement;
 import de.berlios.statcvs.xml.output.TextElement;
 import de.berlios.statcvs.xml.util.FileHelper;
+import de.berlios.statcvs.xml.util.StringHelper;
 
 /**
  * AuthorInfoReport
@@ -44,7 +50,7 @@ public class AuthorDetailsReport {
 
 	private static final Logger logger = 
 		Logger.getLogger("de.berlios.statcvs.xml.report.AuthorDetailsReport");
-	private static final String DEFAULT_PIC = "resources/dummy.png";
+	private static final String DEFAULT_PIC = "resources" + File.separator + "dummy.png";
 	
 	public static Report generate(CvsContent content, ReportSettings settings) 
 	{
@@ -55,7 +61,9 @@ public class AuthorDetailsReport {
 	public static class AuthorInfoElement extends ReportElement
 	{
 	
-		private String picFile = null;
+		private URL pictureURL = null;
+		private String pictureSource = null;
+		private String pictureFilename = null;
 		
 		public AuthorInfoElement(ReportSettings settings, String name)
 		{
@@ -90,17 +98,8 @@ public class AuthorDetailsReport {
 					// add a table with image and details
 					TableElement table = new TableElement(settings, null);
 
-					
-					picFile = settings.getAuthorPic(author, DEFAULT_PIC);
-					File pf = new File(picFile);
-					
-					if (!pf.exists() && !picFile.equals(DEFAULT_PIC)) {
-						logger.info("Picture "+picFile+" (Author: "+author.getName()+") not found. Using dummy instead.");
-						picFile = DEFAULT_PIC;
-						pf = new File(picFile); 
-					}
-					
-					table.addRow().addImage("authorPicture", pf.getName())
+					calculatePictureFilename(settings.getAuthorPic(author, DEFAULT_PIC));
+					table.addRow().addImage("authorPicture", pictureFilename)
 					  			  .addContent(text);
 					
 					addContent(table);
@@ -116,13 +115,44 @@ public class AuthorDetailsReport {
 			
 		}
 		
+		private void calculatePictureFilename(String source)
+		{
+			try {
+				pictureURL = new URL(source);
+				pictureFilename = StringHelper.lastToken(pictureURL.getPath(), "/");
+				if (pictureFilename.length() == 0) {
+					throw new MalformedURLException();
+				}
+				return;
+			} 
+			catch (MalformedURLException e) {
+				// no url, try interpretation as a filename 
+			}
+			
+			File file = new File(source);
+			
+			if (!file.exists() && !source.equals(DEFAULT_PIC)) {
+				logger.info(I18n.tr("Picture file {0} not found, using dummy instead.", source));
+				pictureSource = DEFAULT_PIC;
+			}
+
+			pictureSource = source;
+			pictureFilename = FileUtils.getFilenameWithoutPath(pictureSource);
+		}
+		
 		/**
 		 *  @see de.berlios.statcvs.xml.output.ReportElement#saveResources(java.io.File)
 		 */
 		public void saveResources(File outputPath) throws IOException 
 		{
-			if (picFile != null) {
-				FileHelper.copyResource(picFile, outputPath);	
+			if (pictureFilename != null) {
+				if (pictureURL != null) {
+					FileHelper.copyResource(pictureURL, outputPath, pictureFilename);
+				}
+				else if (pictureSource != null) {
+					FileHelper.copyResource(pictureSource, outputPath, pictureFilename);
+				}
+				// else { images turned off }
 			}
 		}
 

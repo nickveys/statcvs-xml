@@ -27,13 +27,14 @@ import java.net.URL;
 import java.util.logging.Logger;
 
 import net.sf.statcvs.util.FileUtils;
+import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.Main;
 
 /**
  * Provides static file helper methods.
  * 
  * @author Steffen Pingel
- * @version $Id: FileHelper.java,v 1.4 2004-02-27 17:30:39 vanto Exp $
+ * @version $Id: FileHelper.java,v 1.5 2004-06-28 00:52:23 squig Exp $
  */
 public class FileHelper {
 
@@ -42,23 +43,44 @@ public class FileHelper {
 
 	public static boolean copyResource(String filename, File outputPath)
 	{
-		InputStream in = FileHelper.getResourceAsStream(filename);
+		return copyResource(filename, outputPath, FileUtils.getFilenameWithoutPath(filename));
+	}
+	
+	public static boolean copyResource(URL url, File outputPath, String filename)
+	{
+		try {
+			return copyResource(url.openStream(), outputPath, filename);
+		} 
+		catch (IOException e) {
+			logger.warning(I18n.tr("Could not open {0} ({1})", url, e.getLocalizedMessage()));
+		}
+		return false;
+	}
+	
+	public static boolean copyResource(String source, File outputPath, String filename)
+	{
+		InputStream in = FileHelper.getResourceAsStream(source);
 		if (in != null) {
-			try {
-				FileUtils.copyFile(in, new File(outputPath, FileUtils.getFilenameWithoutPath(filename)));
-				return true;
-			} 
-			catch (IOException e) {
-				logger.warning(e.getMessage());
-			}
+			return copyResource(in, outputPath, filename);
 		}
 		else {
-			logger.warning("Resource not found: " + filename);
+			logger.warning("Resource not found: " + source);
 		}
 		return false;
 	}
 
-
+	public static boolean copyResource(InputStream in, File outputPath, String filename)
+	{
+		try {
+			FileUtils.copyFile(in, new File(outputPath, filename));
+			return true;
+		} 
+		catch (IOException e) {
+			logger.warning(e.getMessage());
+		}
+		return false;
+	}
+	
 	/**
 	 * Returns a url to a resource. The classpath is searched first,
 	 * then the file system is searched.
