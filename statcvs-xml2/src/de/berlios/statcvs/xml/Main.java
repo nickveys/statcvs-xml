@@ -51,17 +51,19 @@ import de.berlios.statcvs.xml.output.ReportSettings;
 import de.berlios.statcvs.xml.util.FileHelper;
 
 /**
- * StatCvs Main Class; it starts the application and controls command-line
- * related stuff
- * @author Lukasz Pekacki
- * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.20 2004-03-05 02:22:37 squig Exp $
+ * Runs StatCvs-XML. Parses the command line parameter, intializes the logger 
+ * and generates the reports.    
+ * 
+ * @author Steffen Pingel
+ * @author Tammo van Lessen
+ * @version $Id: Main.java,v 1.21 2004-03-05 18:10:29 squig Exp $
  */
 public class Main {
 
-	private static Logger logger = Logger.getLogger("net.sf.statcvs");
+	private static Logger logger = Logger.getLogger("de.berlios.statcvs.xml.Main");
 
-	public static final String VERSION = "@VERSION@";
+	public static final String VERSION = "0.9.1";
+	
 	/**
 	 * Main method of StatCvs
 	 * @param args command line options
@@ -71,8 +73,8 @@ public class Main {
 		// no graphical output, needed for JFreeChart
 		System.setProperty("java.awt.headless", "true");
 		
-		System.out.println(I18n.tr("StatCvs-XML - CVS statistics generation")+"\n");
-		System.setProperty("java.awt.headless", "true");
+		System.out.println(I18n.tr("StatCvs-XML - CVS statistics generation"));
+		System.out.println();
 		
 		if (args.length == 1) {
 			String arg = args[0].toLowerCase();
@@ -85,8 +87,8 @@ public class Main {
 
 		try {
 			ReportSettings settings = readSettings(args);
-			initLogger((Level)settings.get("_logLevel"));
 			generateSuite(settings);
+			System.out.println(I18n.tr("Done"));
 		} catch (InvalidCommandLineException e) {
 			System.err.println(e.getMessage());
 			printProperUsageAndExit();
@@ -108,11 +110,11 @@ public class Main {
 		System.out.println(
 		//max. 80 chars
 		//         12345678901234567890123456789012345678901234567890123456789012345678901234567890
-				  "Usage: java -jar @JAR@ [options] <logfile> <directory>\n"
+				  "Usage: java -jar statcvs-xml-" + VERSION + "-full.jar [options] [logfile [directory]]\n"
 				+ "\n"
-				+ "Required parameters:\n"
-				+ "  <logfile>          path to the cvs logfile of the module\n"
-				+ "  <directory>        path to the directory of the checked out module\n"
+				+ "Optional parameters:\n"
+				+ "  <logfile>          path to the cvs logfile of the module (default: cvs.log)\n"
+				+ "  <directory>        path to the working directory (default: current directory)\n"
 				+ "\n"
 				+ "Some options:\n"
 				+ "  -version           print the version information and exit\n"
@@ -120,10 +122,10 @@ public class Main {
 				+ "  -include <pattern> include only files matching pattern, e.g. **/*.c;**/*.h\n"
 				+ "  -exclude <pattern> exclude matching files, e.g. tests/**;docs/**\n"
 				+ "  -title <title>     Project title to be used in reports\n"
+				+ "  -render <class>    class can be either html, xdoc, xml or a Java class name\n"
 				+ "  -weburl <url>      integrate with web repository installation at <url>\n"
 				+ "  -verbose           print extra progress information\n"
-				+ "  -output-suite [class] use the xml renderer\n"
-				+ "  -use-history       use history file for proper loc counts\n"
+				+ "  -debug             print debug information\n"
 				+ "\n"
 				+ "If statcvs cannot recognize the type of your web repository, please use the\n"
 				+ "following switches:\n"
@@ -162,6 +164,7 @@ public class Main {
 		Hashtable cmdlSettings = new Hashtable();
 		CommandLineParser parser = new CommandLineParser(args);
 		parser.parse(cmdlSettings);
+		initLogger((Level)cmdlSettings.get("_logLevel"));
 		
 		ReportSettings settings = new ReportSettings(cmdlSettings);
 		File file = new File("statcvs.xml");
@@ -182,7 +185,7 @@ public class Main {
 		return settings;
 	}				
 
-	public static void initLogger(Level level) throws LogSyntaxException 
+	public static void initLogger(Level level) 
 	{
 		if (level == null) {
 			level = Level.OFF;

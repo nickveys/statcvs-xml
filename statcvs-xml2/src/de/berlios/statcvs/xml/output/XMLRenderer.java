@@ -41,9 +41,9 @@ public class XMLRenderer implements DocumentRenderer {
 		xout.setEncoding("ISO-8859-1");
 		setOutputter(xout);
 
-		if (transformer != null) {
-			logger.info("Using transformer "+transformer.getClass().getName());
-		}
+//		if (transformer != null) {
+//			logger.info("Using transformer " + transformer.getClass().getName());
+//		}
 	}
 
 	public XMLRenderer(File outputPath)
