@@ -112,7 +112,7 @@ table {
   border-collapse: collapse;
 }
 table, thead, tfoot, tbody, colgroup, col, tr, th, td {
-  align: top;
+  vertical-align: top;
   border: none;
 }
 td, th {
