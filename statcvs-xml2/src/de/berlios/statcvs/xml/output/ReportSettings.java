@@ -2,11 +2,11 @@ package de.berlios.statcvs.xml.output;
 
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Properties;
 
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.Directory;
+import de.berlios.statcvs.xml.I18n;
 
 /**
  * @author Steffen Pingel
@@ -78,6 +78,41 @@ public class ReportSettings extends Hashtable {
 		catch (NumberFormatException e) {
 			return defaultValue;
 		}
+	}
+
+	/**
+	 * 
+	 */
+	public String getPostfix() 
+	{
+		Object o = get("foreach");
+		if (o instanceof Author) {
+			return ((Author)o).getName();
+		}
+		else if (o instanceof Directory) {
+			return ((Directory)o).getPath();
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public String getFilenamePostfix() 
+	{
+		String postfix = getPostfix();
+		return (postfix == null) ? "" : "_" + postfix;
+	}
+
+	/**
+	 * 
+	 */
+	public String getSubtitlePostfix() 
+	{
+		String postfix = getPostfix();
+		return (postfix == null) ? "" : I18n.tr(" for {0}", postfix);
 	}
 
 }

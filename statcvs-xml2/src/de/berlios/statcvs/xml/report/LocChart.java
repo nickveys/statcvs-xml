@@ -16,9 +16,6 @@
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-    
-	$RCSfile: LocChart.java,v $
-	$Date: 2004-02-21 14:09:36 $ 
 */
 package de.berlios.statcvs.xml.report;
 
@@ -52,7 +49,7 @@ public class LocChart extends TimeLineChart {
 	
 	public LocChart(CvsContent content, ReportSettings settings) 
 	{
-		super(settings, "loc.png", I18n.tr("Lines Of Code"), I18n.tr("Lines"));
+		super(settings, "loc%1.png", I18n.tr("Lines Of Code%1"), I18n.tr("Lines"));
 
 	    this.content = content;
         	
@@ -60,21 +57,9 @@ public class LocChart extends TimeLineChart {
 		setupLocChart(false);
 	}
 
-	public LocChart(CvsContent content, ReportSettings settings, Directory dir) 
-	{
-		super(settings, null, I18n.tr("Lines Of Code for {0}", dir.toString()), 
-			I18n.tr("Lines"));
-
-        this.content = content;
-        
-		addTimeSeries("LOC", settings.getRevisionIterator(content));
-		setupLocChart(false);
-	}
-	
-
 	public LocChart(CvsContent content, ReportSettings settings, Author highlightAuthor)
 	{
-		super(settings, null, I18n.tr("Lines Of Code (per Author)"), I18n.tr("Lines"));
+		super(settings, "loc%1.png", I18n.tr("Lines Of Code (per Author)"), I18n.tr("Lines"));
         this.content = content;
         
 		// add a time line for each author
@@ -98,12 +83,7 @@ public class LocChart extends TimeLineChart {
 		LocChart chart;		
 		Object o = settings.get("foreach");
 		if (o instanceof Author) {
-			chart = new LocChart(content, settings, (Author)o);
-			chart.setFilename("loc_%1.png", ((Author)o).getName());			
-		}
-		else if (o instanceof Directory) {
-			chart = new LocChart(content, settings, (Directory)o);
-			chart.setFilename("loc_%1.png", ((Directory)o).getPath());
+			chart = new LocChart(content, settings, (Author)o);		
 		}
 		else {
 			chart = new LocChart(content, settings);

@@ -6,12 +6,16 @@
 
   <document filename="index">
     <report class="LocChart"/>
-    <report class="AuthorTable"/>
+    <report class="AuthorsTable"/>
     <report class="FileCountChart"/>    
     <report class="AvgFileSizeChart"/>    
+    <report class="ActivityByDayChart"/>    
+    <report class="ActivityByHourChart"/>        
   </document>
 
   <document foreach="author">
     <report class="LocChart"/>
+    <report class="ActivityByDayChart"/>        
+    <report class="ActivityByHourChart"/>        
   </document>
 </suite>

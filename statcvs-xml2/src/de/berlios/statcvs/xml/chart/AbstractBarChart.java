@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractBarChart.java,v $
-	$Date: 2004-02-21 14:09:36 $ 
+	$Date: 2004-02-21 14:46:06 $ 
 */
 package de.berlios.statcvs.xml.chart;
 
@@ -37,7 +37,7 @@ import de.berlios.statcvs.xml.output.ReportSettings;
  */
 public abstract class AbstractBarChart extends AbstractChart {
 
-	DefaultCategoryDataset dataset;
+	protected DefaultCategoryDataset dataset;
 	
 	/**
 	 * @param filename
@@ -54,7 +54,7 @@ public abstract class AbstractBarChart extends AbstractChart {
 			domainLabel,    // domain axis label
 			rangeLabel,       // range axis label
 			dataset,       // data
-			PlotOrientation.HORIZONTAL,
+			PlotOrientation.VERTICAL,
 			true,          // include legend
 			true,          // tooltips
 			false));          // urls
