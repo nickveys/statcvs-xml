@@ -240,4 +240,18 @@ public class ReportSettings extends Hashtable {
 		
 	}
 
+	/**
+	 * @param content
+	 */
+	public Iterator getDirectoryIterator(CvsContent content) 
+	{
+		Object o = get("_foreachObject");
+		if (o instanceof Directory) {
+			return ((Directory)o).getSubdirectoriesRecursive().iterator();
+		}
+		else {
+			return content.getDirectories().iterator(); 
+		}
+	}
+
 }

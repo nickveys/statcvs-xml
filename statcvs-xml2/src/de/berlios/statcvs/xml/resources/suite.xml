@@ -44,6 +44,7 @@
     <report class="DocumentTable"/>
     <report class="LocChart"/>
     <report class="AuthorsTable"/>
+    <report class="DirectoryTree"/>
   </document>
 
 </suite>

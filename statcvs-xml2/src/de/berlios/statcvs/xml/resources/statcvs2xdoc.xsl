@@ -300,10 +300,9 @@
 		    <xsl:with-param name="text" select="@name"/>
 			<xsl:with-param name="url">
 			<xsl:if test="not(@removed)">
-			     <xsl:value-of select="@url"/><xsl:value-of select="$ext"/>
+				<xsl:value-of select="ds:getDirectoryFilename(@ref)"/><xsl:value-of select="$ext"/>
 			</xsl:if>
 			</xsl:with-param>
-
 		  </xsl:call-template>
 		  </td>
 		  <td><xsl:value-of select="@files"/></td>
