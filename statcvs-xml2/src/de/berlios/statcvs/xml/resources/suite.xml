@@ -9,6 +9,15 @@
     <tags>test1</tags>
   </settings>
 
+  <document  filename="recent_activity" title="Recent Activity">
+    <settings>
+      <revisionFilter>util.atMostDaysOld(rev.getDate(), 1)</revisionFilter> 
+    </settings>
+    <report class="AuthorsTable"/>
+    <report class="FileActivityTable"/>
+    <report class="LocChart" filename="recent_loc.png"/>
+  </document>
+
   <document  filename="author%1" title="Author Statistics%1" foreach="author">
     <report class="LocByAuthorChart"/>
     <report class="ModuleSizesChart"/>

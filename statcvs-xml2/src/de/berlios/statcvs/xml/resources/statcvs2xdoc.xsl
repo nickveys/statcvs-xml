@@ -210,6 +210,26 @@
 		</xsl:for-each>
      </table>
   </xsl:template>
+
+  <xsl:template match="fileActivity">
+     <table>
+        <tr>
+       	  <th><xsl:value-of select="i18n:tr('File')"/></th>
+          <th><xsl:value-of select="i18n:tr('Commits')"/></th>
+      	</tr>
+		<xsl:for-each select="files/file">
+		  <tr>
+            <td>
+            <xsl:call-template name="func:make-link">
+				<xsl:with-param name="text" select="@name"/>
+				<xsl:with-param name="url" select="@url"/>
+            </xsl:call-template>
+			</td>
+		    <td><xsl:value-of select="@commits"/></td>
+		  </tr>
+		</xsl:for-each>
+     </table>
+  </xsl:template>
   
   <xsl:template match="modules">
      <table>

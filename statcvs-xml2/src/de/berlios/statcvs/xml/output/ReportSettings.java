@@ -11,9 +11,17 @@ import java.util.regex.Pattern;
 
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
+import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.model.SymbolicName;
+
+import org.apache.commons.jexl.Expression;
+import org.apache.commons.jexl.ExpressionFactory;
+import org.apache.commons.jexl.JexlContext;
+import org.apache.commons.jexl.JexlHelper;
+
 import de.berlios.statcvs.xml.I18n;
+import de.berlios.statcvs.xml.util.ScriptHelper;
 
 /**
  * @author Steffen Pingel
@@ -62,19 +70,37 @@ public class ReportSettings extends Hashtable {
 
 	public Iterator getFileIterator(CvsContent content)
 	{
-		return content.getFiles().iterator();
+		return getFilterIterator("fileFilter", content.getFiles().iterator());
 	}
 
+	public Iterator getFilterIterator(String key, Iterator it)
+	{
+		String expression = getString(key, null);
+		if (expression != null) {
+			try {
+				return new FilteredIterator(it, new ExpressionPredicate(expression));
+			}	
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return it;  
+	}
+		
 	public Iterator getRevisionIterator(CvsContent content)
 	{
+		Iterator it;
 		Object o = get("_foreachObject");
 		if (o instanceof Author) {
-			return ((Author)o).getRevisions().iterator();
+			it = ((Author)o).getRevisions().iterator();
 		}
 		else if (o instanceof Directory) {
-			return ((Directory)o).getRevisions().iterator();
+			it = ((Directory)o).getRevisions().iterator();
 		}
-		return content.getRevisions().iterator();
+		else {
+			it = content.getRevisions().iterator(); 
+		}
+		return getFilterIterator("revisionFilter", it);
 	}
 
 	public Iterator getSymbolicNameIterator(CvsContent content)
@@ -236,6 +262,35 @@ public class ReportSettings extends Hashtable {
 				}
 			}
 			throw new NoSuchElementException();
+		}
+		
+	}
+
+	public static class ExpressionPredicate implements Predicate {
+		
+		private JexlContext context;
+		private Expression expression; 
+		
+		public ExpressionPredicate(String expressionSource) throws Exception
+		{
+			expression = ExpressionFactory.createExpression(expressionSource);
+			context = JexlHelper.createContext();
+			context.getVars().put("util", new ScriptHelper());
+		}
+
+		public boolean matches(Object o)
+		{
+			if (o instanceof CvsRevision) {
+				context.getVars().put("rev", o);
+			}
+
+			try {
+				Object res = expression.evaluate(context);
+				return (res instanceof Boolean) ? ((Boolean)res).booleanValue() : false;
+			}
+			catch (Exception e) {
+				return false;
+			}
 		}
 		
 	}
