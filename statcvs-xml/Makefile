@@ -1,6 +1,15 @@
+JAVA_HOME =
+
+CVS_LOG = cvs.log
+CVS_PATH = .
+
 LIBS = $(shell find lib/ -name "*.jar")
-CP = .:src:$(shell echo $(LIBS) | sed -e 's/ /:/g'):/usr/local/j2sdk1.4.1_01/jre/lib/rt.jar
+CP = .:src:$(shell echo $(LIBS) | sed -e 's/ /:/g'):$(JAVA_HOME)/jre/lib/rt.jar
 JDEPENDS = src/net/sf/statcvs/Main.java $(shell find src -name "*Output.java")
+
+ifeq ($(shell test -r Makefile.local && echo "true"),true)
+  include Makefile.local
+endif
 
 all : 
 	jikes -classpath $(CP) +D +Predundant-modifiers +F $(JDEPENDS)
@@ -34,11 +43,16 @@ makefiles :
 tags :
 	find -name "*.java" | xargs etags
 
+cvs.log:
+	cvs log > cvs.log
+
 xdoc : 
-	/usr/local/j2sdk1.4.1_01/jre/bin/java -classpath $(CP) net.sf.statcvs.Main \
-	  studium.cvslog ~/projects/studium -output-dir xdocs/statcvs -output-suite xdoc
+	mkdir -p xdocs/statcvs
+	$(JAVA_HOME)/bin/java -classpath $(CP) net.sf.statcvs.Main \
+	  $(CVS_LOG) $(CVS_PATH) -output-dir xdocs/statcvs -output-suite xdoc
 
 xml : 
-	/usr/local/j2sdk1.4.1_01/jre/bin/java -classpath $(CP) net.sf.statcvs.Main \
-	  studium.cvslog ~/projects/studium -output-dir out-xml -output-suite 
+	mkdir -p out-xml
+	$(JAVA_HOME)/bin/java -classpath $(CP) net.sf.statcvs.Main \
+	  $(CVS_LOG) $(CVS_PATH) -output-dir out-xml -output-suite 
 
