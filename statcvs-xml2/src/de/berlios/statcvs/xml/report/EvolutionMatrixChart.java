@@ -277,6 +277,8 @@ public class EvolutionMatrixChart extends AbstractChart {
 							g2.setColor(Color.yellow);
 							//g2.setStroke(new BasicStroke(2));
 							if (lastVersion != null 
+								&& eFile.getRevision(ver) != null
+								&& eFile.getRevision(lastVersion) != null
 								&& !eFile.hasSameRevision(lastVersion, ver)) {
 									
 								int length = (int)((eFile.getChangedScore(lastVersion, ver)) * (vspace - 10));
@@ -395,11 +397,17 @@ public class EvolutionMatrixChart extends AbstractChart {
 			this.file = file;
 		}
 		
+		/**
+		 * Add a revision to a version. 
+		 */
 		void addRevision(Version ver, CvsRevision rev)
 		{
 			revisionByVersion.put(ver, rev);
 		}
 		
+		/**
+		 * Returns the revision for this file and the given version.
+		 */
 		public CvsRevision getRevision(Version ver) 
 		{
 			if (ver == null) {
@@ -408,16 +416,28 @@ public class EvolutionMatrixChart extends AbstractChart {
 			return (CvsRevision)revisionByVersion.get(ver);
 		}
 		
+		/**
+		 * Returns the line score of this file in the given version.
+		 * 
+		 * Divides line count by the max. line count in the given version.  
+		 */
 		public double getScore(Version ver)
 		{
 			return (double)getRevision(ver).getLines() / ver.getMaxLoc();
 		}
 		
+		/**
+		 * Returns the changing score.
+		 * 
+		 * Counts the replaces line for each revision between oldV and thisV
+		 * and divides it by the linecount of thisVs revision.
+		 */
 		public double getChangedScore(Version oldV, Version thisV)
 		{
 			CvsRevision target = getRevision(oldV);
 			CvsRevision curr = getRevision(thisV);
-			int change = curr.getReplacedLines();
+			int change = curr.getReplacedLines();	
+			
 			while (target != curr) {
 				curr = curr.getPreviousRevision();
 				if (curr != null) {
@@ -427,11 +447,17 @@ public class EvolutionMatrixChart extends AbstractChart {
 			return (double)change / getRevision(thisV).getLines();
 		}
 		
+		/**
+		 * Returns true, if this file is tagged by the given version
+		 */
 		public boolean isInVersion(Version ver)
 		{
 			return getRevision(ver) != null;	
 		}
 		
+		/**
+		 * Returns true, if this file has for both versions the same revision.
+		 */
 		public boolean hasSameRevision(Version v1, Version v2)
 		{
 			return (getRevision(v1) == getRevision(v2))
