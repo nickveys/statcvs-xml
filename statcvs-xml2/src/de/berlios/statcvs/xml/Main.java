@@ -44,7 +44,7 @@ import net.sf.statcvs.util.LookaheadReader;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.4 2004-02-17 15:44:43 squig Exp $
+ * @version $Id: Main.java,v 1.5 2004-02-17 16:11:54 squig Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -300,7 +300,7 @@ public class Main {
 //		Method m = c.getMethod("generate", new Class[] { CvsContent.class });
 //		m.invoke(null, new Object[] { content });
 		
-		XDocRenderer.generate(content);
+		XDocRenderer.generate(content, new File(Settings.getOutputDir()));
 	}
 
     public static String getSettingsPath()

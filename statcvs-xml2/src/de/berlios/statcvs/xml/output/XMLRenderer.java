@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLRenderer.java,v $
-	$Date: 2004-02-15 18:56:13 $ 
+	$Date: 2004-02-17 16:11:54 $ 
 */
 package de.berlios.statcvs.xml.output;
 
@@ -48,6 +48,8 @@ import de.berlios.statcvs.xml.util.FileHelper;
  */
 public class XMLRenderer implements DocumentRenderer {
 
+	private File outputPath;
+
 	private static Logger logger
 		= Logger.getLogger("net.sf.statcvs.output.XMLRenderer");
 
@@ -55,8 +57,11 @@ public class XMLRenderer implements DocumentRenderer {
 	private Transformer transformer;
 	private String extension;
 	
-	public XMLRenderer(Transformer transformer) {
+	public XMLRenderer(Transformer transformer, File outputPath) 
+	{
 		this.transformer = transformer;
+		this.outputPath = outputPath;
+		
 		setExtension(".xml");
 
 		XMLOutputter xout = new XMLOutputter();
@@ -68,16 +73,17 @@ public class XMLRenderer implements DocumentRenderer {
 		}
 	}
 
-	public XMLRenderer() {
-		this(null);
+	public XMLRenderer(File outputPath)
+	{
+		this(null, outputPath);
 	}
 
 	/**
 	 * Invoked by Main.
 	 */
-	public static void generate(CvsContent content) throws IOException
+	public static void generate(CvsContent content, File outputPath) throws IOException
 	{
-		//DocumentSuite.generate(content, new XMLRenderer());
+		//DocumentSuite.generate(content, new XMLRenderer(outputPath));
 	}
 
 	public boolean copyResource(String filename)
@@ -137,9 +143,8 @@ public class XMLRenderer implements DocumentRenderer {
 
 	private void renderSingle(StatCvsDocument document) throws IOException 
 	{
-		FileWriter writer = new FileWriter
-			(FileUtils.getFilenameWithDirectory
-			 (document.getFilename() + extension));
+		File file = new File(outputPath, document.getFilename() + extension);
+		FileWriter writer = new FileWriter(file);
 
 		try {
 			if (transformer != null) {
@@ -160,7 +165,7 @@ public class XMLRenderer implements DocumentRenderer {
 			writer.close();
 		}	
 
-		document.saveResources();
+		document.saveResources(outputPath);
 	}
 
 	/**

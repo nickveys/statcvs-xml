@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractChart.java,v $
-	$Date: 2004-02-15 18:56:13 $ 
+	$Date: 2004-02-17 16:11:54 $ 
 */
 package de.berlios.statcvs.xml.chart;
 
@@ -56,11 +56,15 @@ public abstract class AbstractChart {
 	private String filename;
 	private String title;
 	private JFreeChart chart;
+	private int width;
+	private int height;
 
 	public AbstractChart(ReportSettings settings, String defaultFilename, String defaultTitle) 
 	{
 		this.filename = settings.getString("filename", (defaultFilename == null) ? "chart" + ++chartNumber + ".png" : defaultFilename);
 		this.title = settings.getString("title", defaultTitle);
+		this.width = settings.getInt("width", 640);
+		this.width = settings.getInt("height", 480);
 	}
 	
 	/** 
@@ -116,22 +120,14 @@ public abstract class AbstractChart {
 		chart.setBackgroundPaint(Color.white);
 	}
 	
-	public void save() throws IOException {
-		// TODO: Make it configurable!
-		save(640, 480);	
+	public void save(File outputPath) throws IOException 
+	{
+		save(new File(outputPath, filename), width, height);	
 	}
 	
-	public void save(int width, int height) throws IOException {
-		save(width, height, this.filename);	
-	}
-	
-	public void save(int width, int height, String filename) throws IOException {
-		// FIX: the output directory should be passed instead of calling getFilenameWithDirectory
-		ChartUtilities.saveChartAsPNG(
-			new File(FileUtils.getFilenameWithDirectory(filename)),
-			chart,
-			width,
-			height);
+	public void save(File file, int width, int height) throws IOException 
+	{
+		ChartUtilities.saveChartAsPNG(file, chart, width, height);
 		logger.fine("saved chart '" + title + "' as '" + filename + "'");
 	}
 

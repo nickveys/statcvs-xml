@@ -60,4 +60,19 @@ public class ReportSettings extends Hashtable {
 		return (String)this.get(key, defaultValue);
 	}
 
+	/**
+	 * @param string
+	 * @param i
+	 * @return
+	 */
+	public int getInt(Object key, int defaultValue) 
+	{
+		try {
+			return Integer.parseInt(getString(key, defaultValue + ""));
+		}
+		catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
+
 }

@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.CvsRevision;
+import net.sf.statcvs.output.ConfigurationOptions;
 
 /**
  * <p>Builds a {@link CvsFile} with {@link CvsRevision}s from logging data.
