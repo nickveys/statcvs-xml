@@ -52,8 +52,8 @@
   <xsl:template match="authorsPerFile">
      <table>
         <tr>
-       	  <th>File</th>
-          <th>Authors</th>
+       	  <th><xsl:value-of select="i18n:tr('File')"/></th>
+          <th><xsl:value-of select="i18n:tr('Authors')"/></th>
       	</tr>
 		<xsl:for-each select="files/file">
 		  <xsl:sort select="@authors" order="descending"/>
@@ -76,8 +76,8 @@
        <td><xsl:value-of select="@author"/></td>
        <td>
 		  <b><xsl:value-of select="comment"/></b>
-		  (<xsl:value-of select="@changedfiles"/> Files changed,
-		  <xsl:value-of select="@changedlines"/> Lines changed)
+		  (<xsl:value-of select="@changedfiles"/><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('Files changed')"/>,
+		  <xsl:value-of select="@changedlines"/><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('Lines changed')"/>)
 		  <br/>
 		  <xsl:for-each select="files/file">
               <!--<xsl:element name="a">
@@ -88,16 +88,16 @@
               <xsl:call-template name="func:make-link">
 				<xsl:with-param name="text">
 				   <xsl:value-of select="@directory"/>
-                   <xsl:value-of select="@name"/><xsl:text> </xsl:text><xsl:value-of select="@revision"/>
+                   <xsl:value-of select="@name"/><xsl:value-of select="@revision"/>
 				</xsl:with-param>
 				<xsl:with-param name="url" select="@url"/>
               </xsl:call-template>
               
               <xsl:if test="@action = 'added'">
-                <font color="green">added <xsl:value-of select="@lines"/></font>
+                <font color="green"><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('added')"/><xsl:text> </xsl:text><xsl:value-of select="@lines"/></font>
               </xsl:if>
               <xsl:if test="@action = 'deleted'">
-                <font color="red">removed</font>
+                <font color="red"><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('removed')"/></font>
               </xsl:if>
               <xsl:if test="@action = 'changed'">
                  (+<xsl:value-of select="@added"/>
@@ -113,9 +113,9 @@
   <xsl:template match="commitlog">
      <table>
         <tr>
-       	  <th>Date</th>
-	      <th>Author</th>
-          <th>File/Message</th>
+       	  <th><xsl:value-of select="i18n:tr('Date')"/></th>
+          <th><xsl:value-of select="i18n:tr('Author')"/></th>
+       	  <th><xsl:value-of select="i18n:tr('File/Message')"/></th>
       	</tr>
 		<xsl:apply-templates select="*"/>
      </table>
@@ -159,8 +159,8 @@
   <xsl:template match="largestFiles">
      <table>
         <tr>
-       	  <th>File</th>
-          <th>Lines of code</th>
+       	  <th><xsl:value-of select="i18n:tr('File')"/></th>
+          <th><xsl:value-of select="i18n:tr('Lines of Code')"/></th>
       	</tr>
 		<xsl:for-each select="files/file">
 		  <tr>
@@ -179,10 +179,10 @@
   <xsl:template match="modules">
      <table>
         <tr>
-       	  <th>Directory</th>
-	      <th>Changes</th>
-          <th>Lines of code</th>
-          <th>Lines per change</th>
+       	  <th><xsl:value-of select="i18n:tr('Directory')"/></th>
+          <th><xsl:value-of select="i18n:tr('Changes')"/></th>
+          <th><xsl:value-of select="i18n:tr('Lines of Code')"/></th>
+       	  <th><xsl:value-of select="i18n:tr('Lines per change')"/></th>
       	</tr>
 		<xsl:apply-templates select="*"/>
      </table>
@@ -206,8 +206,8 @@
   <xsl:template match="mostRecentFiles">
      <table>
         <tr>
-       	  <th>File</th>
-          <th>Revisions</th>
+       	  <th><xsl:value-of select="i18n:tr('File')"/></th>
+       	  <th><xsl:value-of select="i18n:tr('Revisions')"/></th>
       	</tr>
 		<xsl:for-each select="files/file">
 		  <tr>
@@ -225,8 +225,8 @@
 
   <xsl:template match="period">
     <p><xsl:value-of select="@name"/>: <xsl:value-of select="@from"/>
-	<xsl:if test="@to">
-	  to <xsl:value-of select="@to"/>
+	<xsl:if test="@to"><xsl:text> </xsl:text>
+      <xsl:value-of select="i18n:tr('to')"/><xsl:text> </xsl:text><xsl:value-of select="@to"/>
     </xsl:if>
     </p>
   </xsl:template>
