@@ -47,13 +47,8 @@ public abstract class AbstractBarChart extends AbstractChart {
 												  true,          // tooltips
 												  false          // urls
 											  );
-
-		CategoryPlot plot = chart.getCategoryPlot();
-		HorizontalCategoryAxis3D axis = (HorizontalCategoryAxis3D) plot.getDomainAxis();
-		axis.setVerticalTickLabels(true);
-		
 		setChart(chart);  
-		placeTitle();      
+		//placeTitle();      
 	}
 
 	public void setCategoryAxisLabel(String text) {
