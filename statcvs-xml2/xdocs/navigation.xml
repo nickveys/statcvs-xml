@@ -23,8 +23,7 @@
 	</menu>
 
     <menu name="Sample Output">
-	  <item name="StatCvs-XML 0.9.4" href="/statcvs/index.html"/>
-	  <item name="StatCvs-XML (latest)" href="/statcvs-xml/index.html"/>
+	  <item name="StatCvs-XML (xdoc)" href="/statcvs/index.html"/>
 	  <item name="StatCvs-XML (html)" href="/statcvs-xml-html/index.html"/>
 	</menu>
 

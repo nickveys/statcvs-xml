@@ -58,6 +58,11 @@
       <name>0.9.4</name>
       <tag>statcvs-xml-0_9_4</tag>
     </version>
+    <version>
+      <id>095</id>
+      <name>0.9.5</name>
+      <tag>statcvs-xml-0_9_5</tag>
+    </version>
   </versions>
 
   <mailingLists>
