@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractPageableDocument.java,v $
-	$Date: 2003-06-17 19:00:55 $ 
+	$Date: 2003-06-17 23:08:49 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -75,13 +75,17 @@ public abstract class AbstractPageableDocument extends StatCvsDocument implement
 	 */
 	public Element getPage(int page) {
 		Element element = new Element(this.getRootElement().getName());
-		List elCont = element.getContent();
-		elCont.add(getHeader());
+		Element child = new Element(pContentName);
+		element.addContent(getHeader());
+		element.addContent(child);
+		element.addContent(getFooter());
+		List elCont = child.getContent();
+		
 		
 		List pageList = null;// = new ArrayList();
 
 		if ((pContent != null) && (page < getPageCount())) {
-			element.setAttribute("page", ""+page+1);
+			element.setAttribute("page", ""+(page+1));
 			element.setAttribute("totalPages", ""+getPageCount());
 			
 			if (pContent.size() < (page*itemsPerPage)+itemsPerPage) {
@@ -96,7 +100,6 @@ public abstract class AbstractPageableDocument extends StatCvsDocument implement
 			Element el = new Element("x");
 			elCont.add(((Element)pageList.get(i)).clone());//pageList.get(i));
 		}
-		elCont.add(getFooter());
 		return element;
 	}
 	
