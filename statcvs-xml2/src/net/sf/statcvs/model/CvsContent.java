@@ -46,6 +46,7 @@ public class CvsContent {
     /** All CVS Branches (CvsBranch objects) for this repository (that 
      *  are mentioned in the parsed log). */
 	private Set branches;
+	private CvsBranch mainBranch;
 
 	/**
 	 * Adds one file to the repository.
@@ -117,7 +118,9 @@ public class CvsContent {
 		Iterator it = files.iterator();
 		while (it.hasNext()) {
 			CvsFile file = (CvsFile) it.next();
-			result += file.getCurrentLinesOfCode();
+			if (file.existsOnBranch(getMainBranch().getName())) {
+				result += file.getCurrentLinesOfCode();
+			}
 		}
 		return result;
 	}
@@ -237,4 +240,11 @@ public class CvsContent {
         this.branches = branches;
     }
 
+	public void setMainBranch(CvsBranch branch) {
+		this.mainBranch = branch;
+	}
+
+	public CvsBranch getMainBranch() {
+		return mainBranch;
+	}
 }

@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import net.sf.statcvs.model.Author;
+import net.sf.statcvs.model.CvsBranch;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.Directory;
 import org.jdom.Attribute;
@@ -43,6 +44,7 @@ import de.berlios.statcvs.xml.model.DayGrouper;
 import de.berlios.statcvs.xml.model.DirectoryGrouper;
 import de.berlios.statcvs.xml.model.FileGrouper;
 import de.berlios.statcvs.xml.model.ForEachAuthor;
+import de.berlios.statcvs.xml.model.ForEachBranch;
 import de.berlios.statcvs.xml.model.ForEachDirectory;
 import de.berlios.statcvs.xml.model.ForEachModule;
 import de.berlios.statcvs.xml.model.HourGrouper;
@@ -60,6 +62,8 @@ public class DocumentSuite {
 
 	private static Map filenameByAuthorName = new Hashtable();
 
+	private static Map filenameByBranchName = new Hashtable();
+	
 	private static Map filenameByModuleName= new Hashtable();
 
 	private static Map documentTitleByFilename = new LinkedHashMap();
@@ -260,6 +264,17 @@ public class DocumentSuite {
 				}
 			}
 		}
+		else if ("branch".equals(value)) {
+			for (Iterator it = content.getBranches().iterator(); it.hasNext();) {
+				CvsBranch branch = (CvsBranch)it.next();
+				ReportSettings settings = new ReportSettings(defaultSettings);
+				settings.setForEach(new ForEachBranch(branch));
+				StatCvsDocument doc = createDocument(element, renderer, settings);
+				if (doc != null) {				
+					filenameByBranchName.put(branch.getName(), doc.getFilename());
+				}
+			}
+		}
 		else if ("directory".equals(value)) {
 			for (Iterator i = content.getDirectories().iterator(); i.hasNext();) {
 				Directory dir = (Directory)i.next();
@@ -310,6 +325,11 @@ public class DocumentSuite {
 	public static String getAuthorFilename(String name)
 	{
 		return (String)filenameByAuthorName.get(name);
+	}
+
+	public static String getBranchFilename(String name)
+	{
+		return (String)filenameByBranchName.get(name);
 	}
 
 	public static String getDirectoryFilename(String path)

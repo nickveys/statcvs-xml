@@ -58,6 +58,11 @@ public class CvsFile implements Comparable {
 		revisionsByBranchName.put(CvsLogUtils.HEAD_BRANCH_NAME, revisions);
 	}
 
+	public boolean existsOnBranch(String branchName) {
+		final TreeSet branchRevisions = (TreeSet)revisionsByBranchName.get(branchName);
+		return (branchRevisions != null && !branchRevisions.isEmpty());
+	}
+	
 	/**
 	 * Returns a list of authors that have commited at least one revision of the file.
 	 * @return a list of authors

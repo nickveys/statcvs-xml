@@ -40,6 +40,7 @@ import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.model.SymbolicName;
+import net.sf.statcvs.util.CvsLogUtils;
 import net.sf.statcvs.util.FilePatternMatcher;
 import net.sf.statcvs.util.FileUtils;
 
@@ -204,8 +205,11 @@ public class Builder implements CvsLogBuilder {
 		result.setCommits(commits);
 		
 		result.setSymbolicNames(new TreeSet(symbolicNames.values()));
+		result.setMainBranch((parseBranchName != null) 
+				? getBranch(parseBranchName) 
+				: getBranch(CvsLogUtils.HEAD_BRANCH_NAME));
 		result.setBranches(new HashSet(branchesByName.values()));
-
+		
 		return result;
 	}
 
