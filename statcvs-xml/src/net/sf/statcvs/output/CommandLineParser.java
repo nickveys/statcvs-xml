@@ -18,19 +18,23 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommandLineParser.java,v $
-	Created on $Date: 2003-07-02 16:19:30 $ 
+	Created on $Date: 2003-07-04 15:17:27 $ 
 */
 package net.sf.statcvs.output;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.statcvs.output.xml.HTMLRenderer;
+import net.sf.statcvs.output.xml.XDocRenderer;
+import net.sf.statcvs.output.xml.XMLRenderer;
+
 /**
  * Takes a command line, like given to the {@link net.sf.statcvs.Main#main} method,
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.3 2003-07-02 16:19:30 squig Exp $
+ * @version $Id: CommandLineParser.java,v 1.4 2003-07-04 15:17:27 vanto Exp $
  */
 public class CommandLineParser {
 
@@ -74,12 +78,7 @@ public class CommandLineParser {
 
 	private void parseSwitch(String switchName) throws ConfigurationException {
 		String s = switchName.toLowerCase();
-		if (s.equals("css")) {
-			if (args.isEmpty()) {
-				throw new ConfigurationException("Missing argument for -css");
-			}
-			ConfigurationOptions.setCssFile(popNextArg());
-		} else if (s.equals("output-dir")) {
+		if (s.equals("output-dir")) {
 			if (args.isEmpty()) {
 				throw new ConfigurationException("Missing argument for -output-dir");
 			}
@@ -87,17 +86,17 @@ public class CommandLineParser {
 		} else if (s.equals("output-suite")) {
 			if (args.isEmpty()) {
 				ConfigurationOptions.setOutputSuite
-					("net.sf.statcvs.output.xml.XMLRenderer");
+					(XMLRenderer.class.getName());
 			}
 			else {
 				String arg = popNextArg();
 				if (arg.equals("html")) {
 					ConfigurationOptions.setOutputSuite
-						("net.sf.statcvs.output.xml.HTMLRenderer");
+						(HTMLRenderer.class.getName());
 				}
 				else if (arg.equals("xdoc")) {
 					ConfigurationOptions.setOutputSuite
-						("net.sf.statcvs.output.xml.XDocRenderer");
+						(XDocRenderer.class.getName());
 				}
 				else {
 					ConfigurationOptions.setOutputSuite(arg);

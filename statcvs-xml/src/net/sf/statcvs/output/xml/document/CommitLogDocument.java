@@ -18,14 +18,15 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommitLogDocument.java,v $
-	$Date: 2003-06-27 01:05:34 $ 
+	$Date: 2003-07-04 15:17:27 $ 
 */
-package net.sf.statcvs.output.xml;
+package net.sf.statcvs.output.xml.document;
 
 import java.util.logging.Logger;
 
 import net.sf.statcvs.I18n;
 import net.sf.statcvs.model.CvsContent;
+import net.sf.statcvs.output.xml.ReportElement;
 import net.sf.statcvs.output.xml.report.CommitLogReport;
 
 import org.jdom.Document;

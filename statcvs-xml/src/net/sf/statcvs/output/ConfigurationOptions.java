@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ConfigurationOptions.java,v $
-	$Date: 2003-06-17 16:43:02 $ 
+	$Date: 2003-07-04 15:17:27 $ 
 */
 package net.sf.statcvs.output;
 
@@ -26,8 +26,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import net.sf.statcvs.util.FilePatternMatcher;
 import net.sf.statcvs.util.FileUtils;
@@ -38,7 +36,7 @@ import net.sf.statcvs.util.FileUtils;
  * can read all parameter values from here.
  * 
  * @author jentzsch
- * @version $Id: ConfigurationOptions.java,v 1.1 2003-06-17 16:43:02 vanto Exp $
+ * @version $Id: ConfigurationOptions.java,v 1.2 2003-07-04 15:17:27 vanto Exp $
  */
 public class ConfigurationOptions {
 
@@ -58,19 +56,10 @@ public class ConfigurationOptions {
 	private static FilePatternMatcher includePattern = null;
 	private static FilePatternMatcher excludePattern = null;
 
-	private static CssHandler cssHandler = new DefaultCssHandler("statcvs.css");
 	private static WebRepositoryIntegration webRepository = null;
 
 	private static String outputSuite = null;
 
-	/**
-	 * returns the {@link CssHandler}
-	 * @return the CssHandler
-	 */
-	public static CssHandler getCssHandler() {
-		return cssHandler;
-	}
-	
 	/**
 	 * Method getProjectName.
 	 * @return String name of the project
@@ -147,31 +136,6 @@ public class ConfigurationOptions {
 					"directory does not exist: " + checkedOutDirectory);
 		}
 		ConfigurationOptions.checkedOutDirectory = checkedOutDirectory;
-	}
-
-	/**
-	 * Sets the cssFile. Currently, the css file can be any local file or
-	 * a HTTP URL. If it is a local file, a copy will be included in the
-	 * output directory. If this method is never called, a default CSS file
-	 * will be generated in the output directory.
-	 *
-	 * @param cssFile The cssFile to set
-	 * @throws ConfigurationException if the specified CSS file can not be
-	 * accessed from local file system or from URL source, or if the specified
-	 * CSS file is local and does not exist
-	 */
-	public static void setCssFile(String cssFile) throws ConfigurationException {
-		try {
-			URL url = new URL(cssFile);
-			if (!url.getProtocol().equals("http")) {
-				throw new ConfigurationException(
-						"Only HTTP URLs or local files allowed for -css");
-			}
-			cssHandler = new UrlCssHandler(url);
-		} catch (MalformedURLException isLocalFile) {
-			cssHandler = new LocalFileCssHandler(cssFile);
-		}
-		cssHandler.checkForMissingResources();
 	}
 
 	/**

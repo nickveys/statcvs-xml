@@ -18,7 +18,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: LocPerAuthorChart.java,v $
-	$Date: 2003-06-28 11:25:43 $
+	$Date: 2003-07-04 15:17:27 $
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -33,7 +33,7 @@ import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.RevisionIterator;
 import net.sf.statcvs.model.RevisionSortIterator;
-import net.sf.statcvs.output.xml.AuthorDocument;
+import net.sf.statcvs.output.xml.document.AuthorDocument;
 import net.sf.statcvs.reportmodel.TimeLine;
 import net.sf.statcvs.util.IntegerMap;
 

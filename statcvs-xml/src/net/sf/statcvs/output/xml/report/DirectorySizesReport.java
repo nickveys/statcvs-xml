@@ -13,7 +13,7 @@ import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.model.RevisionIterator;
-import net.sf.statcvs.output.xml.ModuleDocument;
+import net.sf.statcvs.output.xml.document.ModuleDocument;
 import net.sf.statcvs.util.Formatter;
 import net.sf.statcvs.util.IntegerMap;
 

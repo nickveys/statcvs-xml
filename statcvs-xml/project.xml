@@ -3,7 +3,7 @@
   <pomVersion>3</pomVersion>
   <name>StatCVS-XML</name>
   <id>StatCvs-XML</id>
-  <!-- <currentVersion>3</currentVersion> -->
+  <currentVersion>0.9</currentVersion>
   <organization>
     <name>StatCvs-XML Team</name>
     <url>http://statcvs-xml.berlios.de/</url>
@@ -60,12 +60,10 @@
      <dependency>
       <id>ant</id>
       <version>1.5</version>
-      <jar>ant-1.5.jar</jar>
      </dependency>
      <dependency>
       <id>jdom</id>
       <version>b9</version>
-      <jar>jdom-b9.jar</jar>
      </dependency>
      <dependency>
       <id>jfreechart</id>
@@ -74,8 +72,11 @@
       <jar>jfreechart-0.7.3.jar</jar>
 -->
       <version>0.9.8</version>
-      <jar>jfreechart-0.9.8.jar</jar>
      </dependency>
+     <dependency>
+      <id>jcommon</id>
+      <version>0.8.2</version>
+    </dependency>
   </dependencies>
 
   <build>

@@ -15,7 +15,7 @@ import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.RevisionIterator;
-import net.sf.statcvs.output.xml.AuthorDocument;
+import net.sf.statcvs.output.xml.document.AuthorDocument;
 
 /**
  * ActivityChart

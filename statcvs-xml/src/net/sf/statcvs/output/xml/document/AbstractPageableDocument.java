@@ -18,11 +18,13 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractPageableDocument.java,v $
-	$Date: 2003-06-19 23:48:27 $ 
+	$Date: 2003-07-04 15:17:27 $ 
 */
-package net.sf.statcvs.output.xml;
+package net.sf.statcvs.output.xml.document;
 
 import java.util.List;
+
+import net.sf.statcvs.output.xml.Pageable;
 
 import org.jdom.Element;
 

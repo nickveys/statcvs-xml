@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLRenderer.java,v $
-	$Date: 2003-07-01 22:56:39 $ 
+	$Date: 2003-07-04 15:17:27 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -31,6 +31,7 @@ import javax.xml.transform.TransformerException;
 
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.output.xml.chart.AbstractChart;
+import net.sf.statcvs.output.xml.document.*;
 import net.sf.statcvs.output.xml.util.XMLOutputter;
 import net.sf.statcvs.util.FileUtils;
 

@@ -18,7 +18,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: StatCvsTask.java,v $
-	$Date: 2003-07-04 14:38:44 $ 
+	$Date: 2003-07-04 15:17:27 $ 
 */
 package net.sf.statcvs.ant;
 
@@ -42,7 +42,6 @@ public class StatCvsTask extends Task {
 	private String logFile;
 	private String pDir;
 	private String outDir;
-	private String cssFile;
 	private String notesFile;
 	private boolean showCredits = true;
 	private String include = null;
@@ -84,9 +83,6 @@ public class StatCvsTask extends Task {
 		}
 		if (this.outDir != null) {
 			ConfigurationOptions.setOutputDir(this.outDir);
-		}
-		if (cssFile != null) {
-			ConfigurationOptions.setCssFile(this.cssFile);
 		}
 		if (notesFile != null) {
 			ConfigurationOptions.setNotesFile(this.notesFile);
@@ -140,13 +136,6 @@ public class StatCvsTask extends Task {
 	 */
 	public void setOutputDirectory(String outDir) {
 		this.outDir = outDir;
-	}
-	
-	/**
-	 * @param cssFile String representing the CSS file to use for the report
-	 */
-	public void setCssFile(String cssFile) {
-		this.cssFile = cssFile;
 	}
 	
 	/**

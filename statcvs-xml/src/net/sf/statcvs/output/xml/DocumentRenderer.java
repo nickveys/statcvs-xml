@@ -18,11 +18,13 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: DocumentRenderer.java,v $
-	$Date: 2003-06-17 16:43:02 $ 
+	$Date: 2003-07-04 15:17:27 $ 
 */
 package net.sf.statcvs.output.xml;
 
 import java.io.*;
+
+import net.sf.statcvs.output.xml.document.*;
 
 /**
  * Handles an xml document.

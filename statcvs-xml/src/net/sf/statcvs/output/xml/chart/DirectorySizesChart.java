@@ -21,7 +21,7 @@ import net.sf.statcvs.model.RevisionFilterIterator;
 import net.sf.statcvs.model.RevisionIterator;
 import net.sf.statcvs.model.RevisionIteratorSummary;
 import net.sf.statcvs.model.UserPredicate;
-import net.sf.statcvs.output.xml.AuthorDocument;
+import net.sf.statcvs.output.xml.document.AuthorDocument;
 import net.sf.statcvs.util.IntegerMap;
 
 /**

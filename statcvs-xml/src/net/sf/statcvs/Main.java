@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Main.java,v $ 
-	Created on $Date: 2003-07-04 12:51:08 $ 
+	Created on $Date: 2003-07-04 15:17:27 $ 
 */
 package net.sf.statcvs;
 
@@ -38,7 +38,7 @@ import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.output.CommandLineParser;
 import net.sf.statcvs.output.ConfigurationException;
 import net.sf.statcvs.output.ConfigurationOptions;
-import net.sf.statcvs.output.HTMLOutput;
+import net.sf.statcvs.output.xml.HTMLRenderer;
 import net.sf.statcvs.output.xml.OutputSettings;
 
 /**
@@ -46,7 +46,7 @@ import net.sf.statcvs.output.xml.OutputSettings;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.6 2003-07-04 12:51:08 vanto Exp $
+ * @version $Id: Main.java,v 1.7 2003-07-04 15:17:27 vanto Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -168,7 +168,6 @@ public class Main {
 		logger.info("Generating report for " 
 					+ ConfigurationOptions.getProjectName()
 					+ " into " + ConfigurationOptions.getOutputDir());
-		logger.info("Using " + ConfigurationOptions.getCssHandler());
 	}
 
 	/**
@@ -206,26 +205,23 @@ public class Main {
 	 */
 	public static void generateSuite(CvsContent content) throws Exception {	
 		if (ConfigurationOptions.getOutputSuite() != null) {
-			logger.info("Reading output settings");
-			String filename = getSettingsPath() + "output.properties";
-			try {
-				OutputSettings.getInstance().read(filename);
-			}
-			catch (IOException e) {
-				logger.warning("Could not read settings: " 
-							   + e.getMessage());
-			}
+			ConfigurationOptions.setOutputSuite(HTMLRenderer.class.getName());
+		}
+		logger.info("Reading output settings");
+		String filename = getSettingsPath() + "output.properties";
+		try {
+			OutputSettings.getInstance().read(filename);
+		}
+		catch (IOException e) {
+			logger.warning("Could not read settings: " 
+						   + e.getMessage());
+		}
 
-			logger.info("Creating suite using "+ConfigurationOptions.getOutputSuite());
-		
-			Class c = Class.forName(ConfigurationOptions.getOutputSuite());
-			Method m = c.getMethod("generate", new Class[] { CvsContent.class });
-			m.invoke(null, new Object[] { content });
-		}
-		else {
-			logger.info("Creating output");
-			new HTMLOutput(content).createHTMLSuite();
-		}
+		logger.info("Creating suite using "+ConfigurationOptions.getOutputSuite());
+	
+		Class c = Class.forName(ConfigurationOptions.getOutputSuite());
+		Method m = c.getMethod("generate", new Class[] { CvsContent.class });
+		m.invoke(null, new Object[] { content });
 	}
 
     public static String getSettingsPath()

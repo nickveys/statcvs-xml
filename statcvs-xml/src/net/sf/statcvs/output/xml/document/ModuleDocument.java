@@ -18,15 +18,20 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ModuleDocument.java,v $ 
-	Created on $Date: 2003-07-01 22:56:39 $ 
+	Created on $Date: 2003-07-04 15:17:27 $ 
 */
-package net.sf.statcvs.output.xml;
+package net.sf.statcvs.output.xml.document;
 
 import net.sf.statcvs.I18n;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.output.ConfigurationOptions;
 import net.sf.statcvs.output.WebRepositoryIntegration;
+import net.sf.statcvs.output.xml.ChartElement;
+import net.sf.statcvs.output.xml.LinkElement;
+import net.sf.statcvs.output.xml.PeriodElement;
+import net.sf.statcvs.output.xml.ReportElement;
+import net.sf.statcvs.output.xml.ValueElement;
 import net.sf.statcvs.output.xml.chart.AbstractChart;
 import net.sf.statcvs.output.xml.report.AuthorsReport;
 import net.sf.statcvs.output.xml.report.CommitLogReport;
