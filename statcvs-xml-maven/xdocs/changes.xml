@@ -29,6 +29,10 @@
 
   <body>
 	<release version="2.2" date="2004-03-16">
+      <action dev="vanto" type="fix">
+	    Bug #1660 has been fixed, statcvs-xml uses now the same JVM
+	    arguments as maven does (MAVEN_OPTS).
+      </action>
       <action dev="squig" type="update">
 		The dependency on StatCvs-XML has been updated to version
 		0.9.2.

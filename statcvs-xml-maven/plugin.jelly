@@ -131,10 +131,19 @@
 	<ant:mkdir dir="${maven.gen.docs}/statcvs"/>
 	
 	<!-- run statcvs-xml -->
+	<ant:property environment="env"/>
+	<j:set var="maven_opts" value="${env.MAVEN_OPTS}"/>
+
 	<j:set var="include" value="${statcvs.include}"/>
 	<j:set var="exclude" value="${statcvs.exclude}"/>
 	<j:set var="weburl" value="${pom.repository.url}"/>
+
 	<ant:java classname="de.berlios.statcvs.xml.Main" fork="true">
+	  <j:if test="${!empty(maven_opts)}">
+	  	<!-- debug: <ant:echo message="MAVEN_OPTS is set to =
+	  ${maven_opts}"/> -->
+		<ant:jvmarg value="${maven_opts}"/>
+	  </j:if>
 	  <ant:arg line="-output-dir ${maven.gen.docs}/statcvs"/>
 	  <ant:arg line="-title '${statcvs.title}'"/>
 	  <ant:arg line="-renderer xdoc"/> 
