@@ -48,7 +48,7 @@ public class SizeChart extends AbstractPieChart {
 	 */
 	public SizeChart(CvsContent content, ReportSettings settings) 
 	{
-		super(settings, "size%1.png", I18n.tr("Size%1"));
+		super(settings, "size%1.png", I18n.tr("Lines Of Code%1"));
 		
 		Grouper grouper = settings.getGrouper(new DirectoryGrouper());
 		

@@ -24,6 +24,7 @@
 
   <document  filename="authors" title="Author Statistics">
     <report class="LocByAuthorChart" filename="loc_per_author.png"/>
+    <report class="SizeChart" filename="size_per_author.png" groupby="author"/>
     <report class="CommitTable"/>
     <report class="CommitChart" groupby="day" title="Activity"/>
     <report class="CommitChart" groupby="hour" title=""/>
