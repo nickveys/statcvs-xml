@@ -70,6 +70,26 @@ public class TextElement extends Element {
 		return this;
 	}
 
+	public TextElement addValue(String key, double value, String description) 
+	{
+		Element element = new Element("value");
+		element.setAttribute("key", name);
+		element.setAttribute("value", Formatter.formatNumber(value, 1));
+		element.setText(description);
+		addContent(element);
+		return this;
+	}
+
+	public TextElement addValue(String key, String value, String description)
+	{
+		Element element = new Element("value");
+		element.setAttribute("key", name);
+		element.setAttribute("value", value);
+		element.setText(description);
+		addContent(element);
+		return this;
+	}
+	
 	public TextElement addText(String text)
 	{
 		addContent(new Element("text").addContent(text));

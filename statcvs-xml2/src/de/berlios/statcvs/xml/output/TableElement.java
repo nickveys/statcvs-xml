@@ -56,13 +56,15 @@ public class TableElement extends Element
 		this.settings = settings;
 		this.headers = headers;
 		
-		Element row = new Element("tr");
-		for (int i = 0; i < headers.length; i++) {
-			if (showColumn(i + 1)) {
-				row.addContent(new Element("th").addContent(headers[i]));
+		if (headers != null) {
+			Element row = new Element("tr");
+			for (int i = 0; i < headers.length; i++) {
+				if (showColumn(i + 1)) {
+					row.addContent(new Element("th").addContent(headers[i]));
+				}
 			}
+			addContent(row);
 		}
-		addContent(row);
 	}
 	
 	public boolean showColumn(int i)
@@ -198,6 +200,13 @@ public class TableElement extends Element
 							.setAttribute("value", value)
 							.setAttribute("url", url));
 			return this;
+		}
+		
+		public RowElement addImage(String key, String src)
+		{
+			addContent(new Element("image")
+							.setAttribute("src", src));
+			return this;	
 		}
 		
 		public RowElement addDirectory(Directory dir) 

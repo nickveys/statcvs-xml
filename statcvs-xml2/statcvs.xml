@@ -8,6 +8,11 @@
       <setting key="vanto">Tammo van Lessen</setting>
     </authors>
     
+    <authorPics type="map">
+      <setting key="vanto">squig.png</setting>
+      <setting key="vanto">vanto.png</setting>
+    </authorPics>
+
     <projectName>StatCVS-XML</projectName>
     <outputDir>xdocs/statcvs-xml</outputDir>
     <renderer>xdoc</renderer>

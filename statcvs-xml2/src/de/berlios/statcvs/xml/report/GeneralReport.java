@@ -44,7 +44,7 @@ public class GeneralReport {
 			.addText(I18n.tr("Generated: {0} by StatCvs-XML {1}", new Date(), Main.VERSION))
 			.addValue("devcount", content.getAuthors().size(), I18n.tr("Developers"))
 			.addValue("filecount", content.getFiles().size(), I18n.tr("Files"))
-			.addValue("devcount", content.getRevisions().size(), I18n.tr("Revisions"))
+			.addValue("revcount", content.getRevisions().size(), I18n.tr("Revisions"))
 			.addValue("loc", content.getCurrentLOC(), I18n.tr("Lines of Code"));
 		root.addContent(text);
 		return new Report(root);

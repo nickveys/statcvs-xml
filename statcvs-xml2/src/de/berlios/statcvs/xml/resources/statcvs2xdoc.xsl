@@ -255,4 +255,16 @@
      </td>
   </xsl:template>
 
+  <xsl:template match="row/container">
+    <td>
+		<xsl:apply-templates select="*"/> 
+     </td>
+  </xsl:template>
+
+  <xsl:template match="row/image">
+    <td>
+	    <p align="center"><img src="{@src}"/></p>
+     </td>
+  </xsl:template>
+
 </xsl:stylesheet>

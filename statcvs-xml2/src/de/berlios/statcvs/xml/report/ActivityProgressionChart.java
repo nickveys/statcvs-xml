@@ -1,22 +1,13 @@
 package de.berlios.statcvs.xml.report;
 
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.font.FontRenderContext;
-import java.awt.font.LineMetrics;
-import java.awt.geom.Rectangle2D;
-import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
-import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.util.IntegerMap;
 
 import org.jfree.chart.JFreeChart;

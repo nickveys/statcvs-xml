@@ -580,4 +580,21 @@ public class ReportSettings extends Hashtable {
 			return author.getName();
 		}
 	}
+
+    /**
+     * @param author
+     * @param string
+     * @return
+     */
+    public String getAuthorPic(Author author, String defaultPic) {
+		Object o = get("authorPics", null);
+		if (o instanceof Map) {
+			Map map = (Map)o;
+			String pic = (String)map.get(author.getName());
+
+			return (pic == null)?defaultPic:pic;
+		} else {
+			return defaultPic;
+		}
+    }
 }
