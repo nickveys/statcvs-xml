@@ -18,7 +18,7 @@
     <outputDir>xdocs/statcvs-xml</outputDir>
     <renderer>xdoc</renderer>
     <include>src/de/berlios/statcvs/xml/**/*.java</include>
-    <include>xdocs/**/statcvs*.png</include>
+<!--    <include>xdocs/**/statcvs*.png</include> -->
     <modules type="map">
       <setting key="Report">**/report/*</setting>
       <setting key="Output">**/output/*</setting>

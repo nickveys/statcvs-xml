@@ -111,7 +111,7 @@ public class ActivityProgressionChart extends AbstractChart {
 	{
 		Map mapByDate = new LinkedHashMap();
 		// define 100% to correlate at least to 1
-		int max = 1;
+		int max = 0;
 		long diff = content.getLastDate().getTime() - content.getFirstDate().getTime();
 		long day = 24 * 60 * 60 * 1000; // 86400
 //		long windowSize 
@@ -146,10 +146,10 @@ public class ActivityProgressionChart extends AbstractChart {
 //					mapByDate.put(new Date(currentDate), null);
 //					
 //				}
-				if (fill > 0) {
+				if (fill > 1) {
 					mapByDate.put(new Date(currentDate + windowSize), null);
 				}
-				currentDate += (fill + 1) * windowSize;
+				currentDate += fill * windowSize;
 			}
 			commitsPerGroup.inc(grouper.getGroup(rev));
 		}
@@ -167,7 +167,7 @@ public class ActivityProgressionChart extends AbstractChart {
 				
 		int dateCount = mapByDate.size();
 		int numValues = dateCount * groupCount;
-		if (numValues == 0) {
+		if (numValues == 0 || max == 0) {
 			return null;
 		}
 		
@@ -176,24 +176,40 @@ public class ActivityProgressionChart extends AbstractChart {
 		Double[] oDoubleZ = new Double[numValues];
 		
 		it = mapByDate.keySet().iterator();
-		for (int x = 0; x < dateCount && it.hasNext(); x++) {
+		for (int x = 0; x < dateCount; x++) {
+			if (!it.hasNext()) {
+				throw new RuntimeException("Invalid date count");
+			}
 			Date date = (Date)it.next();
-			
-			Iterator it2 = grouper.getGroups(content, settings);
-			for (int y = 0; y < groupCount && it2.hasNext(); y++) {
-				Object group = it2.next();
 
-				int index = (x * groupCount) + y;
-				oDateX[index] = date;
-				oDoubleY[index] = new Double(y);
-				IntegerMap map = (IntegerMap)mapByDate.get(date);
-				if (map != null) {
+			IntegerMap map = (IntegerMap)mapByDate.get(date);
+			if (map != null) {
+				Iterator it2 = grouper.getGroups(content, settings);
+				for (int y = 0; y < groupCount; y++) {
+					if (!it2.hasNext()) {
+						throw new RuntimeException("Invalid group count");
+					}
+					Object group = it2.next();
+
+					int index = (x * groupCount) + y;
+					oDateX[index] = date;
+					oDoubleY[index] = new Double(y);
 					double value = (double)map.get(group) * 100.0 / max;
 					oDoubleZ[index] = (value != 0) ? new Double(value) : null;
 				}
 			}
+			else {
+				for (int y = 0; y < groupCount; y++) {
+					int index = (x * groupCount) + y;
+					oDateX[index] = date;
+					oDoubleY[index] = new Double(y);
+					//oDoubleZ[index] = null;
+				}
+			}
 		}
-				
+//		if (oDoubleZ[0] == null) {
+//			oDoubleZ[0] = new Double(0.0);
+//		}
 		return new DefaultContourDataset(null, oDateX, oDoubleY, oDoubleZ);		
 	}
 
