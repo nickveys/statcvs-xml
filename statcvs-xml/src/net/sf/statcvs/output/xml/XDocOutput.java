@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XDocOutput.java,v $
-	$Date: 2003-06-17 16:43:02 $ 
+	$Date: 2003-06-17 23:09:18 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -41,7 +41,7 @@ public class XDocOutput {
 	public static void generate(CvsContent content) 
 		throws IOException, TransformerException
 	{
-		StreamSource source = new StreamSource("CommitLogDocument2xdoc.xsl");
+		StreamSource source = new StreamSource("statcvs2xdoc.xsl");
 		Transformer transformer 
 			= TransformerFactory.newInstance().newTransformer(source);
 		XMLSuite.generate(content, new XMLOutput(transformer));
