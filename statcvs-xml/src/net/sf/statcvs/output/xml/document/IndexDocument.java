@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: IndexDocument.java,v $ 
-	Created on $Date: 2003-07-06 22:39:44 $ 
+	Created on $Date: 2003-07-07 11:36:10 $ 
 */
 package net.sf.statcvs.output.xml.document;
 
@@ -103,7 +103,7 @@ public class IndexDocument extends StatCvsDocument {
 			list.addContent(new LinkElement("commit_log", I18n.tr("Commit Log")));
 			//list.addContent(new LinkElement("loc", I18n.tr("Lines Of Code")));
 			list.addContent(new LinkElement("file_sizes", 
-											I18n.tr("File Sizes And Counts")));
+											I18n.tr("File Sizes and Counts")));
 			list.addContent(new LinkElement("dir_sizes", 
 											I18n.tr("Directory Sizes")));
 			list.addContent(new LinkElement("dir_activity", 

@@ -93,7 +93,7 @@
        <td><xsl:value-of select="@date"/></td>
        <td><xsl:value-of select="@author"/></td>
        <td>
-		  <b><xsl:text disable-output-escaping="yes">&lt;![CDATA[</xsl:text><xsl:value-of select="comment"/><xsl:text disable-output-escaping="yes">]]&gt;</xsl:text></b>
+		  <b><xsl:value-of select="comment"/></b>
 		  (<xsl:value-of select="@changedfiles"/><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('Files changed')"/>,
 		  <xsl:value-of select="@changedlines"/><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('Lines changed')"/>)
 		  <br/>
@@ -121,7 +121,6 @@
                  (+<xsl:value-of select="@added"/>
                  -<xsl:value-of select="@removed"/>)
               </xsl:if>
-
               <br/>
 		  </xsl:for-each>
        </td>
