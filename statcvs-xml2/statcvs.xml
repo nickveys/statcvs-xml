@@ -3,16 +3,7 @@
     <webRepository>
       http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml2/
     </webRepository>
-    <authors type="map">
-      <setting key="squig">Steffen Pingel</setting>
-      <setting key="vanto">Tammo van Lessen</setting>
-    </authors>
-    
-    <authorPics type="map">
-      <setting key="squig">http://steffenpingel.de/img/squig.png</setting>
-      <setting key="vanto">vanto.png</setting>
-    </authorPics>
-    
+
 	<showImages>true</showImages>
     <projectName>StatCVS-XML</projectName>
     <outputDir>xdocs/statcvs-xml</outputDir>

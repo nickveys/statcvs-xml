@@ -25,6 +25,7 @@ import java.io.Reader;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,7 +56,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * 
  * @author Steffen Pingel
  * @author Tammo van Lessen
- * @version $Id: Main.java,v 1.32 2004-07-27 02:45:37 squig Exp $
+ * @version $Id: Main.java,v 1.33 2004-11-10 15:33:56 squig Exp $
  */
 public class Main {
 
@@ -172,6 +173,44 @@ public class Main {
 		initLogger((Level)cmdlSettings.get("_logLevel"));
 		
 		ReportSettings settings = new ReportSettings(cmdlSettings);
+
+		// read settings from maven.xml
+		if (cmdlSettings.get("maven") != null) {
+		    File file = new File((String)cmdlSettings.get("maven"));
+		    if (file.exists()) {
+		        try {
+		            logger.info(I18n.tr("Reading project settings from {0}", file.getName()));
+		            SAXBuilder builder = new SAXBuilder();
+		            Document suite = builder.build(file);
+		            Element element = suite.getRootElement().getChild("developers");
+		            if (element != null) {
+		                for (Iterator it = element.getChildren().iterator(); it.hasNext();) {
+		                    Element developer = (Element)it.next();
+		                    String id = developer.getChildText("id");
+		                    if (id == null) {
+		                        continue;
+		                    }
+		                    if (developer.getChildText("name") != null) {
+		                        settings.setFullname(id, developer.getChildText("name"));
+		                    }
+		                    if (developer.getChildText("image") != null) {
+		                        settings.setAuthorPic(id, developer.getChildText("image"));
+		                    }
+		                    else if (developer.getChildText("url") != null) {
+		                        settings.setAuthorPic(id, developer.getChildText("url") + "/" + id + ".png");
+		                    }
+		                }
+		            }
+		        }
+		        catch (JDOMException e) {
+		            logger.info(I18n.tr("Could not read maven project file {0}: {1}",
+		                    		    cmdlSettings.get("maven"),
+		                    		    e.getLocalizedMessage()));
+		        }
+		    }
+		}
+
+		// read settings from statcvs.xml
 		File file = new File("statcvs.xml");
 		if (file.exists()) {
 			try {

@@ -19,6 +19,7 @@
 package de.berlios.statcvs.xml.output;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -643,4 +644,24 @@ public class ReportSettings extends Hashtable {
     			: id);
     }
     
+    public Map getOrCreateMap(String key)
+    {
+        Object o = get(key);
+        if (!(o instanceof Map)) {
+		    o = new HashMap();
+		    put(key, o);
+		}
+        return (Map)o;
+    }
+    
+	public void setFullname(String authorName, String fullName)
+	{
+		getOrCreateMap("authors").put(authorName, fullName);
+	}
+
+	public void setAuthorPic(String authorName, String filename)
+	{
+		getOrCreateMap("authorPics").put(authorName, filename);
+	}
+
 }

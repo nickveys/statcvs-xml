@@ -27,7 +27,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:output method="html" indent="yes" encoding="UTF-8"/>
-  <xsl:param name="ext"/>
+<!--  <xsl:param name="ext"/> -->
   <xsl:param name="customCss"/>
   <xsl:include href="statcvs2xdoc.xsl"/>
 

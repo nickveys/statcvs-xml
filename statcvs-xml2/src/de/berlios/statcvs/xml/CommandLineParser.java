@@ -29,7 +29,7 @@ import java.util.logging.Level;
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.13 2004-07-27 02:46:28 squig Exp $
+ * @version $Id: CommandLineParser.java,v 1.14 2004-11-10 15:33:56 squig Exp $
  */
 public class CommandLineParser {
 
@@ -122,6 +122,8 @@ public class CommandLineParser {
 				throw new InvalidCommandLineException("Missing argument for -title");
 			}
 			settings.put("projectName", popNextArg());
+		} else if (s.equals("maven")) {
+			settings.put("maven", "project.xml");
 		} else {
 			throw new InvalidCommandLineException("Unrecognized option -" + s);
 		}

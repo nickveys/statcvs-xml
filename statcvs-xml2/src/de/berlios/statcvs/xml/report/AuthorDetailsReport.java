@@ -48,7 +48,8 @@ public class AuthorDetailsReport {
 
 	private static final Logger logger = 
 		Logger.getLogger("de.berlios.statcvs.xml.report.AuthorDetailsReport");
-	private static final String DEFAULT_PIC = "resources" + File.separator + "dummy.png";
+	//private static final String DEFAULT_PIC = "resources" + File.separator + "dummy.png";
+	private static final String DEFAULT_PIC = "resources/dummy.png";
 	
 	public static Report generate(CvsContent content, ReportSettings settings) 
 	{
