@@ -23,6 +23,10 @@
       <action dev="vanto" type="update">
 		The directory tree has been improved.
       </action>
+      <action dev="squig" type="fix">
+        Bug #1724 (ArrayIndexOutOfBoundsException when running on
+        repositories with only a single commit) has been fixed.
+      </action>
       <action dev="vanto" type="fix">
         Bug #1726 (Exception in binary only directories) has been
         fixed.
@@ -33,12 +37,7 @@
       </action>
       <action dev="vanto" type="fix">
         Vertical alignment in table cells has been fixed (top instead center).
-      </action>
-      <action dev="squiq" type="fix">
-        Bug #1724 (ArrayIndexOutOfBoundsException (progression_by_module.png)) 
-        has been fixed.
-      </action>
-      
+      </action>      
 	</release>
 	<release version="0.9.2" date="2004-03-16">
       <action dev="vanto" type="update">
