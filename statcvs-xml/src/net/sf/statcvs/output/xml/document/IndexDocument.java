@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: IndexDocument.java,v $ 
-	Created on $Date: 2003-07-07 11:36:10 $ 
+	Created on $Date: 2003-07-24 01:14:22 $ 
 */
 package net.sf.statcvs.output.xml.document;
 
@@ -117,8 +117,10 @@ public class IndexDocument extends StatCvsDocument {
 		public LocChartReport() {
 			super(I18n.tr("Lines of Code"));
 			CvsContent content = IndexDocument.this.content;
-			addContent(new ChartElement(IndexDocument.this.charts.getLocChart()));
-			addContent(new ValueElement("loc", content
+			Element container = new ElementContainer("locchart");
+			addContent(container);
+			container.addContent(new ChartElement(IndexDocument.this.charts.getLocChart()));
+			container.addContent(new ValueElement("loc", content
 					.getCurrentLOC(),I18n.tr("Lines Of Code")));
 		}
 	}

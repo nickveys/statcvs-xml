@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ModuleDocument.java,v $ 
-	Created on $Date: 2003-07-06 21:26:39 $ 
+	Created on $Date: 2003-07-24 01:14:22 $ 
 */
 package net.sf.statcvs.output.xml.document;
 
@@ -30,6 +30,7 @@ import net.sf.statcvs.output.util.WebRepositoryIntegration;
 import net.sf.statcvs.output.xml.CvsCharts;
 import net.sf.statcvs.output.xml.chart.AbstractChart;
 import net.sf.statcvs.output.xml.element.ChartElement;
+import net.sf.statcvs.output.xml.element.ElementContainer;
 import net.sf.statcvs.output.xml.element.LinkElement;
 import net.sf.statcvs.output.xml.element.PeriodElement;
 import net.sf.statcvs.output.xml.element.ReportElement;
@@ -38,6 +39,8 @@ import net.sf.statcvs.output.xml.report.AuthorsReport;
 import net.sf.statcvs.output.xml.report.CommitLogReport;
 import net.sf.statcvs.output.xml.report.ModulesTreeReport;
 import net.sf.statcvs.util.DateUtils;
+
+import org.jdom.Element;
 
 /**
  * ModuleDocument
@@ -85,8 +88,10 @@ public class ModuleDocument extends StatCvsDocument {
 
 		public LocReport() {
 			super(I18n.tr("Lines of Code"));
-			addContent(new ChartElement(charts.getLocPerModuleChart(directory)));
-			addContent(new ValueElement("loc", directory.getCurrentLOC(),I18n.tr("Lines Of Code")));
+			Element container = new ElementContainer("locchart");
+			addContent(container);
+			container.addContent(new ChartElement(charts.getLocPerModuleChart(directory)));
+			container.addContent(new ValueElement("loc", directory.getCurrentLOC(),I18n.tr("Lines Of Code")));
 		}
 		
 	}
