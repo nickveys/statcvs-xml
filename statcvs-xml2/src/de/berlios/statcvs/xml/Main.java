@@ -55,13 +55,13 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * 
  * @author Steffen Pingel
  * @author Tammo van Lessen
- * @version $Id: Main.java,v 1.26 2004-03-07 20:06:32 vanto Exp $
+ * @version $Id: Main.java,v 1.27 2004-03-07 22:31:22 squig Exp $
  */
 public class Main {
 
 	private static Logger logger = Logger.getLogger("de.berlios.statcvs.xml.Main");
 
-	public static final String VERSION = "0.9.1";
+	public static final String VERSION = "@VERSION@";
 	
 	/**
 	 * Main method of StatCvs
@@ -113,7 +113,7 @@ public class Main {
 		System.out.println(
 		//max. 80 chars
 		//         12345678901234567890123456789012345678901234567890123456789012345678901234567890
-				  "Usage: java -jar statcvs-xml-" + VERSION + "-full.jar [options] [logfile [directory]]\n"
+				  "Usage: java -jar @JAR@ [options] [logfile [directory]]\n"
 				+ "\n"
 				+ "Optional parameters:\n"
 				+ "  <logfile>          path to the cvs logfile of the module (default: cvs.log)\n"
@@ -192,7 +192,7 @@ public class Main {
 	public static void initLogger(Level level) 
 	{
 		if (level == null) {
-			level = Level.OFF;
+			level = Level.WARNING;
 		}
 		
 		ConsoleHandler ch = new ConsoleHandler();

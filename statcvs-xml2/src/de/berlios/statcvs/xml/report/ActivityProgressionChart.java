@@ -2,9 +2,11 @@ package de.berlios.statcvs.xml.report;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
@@ -69,64 +71,74 @@ public class ActivityProgressionChart extends AbstractChart {
 		}
 
  		ValueAxis xAxis = new DateAxis(I18n.tr("Date"));
-		
+
 		SymbolicAxis yAxis = new SymbolicAxis(grouper.getName(), (String[])groupNames.toArray(new String[0])); 
 		yAxis.setInverted(true);
+		yAxis.setLowerMargin(0.0);
+		yAxis.setUpperMargin(0.0);
 
 		ColorBar zAxis = new ColorBar(I18n.tr("Commit Activity (%)"));
 		zAxis.getAxis();
 	
 		ContourPlot plot = new ContourPlot(data, xAxis, yAxis, zAxis);
-		plot.setRenderAsPoints(true);
+		//plot.setRenderAsPoints(true);
 		// don't use plot units for ratios when x axis is date
 		plot.setDataAreaRatio(0.0);
 		plot.setColorBarLocation(RectangleEdge.BOTTOM);
-		
+
 		return new JFreeChart(settings.getProjectName(), null, plot, false);
 	}
 
 	private ContourDataset createDataset(Grouper grouper)
 	{
-		Hashtable mapByDate = new Hashtable();
+		Map mapByDate = new LinkedHashMap();
 		// define 100% to correlate at least to 1
 		int max = 1;
 		long diff = content.getLastDate().getTime() - content.getFirstDate().getTime();
-//		long day = 24 * 60 * 60 * 1000; // 86400
+		long day = 24 * 60 * 60 * 1000; // 86400
 //		long windowSize 
 //			= (diff > 10 * 30 * day) 
 //			? 30 * day
 //			: (diff > 10 * 7 * day)
 //			? 7 * day
 //			: day;
-		long windowSize = Math.max(diff / 40, 1);
+		long windowSize = Math.max(diff / 60, 1);
 		
-		Date currentDate = null;
 		IntegerMap commitsPerGroup = new IntegerMap();
 		Iterator it = settings.getRevisionIterator(content);
-		long windowStart = 0;
+		long currentDate = -1;
 		while (it.hasNext()) {
 			CvsRevision rev = (CvsRevision)it.next();
 			Date date = rev.getDate();
-			if (currentDate == null) {
-				currentDate = date;
-				windowStart = date.getTime();
+			if (currentDate == -1) {
+				currentDate = date.getTime();
 			}
-			else if (date.getTime() > windowStart + windowSize) {
+			else if (date.getTime() > currentDate + windowSize) {
 				// save old map
 				max = Math.max(commitsPerGroup.max(), max);
-				mapByDate.put(currentDate, commitsPerGroup);
-				
+				mapByDate.put(new Date(currentDate), commitsPerGroup);
+								
 				// create new map
 				commitsPerGroup = new IntegerMap();
-				currentDate = date;
-				windowStart += ((date.getTime() - windowStart) / windowSize + 1) * windowSize;
+				
+				// hack: fill in intermediate values
+				int fill = (int)((date.getTime() - currentDate) / windowSize);
+//				for (int i = 0; i < fill; i++) {
+//					currentDate += windowSize;
+//					mapByDate.put(new Date(currentDate), null);
+//					
+//				}
+				if (fill > 0) {
+					mapByDate.put(new Date(currentDate + windowSize), null);
+				}
+				currentDate += (fill + 1) * windowSize;
 			}
 			commitsPerGroup.inc(grouper.getGroup(rev));
 		}
 
-		if (currentDate != null) {
+		if (currentDate != -1) {
+			mapByDate.put(new Date(currentDate), commitsPerGroup);
 			max = Math.max(commitsPerGroup.max(), max);
-			mapByDate.put(currentDate, commitsPerGroup);
 		}
 
 		Iterator it3 = grouper.getGroups(content, settings);
@@ -156,8 +168,11 @@ public class ActivityProgressionChart extends AbstractChart {
 				int index = (x * groupCount) + y;
 				oDateX[index] = date;
 				oDoubleY[index] = new Double(y);
-				double value = (double)((IntegerMap)mapByDate.get(date)).get(group) * 100.0 / max;
-				oDoubleZ[index] = (value != 0) ? new Double(value) : null;
+				IntegerMap map = (IntegerMap)mapByDate.get(date);
+				if (map != null) {
+					double value = (double)map.get(group) * 100.0 / max;
+					oDoubleZ[index] = (value != 0) ? new Double(value) : null;
+				}
 			}
 		}
 				
