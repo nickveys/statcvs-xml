@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+<!--  <extend>${basedir}/../project.xml</extend> -->
+  <pomVersion>3</pomVersion>
+  <id>maven-statcvs-plugin</id>
+  <name>Maven StatCvs-XML Plug-in</name>
+  <currentVersion>1.0</currentVersion>
+  <description/>
+  <shortDescription>Provides CVS statistics</shortDescription>
+  <logo>/images/statcvslogo.png</logo>
+  <url>http://statcvs-xml.berlios.de/maven-statcvs-xml-plugin/</url>
+  <siteDirectory>/home/groups/statcvs-xml/htdocs/maven-statcvs-xml-plugin/</siteDirectory>
+  <repository>
+    <connection>scm:cvs:pserver:anonymous@cvs.berlios.de:/cvsroot/statcvs-xml:statcvs-xml/maven-statcvs-xml-plugin</connection>
+    <url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/maven-statcvs-xml-plugin</url>
+  </repository>
+  <issueTrackingUrl>
+	http://developer.berlios.de/tracker/?group_id=872
+  </issueTrackingUrl>
+  <developers>
+    <developer>
+      <name>Steffen Pingel</name>
+      <id>squig</id>
+      <roles>
+      	<role>Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
+      <name>Tammo van Lessen</name>
+      <id>vanto</id>
+      <roles>
+	    <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>dIon Gillard</name>
+      <id>dion</id>
+      <email>dion@multitask.com.au</email>
+      <organization>Multitask Consulting</organization>
+      <roles>
+        <role>Documentation</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Emmanuel Venisse</name>
+      <id>evenisse</id>
+      <email>evenisse@ifrance.com</email>
+      <organization>Fi System</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Vincent Massol</name>
+      <id>vmassol</id>
+      <email>vmassol@octo.com</email>
+      <organization>Octo Technology</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+  </developers>
+  <dependencies>
+    <dependency>
+      <id>statcvs-xml</id>
+      <version>0.9</version>
+      <properties>
+        <classloader>root.maven</classloader>
+      </properties>
+    </dependency>
+    <dependency>
+      <id>jfreechart</id>
+      <version>0.9.8</version>
+      <properties>
+        <classloader>root.maven</classloader>
+      </properties>
+    </dependency>
+    <dependency>
+      <id>jcommon</id>
+      <version>0.8.2</version>
+      <properties>
+        <classloader>root.maven</classloader>
+      </properties>
+    </dependency>
+  </dependencies>
+  <reports>
+    <report>maven-changes-plugin</report>
+  </reports>
+</project>

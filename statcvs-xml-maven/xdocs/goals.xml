@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+  <properties>
+    <title>Maven StatCvs-XML Plug-in Goals</title>
+    <author email="dion@apache.org">dIon Gillard</author>
+  </properties>
+  <body>
+    <goals>
+      <goal>
+        <name>statcvs</name>
+        <description>Generate CVS statistics for the current CVS project</description>
+      </goal>
+    </goals>
+  </body>
+</document>

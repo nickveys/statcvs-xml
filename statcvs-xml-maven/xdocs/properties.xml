@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+  <properties>
+    <title>Maven StatCvs-XML Plug-in Properties</title>
+    <author email="dion@apache.org">dIon Gillard</author>
+  </properties>
+  <body>
+    <section name="Maven StatCvs-XML Plug-in Settings">
+      <table>
+        <tr>
+          <th>Property</th>
+          <th>Optional?</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>maven.statcvs.web.repositorytype</td>
+          <td>Yes</td>
+          <td>
+            <p>Type of your web repository.<br/>
+   			   Possible values are:
+   			   <ul>
+   			   <li><code>cvsweb</code></li>
+   			   <li><code>viewcvs</code></li>
+   			   <li><code>chora</code></li>
+   			   </ul>
+			</p>
+          </td>
+        </tr>
+      </table>
+    </section>
+  </body>
+</document>
