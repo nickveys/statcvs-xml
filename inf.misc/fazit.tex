@@ -1,7 +1,92 @@
-\frame{\titlepage}
-\section[Outline]{}
-\frame{\tableofcontents}
+\section[Tipps]{Tipps}
+\subsection[Weitere Goals]{Weitere Hilfreiche Goals}
 
-\section{Tipps}
-\subsection{Console, Eclipse, JBuilder}
+\frame[all:1]{
+  \frametitle{Weitere Hilfreiche Goals}
+
+  \begin{itemize}
+  \item console: Konsoleneingabe zum Aufruf von Goals
+    \begin{itemize}
+    \item (+) schnelles sukessives Aufrufen von Goals
+    \item (-) unzureichende Speicherfreigabe führt zu OutOfMemory
+      exception
+    \end{itemize}
+  \item eclipse: Generierung von Eclipse Projekt Dateien
+    \begin{itemize}
+    \item Berücksichtigung aller Dependencies
+    \item Anlegen der MAVEN\_HOME Variable in Eclipse notwendig
+    \end{itemize}
+  \item jbuilder: Generierung von JBuilder Projekt Dateien
+  \item plugin
+  \item release
+  \end{itemize}
+}
+
+\subsection{Command Line}
+
+\frame[all:1]{
+  \frametitle{Command Line Optionen}
+  
+  \begin{itemize}
+  \item \begin{alltt}-g\end{alltt} Eine Liste aller Goals anzeigen
+  \item -o Offline Modus. Nur Goals ausführen, die keine Internet
+    Verbindung benötigen
+  \item -p Project Datei angeben. Nützlich für aufrufe aus nicht Projekt
+    Verzeichnissen (z.B. in einem cron job).
+  \end{itemize}
+}
+
+\subsection{Customizing}
+
+\frame[all:1]{
+  \frametitle{Customizing}
+  
+  \begin{itemize}
+  \item Jelly: Code und Layout bunt durcheinander gemischt
+  \item xnap.jsl Ein Beispiel für ein 3 Column Layout
+  \item Includieren von php Skripten 
+  \end{itemize}
+
+\begin{alltt}
+<jsl:template match="include" trim="false">
+  <x:set var="_file" select="string(@file)"/>
+  <jsl:comment>#include virtual="${_file}"</jsl:comment>
+</jsl:template>
+\end{alltt}
+
+\begin{alltt}
+<section name="FAQ">
+<p><include file="faq.php"/></p>
+\end{alltt}
+
+}
+
 \section{Zusammenfassung}
+
+\frame{
+  \frametitle{Zusammenfassung}
+
+  \begin{itemize}
+  \item Maven ist ein tolles Tool
+    \begin{itemize}
+    \item Sehr einfache Erstellung von Projekt Seiten
+    \item Sehr einfache Erhebung von Projekt und Prozess Metriken
+    \item Sehr einfaches Build und Release
+    \item Sehr einfaches Deployment 
+    \item Automatisches Auflösen von Dependencies
+    \end{itemize}  
+  \item Manches ist noch nicht ganz ausgereift
+    \begin{itemize}
+    \item Lange Startzeiten (auf marvin ca. 16s)
+    \item Schwieriges Customizing der Webseiten wegen Jelly
+    \item Keine unterstützung für I18n
+    \item Viele Reports sind Java spezifisch
+    \item Ohne Ende Leerzeilen in den generierten Webseiten
+    \end{itemize}
+  \end{itemize}  
+}
+  
+
+%%% Local Variables: 
+%%% TeX-master: "index"
+%%% End: 
