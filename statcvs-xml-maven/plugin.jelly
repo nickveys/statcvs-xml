@@ -1,5 +1,23 @@
 <?xml version="1.0"?>
 
+<!-- 
+/*
+ * Copyright 2001-2004 The Apache Software Foundation.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ -->
+
 <!-- ==================================================================
        Generate CVS statistics on the current CVS project
         
@@ -23,6 +41,75 @@
     </j:if>
   </goal>
 
+  <j:set var="scmMethod" value="${maven.scm.method}"/>
+
+  <!--==================================================================-->
+  <!-- Goal to validate SCM properties [copied from scm plugin]         -->
+  <!--==================================================================-->
+  <goal name="statcvs:parse-connection">
+    <j:set var="checkValue" value="${maven.scm.ignore.pom.connection}"/>
+    <j:if test="${!checkValue}">
+      <j:set var="checkValue" value="${maven.scm.ignore.pom.developerConnection}"/>
+      <j:if test="${!checkValue}">
+        <j:set var="value" value="${pom.repository.developerConnection}"/>
+        <j:if test="${!empty(value)}">
+          <echo>Using connection: ${pom.repository.developerConnection}</echo>
+          <j:set var="conn" value="${pom.repository.developerConnection}" />
+        </j:if>
+      </j:if>
+
+      <j:if test="${conn == null}">
+        <j:set var="value" value="${pom.repository.connection}"/>
+        <j:if test="${!empty(value)}">
+          <echo>Using connection: ${pom.repository.connection}</echo>
+          <j:set var="conn" value="${pom.repository.connection}" />
+        </j:if>
+      </j:if>
+    </j:if>
+
+    <j:if test="${conn != null}">
+      <j:set var="delim" value=":"/>
+      <j:if test="${value.length() gt 3}">
+        <j:set var="delim" value="${value.substring(3, 4)}"/>
+      </j:if>
+      <util:tokenize var="tokens" delim="${delim}">${conn}</util:tokenize>
+      <j:if test="${tokens[0] != 'scm'}">
+        <ant:fail>Invalid repository connection format</ant:fail>
+      </j:if>
+      <j:set var="maven.scm.method" value="${tokens[1]}"/>
+      <j:set var="scmMethod" value="${maven.scm.method}"/>
+      <log:info>Using SCM method: ${scmMethod}</log:info>
+      <j:if test="${scmMethod == 'cvs'}">
+        <j:choose>
+          <j:when test="${tokens[2] == 'local'}">
+            <j:set var="maven.scm.cvs.root" value=":${tokens[2]}:${tokens[3]}"/>
+            <j:set var="maven.scm.cvs.module" value="${tokens[4]}"/>
+          </j:when>
+          <j:otherwise>
+            <j:set var="maven.scm.cvs.root" value=":${tokens[2]}:${tokens[3]}:${tokens[4]}"/>
+            <j:set var="maven.scm.cvs.module" value="${tokens[5]}"/>
+          </j:otherwise>
+        </j:choose>
+        <log:info>Using CVSROOT: ${maven.scm.cvs.root}</log:info>
+        <log:info>Using module: ${maven.scm.cvs.module}</log:info>
+      </j:if>
+    </j:if>
+  </goal>
+
+  <goal name="statcvs:validate" prereqs="statcvs:parse-connection">
+    <j:choose>
+      <j:when test="${scmMethod == 'cvs'}">
+        <j:set var="cvsModule" value="${maven.scm.cvs.module}"/>
+        <j:if test="${empty(cvsModule)}">
+          <ant:fail>You must specify maven.scm.cvs.module</ant:fail>
+        </j:if>
+      </j:when>
+      <j:otherwise>
+        <ant:fail>Unknown SCM method: '${maven.scm.method}'</ant:fail>
+      </j:otherwise>
+    </j:choose>
+  </goal>
+
   <goal name="statcvs:init-variables">
 	<!-- set common variables -->
 	<j:set var="statcvs.logfile" 
@@ -31,11 +118,11 @@
 	<j:set var="history" value="${statcvs.history}"/>
 	  
 	<!-- parse cvs connection string by calling scm plugin -->
-	<attainGoal name="scm:validate"/>
-	<j:set var="cvs.root" value="${pom.getPluginContext('maven-scm-plugin').getVariable('maven.scm.cvs.root')}"/>
-	<j:set var="cvs.rsh" value="${pom.getPluginContext('maven-scm-plugin').getVariable('maven.scm.cvs.rsh')}"/>
-	<j:set var="cvs.quiet" value="${pom.getPluginContext('maven-scm-plugin').getVariable('maven.scm.cvs.quiet')}"/>
-	  <j:set var="cvs.module" value="${pom.getPluginContext('maven-scm-plugin').getVariable('maven.scm.cvs.module')}"/>
+	<attainGoal name="statcvs:validate"/>
+	<j:set var="cvs.root" value="${maven.scm.cvs.root}"/>
+	<j:set var="cvs.rsh" value="${maven.scm.cvs.rsh}"/>
+	<j:set var="cvs.quiet" value="${maven.scm.cvs.quiet}"/>
+	  <j:set var="cvs.module" value="${maven.scm.cvs.module}"/>
 	
 	<j:if test="${history}">
 	  <j:set var="statcvs.repository" 
