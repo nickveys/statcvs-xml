@@ -14,7 +14,7 @@
 
   <document  filename="recent_activity" title="Recent Activity">
     <settings>
-      <inputFilter>util.atMostDaysOld(rev.getDate(), 1)</inputFilter> 
+      <inputFilter>util.atMostDaysOld(rev.getDate(), 30)</inputFilter> 
     </settings>
     <report class="CommitTable" groupby="author"/>
     <report class="CommitTable" groupby="file"/>
