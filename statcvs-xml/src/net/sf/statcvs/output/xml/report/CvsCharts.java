@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsCharts.java,v $
-	$Date: 2003-06-28 11:12:27 $ 
+	$Date: 2003-06-28 11:39:52 $ 
 */package net.sf.statcvs.output.xml.report;
 
 import java.util.HashMap;
@@ -158,7 +158,7 @@ public class CvsCharts {
 	public AbstractChart getLocPerModuleChart(Directory directory) {
 		AbstractChart lpm = (AbstractChart)moduleLocCharts.get(directory);
 		if (lpm == null) {
-			lpm = new LocChart(directory);
+			lpm = new LocChart(content, directory);
 			moduleLocCharts.put(directory, lpm);
 		}
 		return (lpm.isRendered())?lpm:null;
