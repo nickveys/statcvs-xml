@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommitLogReport.java,v $
-	$Date: 2003-06-24 17:40:11 $ 
+	$Date: 2003-06-24 17:45:39 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.statcvs.I18n;
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.Commit;
 import net.sf.statcvs.model.CommitListBuilder;
@@ -58,7 +59,7 @@ public class CommitLogReport extends ReportElement {
 	 */
 	private CommitLogReport() 
 	{
-		super("commitlog");
+		super(I18n.tr("Commit Log"));
 		commitsEl = new Element("commitlog");
 		addContent(commitsEl);		
 	}
