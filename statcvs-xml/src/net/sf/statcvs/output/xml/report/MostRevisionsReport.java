@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: MostRevisionsReport.java,v $
-	$Date: 2003-06-24 19:18:59 $ 
+	$Date: 2003-06-24 22:48:42 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -30,6 +30,8 @@ import net.sf.statcvs.I18n;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.FilesRevisionCountComparator;
+import net.sf.statcvs.output.ConfigurationOptions;
+import net.sf.statcvs.output.WebRepositoryIntegration;
 
 import org.jdom.Element;
 
@@ -40,6 +42,7 @@ import org.jdom.Element;
  */
 public class MostRevisionsReport extends ReportElement {
 
+	public static final int MAX_ITEMS = 20;
 	private CvsContent content;
 	
 	/**
@@ -47,7 +50,7 @@ public class MostRevisionsReport extends ReportElement {
 	 */
 	public MostRevisionsReport(CvsContent content) 
 	{
-		super(I18n.tr("Files With Most Revisions"));
+		super(I18n.tr("Files With Most Revisions (TOP {0})", new Integer(MAX_ITEMS)));
 		this.content = content;
 		createReport();
 	}
@@ -57,6 +60,7 @@ public class MostRevisionsReport extends ReportElement {
 		
 		List files = content.getFiles();
 		Collections.sort(files, new FilesRevisionCountComparator());
+		files = files.subList(0, MAX_ITEMS);
 		Iterator it = files.iterator();
 		while (it.hasNext()) {
 			CvsFile file = (CvsFile) it.next();
@@ -64,10 +68,16 @@ public class MostRevisionsReport extends ReportElement {
 				continue;
 			}
 
+			WebRepositoryIntegration webRepository = ConfigurationOptions.getWebRepository();
+			
 			Element fileEl = new Element("file");
 			fileEl.setAttribute("name", file.getFilenameWithPath());
 			fileEl.setAttribute("loc", ""+file.getCurrentLinesOfCode());
 			fileEl.setAttribute("revisions", ""+file.getRevisions().size());
+			if (webRepository != null) {
+				fileEl.setAttribute("url", webRepository.getFileViewUrl(file));				
+			}
+
 			filesEl.addContent(fileEl);
 		}
 

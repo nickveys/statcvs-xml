@@ -4,9 +4,12 @@
    A simple XSL file from Tammo van Lessen
    Transforms Commitlog to xdoc
 -->
-
+<!-- 
+	TODO: make the a href only if url-attrib is set!!! 
+-->
 <xsl:stylesheet version="1.0"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:func="http://statcvs-xml.berlios.de/functions">
 
   <xsl:template match="document">
     <document>
@@ -54,7 +57,12 @@
 		<xsl:for-each select="files/file">
 		  <xsl:sort select="@authors" order="descending"/>
 		  <tr>
-		    <td><xsl:value-of select="@name"/></td>
+            <td>
+            <xsl:call-template name="func:make-link">
+				<xsl:with-param name="text" select="@name"/>
+				<xsl:with-param name="url" select="@url"/>
+            </xsl:call-template>
+			</td>
 		    <td><xsl:value-of select="@authors"/></td>
 		  </tr>
 		</xsl:for-each>
@@ -71,11 +79,19 @@
 		  <xsl:value-of select="@changedlines"/> Lines changed)
 		  <br/>
 		  <xsl:for-each select="files/file">
-              <xsl:element name="a">
+              <!--<xsl:element name="a">
                    <xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute>
                    <xsl:value-of select="@directory"/>
                    <xsl:value-of select="@name"/><xsl:text> </xsl:text><xsl:value-of select="@revision"/>
-              </xsl:element>
+              </xsl:element> -->
+              <xsl:call-template name="func:make-link">
+				<xsl:with-param name="text">
+				   <xsl:value-of select="@directory"/>
+                   <xsl:value-of select="@name"/><xsl:text> </xsl:text><xsl:value-of select="@revision"/>
+				</xsl:with-param>
+				<xsl:with-param name="url" select="@url"/>
+              </xsl:call-template>
+              
               <xsl:if test="@action = 'added'">
                 <font color="green">added <xsl:value-of select="@lines"/></font>
               </xsl:if>
@@ -147,7 +163,12 @@
       	</tr>
 		<xsl:for-each select="files/file">
 		  <tr>
-		    <td><xsl:value-of select="@name"/></td>
+            <td>
+            <xsl:call-template name="func:make-link">
+				<xsl:with-param name="text" select="@name"/>
+				<xsl:with-param name="url" select="@url"/>
+            </xsl:call-template>
+			</td>
 		    <td><xsl:value-of select="@loc"/></td>
 		  </tr>
 		</xsl:for-each>
@@ -189,7 +210,12 @@
       	</tr>
 		<xsl:for-each select="files/file">
 		  <tr>
-		    <td><xsl:value-of select="@name"/></td>
+            <td>
+            <xsl:call-template name="func:make-link">
+				<xsl:with-param name="text" select="@name"/>
+				<xsl:with-param name="url" select="@url"/>
+            </xsl:call-template>
+			</td>
 		    <td><xsl:value-of select="@revisions"/></td>
 		  </tr>
 		</xsl:for-each>
@@ -224,4 +250,21 @@
     </xsl:copy>
   </xsl:template>
 
+  <!-- FUNCTIONS -->
+  <xsl:template name="func:make-link">
+    <xsl:param name="url"/>
+    <xsl:param name="text"/>
+	<xsl:choose>
+		<xsl:when test="$url">
+              <xsl:element name="a">
+                <xsl:attribute name="href"><xsl:value-of select="$url"/></xsl:attribute>
+                <xsl:value-of select="$text"/>
+              </xsl:element>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="$text"/>
+		</xsl:otherwise>
+	</xsl:choose>
+  </xsl:template>
+  
 </xsl:stylesheet>
