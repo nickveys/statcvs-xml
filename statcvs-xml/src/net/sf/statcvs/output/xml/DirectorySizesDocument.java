@@ -18,8 +18,9 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: DirectorySizesDocument.java,v $ 
-	Created on $Date: 2003-06-17 23:33:53 $ 
-*/package net.sf.statcvs.output.xml;
+	Created on $Date: 2003-06-18 17:36:00 $ 
+*/
+package net.sf.statcvs.output.xml;
 
 import java.util.Iterator;
 
@@ -42,39 +43,45 @@ import org.jdom.Element;
  */
 public class DirectorySizesDocument extends StatCvsDocument {
 
-	private CvsContent docContent;
+	private CvsContent cvsContent;
 	
 	/**
 	 * @param element
 	 * @param filename
 	 */
 	public DirectorySizesDocument(CvsContent content) {
-		super(new Element("document"), "dir_sizes");
-		docContent = content;
-		// set doc title
-		getRootElement().setAttribute("title", "Module sizes");
-		Element report = new Element("report");
-		getRootElement().addContent(report);
-		report.setAttribute("title", "Module Sizes");
-		report.addContent(new Element("img")
-			.setAttribute("src", "module_sizes.png"));
-		report.addContent(getModulesElement(content));		
+		super("dir_sizes");
+		cvsContent = content;
+		
+		Element root = new Element("document");
+		root.setAttribute("title", "Module Sizes");
+		setRootElement(root);
+		
+		root.addContent(getModulesReport());
+				
 	}
 
 	/**
 	 * @see net.sf.statcvs.output.xml.StatCvsDocument#getCharts()
 	 */
 	public Chart[] getCharts() {
-		return new Chart[] {new PieChart(docContent, docContent.getModuleName(),
+		return new Chart[] {new PieChart(cvsContent, cvsContent.getModuleName(),
 			Messages.getString("PIE_MODSIZE_SUBTITLE"),
 			"module_sizes.png", null, PieChart.FILTERED_BY_REPOSITORY)};
 	}
 
-	private static Element getModulesElement(CvsContent content) {
-		RevisionIterator revs = content.getRevisionIterator();
+	private Element getModulesReport() {
+		RevisionIterator revs = cvsContent.getRevisionIterator();
 		IntegerMap dirChanges = new IntegerMap();
 		IntegerMap dirLoC = new IntegerMap();
+
+		Element report = new Element("report");
+		report.setAttribute("title", "Module Sizes");
+		report.addContent(new Element("img")
+			.setAttribute("src", "module_sizes.png"));
+
 		Element list = new Element("modules");		
+		report.addContent(list);
 		while (revs.hasNext()) {
 			CvsRevision rev = revs.next();
 			Directory dir = rev.getFile().getDirectory();
@@ -94,7 +101,7 @@ public class DirectorySizesDocument extends StatCvsDocument {
 			el.setAttribute("linesPercent", ""+dirLoC.getPercent(key));
 			list.addContent(el);			
 		}
-		return list;
+		return report;
 	}
 
 }
