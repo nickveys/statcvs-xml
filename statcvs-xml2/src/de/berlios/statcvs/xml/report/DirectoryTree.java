@@ -84,6 +84,7 @@ public class DirectoryTree {
 		{
 			FileHelper.copyResource("resources/folder.png", outputPath);
 			FileHelper.copyResource("resources/folder-deleted.png", outputPath);
+			FileHelper.copyResource("resources/folder-open.png", outputPath);
 		}
 
 	}

@@ -216,12 +216,17 @@
       </xsl:call-template>
       <xsl:choose>
          <xsl:when test="@removed"><img src="folder-deleted.png"/></xsl:when>
-         <xsl:otherwise><img src="folder.png"/></xsl:otherwise>
+         <xsl:when test="((@depth = following::directoryTree/@depth) or (count(following::directoryTree) = 0)) and not(@removed)"><img src="folder.png"/></xsl:when>
+         <xsl:otherwise><img src="folder-open.png"/></xsl:otherwise>
       </xsl:choose>
       <xsl:call-template name="func:make-link">
  		<xsl:with-param name="text" select="@name"/>
 		<xsl:with-param name="localurl" select="ds:getDirectoryFilename(@path)"/>
       </xsl:call-template>
+      <xsl:value-of select="(@depth = following::directoryTree/@depth) or (count(following::directoryTree) = 0)"/>
+      <xsl:value-of select="@depth"/>-
+      <xsl:value-of select="following::*/@depth"/>
+      <xsl:value-of select="count(following::directoryTree) = 0"/>
      </td>
   </xsl:template>
 
