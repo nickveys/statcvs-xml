@@ -56,7 +56,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * 
  * @author Steffen Pingel
  * @author Tammo van Lessen
- * @version $Id: Main.java,v 1.33 2004-11-10 15:33:56 squig Exp $
+ * @version $Id: Main.java,v 1.33.2.1 2005-03-14 03:31:41 squig Exp $
  */
 public class Main {
 
@@ -273,7 +273,7 @@ public class Main {
 		logger.info("Parsing CVS log '" + logFilename + "'");
 		RepositoryFileManager repFileMan
 			= new RepositoryFileManager(settings.getString("localRepository", "."));
-		Builder builder = new Builder(repFileMan, includeMatcher, excludeMatcher);
+		Builder builder = new Builder(repFileMan, includeMatcher, excludeMatcher, settings.getString("branch"));
 		if (builder.getProjectName() != null) {
 			settings.put("projectName", builder.getProjectName());
 		}
