@@ -84,7 +84,7 @@
 \frame{
   \frametitle{Style Guide Checking}
 
-  {\Large Jalopy Plugin}
+  {\bf Jalopy Plugin}
   \begin{itemize}
   \item Formatiert Source Code ahand von Regeln
   \item Transformiert unter anderem
@@ -93,11 +93,11 @@
     \item Leerzeichen
     \item Zeilenumbrüche
     \end{itemize}
-  \item Konfiguration (project.properties)
-    \begin{itemize}
-    \item maven.jalopy.style=mystyle.xml
-    \end{itemize}
   \end{itemize}
+
+  \begin{block}{Konfiguration (project.properties)}
+	\begin{alltt}maven.jalopy.style=mystyle.xml\end{alltt}
+  \end{block}
 }
 
 \frame{
@@ -153,7 +153,7 @@
 }
 
 \subsection{Testüberdeckung}
-\frame{
+\frame[all:1]{
   \frametitle{Testüberdeckung}
   
    Clover
@@ -168,10 +168,10 @@
    \end{itemize}
 }
 
-\frame{
+\frame[all:1]{
   \frametitle{Testüberdeckung}
 
-   JCoverage
+   {\bf JCoverage Plugin}
    \begin{itemize}
    \item Unbrauchbare Standardkonfiguration
    \item Fehler im aktuellen Maven 1.0-rc1 Release
@@ -181,68 +181,146 @@
      \end{itemize}
    \end{itemize}
 
-   gcover
+  \vspace{0.5cm}
+
+  {\bf GCover Plugin}
    \begin{itemize}
-   \item Formatiert die Ausgabe gcov als HTML Frameset
+   \item Formatiert die Ausgabe von gcov als HTML Frameset
+   \item gcov kann Testüberdeckung für gcc Kompilate auswerten
+   \item Bisher nicht in Maven integriert
    \end{itemize}
 }
 
 \section{SCM Plugins}
-\subsection{CVS Plugins}
-\frame{
-  \frametitle{CVS Plugins}
+\subsection{SCM Plugins}
+\frame[all:1]{
+  \frametitle{Commit Log Plugins}
 
-  ChangeLog
-  Developer Activity Plugin
-  File Activity Plugin
+  ChangeLog Plugin
+  \begin{itemize}
+  \item Zeigt den SCM Commit Log als Bericht an
+  \item Fügt Links auf die jeweiligen Revisionen in ViewCVS ein
+  \item Unterstützt mehrere Soure Control Management Werkzeuge
+	\begin{itemize}
+	\item CVS
+	\item Perforce
+	\item StarTeam
+	\item IBM Rational ClearCase 
+	\item Subversion
+	\end{itemize}
+  \end{itemize}
 }
 
-\subsection{StatCvs}
-\frame{
-  \frametitle{StatCvs Plugin}
+\subsection{CVS Plugins}
+\frame[all:1]{
+  \frametitle{CVS Plugins}
+
+  {\bf Developer Activity Plugin}
+  \begin{itemize}
+  \item Zeigt zu jedem Entwickler
+	\begin{itemize}
+	\item Anzahl Commits
+	\item Anzahl der geänderten Dateien
+	\end{itemize}
+  \item Unterstützt nur CVS
+  \end{itemize}
+
+  \vspace{0.5cm}
+
+  {\bf File Activity Plugin}
+  \begin{itemize}
+  \item Zeigt zu jeder Datei die Anzahl der Änderungen
+  \item Unterstützt nur CVS
+  \end{itemize}
+}
+
+\frame[all:1]{
+  \frametitle{CVS Plugins}
+
+  {\bf StatCvs Plugin}
+  \begin{itemize}
+  \item Erzeugt Metriken aus dem CVS Log
+	\begin{itemize}
+	\item Anzahl der Lines of Code pro Autor
+	\item CVS Commit Log (ähnlich dem ChangeLog Plugin)
+	\item Anzahl der Dateien
+	\item Grösse der Dateien
+	\item Grösse der Module
+	\item Aktivität in den Modulen
+	\end{itemize}
+  \item Graphische Darstellung mit Charts
+  \item Basiert auf StatCvs-XML
+  \item Unterstützt nur CVS
+  \end{itemize}
 }
 
 \section{Weitere}
 
-\subsection{License}
-\frame{
-  \frametitle{License Plugin}
-}
+\subsection{Standard Plugins}
+\frame[all:1]{
+  \frametitle{Standard Plugins}
 
-\subsection{Versions Historie}
-\frame{
-  \frametitle{Changes Plugin}
+  License Plugin
+  \begin{itemize}
+  \item Zeigt die Lizenz in einer Rahmen an
+  \item Konfiguration (project.properties)
+    \begin{itemize}
+    \item \begin{alltt}maven.license.licenseFile=COPYING\end{alltt}
+    \end{itemize}
+  \end{itemize}
 
-  Versions Historie
+  \vspace{0.5cm}
 
-  changes.xml
+  Changes Plugin
+  \begin{itemize}
+  \item Zeigt eine Versions Historie an
+  \item Konfiguration über eine XML Datei
+  \end{itemize}
 }
 
 \subsection{Mehr Plugins}
 \frame[all:1]{
   \frametitle{Noch mehr Plugins}
 
+  Ant Plugins
   \begin{itemize}
-  \item Ant Plugins
-  \item Console Plugin
-    \begin{itemize}
-    \item Konsoleneingabe zum Aufruf von Goals
-    \item Schnelles sukessives Aufrufen von Goals
-    \item Unzureichende Speicherfreigabe führt nach mehrmaligem Goal
-      Aufruf zu OutOfMemory exception
-    \end{itemize}
-  \item Eclipse Plugin [eclipse]
-    \begin{itemize}
-    \item Generierung von Eclipse Projekt Dateien
-    \item Berücksichtigung aller Dependencies
-    \item Anlegen der MAVEN\_HOME Variable in Eclipse notwendig
-    \end{itemize}
-  \item Plugin Plugin
-    \begin{itemize}
-    \item Deployment von Maven Plugins
-    \end{itemize}   
-  \item Release Plugin
-  \item Uberjar Plugin
+  \item Erzeugt eine build.xml Datei für Ant
+  \item Hilfreich für builds, wenn Maven nicht verfübgar ist
+  \end{itemize}
+
+  Console Plugin
+  \begin{itemize}
+  \item Konsoleneingabe zum Aufruf von Goals
+  \item Schnelles sukessives Aufrufen von Goals
+  \item Unzureichende Speicherfreigabe führt nach mehrmaligem Goal
+    Aufruf zu OutOfMemory exception
+  \end{itemize}
+  
+  Eclipse Plugin [eclipse]
+  \begin{itemize}
+  \item Generierung von Eclipse Projekt Dateien
+  \item Berücksichtigung aller Dependencies
+  \item Anlegen der MAVEN\_HOME Variable in Eclipse notwendig
+  \end{itemize}
+}  
+
+\subsection{Mehr Plugins}
+\frame[all:1]{
+  \frametitle{Noch mehr Plugins}
+
+  Plugin Plugin
+  \begin{itemize}
+  \item Deployment von Maven Plugins
+  \end{itemize}   
+
+  Release Plugin
+  \begin{itemize}
+  \item Erzeugt vollständige Release Tarballs und zip Dateien
+  \end{itemize}
+
+  Uberjar Plugin
+  \begin{itemize}
+  \item Erzeugt ein Jar mit allen Dependencies
   \end{itemize}
 }
 
