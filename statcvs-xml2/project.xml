@@ -7,10 +7,13 @@
   <organization>
     <name>StatCvs-XML Team</name>
     <url>http://statcvs-xml.berlios.de/</url>
+    <logo>/images/statcvslogo.png</logo>
   </organization>
   <inceptionYear>2003</inceptionYear>
-  <package>net.sf.statcvs</package>
-  <logo>/images/statcvslogo.png</logo>
+  <package>de.berlios.statcvs.xml</package>
+
+  <logo>http://developer.berlios.de/bslogo.php?group_id=1364</logo>
+  
   <shortDescription>XML output extensions for StatCvs</shortDescription>
 
   <url>http://statcvs-xml.berlios.de/</url>

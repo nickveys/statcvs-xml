@@ -3,6 +3,7 @@
   xmlns:u="jelly:util"
   xmlns:ant="jelly:ant"
   xmlns:m="maven"
+  xmlns:maven="jelly:maven"
   default="java:jar">
 
 
@@ -32,4 +33,16 @@
 	      </ant:fileset>
 	    </ant:copy>
 	</postGoal>
+	
+	<goal name="dist:snapshot" 
+		  description="Create a snapshot distribution">
+
+        <maven:snapshot project="${pom}"/>    
+
+        <j:set var="maven.final.name" value="${snapshotSignature}"/>
+        <ant:echo>Building snapshot JAR: ${maven.final.name}</ant:echo>
+    
+        <attainGoal name="dist"/>
+	</goal>
+	
 </project>
