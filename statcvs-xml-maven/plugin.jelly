@@ -224,7 +224,7 @@
 	  <j:if test="${!empty(maven_opts)}">
 	  	<!-- debug: <ant:echo message="MAVEN_OPTS is set to =
 	  ${maven_opts}"/> -->
-		<ant:jvmarg value="${maven_opts}"/>
+		<ant:jvmarg line="${maven_opts}"/>
 	  </j:if>
 	  <ant:arg line="-output-dir '${maven.gen.docs}/statcvs'"/>
 	  <ant:arg line="-title '${statcvs.title}'"/>
