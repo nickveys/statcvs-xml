@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorDocument.java,v $ 
-	Created on $Date: 2003-06-27 01:05:34 $ 
+	Created on $Date: 2003-06-27 18:15:46 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -27,9 +27,9 @@ import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.RevisionIterator;
 import net.sf.statcvs.model.RevisionIteratorSummary;
+import net.sf.statcvs.output.xml.chart.AbstractChart;
 import net.sf.statcvs.output.xml.report.CommitLogReport;
 import net.sf.statcvs.output.xml.report.CvsCharts;
-import net.sf.statcvs.renderer.Chart;
 
 /**
  * 
@@ -61,8 +61,8 @@ public class AuthorDocument extends StatCvsDocument {
 	/**
 	 * @see net.sf.statcvs.output.xml.StatCvsDocument#getCharts()
 	 */
-	public Chart[] getCharts() {
-		return new Chart[] {
+	public AbstractChart[] getCharts() {
+		return new AbstractChart[] {
 			charts.getActivityByHourChart(author),
 			charts.getActivityByDayChart(author),
 			charts.getCodeDistributionChart(author)

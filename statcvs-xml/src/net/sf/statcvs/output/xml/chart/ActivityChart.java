@@ -15,6 +15,7 @@ import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.RevisionIterator;
+import net.sf.statcvs.output.xml.XMLSuite;
 
 /**
  * ActivityChart
@@ -41,10 +42,37 @@ public class ActivityChart extends AbstractBarChart {
 	
 	public ActivityChart(CvsContent content, int type) {
 		this(content.getRevisionIterator(), type);
+		switch (type) {
+			case BY_HOUR :
+				setTitle(I18n.tr("Activity by Hour"));
+				setFilename("activity_time.png");
+				setValuesByHour();
+				break;
+			case BY_DAY :
+				setTitle(I18n.tr("Activity by Day"));
+				setFilename("activity_day.png");
+				setValuesByDay();
+				break;
+		}
+		placeTitle();
 	}
 	
 	public ActivityChart(Author author, int type) {
 		this(author.getRevisionIterator(), type);
+		String authorName = XMLSuite.escapeAuthorName(author.getName());
+		switch (type) {
+			case BY_HOUR :
+				setTitle(I18n.tr("Activity by Hour for",0,1)+author.getName());
+				setFilename("activity_time_"+authorName+".png");
+				setValuesByHour();
+				break;
+			case BY_DAY :
+				setTitle(I18n.tr("Activity by Day for",0,1)+author.getName());
+				setFilename("activity_day_"+authorName+".png");
+				setValuesByDay();
+				break;
+		}
+		placeTitle();
 	}
 
 	public ActivityChart(RevisionIterator revIt, int type) {
@@ -54,19 +82,6 @@ public class ActivityChart extends AbstractBarChart {
 		setCategoryAxisLabel(null);
 		setValueAxisLabel(I18n.tr("Commits"));
 		getChart().setLegend(null);
-		switch (type) {
-			case BY_HOUR :
-				setTitle(I18n.tr("Activity by Hour"));
-				setFilename("activity_time.png");
-				setValuesByHour();
-				break;
-			case BY_DAY :
-				setTitle(I18n.tr("Activity by Day"));
-				setFilename("activity_hour.png");
-				setValuesByDay();
-				break;
-		}
-		placeTitle();
 	}
 	/**
 	 * 
@@ -106,7 +121,7 @@ public class ActivityChart extends AbstractBarChart {
 			values[hour]++;
 		}
 		for (int i=0; i<values.length; i++) {
-			dataset.addValue(values[i], "Activity", categoryNamesDays[i]);
+			dataset.addValue(values[i], "Activity", categoryNamesHours[i]);
 		}
 	}
 

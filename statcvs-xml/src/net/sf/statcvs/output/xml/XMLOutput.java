@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLOutput.java,v $
-	$Date: 2003-06-26 18:33:25 $ 
+	$Date: 2003-06-27 18:15:46 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -30,6 +30,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 
 import net.sf.statcvs.model.CvsContent;
+import net.sf.statcvs.output.xml.chart.AbstractChart;
 import net.sf.statcvs.util.FileUtils;
 
 import org.jdom.output.XMLOutputter;
@@ -100,7 +101,13 @@ public class XMLOutput implements DocumentRenderer {
 			writer.close();
 		}	
 		// create Charts
-		document.getCharts();				
+		AbstractChart[] charts = document.getCharts();
+		if (charts != null) { 
+			for (int i = 0; i < charts.length; i++) {
+				if (charts[i] != null)
+					charts[i].save();				
+			}
+		}
 	}
 	
 	private void renderPages(StatCvsDocument document) throws IOException {

@@ -18,12 +18,12 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ChartElement.java,v $
-	$Date: 2003-06-26 23:04:55 $ 
+	$Date: 2003-06-27 18:15:46 $ 
 */
 package net.sf.statcvs.output.xml;
 
 import net.sf.statcvs.I18n;
-import net.sf.statcvs.renderer.Chart;
+import net.sf.statcvs.output.xml.chart.AbstractChart;
 
 import org.jdom.Element;
 
@@ -34,10 +34,10 @@ import org.jdom.Element;
  */
 public class ChartElement extends Element {
 
-	public ChartElement(Chart chart) {
+	public ChartElement(AbstractChart chart) {
 		super("img");
 		if (chart != null) {
-			setAttribute("src", chart.getFileName());
+			setAttribute("src", chart.getFilename());
 		} else {
 			setAttribute("alt", I18n.tr("Chart could not generated"));
 		}

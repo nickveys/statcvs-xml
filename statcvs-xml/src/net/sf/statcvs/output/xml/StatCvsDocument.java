@@ -18,11 +18,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: StatCvsDocument.java,v $
-	$Date: 2003-06-18 21:22:43 $ 
+	$Date: 2003-06-27 18:15:46 $ 
 */
 package net.sf.statcvs.output.xml;
 
-import net.sf.statcvs.renderer.*;
+import net.sf.statcvs.output.xml.chart.AbstractChart;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -62,7 +62,7 @@ public class StatCvsDocument extends Document {
 	 *
 	 * @return null by default
 	 */
-	public Chart[] getCharts()
+	public AbstractChart[] getCharts()
 	{
 		return null;
 	}

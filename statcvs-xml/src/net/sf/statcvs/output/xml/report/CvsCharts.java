@@ -18,36 +18,19 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsCharts.java,v $
-	$Date: 2003-06-27 01:05:34 $ 
+	$Date: 2003-06-27 18:15:46 $ 
 */package net.sf.statcvs.output.xml.report;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
-import net.sf.statcvs.I18n;
-import net.sf.statcvs.Messages;
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
-import net.sf.statcvs.model.CvsRevision;
-import net.sf.statcvs.model.RevisionIterator;
-import net.sf.statcvs.model.RevisionSortIterator;
-import net.sf.statcvs.output.LOCSeriesBuilder;
-import net.sf.statcvs.output.xml.XMLSuite;
-import net.sf.statcvs.renderer.BarChart;
-import net.sf.statcvs.renderer.Chart;
-import net.sf.statcvs.renderer.LOCChart;
-import net.sf.statcvs.renderer.PieChart;
-import net.sf.statcvs.renderer.StackedBarChart;
-import net.sf.statcvs.renderer.TimeLineChart;
-import net.sf.statcvs.reportmodel.TimeLine;
-import net.sf.statcvs.reports.AvgFileSizeTimeLineReport;
-import net.sf.statcvs.reports.FileCountTimeLineReport;
-
-import com.jrefinery.data.BasicTimeSeries;
+import net.sf.statcvs.output.xml.chart.AbstractChart;
+import net.sf.statcvs.output.xml.chart.ActivityChart;
+import net.sf.statcvs.output.xml.chart.AvgFileSizeChart;
+import net.sf.statcvs.output.xml.chart.DirectorySizesChart;
+import net.sf.statcvs.output.xml.chart.FileCountChart;
 
 /**
  * CvsCharts
@@ -56,7 +39,94 @@ import com.jrefinery.data.BasicTimeSeries;
  */
 public class CvsCharts {
 
-	private String[] categoryNamesHours = new String[] { "0", "1", "2", "3", "4", "5", "6", "7", 
+	private Map userActByHourCharts = new HashMap();
+	private Map userActByDayCharts = new HashMap();
+	private AbstractChart fileCountChart;
+	private AbstractChart fileSizeChart;
+	private AbstractChart dirSizeChart;
+	private AbstractChart actByDayChart;
+	private AbstractChart actByHourChart;
+		
+	private CvsContent content;
+
+	public CvsCharts(CvsContent content) 
+	{
+		this.content = content;
+	}
+
+	public AbstractChart getFileCountChart() {
+		if (fileCountChart == null) {
+			fileCountChart = new FileCountChart(content);
+		}
+		return (fileCountChart.isRendered())?fileCountChart:null;
+	}
+
+	public AbstractChart getAvgFileSizeChart() {
+		if (fileSizeChart == null) {
+			fileSizeChart = new AvgFileSizeChart(content);
+		}
+		return (fileSizeChart.isRendered())?fileSizeChart:null;
+	}
+
+	public AbstractChart getLocChart() {
+		// TODO
+		return null;
+	}
+
+	public AbstractChart getDirectorySizesChart() {
+		if (dirSizeChart == null) {
+			dirSizeChart = new DirectorySizesChart(content);
+		}
+		return (dirSizeChart.isRendered())?dirSizeChart:null;
+	}
+
+	public AbstractChart getLocPerAuthorChart() {
+		// TODO
+		return null;
+	}
+
+	public AbstractChart getActivityByDayChart() {
+		if (actByDayChart == null) {
+			actByDayChart = new ActivityChart(content, ActivityChart.BY_DAY);
+		}
+		return (actByDayChart.isRendered())?actByDayChart:null;
+	}
+
+	public AbstractChart getActivityByHourChart() {
+		if (actByHourChart == null) {
+			actByHourChart = new ActivityChart(content, ActivityChart.BY_HOUR);
+		}
+		return (actByHourChart.isRendered())?actByHourChart:null;
+	}
+
+	public AbstractChart getAuthorsActivityChart() {
+		// TODO
+		return null;
+	}
+
+	public AbstractChart getActivityByHourChart(Author author) {
+		AbstractChart abh = (AbstractChart)userActByHourCharts.get(author);
+		if (abh == null) {
+			abh = new ActivityChart(author, ActivityChart.BY_HOUR);
+			userActByHourCharts.put(author, abh);
+		}
+		return (abh.isRendered())?abh:null;
+	}
+
+	public AbstractChart getActivityByDayChart(Author author) {
+		AbstractChart abd = (AbstractChart)userActByDayCharts.get(author);
+		if (abd == null) {
+			abd = new ActivityChart(author, ActivityChart.BY_DAY);
+			userActByDayCharts.put(author, abd);
+		}
+		return (abd.isRendered())?abd:null;
+	}
+
+	public AbstractChart getCodeDistributionChart(Author author) {
+		// TODO
+		return null;
+	}
+/*	private String[] categoryNamesHours = new String[] { "0", "1", "2", "3", "4", "5", "6", "7", 
 		"8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", 
 		"20", "21",	"22", "23" };
 
@@ -83,9 +153,6 @@ public class CvsCharts {
 	private Map userActByDay = new HashMap();
 	private Map userCodeDist = new HashMap();
 	
-	/**
-	 * 
-	 */
 	public CvsCharts(CvsContent content) 
 	{
 		this.content = content;
@@ -215,6 +282,17 @@ public class CvsCharts {
 				Messages.getString("PIE_MODSIZE_SUBTITLE"),
 				"module_sizes.png", null, PieChart.FILTERED_BY_REPOSITORY);
 		}
+ // Testblock!
+ 
+ try {
+			new DirectorySizesChart(content).save();
+			new ActivityChart(content, ActivityChart.BY_DAY).save();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+ // TESTBLOCK
 		return directorySizesChart;
 	}
 	
@@ -269,5 +347,5 @@ public class CvsCharts {
 		}
 		return cdc;
 	}
-
+*/
 }

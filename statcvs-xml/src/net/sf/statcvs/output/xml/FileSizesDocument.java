@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: FileSizesDocument.java,v $ 
-	Created on $Date: 2003-06-27 17:24:04 $ 
+	Created on $Date: 2003-06-27 18:15:46 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -27,9 +27,9 @@ import java.util.Iterator;
 import net.sf.statcvs.I18n;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
+import net.sf.statcvs.output.xml.chart.AbstractChart;
 import net.sf.statcvs.output.xml.report.CvsCharts;
 import net.sf.statcvs.output.xml.report.CvsReports;
-import net.sf.statcvs.renderer.Chart;
 
 import org.jdom.Element;
 
@@ -63,8 +63,8 @@ public class FileSizesDocument extends StatCvsDocument {
 	/**
 	 * @see net.sf.statcvs.output.xml.StatCvsDocument#getCharts()
 	 */
-	public Chart[] getCharts() {
-		return new Chart[] {
+	public AbstractChart[] getCharts() {
+		return new AbstractChart[] {
 			charts.getFileCountChart(),
 			charts.getAvgFileSizeChart()
 		};
