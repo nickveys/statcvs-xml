@@ -61,7 +61,8 @@ import de.berlios.statcvs.xml.output.ReportSettings;
 public class EvolutionMatrixChart extends AbstractChart {
 
 	private final int SPACER = 25; 
-	private final int LINE_WIDTH = 4;
+	private final int LINE_HEIGHT = 4;
+	private final int TEXT_HEIGHT = 15;
     
 	private CvsContent content;
 	private ReportSettings settings;
@@ -206,7 +207,7 @@ public class EvolutionMatrixChart extends AbstractChart {
 
 			// set drawing settings
 			Stroke oldStroke = g2.getStroke();
-			Stroke itemStroke = new BasicStroke(LINE_WIDTH);
+			Stroke itemStroke = new BasicStroke(LINE_HEIGHT);
 			Stroke borderStroke = new BasicStroke(1); 
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
 								RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -226,6 +227,24 @@ public class EvolutionMatrixChart extends AbstractChart {
 					Directory dir = (Directory)dirIt.next();
 					Iterator fit = dir.getFiles().iterator();
 
+					if (dir.getFiles().size() != 0) {
+						y += (g2.getFontMetrics().getStringBounds(dir.getName(), g2).getHeight() / 2) - 1;
+
+						if (x == plotArea.getX()) {
+							g2.setColor(new Color(0xCCCCCC));
+							
+							g2.setStroke(borderStroke);
+							
+							Rectangle2D r = g2.getFontMetrics().getStringBounds(dir.getName(), g2);
+							g2.fill3DRect((int)x-3, (int)(y+r.getY()+1), (int)plotArea.getWidth(), (int)r.getHeight(), true);
+							g2.setColor(Color.black);
+							g2.drawString(dir.getPath(), (float)x, (float)y);
+							
+						}
+						y += LINE_HEIGHT + 1;
+
+					}
+					
 					// and files...
 					while (fit.hasNext()) {
 						CvsFile file = (CvsFile)fit.next();
@@ -258,8 +277,8 @@ public class EvolutionMatrixChart extends AbstractChart {
 									g2.setColor(Color.red);
 								}
 							} else {
-								// all files of the first version: red
-								g2.setColor(Color.red);
+								// all files of the first version: green
+								g2.setColor(Color.green);
 							}
 							
 							// drawing
@@ -288,17 +307,17 @@ public class EvolutionMatrixChart extends AbstractChart {
 							// file was never tagged
 							
 							// draw grey dot
-							// g2.setColor(Color.lightGray);
-							// g2.drawLine((int)x, (int)y, (int)x, (int)y);
+							g2.setColor(Color.lightGray);
+							g2.drawLine((int)x, (int)y, (int)x, (int)y);
 						}
 						
 						// next line
-						y = y + LINE_WIDTH + 1;
+						y += LINE_HEIGHT + 1;
 					}
 				}
 				
 				// next block
-				x = x + vspace;
+				x += vspace;
 				y = plotArea.getY() + SPACER;
 
 				// remember last version
@@ -307,9 +326,18 @@ public class EvolutionMatrixChart extends AbstractChart {
         }
         
         public int getHeight() 
-        {
-        	return getInsets().bottom + getInsets().bottom + (2*SPACER) + 
-        		(content.getFiles().size() * (LINE_WIDTH + 1));
+        {	
+        	int dirCount = 0;
+        	Iterator it = content.getDirectories().iterator();
+        	while (it.hasNext()) {
+        		if (((Directory)it.next()).getFiles().size() != 0) {
+        			dirCount++;
+        		}
+        	}
+        	
+        	return getInsets().bottom + getInsets().bottom + (4*SPACER) + 
+        		(content.getFiles().size() * (LINE_HEIGHT + 1))
+        		+ (dirCount * TEXT_HEIGHT);
         }
 	}
 	
@@ -436,12 +464,12 @@ public class EvolutionMatrixChart extends AbstractChart {
 		{
 			CvsRevision target = getRevision(oldV);
 			CvsRevision curr = getRevision(thisV);
-			int change = curr.getReplacedLines();	
+			double change = curr.getReplacedLines();	
 			
 			while (target != curr) {
 				curr = curr.getPreviousRevision();
 				if (curr != null) {
-					change += curr.getReplacedLines();	
+					change += curr.getReplacedLines() / curr.getLines();	
 				}
 			}
 			return (double)change / getRevision(thisV).getLines();
