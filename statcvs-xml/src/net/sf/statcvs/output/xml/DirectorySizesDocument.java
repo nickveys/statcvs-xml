@@ -18,32 +18,24 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: DirectorySizesDocument.java,v $ 
-	Created on $Date: 2003-06-20 00:37:24 $ 
+	Created on $Date: 2003-06-27 01:05:34 $ 
 */
 package net.sf.statcvs.output.xml;
 
-import java.util.Iterator;
-
-import net.sf.statcvs.*;
+import net.sf.statcvs.I18n;
 import net.sf.statcvs.model.CvsContent;
-import net.sf.statcvs.model.CvsRevision;
-import net.sf.statcvs.model.Directory;
-import net.sf.statcvs.model.RevisionIterator;
+import net.sf.statcvs.output.xml.report.CvsCharts;
+import net.sf.statcvs.output.xml.report.CvsReports;
 import net.sf.statcvs.renderer.Chart;
-import net.sf.statcvs.renderer.PieChart;
-import net.sf.statcvs.util.*;
-
-import org.jdom.Element;
 
 /**
  * DirectorySizesDocument
  * 
  * @author Tammo van Lessen
- * @version $id: $
  */
 public class DirectorySizesDocument extends StatCvsDocument {
 
-	private CvsContent cvsContent;
+	private CvsCharts charts;
 	
 	/**
 	 * @param element
@@ -52,52 +44,26 @@ public class DirectorySizesDocument extends StatCvsDocument {
 	public DirectorySizesDocument(CvsContent content) {
 		super(I18n.tr("Module Sizes"), "dir_sizes");
 
-		cvsContent = content;
-		getRootElement().addContent(getModulesReport());
+		CvsReports reports = new CvsReports(content);
+		charts = new CvsCharts(content);
+		
+		getRootElement().addContent(new DirectoryChartReport());
+		getRootElement().addContent(reports.getDirectorySizesReport());
 	}
 
 	/**
 	 * @see net.sf.statcvs.output.xml.StatCvsDocument#getCharts()
 	 */
 	public Chart[] getCharts() {
-		return new Chart[] {new PieChart(cvsContent, cvsContent.getModuleName(),
-			Messages.getString("PIE_MODSIZE_SUBTITLE"),
-			"module_sizes.png", null, PieChart.FILTERED_BY_REPOSITORY)};
+		return new Chart[] {charts.getDirectorySizesChart()};
 	}
 
-	private Element getModulesReport() {
-		RevisionIterator revs = cvsContent.getRevisionIterator();
-		IntegerMap dirChanges = new IntegerMap();
-		IntegerMap dirLoC = new IntegerMap();
+	private class DirectoryChartReport extends ReportElement {
 
-		Element report = new ReportElement(I18n.tr("Module Sizes"));
-
-		report.addContent(new Element("img")
-			.setAttribute("src", "module_sizes.png"));
-
-		Element list = new Element("modules");		
-		report.addContent(list);
-		while (revs.hasNext()) {
-			CvsRevision rev = revs.next();
-			Directory dir = rev.getFile().getDirectory();
-			dirChanges.addInt(dir, 1);
-			dirLoC.addInt(dir, rev.getLineValue()); 			
+		public DirectoryChartReport() {
+			super(I18n.tr("Directory Sizes"));
+			addContent(new ChartElement(
+				DirectorySizesDocument.this.charts.getDirectorySizesChart()));
 		}
-		Iterator it = dirLoC.iteratorSortedByValueReverse();
-		while (it.hasNext()) {
-			Directory key = (Directory)it.next();
-			Element el = new Element("module");
-			// TODO: Add link to module page
-			el.setAttribute("name", key.isRoot() ? "/" : key.getPath());
-			el.setAttribute("changes", ""+dirChanges.get(key));
-			el.setAttribute("lines", ""+dirLoC.get(key));
-			el.setAttribute("linesPerChange", ""+
-							Formatter.formatNumber((double)dirLoC.get(key) / dirChanges.get(key), 1));
-			el.setAttribute("changesPercent", ""+Formatter.formatPercent(dirChanges.getPercent(key)));
-			el.setAttribute("linesPercent", ""+ Formatter.formatPercent(dirLoC.getPercent(key)));
-			list.addContent(el);			
-		}
-		return report;
 	}
-
 }

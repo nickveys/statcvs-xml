@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: FileSizesDocument.java,v $ 
-	Created on $Date: 2003-06-24 19:18:59 $ 
+	Created on $Date: 2003-06-27 01:05:34 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -63,9 +63,6 @@ public class FileSizesDocument extends StatCvsDocument {
 		return new Chart[] {
 			charts.getFileCountChart(),
 			charts.getAvgFileSizeChart()
-			
-			//createFileCountChart(FILE_COUNT_IMG, 640, 480),
-			//createAvgFileSizeChart(FILE_SIZE_IMG, 640, 480)
 		};
 	}
 }

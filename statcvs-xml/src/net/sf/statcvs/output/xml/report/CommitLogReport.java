@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommitLogReport.java,v $
-	$Date: 2003-06-24 17:45:39 $ 
+	$Date: 2003-06-27 01:05:34 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -61,7 +61,7 @@ public class CommitLogReport extends ReportElement {
 	{
 		super(I18n.tr("Commit Log"));
 		commitsEl = new Element("commitlog");
-		addContent(commitsEl);		
+		addContent(commitsEl);
 	}
 
 	/**
@@ -83,12 +83,13 @@ public class CommitLogReport extends ReportElement {
 			(new CommitListBuilder(revisionsIt).createCommitList());
 		Collections.reverse(commits);
 		
-		if (maxCommits >= 0) {
+		if ((maxCommits >= 0) && (maxCommits < commits.size())) {
 			addCommits(commits.subList(0, maxCommits));
 		}
 		else {
 			addCommits(commits);
 		}
+		setReportName(I18n.tr("Most Recent Commits (TOP {0})", new Integer(maxCommits)));
 	}
 
 	/**
@@ -100,6 +101,29 @@ public class CommitLogReport extends ReportElement {
 	public CommitLogReport(CvsContent content)
 	{
 		this(content, -1);
+	}
+
+	/**
+	 * Returns the top 'maxCommits' of Commits made by the 
+	 * Author
+	 * 
+	 * @param author
+	 * @return
+	 */
+	public CommitLogReport(Author author, int maxCommits)
+	{
+		this();
+
+		CommitListBuilder builder 
+			= new CommitListBuilder(author.getRevisionIterator());
+		List commits = builder.createCommitList();
+		Collections.reverse(commits);
+		if ((maxCommits >= 0) && (maxCommits < commits.size())) {
+			addCommits(commits.subList(0, maxCommits));
+		} else {
+			addCommits(commits);
+		}
+		setReportName(I18n.tr("Most Recent Commits (TOP {0})", new Integer(maxCommits)));
 	}
 
 	/**
@@ -115,7 +139,7 @@ public class CommitLogReport extends ReportElement {
 		CommitListBuilder builder 
 			= new CommitListBuilder(author.getRevisionIterator());
 		List commits = builder.createCommitList();
-
+		Collections.reverse(commits);
 		addCommits(commits);
 	}
 

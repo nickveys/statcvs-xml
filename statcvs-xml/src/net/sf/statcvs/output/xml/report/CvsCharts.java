@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsCharts.java,v $
-	$Date: 2003-06-26 23:04:55 $ 
+	$Date: 2003-06-27 01:05:34 $ 
 */package net.sf.statcvs.output.xml.report;
 
 import java.util.ArrayList;
@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.statcvs.I18n;
 import net.sf.statcvs.Messages;
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
@@ -35,9 +36,11 @@ import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.RevisionIterator;
 import net.sf.statcvs.model.RevisionSortIterator;
 import net.sf.statcvs.output.LOCSeriesBuilder;
+import net.sf.statcvs.output.xml.XMLSuite;
 import net.sf.statcvs.renderer.BarChart;
 import net.sf.statcvs.renderer.Chart;
 import net.sf.statcvs.renderer.LOCChart;
+import net.sf.statcvs.renderer.PieChart;
 import net.sf.statcvs.renderer.StackedBarChart;
 import net.sf.statcvs.renderer.TimeLineChart;
 import net.sf.statcvs.reportmodel.TimeLine;
@@ -73,9 +76,13 @@ public class CvsCharts {
 	private Chart activityByHourChart;
 	private Chart activityByDayChart;
 	private LOCChart locPerAuthorChart;
-	private StackedBarChart authorActivityChart;
-
-
+	private StackedBarChart authorsActivityChart;
+	private LOCChart locChart;
+	private Chart directorySizesChart;
+	private Map userActByHour = new HashMap();
+	private Map userActByDay = new HashMap();
+	private Map userCodeDist = new HashMap();
+	
 	/**
 	 * 
 	 */
@@ -133,12 +140,13 @@ public class CvsCharts {
 				title, fileName, categoryNames.length, categoryNames);
 	}
 
-	public Chart getAuthorActivityChart() {
-		if (authorActivityChart == null) {
-			authorActivityChart = new StackedBarChart(content, content.getModuleName(), 
+
+	public Chart getAuthorsActivityChart() {
+		if (authorsActivityChart == null) {
+			authorsActivityChart = new StackedBarChart(content, content.getModuleName(), 
 			Messages.getString("AUTHOR_ACTIVITY_TITLE"), "activity.png"); 
 		}
-		return authorActivityChart;
+		return authorsActivityChart;
 	}
 
 	public Chart getLOCPerAuthorChart() {
@@ -180,5 +188,86 @@ public class CvsCharts {
 		return locPerAuthorChart;
 	}
 
+	public Chart getLOCChart() {
+		if (locChart == null) {
+			String projectName = content.getModuleName();
+			RevisionIterator it
+				= new RevisionSortIterator(content.getRevisionIterator());
+			LOCSeriesBuilder locCounter 
+				= new LOCSeriesBuilder(I18n.tr("Lines Of Code"), true);
+			while (it.hasNext()) {
+				locCounter.addRevision(it.next());
+			}
+			BasicTimeSeries series = locCounter.getTimeSeries();
+		
+			if (series == null) {
+				return null;
+			}
+			locChart = new LOCChart(series, projectName, I18n.tr("Lines Of Code"),
+							"loc_small.png", WIDTH, HEIGHT);
+		}
+		return locChart;
+	}
+
+	public Chart getDirectorySizesChart() {
+		if (directorySizesChart == null) {
+			directorySizesChart = new PieChart(content, content.getModuleName(),
+				Messages.getString("PIE_MODSIZE_SUBTITLE"),
+				"module_sizes.png", null, PieChart.FILTERED_BY_REPOSITORY);
+		}
+		return directorySizesChart;
+	}
+	
+	public Chart getActivityByHourChart(Author author)
+	{
+		Chart abh = (Chart)userActByHour.get(author);
+		if (abh == null) {
+			RevisionIterator userRevs = author.getRevisionIterator();
+			abh = createActivityChart(userRevs, Messages.getString("ACTIVITY_TIME_FOR_AUTHOR_TITLE") + " " 
+					+ author.getName(),	
+					"activity_time_"+ XMLSuite.escapeAuthorName(author.getName()) + ".png",
+					categoryNamesHours);
+			userActByHour.put(author, abh);
+		}
+		return abh;
+	}
+
+	public Chart getActivityByDayChart(Author author)
+	{
+		Chart abd = (Chart)userActByDay.get(author);
+		if (abd == null) {
+			RevisionIterator userRevs = author.getRevisionIterator();
+			abd = createActivityChart(userRevs, Messages.getString("ACTIVITY_DAY_FOR_AUTHOR_TITLE") + " " 
+					+ author.getName(),	
+					"activity_day_"+ XMLSuite.escapeAuthorName(author.getName()) + ".png", 
+					categoryNamesDays);
+			userActByDay.put(author, abd);
+		}
+		return abd;
+	}
+
+	
+	public Chart getCodeDistributionChart(Author author) {
+		Chart cdc = (Chart)userCodeDist.get(author);
+		if (cdc == null) {
+			RevisionIterator userRevs = author.getRevisionIterator();
+			int totalLinesOfCode = 0;
+			while (userRevs.hasNext()) {
+				CvsRevision rev = userRevs.next();
+				totalLinesOfCode += rev.getLineValue();
+			}
+			userRevs.reset();
+			if (totalLinesOfCode == 0) {
+				return null;
+			}
+			Chart chart = new PieChart(content, content.getModuleName(),
+					Messages.getString("PIE_CODEDISTRIBUTION_SUBTITLE") + " " + author.getName(),
+					"module_sizes_" + XMLSuite.escapeAuthorName(author.getName()) + ".png",
+					author, PieChart.FILTERED_BY_USER);
+			userRevs.reset();
+			userCodeDist.put(author, cdc);
+		}
+		return cdc;
+	}
 
 }

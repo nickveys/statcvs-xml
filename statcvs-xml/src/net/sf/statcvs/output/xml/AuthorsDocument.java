@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorsDocument.java,v $ 
-	Created on $Date: 2003-06-26 23:04:55 $ 
+	Created on $Date: 2003-06-27 01:05:34 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -62,7 +62,7 @@ public class AuthorsDocument extends StatCvsDocument {
 			charts.getLOCPerAuthorChart(),
 			charts.getActivityByDayChart(),
 			charts.getActivityByHourChart(),
-			charts.getAuthorActivityChart()
+			charts.getAuthorsActivityChart()
 		};
 	}
 
@@ -85,7 +85,7 @@ public class AuthorsDocument extends StatCvsDocument {
 	private class AuthorActivityReport extends ReportElement {
 		public AuthorActivityReport() {
 			super(I18n.tr("Author Activity"));
-			addContent(new ChartElement(charts.getAuthorActivityChart()));
+			addContent(new ChartElement(charts.getAuthorsActivityChart()));
 		}
 	}
 }

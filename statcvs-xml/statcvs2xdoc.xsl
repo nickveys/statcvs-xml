@@ -198,27 +198,30 @@
      <table>
         <tr>
        	  <th><xsl:value-of select="i18n:tr('Directory')"/></th>
-          <th><xsl:value-of select="i18n:tr('Changes')"/></th>
           <th><xsl:value-of select="i18n:tr('Lines of Code')"/></th>
+          <th><xsl:value-of select="i18n:tr('Changes')"/></th>
        	  <th><xsl:value-of select="i18n:tr('Lines per change')"/></th>
       	</tr>
-		<xsl:apply-templates select="*"/>
+		<xsl:for-each select="module">
+		  <tr>
+            <td>
+              <xsl:call-template name="func:make-link">
+				<xsl:with-param name="url" select="@url"/>
+				<xsl:with-param name="text" select="@name"/>
+              </xsl:call-template>
+            </td>
+       	    <td>
+         	  <xsl:value-of select="@lines"/> 
+         	  (<xsl:value-of select="@linesPercent"/>%)
+       		</td>
+       		<td>
+         	  <xsl:value-of select="@changes"/>
+         	  (<xsl:value-of select="@changesPercent"/>%)
+       		</td>
+       		<td><xsl:value-of select="@linesPerChange"/></td>
+     	  </tr>
+		</xsl:for-each>
      </table>
-  </xsl:template>
-
-  <xsl:template match="module">
-	 <tr>
-       <td><xsl:value-of select="@name"/></td>
-       <td>
-         <xsl:value-of select="@changes"/>
-         (<xsl:value-of select="@changesPercent"/>%)
-       </td>
-       <td>
-         <xsl:value-of select="@lines"/> 
-         (<xsl:value-of select="@linesPercent"/>%)
-       </td>
-       <td><xsl:value-of select="@linesPerChange"/></td>
-     </tr>
   </xsl:template>
 
   <xsl:template match="mostRecentFiles">

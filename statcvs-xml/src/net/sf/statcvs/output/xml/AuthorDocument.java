@@ -18,25 +18,18 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorDocument.java,v $ 
-	Created on $Date: 2003-06-20 10:37:31 $ 
+	Created on $Date: 2003-06-27 01:05:34 $ 
 */
 package net.sf.statcvs.output.xml;
 
-import java.util.*;
-
-import net.sf.statcvs.*;
+import net.sf.statcvs.I18n;
+import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.RevisionIterator;
-import net.sf.statcvs.model.*;
-import net.sf.statcvs.output.LOCSeriesBuilder;
-import net.sf.statcvs.renderer.*;
-import net.sf.statcvs.renderer.LOCChart;
-import net.sf.statcvs.reports.*;
-import net.sf.statcvs.util.*;
-
-import org.jdom.Element;
-
-import com.jrefinery.data.BasicTimeSeries;
+import net.sf.statcvs.model.RevisionIteratorSummary;
+import net.sf.statcvs.output.xml.report.CommitLogReport;
+import net.sf.statcvs.output.xml.report.CvsCharts;
+import net.sf.statcvs.renderer.Chart;
 
 /**
  * 
@@ -45,17 +38,10 @@ import com.jrefinery.data.BasicTimeSeries;
  */
 public class AuthorDocument extends StatCvsDocument {
 
+	private CvsCharts charts;
 	private Author author;
 	private CvsContent content;
-	private RevisionIterator userRevs;
 
-	private String[] categoryNamesHours = new String[] { "0", "1", "2", "3", "4", "5", "6", "7", 
-		"8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", 
-		"20", "21",	"22", "23" };
-
-	private String[] categoryNamesDays = new String[] { "Sunday", "Monday", "Tuesday", "Wednesday", 
-		"Thursday", "Friday", "Saturday" };
-	
 	/**
 	 */
 	public AuthorDocument(CvsContent content, Author author, String filename) {
@@ -64,12 +50,12 @@ public class AuthorDocument extends StatCvsDocument {
 
 		this.content = content;
 		this.author = author;
-		this.userRevs = author.getRevisionIterator();
-
-		getRootElement().addContent(createGeneralReport());
-		getRootElement().addContent(createModuleReport());
-		getRootElement().addContent(createActivityReport());
-		getRootElement().addContent(createCommitLog());
+		
+		this.charts = new CvsCharts(content);
+		getRootElement().addContent(new GeneralReport());
+		getRootElement().addContent(new ModuleReport());
+		getRootElement().addContent(new ActivityReport());
+		getRootElement().addContent(new CommitLogReport(author, 20));
 	}
 
 	/**
@@ -77,123 +63,59 @@ public class AuthorDocument extends StatCvsDocument {
 	 */
 	public Chart[] getCharts() {
 		return new Chart[] {
-			createActivityByHourChart(), createActivityByDayChart(),
-			createCodeDistributionChart(),
+			charts.getActivityByHourChart(author),
+			charts.getActivityByDayChart(author),
+			charts.getCodeDistributionChart(author)
 		};
 	}
 
-	private Chart createActivityByHourChart()
-	{
-		Chart chart = createActivityChart(userRevs, Messages.getString("ACTIVITY_TIME_FOR_AUTHOR_TITLE") + " " 
-							+ author.getName(),	getActivityTimeChartFilename(), 
-							categoryNamesHours);
-		userRevs.reset();
-		return chart;
-	}
 
-	private Chart createActivityByDayChart()
-	{
-		Chart chart = createActivityChart(userRevs, Messages.getString("ACTIVITY_DAY_FOR_AUTHOR_TITLE") + " " 
-							+ author.getName(),	getActivityDayChartFilename(), 
-							categoryNamesDays);
-		userRevs.reset();
-		return chart;
-	}
+	private class GeneralReport extends ReportElement {
+		
+		public GeneralReport() {
+			super(I18n.tr("General Statistics for {0}", author.getName()));
+			CvsContent content = AuthorDocument.this.content;
+			RevisionIteratorSummary summary;
+			summary = new RevisionIteratorSummary(content.getRevisionIterator());
+			long totalChangeCount = summary.size();
+			long totalLineCount = summary.getLineValue();
 
-	private Chart createActivityChart(RevisionIterator revIt, String title, String fileName, 
-		String[] categoryNames) {
-		return new BarChart(revIt, content.getModuleName(),
-				title, fileName, categoryNames.length, categoryNames);
-	}
+			RevisionIterator userRevs = author.getRevisionIterator();
+			summary = new RevisionIteratorSummary(userRevs);
+			long userChangeCount = summary.size();
+			long userLineCount = summary.getLineValue();
 
-	private Chart createCodeDistributionChart() {
-		int totalLinesOfCode = 0;
-		while (userRevs.hasNext()) {
-			CvsRevision rev = userRevs.next();
-			totalLinesOfCode += rev.getLineValue();
+			double percent = (double)userChangeCount * 100 / totalChangeCount;
+			
+			addContent
+				(new ValueElement("totalChanges", userChangeCount, percent,
+					  I18n.tr("Total changes")));
+			percent = (double)userLineCount * 100 / totalLineCount;
+			
+			addContent
+				(new ValueElement("loc", userLineCount, percent, 
+					  I18n.tr("Lines of code")));
 		}
-		userRevs.reset();
-		if (totalLinesOfCode == 0) {
-			return null;
+	}
+
+	private class ModuleReport extends ReportElement {
+
+		public ModuleReport() {
+			super(I18n.tr("Modules"));
+			addContent
+				(new ChartElement(charts.getActivityByDayChart(author)));
 		}
-		Chart chart = new PieChart(content, content.getModuleName(),
-				Messages.getString("PIE_CODEDISTRIBUTION_SUBTITLE") + " " + author.getName(),
-				getCodeDistributionChartFilename(),
-				author, PieChart.FILTERED_BY_USER);
-		userRevs.reset();
-		return chart;
 	}
 
-	private Element createGeneralReport()
+	private class ActivityReport extends ReportElement
 	{
-		Element reportRoot = new ReportElement("General");
-
-		RevisionIteratorSummary summary;
-		summary = new RevisionIteratorSummary(content.getRevisionIterator());
-		long totalChangeCount = summary.size();
-		long totalLineCount = summary.getLineValue();
-
-		summary = new RevisionIteratorSummary(userRevs);
-		long userChangeCount = summary.size();
-		long userLineCount = summary.getLineValue();
-
-		double percent = (double)userChangeCount * 100 / totalChangeCount;
-		reportRoot.addContent
-			(new ValueElement("totalChanges", userChangeCount, percent,
-							  I18n.tr("Total changes")));
-		percent = (double)userLineCount * 100 / totalLineCount;
-		reportRoot.addContent
-			(new ValueElement("loc", userLineCount, percent, 
-							  I18n.tr("Lines of code")));
-
-
-		return reportRoot;
-	}
-
-	private Element createModuleReport() {
-		Element reportRoot = new ReportElement(I18n.tr("Modules"));
-		reportRoot.addContent
-			(new ImageElement(getCodeDistributionChartFilename()));
-		return reportRoot;
-	}
-
-	private Element createActivityReport()
-	{
-		Element reportRoot = new ReportElement(I18n.tr("Activity By Time"));
-		reportRoot.addContent
-			(new ImageElement(getActivityTimeChartFilename()));
-		reportRoot.addContent
-			(new ImageElement(getActivityDayChartFilename()));
-		return reportRoot;
-	}
-
-	private Element createCommitLog() {
-		Element reportRoot = new ReportElement(I18n.tr("Most Recent Commits"));
-
-		return reportRoot;
-	}
-
-	/**
-	 * @param author an author
-	 * @return filename for author's activity by hour of day chart
-	 */
-	public String getActivityTimeChartFilename() {
-		return "activity_time_"
-			+ XMLSuite.escapeAuthorName(author.getName()) + ".png";
-	}
-
-	/**
-	 * @param author an author
-	 * @return filename for author's activity by day of week chart
-	 */
-	public String getActivityDayChartFilename() {
-		return "activity_day_" 
-			+ XMLSuite.escapeAuthorName(author.getName()) + ".png";
-	}
-
-	public String getCodeDistributionChartFilename() {
-		return "module_sizes_" 
-			+ XMLSuite.escapeAuthorName(author.getName()) + ".png";
+		public ActivityReport() {
+			super(I18n.tr("Activity By Time"));
+			addContent
+				(new ChartElement(charts.getActivityByHourChart(author)));
+			addContent
+				(new ChartElement(charts.getActivityByDayChart(author)));
+		}
 	}
 
 }

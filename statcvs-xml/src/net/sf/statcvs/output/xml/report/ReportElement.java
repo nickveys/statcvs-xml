@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ReportElement.java,v $
-	$Date: 2003-06-24 17:40:11 $ 
+	$Date: 2003-06-27 01:05:34 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -40,4 +40,7 @@ public class ReportElement extends Element {
 		setAttribute("name", name);
 	}
 
+	public void setReportName(String name) {
+		setAttribute("name", name);
+	}
 }

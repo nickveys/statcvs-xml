@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorsReport.java,v $
-	$Date: 2003-06-26 23:04:55 $ 
+	$Date: 2003-06-27 01:05:34 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -38,6 +38,7 @@ import org.jdom.Element;
  * 
  * 
  * @author Steffen Pingel
+ * @author Tammo van Lessen
  */
 public class AuthorsReport extends ReportElement {
 

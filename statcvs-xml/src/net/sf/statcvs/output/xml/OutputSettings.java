@@ -18,24 +18,14 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: OutputSettings.java,v $
-	$Date: 2003-06-25 12:19:19 $ 
+	$Date: 2003-06-27 01:05:34 $ 
 */
 package net.sf.statcvs.output.xml;
 
-import java.io.FileWriter;
-import java.io.*;
-import java.util.*;
-import java.util.logging.*;
-
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-
-import net.sf.statcvs.model.CvsContent;
-import net.sf.statcvs.util.FileUtils;
-
-import org.jdom.output.XMLOutputter;
-import org.jdom.transform.JDOMResult;
-import org.jdom.transform.JDOMSource;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * Stores the output settings.
