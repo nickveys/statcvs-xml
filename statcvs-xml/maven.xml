@@ -18,7 +18,7 @@
   	</preGoal>
   	
   	<postGoal name="uberjar">
-		<ant:move file="${maven.build.dir}/${maven.final.name}-uber.jar" toFile="${maven.build.dir}/${maven.final.name}.jar" overwrite="true"/>
+		<ant:move file="${maven.build.dir}/${maven.final.name}-uber.jar" toFile="${maven.build.dir}/${maven.final.name}-full.jar" overwrite="true"/>
   	</postGoal>
 
 </project>
