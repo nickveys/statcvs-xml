@@ -193,7 +193,7 @@ public class FileBuilder {
 		if (isBinary) {
 			return 0;
 		}
-		else if (lastAdded.isAddOnSubbranch()) {
+		else if (lastAdded != null && lastAdded.isAddOnSubbranch()) {
 			return locDelta;
 		}
 
@@ -212,9 +212,11 @@ public class FileBuilder {
 				return builder.getLOC(name) + locDelta;
 			}
 			else {
-				RevisionData firstAdded = (RevisionData)revisions.get(0);
-				if (!finalRevisionIsDead() && !firstAdded.getRevisionNumber().equals(revision)) {
-					logger.warning("Revision of local file does not match expected revision");
+				if (!revisions.isEmpty()) {
+					RevisionData firstAdded = (RevisionData)revisions.get(0);
+					if (!finalRevisionIsDead() && !firstAdded.getRevisionNumber().equals(revision)) {
+						logger.warning("Revision of " + name + " does not match expected revision");
+					}
 				}
 				return builder.getLOC(name);
 			}

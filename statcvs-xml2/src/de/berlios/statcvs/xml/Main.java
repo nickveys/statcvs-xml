@@ -56,7 +56,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * 
  * @author Steffen Pingel
  * @author Tammo van Lessen
- * @version $Id: Main.java,v 1.23 2004-03-05 21:58:02 squig Exp $
+ * @version $Id: Main.java,v 1.24 2004-03-06 15:14:02 squig Exp $
  */
 public class Main {
 
@@ -224,7 +224,7 @@ public class Main {
 		
 		String logFilename = settings.getString("logFile", "cvs.log");
 		if (!new File(logFilename).exists()) {
-			throw new IOException(I18n.tr("CVS log file '{0}' not found, please run 'cvs log > {0}'", logFilename));
+			throw new IOException(I18n.tr("CVS log file {0} not found, please run ''cvs log > {0}''", logFilename));
 		}
 		
 		Reader logReader = new FileReader(logFilename);
