@@ -63,14 +63,14 @@
       <li>The easiest way to install the StatCvs maven plugin is
       through maven:
 
-<source>maven plugin:download -DartifactId=maven-statcvs-plugin -DgroupId=statcvs -Dversion=2.5</source></li>
+<source>maven plugin:download -DartifactId=maven-statcvs-plugin -DgroupId=statcvs -Dversion=2.6</source></li>
 
 	  <li>Alternatively you can <a
 	  href="http://developer.berlios.de/project/showfiles.php?group_id=872">download</a>
 	  the plugin manually, unpack the jar archive and install the
 	  plugin into your Maven repository:
 
-<source>jar xvf maven-statcvs-plugin-2.5.jar
+<source>jar xvf maven-statcvs-plugin-2.6.jar
 maven plugin:install</source></li>
 
       <li>Or add a dependency in your project.xml:
@@ -78,7 +78,7 @@ maven plugin:install</source></li>
 <source><![CDATA[<dependency>
   <groupId>statcvs</groupId>
   <artifactId>maven-statcvs-plugin</artifactId>
-  <version>2.5</version>
+  <version>2.6</version>
   <type>plugin</type>
 </dependency>]]></source></li>
 
