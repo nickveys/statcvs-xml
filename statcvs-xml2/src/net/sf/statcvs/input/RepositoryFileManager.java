@@ -36,6 +36,7 @@ import net.sf.statcvs.util.FileUtils;
  * line number counts for repository files.
  * 
  * @author Manuel Schulze
+ * @author Steffen Pingel
  * @version $Id$
  */
 public class RepositoryFileManager {

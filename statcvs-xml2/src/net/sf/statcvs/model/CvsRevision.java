@@ -277,7 +277,7 @@ public class CvsRevision implements Comparable {
 	 * Returns a list of {@link SymbolicName}s of this revision or null if
 	 * the revision has no symbolic names. The list is ordered from 
 	 * latest to oldest.
-     *
+	 *
 	 * @return list of symbolic names 
 	 */
 	public SortedSet getSymbolicNames()
