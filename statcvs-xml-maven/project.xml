@@ -23,7 +23,7 @@
 <pomVersion>3</pomVersion>
   <id>maven-statcvs-plugin</id>
   <name>Maven StatCvs Plugin</name>
-  <currentVersion>2.4</currentVersion>
+  <currentVersion>2.5</currentVersion>
   <description/>
   <shortDescription>Provides CVS statistics</shortDescription>
   <logo>/images/statcvslogo.png</logo>
@@ -65,6 +65,11 @@
       <id>2.4</id>
       <name>2.4</name>
       <tag>maven-statcvs-plugin-2_4</tag>
+    </version>
+    <version>
+      <id>2.5</id>
+      <name>2.5</name>
+      <tag>maven-statcvs-plugin-2_5</tag>
     </version>
   </versions> 
 
@@ -118,7 +123,7 @@
     <dependency>
       <groupId>statcvs</groupId>
       <artifactId>statcvs-xml</artifactId>
-      <version>0.9.3</version>
+      <version>0.9.4</version>
     </dependency>
     <dependency>
       <groupId>jdom</groupId>

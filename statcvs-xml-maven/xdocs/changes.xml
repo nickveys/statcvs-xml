@@ -28,6 +28,11 @@
   </properties>
 
   <body>
+	<release version="2.5" date="in CVS">
+      <action dev="vanto" type="fix">
+		Fixed problem with directory names which contain spaces.
+      </action>
+    </release>
 	<release version="2.4" date="2004-04-17">
       <action dev="squig" type="fix">
 		Fixed groupId tags of statcvs dependency (patch by Heritier Arnaud).

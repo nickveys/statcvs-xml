@@ -226,7 +226,7 @@
 	  ${maven_opts}"/> -->
 		<ant:jvmarg value="${maven_opts}"/>
 	  </j:if>
-	  <ant:arg line="-output-dir ${maven.gen.docs}/statcvs"/>
+	  <ant:arg line="-output-dir '${maven.gen.docs}/statcvs'"/>
 	  <ant:arg line="-title '${statcvs.title}'"/>
 	  <ant:arg line="-renderer xdoc"/> 
 	  <j:if test="${statcvs.verbose}">

@@ -70,7 +70,7 @@
 	  the plugin manually, unpack the jar archive and install the
 	  plugin into your Maven repository:
 
-<source>jar xvf maven-statcvs-plugin-2.4.jar
+<source>jar xvf maven-statcvs-plugin-2.5.jar
 maven plugin:install</source></li>
 
       <li>Or add a dependency in your project.xml:
