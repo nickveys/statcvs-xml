@@ -97,6 +97,7 @@
     only support a subset of all possible settings though, but may
     define additional custom settings.</p>
 
+    <a name="reportSettings"/>
     <table>
       <tr>
          <th>Setting</th>
@@ -158,6 +159,13 @@
          <td></td>
          <td>A <a href="#Jexl">Jexl expression</a> filtering the
          output.</td>
+      </tr>
+      <tr>
+         <td>tags</td>
+         <td>LocChart</td>
+         <td></td>
+         <td>A regular expression. Only the tags that match the
+         expression will be included.</td> 
       </tr>
       <tr>
          <td>title</td>
@@ -299,6 +307,12 @@
          <td></td>
          <td>Prints a list of the documents generated up to that
          point. Useful for the index page.</td> 
+      </tr>
+      <tr>
+         <td>MostCommonCommentsTable</td>
+         <td>commits</td>
+         <td>Prints a list of the commit comments, sorted by
+         frequency.</td> 
       </tr>
     </table>
 

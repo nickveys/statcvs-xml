@@ -34,7 +34,9 @@
   </xsl:template>
 
   <xsl:template match="report">
-    <h2><xsl:value-of select="@name"/></h2>
+    <xsl:if test="@name != ''">
+      <h2><xsl:value-of select="@name"/></h2>
+    </xsl:if>
 	<xsl:apply-templates select="*"/>
   </xsl:template>
 

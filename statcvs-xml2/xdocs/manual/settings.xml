@@ -37,6 +37,7 @@
       <setting key="Output">**/output/*</setting>
       <setting key="Model">**/model/*</setting>
     </modules>
+    <tags>^stable-\d_\d$</tags>
   </settings>
 </statcvs>
 ]]></source>
@@ -54,6 +55,9 @@
   </section>
 
   <section name="Settings">
+
+    <p>In addition to global StatCvs-XML settings it is also possible to
+    <a href="suite.html#reportSettings">customize reports</a>.</p>
 
     <table>
       <tr>
