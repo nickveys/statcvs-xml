@@ -56,3 +56,7 @@ xml :
 	$(JAVA_HOME)/bin/java -classpath $(CP) net.sf.statcvs.Main \
 	  $(CVS_LOG) $(CVS_PATH) -output-dir out-xml -output-suite 
 
+deploy :
+	make all
+	make xdoc
+	maven site:deploy

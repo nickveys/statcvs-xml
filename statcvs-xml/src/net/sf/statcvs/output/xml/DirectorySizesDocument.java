@@ -18,13 +18,13 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: DirectorySizesDocument.java,v $ 
-	Created on $Date: 2003-06-18 21:22:43 $ 
+	Created on $Date: 2003-06-18 23:10:53 $ 
 */
 package net.sf.statcvs.output.xml;
 
 import java.util.Iterator;
 
-import net.sf.statcvs.Messages;
+import net.sf.statcvs.*;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
@@ -50,14 +50,11 @@ public class DirectorySizesDocument extends StatCvsDocument {
 	 * @param filename
 	 */
 	public DirectorySizesDocument(CvsContent content) {
-		super("dir_sizes");
+		super(I18n.tr("Module Sizes"), "dir_sizes");
+
 		cvsContent = content;
 		
-		Element root = new Element("document");
-		root.setAttribute("title", "Module Sizes");
-		setRootElement(root);
-		
-		root.addContent(getModulesReport());
+		getRootElement().addContent(getModulesReport());
 	}
 
 	/**
@@ -75,7 +72,7 @@ public class DirectorySizesDocument extends StatCvsDocument {
 		IntegerMap dirLoC = new IntegerMap();
 
 		Element report = new Element("report");
-		report.setAttribute("title", "Module Sizes");
+		report.setAttribute("name", "Module Sizes");
 		report.addContent(new Element("img")
 			.setAttribute("src", "module_sizes.png"));
 
@@ -95,7 +92,7 @@ public class DirectorySizesDocument extends StatCvsDocument {
 			el.setAttribute("name", key.isRoot() ? "/" : key.getPath());
 			el.setAttribute("changes", ""+dirChanges.get(key));
 			el.setAttribute("lines", ""+dirLoC.get(key));
-			el.setAttribute("changesPerLine", ""+(double)dirLoC.get(key) / dirChanges.get(key));
+			el.setAttribute("linesPerChange", ""+(double)dirLoC.get(key) / dirChanges.get(key));
 			el.setAttribute("changesPercent", ""+dirChanges.getPercent(key));
 			el.setAttribute("linesPercent", ""+dirLoC.getPercent(key));
 			list.addContent(el);			

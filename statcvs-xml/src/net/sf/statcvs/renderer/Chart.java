@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Chart.java,v $
-	$Date: 2003-06-17 16:43:02 $ 
+	$Date: 2003-06-18 23:10:53 $ 
 */
 package net.sf.statcvs.renderer;
 
@@ -75,7 +75,8 @@ public class Chart {
 	public void createChart() {
 		addTitles();
 		showCreditInformation();
-		chart.setBackgroundPaint(new Color(208, 208, 208));
+		//chart.setBackgroundPaint(new Color(208, 208, 208));
+		chart.setBackgroundPaint(Color.white);
 	}
 
 	/**

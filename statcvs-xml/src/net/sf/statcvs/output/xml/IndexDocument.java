@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: IndexDocument.java,v $ 
-	Created on $Date: 2003-06-18 21:22:43 $ 
+	Created on $Date: 2003-06-18 23:10:53 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -69,17 +69,22 @@ public class IndexDocument extends StatCvsDocument {
 	}
 
 	private Chart createLOCChart(String filename,
-										int width, int height) {
+								 int width, int height) {
 		String projectName = content.getModuleName();
-		String subtitle = Messages.getString("TIME_LOC_SUBTITLE");
 		RevisionIterator it
 			= new RevisionSortIterator(content.getRevisionIterator());
-		BasicTimeSeries series = getTimeSeriesFromIterator(it, subtitle);
+		LOCSeriesBuilder locCounter 
+			= new LOCSeriesBuilder(I18n.tr("Lines Of Code"), true);
+		while (it.hasNext()) {
+			locCounter.addRevision(it.next());
+		}
+		BasicTimeSeries series = locCounter.getTimeSeries();
+		
 		if (series == null) {
 			return null;
 		}
-		return new LOCChart(series, projectName, subtitle, filename, 
-							width, height);
+		return new LOCChart(series, projectName, I18n.tr("Lines Of Code"),
+							filename, width, height);
 	}
 
 	private Element createReportRefs() {
@@ -107,15 +112,6 @@ public class IndexDocument extends StatCvsDocument {
 		return reportRoot;
 	}
 
-	private BasicTimeSeries getTimeSeriesFromIterator
-		(RevisionIterator it, String title) {
-		LOCSeriesBuilder locCounter = new LOCSeriesBuilder(title, true);
-		while (it.hasNext()) {
-			locCounter.addRevision(it.next());
-		}
-		return locCounter.getTimeSeries();
-	}
-
 	private Element createLOCReport() {
 		Element reportRoot = new Element("report");
 		reportRoot.setAttribute("name", "Lines Of Code");
@@ -130,5 +126,20 @@ public class IndexDocument extends StatCvsDocument {
 
 		return reportRoot;
 	}
+
+//  	private Element createAuthorsReport()
+//  	{
+//  		calculateChangesAndLinesPerAuthor(getContent().getRevisionIterator());
+//  		Iterator it = getLinesMap().iteratorSortedByValueReverse();
+//  		for (int i = 0; i < 10; i++) {
+//  			if (!it.hasNext()) {
+//  				break;
+//  			}
+//  			Author author = (Author) it.next();
+//  			authors.addValue(author);
+//  			linesOfCode.addValue(getLinesMap().get(author));
+//  		}
+//  		linesOfCode.setSum(getLinesMap().sum());
+//  	}
 
 }

@@ -25,17 +25,6 @@
 	</section>
   </xsl:template>
 
-  <xsl:template match="commitlog">
-     <table>
-        <tr>
-       	  <th>Date</th>
-	      <th>Author</th>
-          <th>File/Message</th>
-      	</tr>
-		<xsl:apply-templates select="*"/>
-     </table>
-  </xsl:template>
-
   <xsl:template match="commit">
 	 <tr>
        <td><xsl:value-of select="@date"/></td>
@@ -50,12 +39,15 @@
      </tr>
   </xsl:template>
 
-  <xsl:template match="period">
-    <p><xsl:value-of select="@name"/>: <xsl:value-of select="@from"/>
-	<xsl:if test="@to">
-	  to <xsl:value-of select="@to"/>
-    </xsl:if>
-    </p>
+  <xsl:template match="commitlog">
+     <table>
+        <tr>
+       	  <th>Date</th>
+	      <th>Author</th>
+          <th>File/Message</th>
+      	</tr>
+		<xsl:apply-templates select="*"/>
+     </table>
   </xsl:template>
 
   <xsl:template match="file">
@@ -72,6 +64,41 @@
 
   <xsl:template match="img">
     <p align="center"><img src="{@src}"/></p>
+  </xsl:template>
+
+  <xsl:template match="modules">
+     <table>
+        <tr>
+       	  <th>Directory</th>
+	      <th>Changes</th>
+          <th>Lines of code</th>
+          <th>Lines per change</th>
+      	</tr>
+		<xsl:apply-templates select="*"/>
+     </table>
+  </xsl:template>
+
+  <xsl:template match="module">
+	 <tr>
+       <td><xsl:value-of select="@name"/></td>
+       <td>
+         <xsl:value-of select="@changes"/>
+         (<xsl:value-of select="@changesPercent"/>%)
+       </td>
+       <td>
+         <xsl:value-of select="@lines"/> 
+         (<xsl:value-of select="@linesPercent"/>%)
+       </td>
+       <td><xsl:value-of select="@linesPerChange"/></td>
+     </tr>
+  </xsl:template>
+
+  <xsl:template match="period">
+    <p><xsl:value-of select="@name"/>: <xsl:value-of select="@from"/>
+	<xsl:if test="@to">
+	  to <xsl:value-of select="@to"/>
+    </xsl:if>
+    </p>
   </xsl:template>
 
   <xsl:template match="reports">
