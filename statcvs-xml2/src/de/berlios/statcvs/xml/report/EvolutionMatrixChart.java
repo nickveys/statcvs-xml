@@ -119,39 +119,6 @@ public class EvolutionMatrixChart extends AbstractChart {
 		public EvolutionMatrixPlot(CvsContent content) {
 			this.content = content;
 			
-/*			// map integermaps with file => rev.getLines() by version
-			Iterator it = content.getSymbolicNames().iterator();
-			while (it.hasNext()) {
-				SymbolicName sn = (SymbolicName)it.next();
-				Version version = new Version(sn.getName(), sn.getDate());
-				IntegerMap map = (IntegerMap)filesByVersion.get(version);
-				if (map == null) {
-					map = new IntegerMap();
-					filesByVersion.put(version, map);
-				}
-				
-				Iterator revIt = sn.getRevisions().iterator();
-				while (revIt.hasNext()) {
-					CvsRevision rev = (CvsRevision)revIt.next();
-					map.addInt(rev.getFile(), rev.getLines());
-				}
-			}
-			
-			// cheat head into map
-			it = content.getFiles().iterator();
-			IntegerMap map = new IntegerMap();
-			while (it.hasNext()) {
-				CvsFile file = (CvsFile)it.next();
-				if (!file.isDead()) {
-					map.put(file, file.getLatestRevision().getLines());
-				}
-			}
-			
-			filesByVersion.put(new Version("HEAD", new Date()), map);*/
-			
-
-			
-			
 			Iterator it = content.getSymbolicNames().iterator();
 			while (it.hasNext()) {
 				SymbolicName sn = (SymbolicName)it.next();
@@ -193,6 +160,7 @@ public class EvolutionMatrixChart extends AbstractChart {
 					evo.addRevision(version, file.getLatestRevision());
 				}
 			}
+
 			version.setMaxLoc(maxLoc);
 			versions.add(version);			
 		}
@@ -223,88 +191,6 @@ public class EvolutionMatrixChart extends AbstractChart {
 								 plotArea.getHeight() - insets.top - insets.bottom);
 			}
 			
-
-			/*// store file here if file occurs the first time
-			List newAdded = new ArrayList();
-
-			// get version iterator
-			Iterator symIt = filesByVersion.keySet().iterator();
-			
-			double vspace = plotArea.getWidth() / (content.getSymbolicNames().size() + 1);
-			double x = plotArea.getX();
-  			double y = plotArea.getY() + SPACER;
-
-			// set drawing settings
-			Stroke oldStroke = g2.getStroke();
-			Stroke itemStroke = new BasicStroke(LINE_WIDTH);
-			Stroke borderStroke = new BasicStroke(1); 
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-
-			while (symIt.hasNext()) {
-				Version ver = (Version)symIt.next();
-				// get integermaps with files for version
-				IntegerMap map = (IntegerMap)filesByVersion.get(ver);
-				
-				g2.setColor(Color.black);
-				g2.drawString(ver.getName(), (int)x, 
-						(int)plotArea.getY() + SPACER - 10);
-
-				// walk through all directories...
-				Iterator dirIt = content.getDirectories().iterator();
-				while (dirIt.hasNext()) {
-					Directory dir = (Directory)dirIt.next();
-					Iterator fit = dir.getFiles().iterator();
-
-					//g2.setColor(Color.black);
-					//g2.setStroke(borderStroke);
-					//g2.drawRect((int)x, (int)y, (int)plotArea.getMaxX(), (int)y + g2.getFontMetrics().getHeight());
-					//RefineryUtilities.drawAlignedString("xxx", g2, (int)x, (int)y, TextAnchor.BASELINE_LEFT);
-					//g2.drawString(dir.getPath(), (int)x, (int)y);
-					//y = y + g2.getFontMetrics().getHeight();
-					
-					// and files...
-					while (fit.hasNext()) {
-						CvsFile file = (CvsFile)fit.next();
-						
-						// colorize
-						// new: green
-						// old: red
-						// not exist: gray				
-						if (map.contains(file)) {
-							if (!newAdded.contains(file)) {
-								g2.setColor(Color.green);
-								newAdded.add(file);				
-							} else {
-								g2.setColor(Color.red);	
-							}
-							
-						} 
-						else {
-							g2.setColor(Color.lightGray);	
-						}
-						
-						g2.setStroke(itemStroke);
-							
-						// draw line if file belongs to this version
-						//if (map.contains(file)) {
-							int length = (int)((map.getPercentOfMaximum(file) / 100) * (vspace - 5));
-							g2.drawLine((int)x, (int)y, (int)x + length, (int)y);	
-						//}
-						
-						// next line
-						y = y + LINE_WIDTH + 1;
-					}
-				}
-
-				// next block
-				x = x + vspace;
-				y = plotArea.getY() + SPACER;
-			}
-			
-			// clean up
-			g2.setStroke(oldStroke);*/
-			
-			
 			// store file here if file occurs the first time
 			List newAdded = new ArrayList();
 
@@ -324,6 +210,11 @@ public class EvolutionMatrixChart extends AbstractChart {
 			Version lastVersion = null;
 			while (verIt.hasNext()) {
 				Version ver = (Version)verIt.next();
+
+				// draw tag names
+				g2.setColor(Color.black);
+				g2.drawString(ver.getName(), (int)x, 
+						(int)plotArea.getY() + SPACER - 10);
 
 				// walk through all directories...
 				Iterator dirIt = content.getDirectories().iterator();
@@ -368,11 +259,11 @@ public class EvolutionMatrixChart extends AbstractChart {
 							// drawing
 							if (eFile.isInVersion(ver)) {
 								// draw existing file
-								int length = (int)((eFile.getScore(ver)) * (vspace - 5));
+								int length = (int)((eFile.getScore(ver)) * (vspace - 10));
 								g2.drawLine((int)x, (int)y, (int)x + length, (int)y);
 							} else if (eFile.isInVersion(lastVersion)) {
 								// draw deleted file with score of the last known version
-								int length = (int)((eFile.getScore(lastVersion)) * (vspace - 5));
+								int length = (int)((eFile.getScore(lastVersion)) * (vspace - 10));
 								g2.drawLine((int)x, (int)y, (int)x + length, (int)y);
 							}
 							
@@ -380,7 +271,7 @@ public class EvolutionMatrixChart extends AbstractChart {
 							g2.setColor(Color.yellow);
 							//g2.setStroke(new BasicStroke(2));
 							if (lastVersion != null && !eFile.hasSameRevision(lastVersion, ver)) {
-								int length = (int)((eFile.getChangedScore(lastVersion, ver)) * (vspace - 5));
+								int length = (int)((eFile.getChangedScore(lastVersion, ver)) * (vspace - 10));
 								g2.drawLine((int)x, (int)y, (int)x + length, (int)y);								
 							}
 						} else {
