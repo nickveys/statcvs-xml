@@ -1,11 +1,8 @@
 package de.berlios.statcvs.xml.model;
 
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 import net.sf.statcvs.model.Author;
-import net.sf.statcvs.model.Commit;
 import net.sf.statcvs.model.CvsContent;
 
 /**

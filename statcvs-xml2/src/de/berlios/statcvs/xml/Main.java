@@ -28,7 +28,6 @@ import java.net.URL;
 import java.util.Hashtable;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import net.sf.statcvs.input.Builder;
@@ -56,7 +55,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * 
  * @author Steffen Pingel
  * @author Tammo van Lessen
- * @version $Id: Main.java,v 1.25 2004-03-06 15:58:09 squig Exp $
+ * @version $Id: Main.java,v 1.26 2004-03-07 20:06:32 vanto Exp $
  */
 public class Main {
 
@@ -86,9 +85,11 @@ public class Main {
 		}
 
 		try {
+			long startTime = System.currentTimeMillis();
 			ReportSettings settings = readSettings(args);
 			generateSuite(settings);
-			System.out.println(I18n.tr("Done. Generated reports in {0}.", settings.getOutputPath()));
+			long endTime = System.currentTimeMillis();
+			System.out.println(I18n.tr("Done ({0}s). Generated reports in {1}.", new Long((endTime - startTime) / 1000),settings.getOutputPath()));
 		} catch (InvalidCommandLineException e) {
 			System.err.println(e.getMessage());
 			printProperUsageAndExit();

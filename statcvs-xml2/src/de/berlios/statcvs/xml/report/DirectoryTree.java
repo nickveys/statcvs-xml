@@ -26,8 +26,6 @@ import java.util.Iterator;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.Directory;
 
-import org.jdom.Element;
-
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportElement;
