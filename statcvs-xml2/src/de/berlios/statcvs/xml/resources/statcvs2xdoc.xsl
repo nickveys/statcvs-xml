@@ -223,10 +223,6 @@
  		<xsl:with-param name="text" select="@name"/>
 		<xsl:with-param name="localurl" select="ds:getDirectoryFilename(@path)"/>
       </xsl:call-template>
-      <xsl:value-of select="(@depth = following::directoryTree/@depth) or (count(following::directoryTree) = 0)"/>
-      <xsl:value-of select="@depth"/>-
-      <xsl:value-of select="following::*/@depth"/>
-      <xsl:value-of select="count(following::directoryTree) = 0"/>
      </td>
   </xsl:template>
 
