@@ -11,11 +11,9 @@
       href="http://statcvs-xml.berlios.de/">StatCvs-XML</a>.</p>
 
       <p>This page and plugin is maintained by the authors of
-      StatCvs-XML. See the Apache pages for the <a
-      href="http://jira.codehaus.org/secure/BrowseProject.jspa">issue
-      tracker</a> of the <a
-      href="http://maven.apache.org/reference/plugins/statcvs/">official
-      plugin</a>.</p>
+      StatCvs-XML. It superseeds the <a
+      href="http://maven.apache.org/reference/plugins/statcvs/">statcvs
+      plugin</a> formerly shipped with maven.</p>
         
     </section>
 
@@ -34,6 +32,26 @@
     </section>
 
     <section name="Install">
+
+      <subsection name="Release">
+
+      <p>The easiest way to install the StatCvs maven plugin is
+      through maven:</p>
+
+      <source>maven plugin:download -DartifactId=maven-statcvs-plugin -DgroupId=statcvs -Dversion=2.1</source>
+
+      <p>Alternatively you can add a dependency in your project.xml:</p>
+
+<source><![CDATA[<dependency>
+  <groupId>statcvs</groupId>
+  <artifactId>maven-statcvs-plugin</artifactId>
+  <version>2.1</version>
+  <type>plugin</type>
+</dependency>]]></source>
+
+      </subsection>
+
+      <subsection name="Latest (CVS)">
 
       <p>It is easy stay to stay on the cutting edge of the StatCvs-XML
       development. You need to follow these steps:</p>
@@ -70,6 +88,8 @@ co statcvs-xml-maven</tt>
 
       <p>That's it! Now run <tt>maven statcvs xdoc</tt> on your
       project and enjoy the latest of the StatCvs-XML development.</p>
+
+      </subsection>
 
     </section>
 

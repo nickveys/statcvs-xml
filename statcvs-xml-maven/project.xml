@@ -11,15 +11,58 @@
   <url>http://statcvs-xml.berlios.de/maven-plugin/</url>
   <siteAddress>shell.berlios.de</siteAddress>
   <siteDirectory>/home/groups/statcvs-xml/htdocs/maven-plugin/</siteDirectory>
+
   <repository>
     <connection>scm:cvs:pserver:anonymous@cvs.berlios.de:/cvsroot/statcvs-xml:statcvs-xml-maven</connection>
     <url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml-maven/</url>
   </repository>
+
   <issueTrackingUrl>
     http://developer.berlios.de/tracker/?group_id=872
   </issueTrackingUrl>
-  
+
+  <versions>
+    <version>
+      <id>1.2</id>
+      <name>1.2</name>
+      <tag>maven-statcvs-plugin-1_2</tag>
+    </version>
+    <version>
+      <id>2.1</id>
+      <name>2.1</name>
+      <tag>maven-statcvs-plugin-2_1</tag>
+    </version>
+  </versions> 
   <developers>
+    <developer>
+      <name>dIon Gillard</name>
+      <id>dion</id>
+      <email>dion@multitask.com.au</email>
+      <organization>Multitask Consulting</organization>
+      <roles>
+        <role>Documentation</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Vincent Massol</name>
+      <id>vmassol</id>
+      <email>vmassol@pivolis.com</email>
+      <organization>Pivolis</organization>
+      <roles>
+        <role>Creator</role>
+        <role>Java Developer</role>
+        <role>Release Manager</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Emmanuel Venisse</name>
+      <id>evenisse</id>
+      <email>emmanuel@venisse.net</email>
+      <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
     <developer>
       <name>Tammo van Lessen</name>
       <id>vanto</id>
@@ -32,34 +75,6 @@
       <id>squig</id>
       <roles>
         <role>Developer</role>
-      </roles>
-    </developer>
-
-    <developer>
-      <name>dIon Gillard</name>
-      <id>dion</id>
-      <email>dion@multitask.com.au</email>
-      <organization>Multitask Consulting</organization>
-      <roles>
-        <role>Documentation</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Emmanuel Venisse</name>
-      <id>evenisse</id>
-      <email>evenisse@ifrance.com</email>
-      <organization>Fi System</organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Vincent Massol</name>
-      <id>vmassol</id>
-      <email>vmassol@octo.com</email>
-      <organization>Octo Technology</organization>
-      <roles>
-        <role>Java Developer</role>
       </roles>
     </developer>
   </developers>

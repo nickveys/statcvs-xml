@@ -1,7 +1,28 @@
 <?xml version="1.0"?>
+
+<!-- 
+/*
+ * Copyright 2001-2004 The Apache Software Foundation.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ -->
+
 <document>
   <properties>
     <title>Changes</title>
+    <author email="vmassol@pivolis.com">Vincent Massol</author>
+    <author email="evenisse@ifrance.com">Emmanuel Venisse</author>
     <author email="vanto@users.berlios.de">Tammo van Lessen</author>
     <author>Steffen Pingel</author>
   </properties>
@@ -32,10 +53,22 @@
 		passed to StatCvs-XML in that case.
       </action>
     </release>
-	<release version="1.2" date="2003-07-06">
-      <action dev="vanto" type="add">
-		Never released, only exists in cvs.
-      </action>
+    <release version="2.0" date="2003-09-21">
+      <action dev="vmassol" type="update">Migrated the plugin to use
+      the new statcvs-xml jar (which generates XML xdoc output instead
+      of HTML).</action>
+    </release>
+    <release version="1.2" date="2003-09-19">
+      <action dev="dion" type="update">
+       Updated to use
+      maven.docs.*/maven.gen.docs</action>
+      <action dev="evenisse" type="fix" due-to="Alwyn Schoeman"
+      issue="MPSTATCVS-1">Creates maven.build.dir and maven.docs.dest
+      directory if doesn't exist.</action>
+      <action dev="evenisse" type="fix" issue="MPCHANGELOG-9">Register
+      reports only if source, test,... exists. So, corresponding
+      entrys in menu will appear only if reports are
+      registered.</action>
     </release>
   </body>
 </document>
