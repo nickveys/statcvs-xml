@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+
+<document>
+
+<properties>
+ <title>About</title>
+</properties>
+
+<body>
+  <section name="Views">
+
+  <p>
+    StatCVS-XML provides different views on the cvs log data:
+
+    <ul>
+      <li>Global</li>
+      <li>Author</li>
+      <li>Directory</li>
+      <li>Module</li>
+    </ul>
+
+    Each of these views provides a number of access methods to the
+    data. 
+
+    <table>
+    <th>
+      <td>View</td>
+      <td>Access</td>
+    </th>
+    <tr>
+      <td>Global</td>
+      <td>
+        <ul>
+          <li>All</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>Author</td>
+      <td>
+        <ul>
+          <li>Directories</li>
+          <li>Revisions</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>Directory</td>
+      <td>
+        <ul>
+          <li>Directories (Recursively All Subdirectories)</li>
+          <li>Files</li>
+          <li>Revisions</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>Author</td>
+      <td>
+        <ul>
+          <li>Directories</li>
+          <li>Revisions</li>
+        </ul>
+      </td>
+    </tr>
+    </table>
+  </p>
+
+  <p>
+  </p>
+
+  </section>  
+</body>
+
+</document>
+  
