@@ -158,7 +158,7 @@ public class ActivityProgressionChart extends AbstractChart {
 
 	public int getPreferredHeigth() 
 	{
-		return 150 + groupCount * 24;
+		return 120 + groupCount * 24;
 	}
 
 }
