@@ -465,14 +465,15 @@ public class EvolutionMatrixChart extends AbstractChart {
 			CvsRevision target = getRevision(oldV);
 			CvsRevision curr = getRevision(thisV);
 			double change = curr.getReplacedLines();	
-			
+			int revCount = 0;
 			while (target != curr) {
 				curr = curr.getPreviousRevision();
 				if (curr != null) {
-					change += curr.getReplacedLines() / curr.getLines();	
+					change += curr.getReplacedLines() / curr.getLines();
+					revCount++;	
 				}
 			}
-			return (double)change / getRevision(thisV).getLines();
+			return (double)change / revCount;
 		}
 		
 		/**
