@@ -97,7 +97,7 @@ public class EvolutionMatrixChart extends AbstractChart {
      */
     private JFreeChart createChart() 
     {
-        return new JFreeChart(new EvolutionMatrixPlot(content));
+		return new JFreeChart(settings.getProjectName(), null, new EvolutionMatrixPlot(content), false);
     }
 
 	/**
