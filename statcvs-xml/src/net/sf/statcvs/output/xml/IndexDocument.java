@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: IndexDocument.java,v $ 
-	Created on $Date: 2003-06-27 18:15:46 $ 
+	Created on $Date: 2003-07-04 12:51:08 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -94,6 +94,8 @@ public class IndexDocument extends StatCvsDocument {
 											I18n.tr("File Sizes And Counts")));
 			list.addContent(new LinkElement("dir_sizes", 
 											I18n.tr("Directory Sizes")));
+			list.addContent(new LinkElement("dir_activity", 
+											I18n.tr("Directory Activity")));
 		}
 	}
 

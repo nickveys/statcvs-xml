@@ -17,49 +17,39 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
-	$RCSfile: DirectorySizesDocument.java,v $ 
+	$RCSfile: DirectoryActivityDocument.java,v $ 
 	Created on $Date: 2003-07-04 12:51:08 $ 
 */
 package net.sf.statcvs.output.xml;
 
 import net.sf.statcvs.I18n;
 import net.sf.statcvs.model.CvsContent;
-import net.sf.statcvs.output.xml.chart.AbstractChart;
 import net.sf.statcvs.output.xml.report.CvsCharts;
-import net.sf.statcvs.output.xml.report.CvsReports;
 
 /**
- * DirectorySizesDocument
+ * DirectoryActivityDocument
  * 
  * @author Tammo van Lessen
  */
-public class DirectorySizesDocument extends StatCvsDocument {
+public class DirectoryActivityDocument extends StatCvsDocument {
 
 	private CvsCharts charts;
-	
-	public DirectorySizesDocument(CvsContent content) {
-		super(I18n.tr("Module Sizes"), "dir_sizes");
-
-		CvsReports reports = new CvsReports(content);
-		charts = new CvsCharts(content);
-		
-		getRootElement().addContent(new DirectoryChartReport());
-		getRootElement().addContent(reports.getDirectorySizesReport());
-	}
 
 	/**
-	 * @see net.sf.statcvs.output.xml.StatCvsDocument#getCharts()
+	 * @param filename
 	 */
-	public AbstractChart[] getCharts() {
-		return new AbstractChart[] {charts.getDirectorySizesChart()};
+	public DirectoryActivityDocument(CvsContent content) {
+		super(I18n.tr("Module Activity"), "dir_activity");
+		charts = new CvsCharts(content);
+		getRootElement().addContent(new DirectoryActivityReport());
 	}
 
-	private class DirectoryChartReport extends ReportElement {
+	private class DirectoryActivityReport extends ReportElement {
 
-		public DirectoryChartReport() {
-			super(I18n.tr("Directory Sizes"));
-			addContent(new ChartElement(
-				DirectorySizesDocument.this.charts.getDirectorySizesChart()));
+		public DirectoryActivityReport() {
+			super(I18n.tr("Module Activity"));
+			addContent(new ChartElement(charts.getModuleActivityChart()));
 		}
+		
 	}
 }

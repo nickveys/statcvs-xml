@@ -18,13 +18,14 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Main.java,v $ 
-	Created on $Date: 2003-07-01 22:56:39 $ 
+	Created on $Date: 2003-07-04 12:51:08 $ 
 */
 package net.sf.statcvs;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.*;
+import java.io.Reader;
 import java.lang.reflect.Method;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -38,14 +39,14 @@ import net.sf.statcvs.output.CommandLineParser;
 import net.sf.statcvs.output.ConfigurationException;
 import net.sf.statcvs.output.ConfigurationOptions;
 import net.sf.statcvs.output.HTMLOutput;
-import net.sf.statcvs.output.xml.*;
+import net.sf.statcvs.output.xml.OutputSettings;
 
 /**
  * StatCvs Main Class; it starts the application and controls command-line
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.5 2003-07-01 22:56:39 vanto Exp $
+ * @version $Id: Main.java,v 1.6 2003-07-04 12:51:08 vanto Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -216,7 +217,7 @@ public class Main {
 			}
 
 			logger.info("Creating suite using "+ConfigurationOptions.getOutputSuite());
-
+		
 			Class c = Class.forName(ConfigurationOptions.getOutputSuite());
 			Method m = c.getMethod("generate", new Class[] { CvsContent.class });
 			m.invoke(null, new Object[] { content });
