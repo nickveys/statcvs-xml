@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommitLogDocument.java,v $
-	$Date: 2003-06-19 21:58:24 $ 
+	$Date: 2003-06-19 23:48:28 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -37,27 +37,25 @@ import org.jdom.Element;
 public class CommitLogDocument extends AbstractPageableDocument {
 
 	private static final Logger logger = Logger.getLogger("net.sf.statcvs.output.xml.CommitLogDocument");
-	
+	private CvsContent content;
 	/**
 	 * 
 	 */
 	public CommitLogDocument(CvsContent content) {
 		super("Commitlog","commit_log", 5);
-		
+		this.content = content;
 		Element root = getRootElement();
 		Element report = new Element("report");
 		
 		root.addContent(report);
 		Element rootClone = (Element)root.clone();
 		
-		Element page = new CommitLogElement(CommitLogElement.getCommitList(content));		
-		
-		setPageableContent(page);
-
-		report.addContent(page);
+		Element commitLog = getPageableContent();
+		report.addContent(commitLog);
+		setPageableContent(commitLog);
 	}
 	
-	public Element getPageParent() {
+	public Element createPageTemplate() {
 		Document doc = new StatCvsDocument("Commitlog",null);
 		Element docEl = new Element("document");
 		docEl.setAttribute("title", "Commitlog");
@@ -66,5 +64,9 @@ public class CommitLogDocument extends AbstractPageableDocument {
 		docEl.addContent(report);
 		doc.setRootElement(docEl);
 		return report;
+	}
+	
+	public Element getPageableContent() {
+		return new CommitLogElement(CommitLogElement.getCommitList(content));
 	}
 }

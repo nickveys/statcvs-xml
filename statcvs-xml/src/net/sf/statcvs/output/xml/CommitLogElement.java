@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommitLogElement.java,v $
-	$Date: 2003-06-17 17:32:18 $ 
+	$Date: 2003-06-19 23:48:28 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -77,8 +77,8 @@ public class CommitLogElement extends Element {
 			//comel.setAttribute("date", commit.getDate().toString());
 			comEl.setAttribute("date", DateUtils.formatDateAndTime(commit.getDate()));
 			
-			comEl.setAttribute("changedfiles", Integer.toString(commit.getChangeCount()));						
-			comEl.setAttribute("changedlines", Integer.toString(locSum));
+			comEl.setAttribute("changedfiles", ""+commit.getChangeCount());						
+			comEl.setAttribute("changedlines", ""+locSum);
 			comEl.addContent(new Element("comment").setText(commit.getComment()));
 
 			comEl.addContent(createFilesElement(commit));
@@ -113,7 +113,8 @@ public class CommitLogElement extends Element {
 				}
 				CvsRevision revision =
 					(CvsRevision) revisions.get(directory + filename);
-				
+		
+				file.setAttribute("revision", revision.getRevision());
 				// links to webrepo				
 				WebRepositoryIntegration webRepository = ConfigurationOptions.getWebRepository();
 				if (webRepository != null) {
@@ -133,14 +134,14 @@ public class CommitLogElement extends Element {
 					if (revision.getFile().isBinary()) {
 						file.setAttribute("type", "binary");
 					} else {
-						file.setAttribute("lines", Integer.toString(revision.getLinesOfCode()));
+						file.setAttribute("lines", ""+revision.getLinesOfCode());
 					}
 				} else if (revision.isDead()) {
 					file.setAttribute("action", "deleted");
 				} else {
 					file.setAttribute("action", "changed");
-					file.setAttribute("added", Integer.toString(revision.getLinesAdded()));
-					file.setAttribute("removed", Integer.toString(revision.getLinesRemoved()));
+					file.setAttribute("added", ""+revision.getLinesAdded());
+					file.setAttribute("removed", ""+revision.getLinesRemoved());
 				}
 				files.addContent(file);
 			}

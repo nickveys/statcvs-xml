@@ -35,12 +35,15 @@
 		  <xsl:value-of select="@changedlines"/> Lines changed)
 		  <br/>
 		  <xsl:for-each select="files/file">
-              <xsl:value-of select="@directory"/>
-              <xsl:value-of select="@name"/><xsl:text> </xsl:text>
+              <xsl:element name="a">
+                   <xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute>
+                   <xsl:value-of select="@directory"/>
+                   <xsl:value-of select="@name"/><xsl:text> </xsl:text><xsl:value-of select="@revision"/>
+              </xsl:element>
               <xsl:if test="@action = 'added'">
-                <font color="green">added</font>
+                <font color="green">added <xsl:value-of select="@lines"/></font>
               </xsl:if>
-              <xsl:if test="@action = 'removed'">
+              <xsl:if test="@action = 'deleted'">
                 <font color="red">removed</font>
               </xsl:if>
               <xsl:if test="@action = 'changed'">

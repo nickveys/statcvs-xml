@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Pageable.java,v $
-	$Date: 2003-06-19 21:58:24 $ 
+	$Date: 2003-06-19 23:48:28 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -35,5 +35,5 @@ public interface Pageable {
 	public Element getPage(int page);
 	public int getPageCount();
 	public String getFilename(int page);
-	public Element getPageParent();
+	public Element createPageTemplate();
 }
