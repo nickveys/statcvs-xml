@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ConfigurationOptions.java,v $
-	$Date: 2004-02-15 18:56:13 $ 
+	$Date: 2004-02-17 15:44:43 $ 
 */
 package net.sf.statcvs.output;
 
@@ -33,23 +33,13 @@ import net.sf.statcvs.util.FileUtils;
  * can read all parameter values from here.
  * 
  * @author jentzsch
- * @version $Id: ConfigurationOptions.java,v 1.2 2004-02-15 18:56:13 squig Exp $
+ * @version $Id: ConfigurationOptions.java,v 1.3 2004-02-17 15:44:43 squig Exp $
  */
 public class ConfigurationOptions {
 
 	private static FilePatternMatcher includePattern = null;
 	private static FilePatternMatcher excludePattern = null;
-	private static String projectName;
-	private static String outputDir = "";
 	
-	/**
-	 * @return
-	 */
-	public static Object getProjectName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	/**
 	 * Sets a file include pattern list. Only files matching one of the
 	 * patterns will be included in the analysis.
@@ -70,21 +60,6 @@ public class ConfigurationOptions {
 	 */
 	public static void setExcludePattern(String patternList) {
 		excludePattern = new FilePatternMatcher(patternList);
-	}
-	/**
-	 * Returns the outputDir.
-	 * @return String output Directory
-	 */
-	public static String getOutputDir() {
-		return outputDir;
-	}
-	
-	/**
-	 * Sets a project title to be used in the reports
-	 * @param projectName The project title to be used in the reports
-	 */
-	public static void setProjectName(String projectName) {
-		ConfigurationOptions.projectName = projectName;
 	}
 	
 	/**
@@ -107,24 +82,4 @@ public class ConfigurationOptions {
 		return true;
 	}
 
-	/**
-	 * Sets the outputDir.
-	 * @param outputDir The outputDir to set
-	 * @throws ConfigurationException if the output directory cannot be created
-	 */
-	public static void setOutputDir(String outputDir) throws ConfigurationException {
-		if (!outputDir.endsWith(FileUtils.getDirSeparator())) {
-			outputDir += FileUtils.getDefaultDirSeparator();
-		}
-		File outDir = new File(outputDir);
-		if (!outDir.exists()) {
-			outDir.mkdir();
-		}
-		if (outDir.length() > 0 && (!outDir.exists() || !outDir.isDirectory())) {
-			throw new ConfigurationException(
-					"Can't create output directory: " + outputDir);
-		}
-		ConfigurationOptions.outputDir = outputDir;
-	}
-	
 }

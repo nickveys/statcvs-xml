@@ -18,11 +18,9 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: DateUtils.java,v $ 
-	Created on $Date: 2004/02/13 17:48:46 $ 
+	Created on $Date: 2004/02/17 15:34:44 $ 
 */
 package net.sf.statcvs.util;
-
-import net.sf.statcvs.Messages;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,7 +31,7 @@ import java.util.Locale;
 /** 
  * Utility functions for date handling
  * @author Lukasz Pekacki
- * @version $Id: DateUtils.java,v 1.1.1.1 2004/02/13 17:48:46 squig Exp $
+ * @version $Id: DateUtils.java,v 1.2 2004/02/17 15:34:44 squig Exp $
  */
 public class DateUtils {
 	private static final String LOG_TIMESTAMP_FORMAT =

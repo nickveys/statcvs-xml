@@ -44,7 +44,7 @@ import net.sf.statcvs.util.LookaheadReader;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.3 2004-02-15 18:56:13 squig Exp $
+ * @version $Id: Main.java,v 1.4 2004-02-17 15:44:43 squig Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -84,7 +84,6 @@ public class Main {
 			if (Settings.getIncludePattern() != null) {
 				ConfigurationOptions.setIncludePattern(Settings.getIncludePattern());
 			}
-			ConfigurationOptions.setOutputDir(Settings.getOutputDir());
 			
 			run();
 		} catch (IOException e) {
