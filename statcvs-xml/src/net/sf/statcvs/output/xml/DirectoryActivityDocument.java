@@ -18,12 +18,13 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: DirectoryActivityDocument.java,v $ 
-	Created on $Date: 2003-07-04 12:51:08 $ 
+	Created on $Date: 2003-07-04 13:03:07 $ 
 */
 package net.sf.statcvs.output.xml;
 
 import net.sf.statcvs.I18n;
 import net.sf.statcvs.model.CvsContent;
+import net.sf.statcvs.output.xml.chart.AbstractChart;
 import net.sf.statcvs.output.xml.report.CvsCharts;
 
 /**
@@ -52,4 +53,12 @@ public class DirectoryActivityDocument extends StatCvsDocument {
 		}
 		
 	}
+	
+	/**
+	 * @see net.sf.statcvs.output.xml.StatCvsDocument#getCharts()
+	 */
+	public AbstractChart[] getCharts() {
+		return new AbstractChart[] {charts.getModuleActivityChart()};
+	}
+
 }
