@@ -28,7 +28,7 @@
   </properties>
 
   <body>
-	<release version="2.3" date="2004-03-29">
+	<release version="2.3" date="2004-04-05">
       <action dev="vanto" type="update">
 		The dependency on StatCvs-XML has been updated to version
 		0.9.3.
