@@ -41,7 +41,7 @@ public class ChartReportElement extends ReportElement {
 		Element element = new Element("img");
 		element.setAttribute("src", chart.getFilename());
 
-		if (tooltipMap != null) {
+		if (tooltipMap != null && settings.getBoolean("imagemap", false)) {
 			element.setAttribute("usemap", "#" + tooltipMap.getMapName());
 			addContent(tooltipMap);
 		}
