@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: DocumentSuite.java,v $
-	$Date: 2003-07-06 13:58:07 $ 
+	$Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -28,7 +28,14 @@ import java.util.Iterator;
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.Directory;
-import net.sf.statcvs.output.xml.document.*;
+import net.sf.statcvs.output.xml.document.AuthorDocument;
+import net.sf.statcvs.output.xml.document.AuthorsDocument;
+import net.sf.statcvs.output.xml.document.CommitLogDocument;
+import net.sf.statcvs.output.xml.document.DirectoryActivityDocument;
+import net.sf.statcvs.output.xml.document.DirectorySizesDocument;
+import net.sf.statcvs.output.xml.document.FileSizesDocument;
+import net.sf.statcvs.output.xml.document.IndexDocument;
+import net.sf.statcvs.output.xml.document.ModuleDocument;
 
 /**
  * XMLSuite

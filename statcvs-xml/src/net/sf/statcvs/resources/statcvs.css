@@ -3,15 +3,15 @@ body {
   font-family: Verdana, Helvetica, Arial, sans-serif;
   font-size: 84%;
   color: #000;
-  background-color: #CCCCBB;
+  background-color: #fff;
 }
 h1 {
   margin-left: -25px;
   padding: 0.4em;
   font-size: 200%;
   font-weight: bold;
-  color: #000;
-  background-color: #91AB67;
+  color: #fff;
+  background-color: #008;
 }
 h2 {
   margin-left: -25px;
@@ -19,8 +19,8 @@ h2 {
   padding: 0.3em;
   font-size: 135%;
   font-weight: bold;
-  color: #000;
-  background-color: #91AB67;
+  color: #fff;
+  background-color: #008;
 }
 a:link {
   font-weight: bold;

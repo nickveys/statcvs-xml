@@ -18,14 +18,14 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: HTMLOutputter.java,v $
-	$Date: 2003-07-05 20:12:32 $ 
+	$Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs.output.xml.util;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.List;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.jdom.DocType;

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ModuleActivityChart.java,v $
-	$Date: 2003-07-06 12:30:23 $ 
+	$Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -35,8 +35,8 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.statcvs.ConfigurationOptions;
 import net.sf.statcvs.I18n;
+import net.sf.statcvs.Settings;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
@@ -85,7 +85,7 @@ public class ModuleActivityChart extends AbstractChart {
 	}
 	
 	private JFreeChart createContourPlot() {
-		String title = ConfigurationOptions.getProjectName();
+		String title = Settings.getProjectName();
 		String xAxisLabel = I18n.tr("Date");
 		String yAxisLabel = I18n.tr("Modules");
 		String zAxisLabel = I18n.tr("Commit Activity (%)");

@@ -18,11 +18,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractPieChart.java,v $
-	$Date: 2003-07-06 12:30:23 $ 
+	$Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
-import net.sf.statcvs.ConfigurationOptions;
+import net.sf.statcvs.Settings;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -52,7 +52,7 @@ public abstract class AbstractPieChart extends AbstractChart {
 	 */
 	private void createChart() {
 		// create the chart...
-		JFreeChart chart = ChartFactory.createPie3DChart(ConfigurationOptions.getProjectName(),  // chart title
+		JFreeChart chart = ChartFactory.createPie3DChart(Settings.getProjectName(),  // chart title
 														 dataset,                // data
 														 true,                // include legend
 														 true,

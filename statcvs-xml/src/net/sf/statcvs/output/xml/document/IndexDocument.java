@@ -18,12 +18,13 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: IndexDocument.java,v $ 
-	Created on $Date: 2003-07-06 12:30:23 $ 
+	Created on $Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs.output.xml.document;
 
 import net.sf.statcvs.I18n;
 import net.sf.statcvs.model.CvsContent;
+import net.sf.statcvs.model.RevisionIteratorSummary;
 import net.sf.statcvs.output.xml.CvsCharts;
 import net.sf.statcvs.output.xml.CvsReports;
 import net.sf.statcvs.output.xml.chart.AbstractChart;
@@ -81,6 +82,9 @@ public class IndexDocument extends StatCvsDocument {
 								   content.getFirstDate(), content.getLastDate()));
 			addContent(new PeriodElement(I18n.tr("Generated"),
 								   DateUtils.currentDate()));
+			addContent(new ValueElement("devcount", content.getAuthors().size(), I18n.tr("Developers")));
+			addContent(new ValueElement("filecount", content.getFiles().size(), I18n.tr("Files")));
+			addContent(new ValueElement("devcount", new RevisionIteratorSummary(content.getRevisionIterator()).size(), I18n.tr("Revisions")));
 		}
 	}
 

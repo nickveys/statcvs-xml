@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommandLineParser.java,v $
-	Created on $Date: 2003-07-06 12:30:23 $ 
+	Created on $Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs;
 
@@ -39,7 +39,7 @@ import net.sf.statcvs.output.util.WebRepositoryIntegration;
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.1 2003-07-06 12:30:23 vanto Exp $
+ * @version $Id: CommandLineParser.java,v 1.2 2003-07-06 21:26:39 vanto Exp $
  */
 public class CommandLineParser {
 
@@ -87,41 +87,41 @@ public class CommandLineParser {
 			if (args.isEmpty()) {
 				throw new ConfigurationException("Missing argument for -output-dir");
 			}
-			ConfigurationOptions.setOutputDir(popNextArg());
+			Settings.setOutputDir(popNextArg());
 		} else if (s.equals("output-suite")) {
 			if (args.isEmpty()) {
-				ConfigurationOptions.setOutputSuite
+				Settings.setOutputSuite
 					(XMLRenderer.class.getName());
 			}
 			else {
 				String arg = popNextArg();
 				if (arg.equals("html")) {
-					ConfigurationOptions.setOutputSuite
+					Settings.setOutputSuite
 						(HTMLRenderer.class.getName());
 				}
 				else if (arg.equals("xdoc")) {
-					ConfigurationOptions.setOutputSuite
+					Settings.setOutputSuite
 						(XDocRenderer.class.getName());
 				}
 				else {
-					ConfigurationOptions.setOutputSuite(arg);
+					Settings.setOutputSuite(arg);
 				}
 			}
 		} else if (s.equals("generate-history")) {
-			ConfigurationOptions.setGenerateHistory(true);
+			Settings.setGenerateHistory(true);
 		} else if (s.equals("use-history")) {
-			ConfigurationOptions.setUseHistory(true);
+			Settings.setUseHistory(true);
 		} else if (s.equals("verbose")) {
-			ConfigurationOptions.setVerboseLogging();
+			Settings.setVerboseLogging();
 		} else if (s.equals("debug")) {
-			ConfigurationOptions.setDebugLogging();
+			Settings.setDebugLogging();
 		} else if (s.equals("nocredits")) {
-			ConfigurationOptions.setShowCreditInformation(false);
+			Settings.setShowCreditInformation(false);
 		} else if (s.equals("notes")) {
 			if (args.isEmpty()) {
 				throw new ConfigurationException("Missing argument for -notes");
 			}
-			ConfigurationOptions.setNotesFile(popNextArg());
+			Settings.setNotesFile(popNextArg());
 		} else if (s.equals("weburl")) {
 			if (args.isEmpty()) {
 				throw new ConfigurationException("Missing argument for -weburl");
@@ -130,38 +130,38 @@ public class CommandLineParser {
 			if (wri == null) {
 				throw new ConfigurationException("Cannot recognize web repository type. Please select it explicitly");
 			}
-			ConfigurationOptions.setWebRepository(wri);
+			Settings.setWebRepository(wri);
 		}
 		else if (s.equals("viewcvs")) {
 			if (args.isEmpty()) {
 				throw new ConfigurationException("Missing argument for -viewcvs");
 			}
-			ConfigurationOptions.setWebRepository(new ViewCvsIntegration(popNextArg()));
+			Settings.setWebRepository(new ViewCvsIntegration(popNextArg()));
 		} else if (s.equals("cvsweb")) {
 			if (args.isEmpty()) {
 				throw new ConfigurationException("Missing argument for -cvsweb");
 			}
-			ConfigurationOptions.setWebRepository(new CvswebIntegration(popNextArg()));
+			Settings.setWebRepository(new CvswebIntegration(popNextArg()));
 		} else if (s.equals("chora")) {
 			if (args.isEmpty()) {
 				throw new ConfigurationException("Missing argument for -chora");
 			}
-			ConfigurationOptions.setWebRepository(new ChoraIntegration(popNextArg()));
+			Settings.setWebRepository(new ChoraIntegration(popNextArg()));
 		} else if (s.equals("include")) {
 			if (args.isEmpty()) {
 				throw new ConfigurationException("Missing argument for -include");
 			}
-			ConfigurationOptions.setIncludePattern(popNextArg());
+			Settings.setIncludePattern(popNextArg());
 		} else if (s.equals("exclude")) {
 			if (args.isEmpty()) {
 				throw new ConfigurationException("Missing argument for -exclude");
 			}
-			ConfigurationOptions.setExcludePattern(popNextArg());
+			Settings.setExcludePattern(popNextArg());
 		} else if (s.equals("title")) {
 			if (args.isEmpty()) {
 				throw new ConfigurationException("Missing argument for -title");
 			}
-			ConfigurationOptions.setProjectTitle(popNextArg());
+			Settings.setProjectTitle(popNextArg());
 		} else {
 			throw new ConfigurationException("Unrecognized option -" + s);
 		}
@@ -171,10 +171,10 @@ public class CommandLineParser {
 		argCount++;
 		switch (argCount) {
 			case 1:
-				ConfigurationOptions.setLogFileName(arg);
+				Settings.setLogFileName(arg);
 				break;
 			case 2:
-				ConfigurationOptions.setCheckedOutDirectory(arg);
+				Settings.setCheckedOutDirectory(arg);
 				break;
 			default:
 				throw new ConfigurationException("Too many arguments");

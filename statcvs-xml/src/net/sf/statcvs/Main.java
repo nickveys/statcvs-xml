@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Main.java,v $ 
-	Created on $Date: 2003-07-06 12:30:23 $ 
+	Created on $Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs;
 
@@ -27,6 +27,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Method;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -44,11 +45,10 @@ import net.sf.statcvs.output.OutputSettings;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.14 2003-07-06 12:30:23 vanto Exp $
+ * @version $Id: Main.java,v 1.15 2003-07-06 21:26:39 vanto Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
-	private static LogManager lm = LogManager.getLogManager();
 
 	public static final String VERSION = "@VERSION@";
 	/**
@@ -151,8 +151,8 @@ public class Main {
 		initLogger();
 		
 		CvsContent content = readLogFile();
-		boolean useHistory = ConfigurationOptions.getUseHistory();
-		boolean createHistory = ConfigurationOptions.getGenerateHistory();
+		boolean useHistory = Settings.getUseHistory();
+		boolean createHistory = Settings.getGenerateHistory();
 
 		if (useHistory && createHistory) {
 			CvsLocHistory hist = CvsLocHistory.getInstance();
@@ -173,13 +173,9 @@ public class Main {
 	}
 
 	public static void initLogger() throws LogSyntaxException {
-		try {
-			String props = ConfigurationOptions.getLoggingProperties();
-			lm.readConfiguration(Main.class.getResourceAsStream(props));
-		}
-		catch (IOException e) {
-			System.err.println("ERROR: Logging could not be initialized!");
-		}
+		ConsoleHandler ch = new ConsoleHandler();
+		ch.setLevel(Settings.getLoggingLevel());
+		LogManager.getLogManager().getLogger("net.sf.statcvs").addHandler(ch);
 	}
 
 	/**
@@ -191,20 +187,20 @@ public class Main {
 	public static CvsContent readLogFile() 
 		throws ConfigurationException, IOException, LogSyntaxException
 	{
-		if (ConfigurationOptions.getLogFileName() == null) {
+		if (Settings.getLogFileName() == null) {
 			throw new ConfigurationException("Missing logfile name");
 		}
-		if (ConfigurationOptions.getCheckedOutDirectory() == null) {
+		if (Settings.getCheckedOutDirectory() == null) {
 			throw new ConfigurationException("Missing checked out directory");
 		}
 		
 		logger.info("Parsing CVS log '"
-				+ ConfigurationOptions.getLogFileName() + "'");
+				+ Settings.getLogFileName() + "'");
 
-		Reader logReader = new FileReader(ConfigurationOptions.getLogFileName());
+		Reader logReader = new FileReader(Settings.getLogFileName());
 		RepositoryFileManager repFileMan
 			= new RepositoryFileManager
-				(ConfigurationOptions.getCheckedOutDirectory());
+				(Settings.getCheckedOutDirectory());
 		Builder builder = new Builder(repFileMan);
 		new CvsLogfileParser(logReader, builder).parse();
 		return builder.getCvsContent();
@@ -217,14 +213,14 @@ public class Main {
 	 */
 	public static void generateSuite(CvsContent content) throws Exception {	
 		logger.info("Generating report for " 
-					+ ConfigurationOptions.getProjectName()
-					+ " into " + ConfigurationOptions.getOutputDir());
+					+ Settings.getProjectName()
+					+ " into " + Settings.getOutputDir());
 
-		if (ConfigurationOptions.getOutputSuite() == null) {
-			ConfigurationOptions.setOutputSuite(HTMLRenderer.class.getName());
+		if (Settings.getOutputSuite() == null) {
+			Settings.setOutputSuite(HTMLRenderer.class.getName());
 		}
-		if (ConfigurationOptions.getWebRepository() != null) {
-			logger.info("Assuming web repository is "+ConfigurationOptions.getWebRepository().getName());
+		if (Settings.getWebRepository() != null) {
+			logger.info("Assuming web repository is "+Settings.getWebRepository().getName());
 		}
 		logger.info("Reading output settings");
 		String filename = getSettingsPath() + "output.properties";
@@ -236,9 +232,9 @@ public class Main {
 						   + e.getMessage());
 		}
 
-		logger.info("Creating suite using "+ConfigurationOptions.getOutputSuite());
+		logger.info("Creating suite using "+Settings.getOutputSuite());
 	
-		Class c = Class.forName(ConfigurationOptions.getOutputSuite());
+		Class c = Class.forName(Settings.getOutputSuite());
 		Method m = c.getMethod("generate", new Class[] { CvsContent.class });
 		m.invoke(null, new Object[] { content });
 	}

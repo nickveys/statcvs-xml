@@ -7,8 +7,9 @@
 package net.sf.statcvs.output.xml.chart;
 
 import java.util.Calendar;
-import java.util.*;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import net.sf.statcvs.I18n;
 import net.sf.statcvs.model.Author;
@@ -44,12 +45,12 @@ public class ActivityChart extends AbstractBarChart {
 		this(content.getRevisionIterator(), type);
 		switch (type) {
 			case BY_HOUR :
-				setTitle(I18n.tr("Activity by Hour"));
+				setTitle(I18n.tr("Activity by hour"));
 				setFilename("activity_time.png");
 				setValuesByHour();
 				break;
 			case BY_DAY :
-				setTitle(I18n.tr("Activity by Day"));
+				setTitle(I18n.tr("Activity by day"));
 				setFilename("activity_day.png");
 				setValuesByDay();
 				break;
@@ -62,12 +63,12 @@ public class ActivityChart extends AbstractBarChart {
 		String authorName = AuthorDocument.escapeAuthorName(author.getName());
 		switch (type) {
 			case BY_HOUR :
-				setTitle(I18n.tr("Activity by Hour for {0}",author.getName()));
+				setTitle(I18n.tr("Activity by hour for author {0}",author.getName()));
 				setFilename("activity_time_"+authorName+".png");
 				setValuesByHour();
 				break;
 			case BY_DAY :
-				setTitle(I18n.tr("Activity by Day for {0}",author.getName()));
+				setTitle(I18n.tr("Activity by day for author {0}",author.getName()));
 				setFilename("activity_day_"+authorName+".png");
 				setValuesByDay();
 				break;

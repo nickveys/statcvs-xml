@@ -18,7 +18,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: TimeLineTest.java,v $
-	$Date: 2003-07-06 12:30:23 $
+	$Date: 2003-07-06 21:26:39 $
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -31,7 +31,7 @@ import junit.framework.TestCase;
  * Test cases for {@link TimeLine}
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: TimeLineTest.java,v 1.1 2003-07-06 12:30:23 vanto Exp $
+ * @version $Id: TimeLineTest.java,v 1.2 2003-07-06 21:26:39 vanto Exp $
  */
 public class TimeLineTest extends TestCase {
 	private Date date1 = new Date(100000000);
@@ -85,18 +85,17 @@ public class TimeLineTest extends TestCase {
 	 * Tests an empty TimeLine
 	 */
 	public void testCreation() {
-		TimeLine tl = new TimeLine("title", "domain");
+		TimeLine tl = new TimeLine("title");
 		assertTrue(tl.isEmpty());
 		assertTrue(tl.getDataPoints().isEmpty());
 		assertEquals("title", tl.getTitle());
-		assertEquals("domain", tl.getRangeLabel());
 	}
 	
 	/**
 	 * Tests a TimeLine with one data point
 	 */
 	public void testOneDataPoint() {
-		TimeLine tl = new TimeLine("title", "domain");
+		TimeLine tl = new TimeLine("title");
 		tl.addTimePoint(date1, 100);
 		assertTrue(tl.isEmpty());
 		assertEquals(1, tl.getDataPoints().size());
@@ -109,7 +108,7 @@ public class TimeLineTest extends TestCase {
 	 * Test if the time points will be sorted if added in a non-ascending order 
 	 */
 	public void testSorting() {
-		TimeLine tl = new TimeLine("title", "domain");
+		TimeLine tl = new TimeLine("title");
 		tl.addTimePoint(date2, 100);
 		tl.addTimePoint(date1, 110);
 		tl.addTimePoint(date4, 120);
@@ -122,7 +121,7 @@ public class TimeLineTest extends TestCase {
 	 * Test a time line with only relative values
 	 */
 	public void testDeltaTimeLine() {
-		TimeLine t1 = new TimeLine("title", "domain");
+		TimeLine t1 = new TimeLine("title");
 		t1.setInitialValue(100);
 		t1.addChange(date1, 10);
 		t1.addChange(date2, -5);
@@ -142,7 +141,7 @@ public class TimeLineTest extends TestCase {
 	 * Test a time line with only relative values and no initial value
 	 */
 	public void testIllegalDeltaTimeLine() {
-		TimeLine t1 = new TimeLine("title", "domain");
+		TimeLine t1 = new TimeLine("title");
 		t1.addChange(date1, 10);
 		t1.addChange(date2, -5);
 		try {
@@ -157,7 +156,7 @@ public class TimeLineTest extends TestCase {
 	 * Test a time line with multiple relative values at the same time
 	 */
 	public void testDeltaTimeLineMultipleValues() {
-		TimeLine t1 = new TimeLine("title", "domain");
+		TimeLine t1 = new TimeLine("title");
 		t1.setInitialValue(100);
 		t1.addChange(date1, 10);
 		t1.addChange(date2, -5);

@@ -18,23 +18,26 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLRenderer.java,v $
-	$Date: 2003-07-06 13:58:07 $ 
+	$Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs.output;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Logger;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 
-import net.sf.statcvs.*;
+import net.sf.statcvs.Settings;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.output.xml.DocumentRenderer;
 import net.sf.statcvs.output.xml.DocumentSuite;
 import net.sf.statcvs.output.xml.chart.AbstractChart;
-import net.sf.statcvs.output.xml.document.*;
+import net.sf.statcvs.output.xml.document.Pageable;
+import net.sf.statcvs.output.xml.document.StatCvsDocument;
 import net.sf.statcvs.output.xml.util.XMLOutputter;
 import net.sf.statcvs.util.FileUtils;
 
@@ -82,7 +85,7 @@ public class XMLRenderer implements DocumentRenderer {
 		InputStream in = FileUtils.getResourceAsStream(filename);
 		if (in != null) {
 			try {
-				String target = ConfigurationOptions.getOutputDir()
+				String target = Settings.getOutputDir()
 					+ FileUtils.getFilenameWithoutPath(filename);
 				FileUtils.copyFile(in, new File(target));
 				return true;

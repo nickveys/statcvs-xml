@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XDocRenderer.java,v $
-	$Date: 2003-07-06 12:30:23 $ 
+	$Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs.output;
 
@@ -29,9 +29,9 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
-import net.sf.statcvs.Main;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.output.xml.DocumentSuite;
+import net.sf.statcvs.util.FileUtils;
 
 /**
  * Writes xml files to disk.
@@ -43,9 +43,8 @@ public class XDocRenderer {
 	public static void generate(CvsContent content) 
 		throws IOException, TransformerException
 	{
-		System.out.println(Main.class.getClassLoader().getResource("statcvs.properties"));
 		StreamSource source = new StreamSource
-			(Main.class.getClassLoader().getResource("statcvs2xdoc.xsl").toString());
+			(FileUtils.getResource("resources/statcvs2xdoc.xsl").toString());
 		Transformer transformer 
 			= TransformerFactory.newInstance().newTransformer(source);
 		transformer.setParameter("ext", ".html");

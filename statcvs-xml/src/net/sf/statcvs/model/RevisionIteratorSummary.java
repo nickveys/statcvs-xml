@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: RevisionIteratorSummary.java,v $ 
-	Created on $Date: 2003-06-17 16:43:02 $ 
+	Created on $Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs.model;
 
@@ -37,12 +37,12 @@ import java.util.Vector;
  * 
  * @author Anja Jentzsch
  * @author Richard Cyganiak
- * @version $Id: RevisionIteratorSummary.java,v 1.1 2003-06-17 16:43:02 vanto Exp $
+ * @version $Id: RevisionIteratorSummary.java,v 1.2 2003-07-06 21:26:39 vanto Exp $
  */
 public class RevisionIteratorSummary {
 
 	private Vector buffer = new Vector();
-
+	
 	/**
 	 * Creates a new <code>RevisionIteratorSummary</code>,
 	 * based on a source {@link RevisionIterator}. The
@@ -140,6 +140,7 @@ public class RevisionIteratorSummary {
 	 * @return int number of lines added in the change set
 	 */
 	public int getLineValue() {
+		// remove this messy stuff!
 		int result = 0;
 		Iterator it = buffer.iterator();
 		while (it.hasNext()) {

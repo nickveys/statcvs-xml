@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsFileBlockParser.java,v $ 
-	Created on $Date: 2003-07-06 12:30:23 $ 
+	Created on $Date: 2003-07-06 21:26:39 $ 
 */
 
 package net.sf.statcvs.input;
@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.statcvs.ConfigurationOptions;
+import net.sf.statcvs.Settings;
 import net.sf.statcvs.util.CvsLogUtils;
 import net.sf.statcvs.util.LookaheadReader;
 
@@ -38,7 +38,7 @@ import net.sf.statcvs.util.LookaheadReader;
  * 
  * @author Anja Jentzsch
  * @author Richard Cyganiak
- * @version $Id: CvsFileBlockParser.java,v 1.4 2003-07-06 12:30:23 vanto Exp $
+ * @version $Id: CvsFileBlockParser.java,v 1.5 2003-07-06 21:26:39 vanto Exp $
  */
 public class CvsFileBlockParser {
 
@@ -65,7 +65,7 @@ public class CvsFileBlockParser {
 		String rcsFile = parseSingleLine(logReader.getCurrentLine(), "RCS file: ");
 		String workingFile = parseSingleLine(logReader.getNextLine(), "Working file: ");
 		// initialize history
-		if (ConfigurationOptions.getUseHistory()) {
+		if (Settings.getUseHistory()) {
 			CvsLocHistory.getInstance().load(CvsLogUtils.getModuleName(rcsFile, workingFile));
 		}
 		
@@ -85,9 +85,9 @@ public class CvsFileBlockParser {
 		builder.buildFileSymbolicNames(symbolicNames);
 		new CvsRevisionParser(logReader, builder).parse();
 		builder.buildFileEnd();
-		if (ConfigurationOptions.getProjectName() == null) {
+		if (Settings.getProjectName() == null) {
 			String moduleName = CvsLogUtils.getModuleName(rcsFile, workingFile);
-			ConfigurationOptions.setProjectTitle(moduleName);
+			Settings.setProjectTitle(moduleName);
 		}
 	}
 

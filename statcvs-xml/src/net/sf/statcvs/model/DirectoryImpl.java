@@ -18,16 +18,18 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: DirectoryImpl.java,v $
-	$Date: 2003-06-17 16:43:02 $
+	$Date: 2003-07-06 21:26:39 $
 */
 package net.sf.statcvs.model;
+
+import net.sf.statcvs.I18n;
 
 /**
  * A concrete directory in a directory tree. Implementation of the
  * {@link Directory} interface.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: DirectoryImpl.java,v 1.1 2003-06-17 16:43:02 vanto Exp $
+ * @version $Id: DirectoryImpl.java,v 1.2 2003-07-06 21:26:39 vanto Exp $
  */
 public class DirectoryImpl extends Directory {
 
@@ -79,7 +81,7 @@ public class DirectoryImpl extends Directory {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return "directory " + getPath();
+		return I18n.tr("directory " + getPath());
 	}
 
 	/**

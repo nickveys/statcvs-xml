@@ -18,13 +18,13 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: I18n.java,v $ 
-	Created on $Date: 2003-07-06 13:58:07 $ 
+	Created on $Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs;
 
+import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.text.*;
 
 /**
  * This class provides internationalization support.

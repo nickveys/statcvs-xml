@@ -18,12 +18,12 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ModuleDocument.java,v $ 
-	Created on $Date: 2003-07-06 12:30:23 $ 
+	Created on $Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs.output.xml.document;
 
-import net.sf.statcvs.ConfigurationOptions;
 import net.sf.statcvs.I18n;
+import net.sf.statcvs.Settings;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.output.util.WebRepositoryIntegration;
@@ -73,8 +73,8 @@ public class ModuleDocument extends StatCvsDocument {
 			addContent(new PeriodElement(I18n.tr("Generated"),
 								   DateUtils.currentDate()));
 			
-			if (ConfigurationOptions.getWebRepository() != null) {
-				WebRepositoryIntegration rep = ConfigurationOptions.getWebRepository();
+			if (Settings.getWebRepository() != null) {
+				WebRepositoryIntegration rep = Settings.getWebRepository();
 				String text = I18n.tr("Browse with {0}", rep.getName());
 				addContent(new LinkElement(rep.getDirectoryUrl(directory), text));
 			}

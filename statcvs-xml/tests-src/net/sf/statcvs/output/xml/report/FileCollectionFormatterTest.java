@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$Name: not supported by cvs2svn $ 
-	Created on $Date: 2003-07-06 12:30:23 $ 
+	Created on $Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -27,12 +27,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import junit.framework.TestCase;
-import net.sf.statcvs.output.xml.report.FileCollectionFormatter;
 
 /**
  * @author Anja Jentzsch
  * @author Richard Cyganiak
- * @version $Id: FileCollectionFormatterTest.java,v 1.1 2003-07-06 12:30:23 vanto Exp $
+ * @version $Id: FileCollectionFormatterTest.java,v 1.2 2003-07-06 21:26:39 vanto Exp $
  */
 public class FileCollectionFormatterTest extends TestCase {
 

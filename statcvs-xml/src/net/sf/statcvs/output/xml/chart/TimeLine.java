@@ -18,7 +18,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: TimeLine.java,v $
-	$Date: 2003-07-06 12:30:23 $
+	$Date: 2003-07-06 21:26:39 $
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -38,7 +38,7 @@ import java.util.TreeMap;
  * using {@link #setInitialValue}.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: TimeLine.java,v 1.1 2003-07-06 12:30:23 vanto Exp $
+ * @version $Id: TimeLine.java,v 1.2 2003-07-06 21:26:39 vanto Exp $
  */
 public class TimeLine {
 	private TreeMap dataPoints = new TreeMap();
@@ -46,16 +46,14 @@ public class TimeLine {
 	private int initialValue;
 	private boolean hasInitialValue = false;
 	private String title;
-	private String rangeLabel;
 
 	/**
 	 * Creates a new time line.
 	 * @param title the time line's title
 	 * @param rangeLabel a range label (axis label) for the values
 	 */
-	public TimeLine(String title, String rangeLabel) {
+	public TimeLine(String title) {
 		this.title = title;
-		this.rangeLabel = rangeLabel;
 	}
 
 	/**
@@ -149,14 +147,6 @@ public class TimeLine {
 			newPoint = oldPoint.join(newPoint);
 		}
 		dataPoints.put(newPoint.getDate(), newPoint);
-	}
-
-	/**
-	 * Returns the range label (axis label) of the values
-	 * @return an axis label for the values
-	 */
-	public String getRangeLabel() {
-		return rangeLabel;
 	}
 
 	/**

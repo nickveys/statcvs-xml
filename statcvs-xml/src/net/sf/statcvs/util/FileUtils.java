@@ -18,26 +18,28 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: FileUtils.java,v $ 
-	Created on $Date: 2003-07-06 13:58:07 $ 
+	Created on $Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs.util;
 
-import java.io.*;
-import java.net.*;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
-import net.sf.statcvs.*;
+import net.sf.statcvs.Main;
+import net.sf.statcvs.Settings;
 
 /**
  * Some helpful file functions
  * TODO: Remove redundancy and dependency on ConfigurationOptions, write tests
  * @author Lukasz Pekacki
- * @version $Id: FileUtils.java,v 1.3 2003-07-06 13:58:07 squig Exp $
+ * @version $Id: FileUtils.java,v 1.4 2003-07-06 21:26:39 vanto Exp $
  */
 public class FileUtils {
     /**
@@ -88,7 +90,7 @@ public class FileUtils {
      * @return String the full path to the specified filename
      */
     public static String getFilenameWithDirectory(String filename) {
-        return ConfigurationOptions.getOutputDir() + filename;
+        return Settings.getOutputDir() + filename;
     }
 
     /**

@@ -18,13 +18,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Page.java,v $
-	$Date: 2003-07-06 12:30:23 $ 
+	$Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs.output.xml.document;
 
 import org.jdom.Element;
-
-import net.sf.statcvs.output.xml.document.*;
 
 /**
  * Defines the requirements for classes that implement pages.

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsLocHistory.java,v $ 
-	Created on $Date: 2003-07-06 13:58:07 $ 
+	Created on $Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs.input;
 
@@ -35,8 +35,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import net.sf.statcvs.ConfigurationOptions;
 import net.sf.statcvs.Main;
+import net.sf.statcvs.Settings;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.util.FileUtils;
@@ -48,6 +48,7 @@ import net.sf.statcvs.util.FileUtils;
  */
 public class CvsLocHistory {
 
+	private static final int CURR_HIST_VERSION = 1;
 	private static Logger logger = Logger.getLogger(CvsLocHistory.class.getName());
 	
 	private static CvsLocHistory singleton = new CvsLocHistory();
@@ -59,7 +60,7 @@ public class CvsLocHistory {
 	private boolean loaded = false;
 		
 	private CvsLocHistory() {
-		workingDir = new File(ConfigurationOptions.getCheckedOutDirectory());
+		workingDir = new File(Settings.getCheckedOutDirectory());
 	}
 	
 	public static CvsLocHistory getInstance() {
@@ -73,6 +74,13 @@ public class CvsLocHistory {
 			FileInputStream in = new FileInputStream(filename);
 			try {
 				ObjectInputStream ois = new ObjectInputStream(in);
+				int version = ois.readInt();
+				if (version != CURR_HIST_VERSION) {
+					logger.warning("Old history file found. A new one will be created");
+					loaded = true;
+					Settings.setGenerateHistory(true);
+					return;
+				}
 				fileLocMap = (Map)ois.readObject();
 				loaded = true;
 				logger.info("History file '"+module+".hist' loaded.");
@@ -86,7 +94,7 @@ public class CvsLocHistory {
 			logger.info("no history file found");
 			// dont try to load in next file
 			loaded = true;
-			ConfigurationOptions.setGenerateHistory(true);
+			Settings.setGenerateHistory(true);
 		}
 	}
 	
@@ -97,7 +105,7 @@ public class CvsLocHistory {
 			String filename = Main.getSettingsPath()+module+".hist";
 			out = new FileOutputStream(filename);
 			ObjectOutputStream oos = new ObjectOutputStream(out);
-
+			oos.writeInt(CURR_HIST_VERSION);
 			oos.writeObject(fileLocMap);
 			oos.flush();
 			out.close();
@@ -114,11 +122,11 @@ public class CvsLocHistory {
 			File cvsdir = new File(tmpdir, "CVS");
 			cvsdir.mkdirs();
 
-			FileUtils.copyFile(ConfigurationOptions.getCheckedOutDirectory()+"/CVS/Repository",
+			FileUtils.copyFile(Settings.getCheckedOutDirectory()+"/CVS/Repository",
 				 cvsdir.getAbsolutePath()+"/Repository");
-			FileUtils.copyFile(ConfigurationOptions.getCheckedOutDirectory()+"/CVS/Entries",
+			FileUtils.copyFile(Settings.getCheckedOutDirectory()+"/CVS/Entries",
 				 cvsdir.getAbsolutePath()+"/Entries");
-			FileUtils.copyFile(ConfigurationOptions.getCheckedOutDirectory()+"/CVS/Root",
+			FileUtils.copyFile(Settings.getCheckedOutDirectory()+"/CVS/Root",
 				 cvsdir.getAbsolutePath()+"/Root");
 
 			String[] cmd = {"cvs", "-Q", "update","-d", "-r","1.1"};
@@ -153,10 +161,13 @@ public class CvsLocHistory {
 	public int getLinesOfCode(CvsFile file) {
 		if (!loaded) return -1;
 		// return 0 because we need a second run after hist generation
-		if (ConfigurationOptions.getGenerateHistory()) return 0;
+		if (Settings.getGenerateHistory()) return 0;
 		int lineCount = 0;
 		Integer loc = (Integer)fileLocMap.get(file.getFilenameWithPath());
 		if (loc == null) {
+			if (file.getLatestRevision().isInitialRevision()) {
+				// TODO: Get local loc count... oder auch nicht
+			}
 			try {
 				logger.info("History: LOC count unknown, asking cvs: "+file.getFilenameWithPath());
 				Process cvs = Runtime.getRuntime().exec("cvs -q update -p -r 1.1 "+file.getFilenameWithPath(), 

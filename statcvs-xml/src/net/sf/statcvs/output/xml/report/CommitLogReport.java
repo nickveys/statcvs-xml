@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommitLogReport.java,v $
-	$Date: 2003-07-06 12:30:23 $ 
+	$Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -29,8 +29,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.statcvs.ConfigurationOptions;
 import net.sf.statcvs.I18n;
+import net.sf.statcvs.Settings;
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.Commit;
 import net.sf.statcvs.model.CommitListBuilder;
@@ -263,7 +263,7 @@ public class CommitLogReport extends ReportElement {
 		
 				file.setAttribute("revision", revision.getRevision());
 				// links to webrepo				
-				WebRepositoryIntegration webRepository = ConfigurationOptions.getWebRepository();
+				WebRepositoryIntegration webRepository = Settings.getWebRepository();
 				if (webRepository != null) {
 					CvsRevision previous = revision.getPreviousRevision();
 					String url; 

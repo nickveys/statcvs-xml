@@ -18,11 +18,12 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ValueElement.java,v $
-	$Date: 2003-07-06 12:30:23 $ 
+	$Date: 2003-07-06 21:26:39 $ 
 */
 package	net.sf.statcvs.output.xml.element;
 
-import net.sf.statcvs.util.*;
+import net.sf.statcvs.util.Formatter;
+
 import org.jdom.Element;
 
 /**

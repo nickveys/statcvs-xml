@@ -3,7 +3,7 @@
   <pomVersion>3</pomVersion>
   <name>StatCVS-XML</name>
   <id>statcvs-xml</id>
-  <currentVersion>0.9-SNAPSHOT</currentVersion>
+  <currentVersion>0.9.0</currentVersion>
   <organization>
     <name>StatCvs-XML Team</name>
     <url>http://statcvs-xml.berlios.de/</url>
@@ -58,19 +58,11 @@
 
   <dependencies>
      <dependency>
-      <id>ant</id>
-      <version>1.5.1</version>
-     </dependency>
-     <dependency>
       <id>jdom</id>
       <version>b9</version>
      </dependency>
      <dependency>
       <id>jfreechart</id>
-<!--
-      <version>0.7.3</version>
-      <jar>jfreechart-0.7.3.jar</jar>
--->
       <version>0.9.8</version>
      </dependency>
      <dependency>
@@ -91,8 +83,8 @@
   	
   	<resources>
       <resource>
-        <directory>${basedir}/src/net/sf/statcvs/web-files</directory>
-      	<targetPath>net/sf/statcvs/web-files</targetPath>
+        <directory>${basedir}/src/net/sf/statcvs/resources</directory>
+      	<targetPath>net/sf/statcvs/resources</targetPath>
       </resource>
       <resource>
         <directory>${basedir}/src/net/sf/statcvs</directory>
@@ -101,15 +93,7 @@
 		</includes>
       	<targetPath>net/sf/statcvs</targetPath>
       </resource>
-      <resource>
-        <directory>${basedir}</directory>
-		<includes>
-			<include>*.xsl</include>
-		</includes>
-      </resource>
     </resources>
-
-  	
   </build>
   
   <reports>

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: LocChart.java,v $
-	$Date: 2003-07-06 12:30:23 $ 
+	$Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -66,7 +66,7 @@ public class LocChart extends TimeLineChart {
 	}
 
 	public LocChart(CvsContent content, Directory dir) {
-		super("loc"+ModuleDocument.escapeModuleName(dir)+".png", I18n.tr("Lines Of Code for {0}", dir.getPath()));
+		super("loc"+ModuleDocument.escapeModuleName(dir)+".png", I18n.tr("Lines Of Code for {0}", dir.toString()));
 		
 		if (dir.getCurrentFileCount() == 0) {
 			setChart(null);
@@ -91,7 +91,7 @@ public class LocChart extends TimeLineChart {
 		IntegerMap authorsLoc = new IntegerMap();
 		while (authorsIt.hasNext()) {
 			Author aut = (Author) authorsIt.next();
-			TimeLine locTL = new TimeLine(null, null);
+			TimeLine locTL = new TimeLine(aut.getName());
 			locTL.setInitialValue(0);
 			authorTimeLineMap.put(
 					aut,
@@ -136,7 +136,7 @@ public class LocChart extends TimeLineChart {
 	
 	private TimeLine calculate(RevisionIterator rit) {
 		int loc = 0;
-		TimeLine locTL = new TimeLine(null, null);
+		TimeLine locTL = new TimeLine(null);
 		RevisionIterator it = new RevisionSortIterator(rit);
 		while (it.hasNext()) {
 			CvsRevision rev = (CvsRevision) it.next();

@@ -254,11 +254,11 @@
   </xsl:template>
 
   <xsl:template match="period">
-    <p><xsl:value-of select="@name"/>: <xsl:value-of select="@from"/>
+    <xsl:value-of select="@name"/>: <xsl:value-of select="@from"/>
 	<xsl:if test="@to"><xsl:text> </xsl:text>
       <xsl:value-of select="i18n:tr('to')"/><xsl:text> </xsl:text><xsl:value-of select="@to"/>
     </xsl:if>
-    </p>
+    <br/>
   </xsl:template>
 
   <xsl:template match="reports">
@@ -301,8 +301,8 @@
   </xsl:template>
   
   <xsl:template match="value">
-    <p><xsl:apply-templates/>: <xsl:value-of select="@value"/>
-    </p>    
+    <xsl:apply-templates/>: <xsl:value-of select="@value"/>
+    <br/>    
   </xsl:template>
 
   <!-- copy any other elements through -->

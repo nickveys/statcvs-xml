@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorsPerFileReport.java,v $
-	$Date: 2003-07-06 12:30:23 $ 
+	$Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -27,8 +27,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.statcvs.ConfigurationOptions;
 import net.sf.statcvs.I18n;
+import net.sf.statcvs.Settings;
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
@@ -88,7 +88,7 @@ public class AuthorsPerFileReport extends ReportElement {
 			Element fileEl = new Element("file");
 			fileEl.setAttribute("name", file.getFilenameWithPath());
 			
-			WebRepositoryIntegration webRepository = ConfigurationOptions.getWebRepository();
+			WebRepositoryIntegration webRepository = Settings.getWebRepository();
 			if (webRepository != null) {
 				fileEl.setAttribute("url", webRepository.getFileViewUrl(file));				
 			}

@@ -18,7 +18,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Builder.java,v $
-	$Date: 2003-07-06 12:30:23 $
+	$Date: 2003-07-06 21:26:39 $
 */
 package net.sf.statcvs.input;
 
@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import net.sf.statcvs.ConfigurationOptions;
+import net.sf.statcvs.Settings;
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
@@ -54,7 +54,7 @@ import net.sf.statcvs.util.FileUtils;
  * for each author name and path.</p>
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: Builder.java,v 1.4 2003-07-06 12:30:23 vanto Exp $
+ * @version $Id: Builder.java,v 1.5 2003-07-06 21:26:39 vanto Exp $
  */
 public class Builder {
 
@@ -99,7 +99,7 @@ public class Builder {
 	 * are in a valid state.
 	 */
 	public void finish() {
-		cvsContent = new CvsContent(ConfigurationOptions.getProjectName(), files);
+		cvsContent = new CvsContent(Settings.getProjectName(), files);
 	}
 	
 	/**
@@ -186,7 +186,7 @@ public class Builder {
 			}
 		} 
 
-		if (ConfigurationOptions.getUseHistory() && !CvsLocHistory.getInstance().isEmpty()) {
+		if (Settings.getUseHistory() && !CvsLocHistory.getInstance().isEmpty()) {
 			calculateRealLinesOfCode(file);
 		} else {
 			calculateLinesOfCode(file);
@@ -401,7 +401,7 @@ public class Builder {
 	 */
 	private boolean isFilteredFile(String workingFileName) {
 		return workingFileName.startsWith("CVSROOT")
-				|| !ConfigurationOptions.matchesPatterns(workingFileName);
+				|| !Settings.matchesPatterns(workingFileName);
 	}
 
 	/**

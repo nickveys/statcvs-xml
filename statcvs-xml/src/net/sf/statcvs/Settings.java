@@ -17,8 +17,8 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
-	$RCSfile: ConfigurationOptions.java,v $
-	$Date: 2003-07-06 12:30:23 $ 
+	$RCSfile: Settings.java,v $
+	$Date: 2003-07-06 21:26:39 $ 
 */
 package net.sf.statcvs;
 
@@ -26,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.Level;
 
 import net.sf.statcvs.output.util.WebRepositoryIntegration;
 import net.sf.statcvs.util.FilePatternMatcher;
@@ -37,9 +38,9 @@ import net.sf.statcvs.util.FileUtils;
  * can read all parameter values from here.
  * 
  * @author jentzsch
- * @version $Id: ConfigurationOptions.java,v 1.1 2003-07-06 12:30:23 vanto Exp $
+ * @version $Id: Settings.java,v 1.1 2003-07-06 21:26:39 vanto Exp $
  */
-public class ConfigurationOptions {
+public class Settings {
 
 	private static boolean generateHistory;
 	private static boolean useHistory;
@@ -51,7 +52,7 @@ public class ConfigurationOptions {
 	private static String checkedOutDirectory = null;
 	private static String projectTitle = null;
 	private static String outputDir = "";
-	private static String loggingProperties = LOGGING_CONFIG_DEFAULT;
+	private static Level loggingLevel = Level.WARNING;
 	private static boolean showCreditInformation = true;
 	private static String notesFile = null;
 	private static String notes = null;
@@ -138,7 +139,7 @@ public class ConfigurationOptions {
 			throw new ConfigurationException(
 					"directory does not exist: " + checkedOutDirectory);
 		}
-		ConfigurationOptions.checkedOutDirectory = checkedOutDirectory;
+		Settings.checkedOutDirectory = checkedOutDirectory;
 	}
 
 	/**
@@ -152,7 +153,7 @@ public class ConfigurationOptions {
 			throw new ConfigurationException(
 					"Specified logfile not found: " + logFileName);
 		}
-		ConfigurationOptions.logFileName = logFileName;
+		Settings.logFileName = logFileName;
 	}
 
 	/**
@@ -172,7 +173,7 @@ public class ConfigurationOptions {
 			throw new ConfigurationException(
 					"Can't create output directory: " + outputDir);
 		}
-		ConfigurationOptions.outputDir = outputDir;
+		Settings.outputDir = outputDir;
 	}
 
 	/**
@@ -193,7 +194,7 @@ public class ConfigurationOptions {
 			throw new ConfigurationException(
 					"Can't read notes file: " + notesFile);
 		}
-		ConfigurationOptions.notesFile = notesFile;
+		Settings.notesFile = notesFile;
 		try {
 			notes = readNotesFile();
 		} catch (IOException e) {
@@ -206,7 +207,7 @@ public class ConfigurationOptions {
 	 * @param repo a WebRepositoryIntegration instance
 	 */
 	public static void setWebRepository(WebRepositoryIntegration repo) {
-		ConfigurationOptions.webRepository = repo;
+		Settings.webRepository = repo;
 	}
 
 	/**
@@ -214,29 +215,29 @@ public class ConfigurationOptions {
 	 * @param projectTitle The project title to be used in the reports
 	 */
 	public static void setProjectTitle(String projectTitle) {
-		ConfigurationOptions.projectTitle = projectTitle;
+		Settings.projectTitle = projectTitle;
 	}
 
 	/**
 	 * Gets the name of the logging properties file
 	 * @return the name of the logging properties file
 	 */
-	public static String getLoggingProperties() {
-		return loggingProperties;
+	public static Level getLoggingLevel() {
+		return loggingLevel;
 	}
 
 	/**
 	 * Sets the logging level to verbose
 	 */
 	public static void setVerboseLogging() {
-		ConfigurationOptions.loggingProperties = LOGGING_CONFIG_VERBOSE;
+		Settings.loggingLevel = Level.INFO;
 	}
 
 	/**
 	 * Sets the logging level to debug
 	 */
 	public static void setDebugLogging() {
-		ConfigurationOptions.loggingProperties = LOGGING_CONFIG_DEBUG;
+		Settings.loggingLevel = Level.FINEST;
 	}
 
 	private static String readNotesFile() throws IOException {
@@ -301,7 +302,7 @@ public class ConfigurationOptions {
 	}
 
 	public static void setOutputSuite(String outputSuite) {
-		ConfigurationOptions.outputSuite = outputSuite;
+		Settings.outputSuite = outputSuite;
 	}
 
 	public static boolean getUseHistory() {
