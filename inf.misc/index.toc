@@ -1,0 +1,19 @@
+\select@language {german}
+\sectionintoc {3}{Einf\"uhrung}{6}{1}
+\subsectionintoc {3}{1}{Hintergrund}{6}{1}
+\sectionintoc {4}{Konzepte}{6}{1}
+\subsectionintoc {4}{1}{Architektur}{6}{1}
+\subsectionintoc {4}{2}{Project Object Model}{6}{1}
+\subsectionintoc {4}{3}{Project Properties}{6}{1}
+\subsectionintoc {4}{4}{Repositories}{6}{1}
+\sectionintoc {5}{Installation}{6}{1}
+\sectionintoc {6}{Beispiel}{6}{1}
+\sectionintoc {9}{Einf\"uhrung}{12}{2}
+\subsectionintoc {9}{1}{Hintergrund}{12}{2}
+\sectionintoc {10}{Konzepte}{12}{2}
+\subsectionintoc {10}{1}{Architektur}{12}{2}
+\subsectionintoc {10}{2}{Project Object Model}{12}{2}
+\subsectionintoc {10}{3}{Project Properties}{12}{2}
+\subsectionintoc {10}{4}{Repositories}{12}{2}
+\sectionintoc {11}{Installation}{12}{2}
+\sectionintoc {12}{Beispiel}{12}{2}
