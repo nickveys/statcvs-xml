@@ -129,7 +129,7 @@
         <ant:java classname="de.berlios.statcvs.xml.Main" fork="true">
           <ant:arg line="-output-dir ${maven.gen.docs}/statcvs-xml"/>
           <ant:arg line="-title '${pom.name}'"/>
-          <ant:arg line="-output-suite xdoc"/> 
+          <ant:arg line="-renderer xdoc"/> 
           <ant:arg line="-verbose"/> 
           <ant:arg line="-weburl ${pom.repository.url}"/>
           <j:if test="${statcvs.history} != ''">
