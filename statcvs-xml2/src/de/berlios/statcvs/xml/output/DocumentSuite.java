@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -26,9 +27,11 @@ import org.jdom.input.SAXBuilder;
  */
 public class DocumentSuite {
 
-	private Map filenameByDirectoryPath = new Hashtable();
+	private static Map filenameByDirectoryPath = new Hashtable();
 
-	private Map filenameByAuthorName = new Hashtable();
+	private static Map filenameByAuthorName = new Hashtable();
+
+	private static Map documentTitleByFilename = new LinkedHashMap();
 
 	public static final String PRIVATE_SETTING_PREFIX = "_"; 
 
@@ -141,6 +144,7 @@ public class DocumentSuite {
 		String value = element.getAttributeValue("foreach");
 		if (value == null) {
 			StatCvsDocument document = createDocument(element, defaultSettings);
+			documentTitleByFilename.put(document.getFilename(), document.getTitle());
 			renderer.render(document);
 		}
 		else if ("author".equals(value)) {
@@ -219,14 +223,19 @@ public class DocumentSuite {
 		}
 	}
 	
-	public String getAuthorFilename(String name)
+	public static String getAuthorFilename(String name)
 	{
 		return (String)filenameByAuthorName.get(name);
 	}
 
-	public String getDirectoryFilename(String path)
+	public static String getDirectoryFilename(String path)
 	{
 		return (String)filenameByDirectoryPath.get(path);
+	}
+
+	public static Map getDocuments()
+	{
+		return documentTitleByFilename;
 	}
 	
 }

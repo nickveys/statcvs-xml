@@ -9,23 +9,39 @@
     <tags>test1</tags>
   </settings>
 
-  <document filename="index">
+  <document  filename="author%1" title="Author Statistics%1" foreach="author">
+    <report class="LocByAuthorChart"/>
+    <report class="ModuleSizesChart"/>
+    <report class="ActivityByDayChart"/>        
+    <report class="ActivityByHourChart"/>        
+  </document>
+
+  <document  filename="directory%1" title="Directory Statistics%1" foreach="directory">
     <report class="LocChart"/>
-    <report class="AuthorsTable"/>
-    <report class="AuthorsPerFileTable"/>
-    <report class="RevisionsPerFileTable"/>
-    <report class="FileCountChart"/>    
-    <report class="AvgFileSizeChart"/>    
+  </document>
+
+  <document  filename="authors" title="Author Statistics">
+    <report class="LocByAuthorChart" filename="loc_per_author.png"/>
     <report class="ActivityByDayChart"/>    
     <report class="ActivityByHourChart"/>
-    <report class="ModuleSizesChart"/>
     <report class="AuthorsActivityChart"/>
   </document>
 
-  <document  filename="user%1" foreach="author">
-    <report class="LocChart"/>
-    <report class="ActivityByDayChart"/>        
-    <report class="ActivityByHourChart"/>        
+  <document  filename="file_stats" title="File Statistics">
+    <report class="FileCountChart"/>    
+    <report class="AvgFileSizeChart"/>    
+    <report class="AuthorsPerFileTable"/>
+    <report class="RevisionsPerFileTable"/>
+  </document>
+  
+  <document  filename="module_stats" title="Module Statistics">
     <report class="ModuleSizesChart"/>
   </document>
+    
+  <document filename="index" title="CVS Statistics">
+    <report class="DocumentTable"/>
+    <report class="LocChart"/>
+    <report class="AuthorsTable"/>
+  </document>
+
 </suite>

@@ -8,7 +8,8 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:func="http://statcvs-xml.berlios.de/functions"
                 xmlns:i18n="de.berlios.statcvs.xml.I18n"
-				exclude-result-prefixes="func i18n">
+                xmlns:ds="de.berlios.statcvs.xml.output.DocumentSuite"
+				exclude-result-prefixes="func i18n ds">
 
   <xsl:param name="ext"/>
   <xsl:template match="document">
@@ -38,8 +39,9 @@
           <th><xsl:value-of select="i18n:tr('Lines per Change')"/></th>
       	</tr>
 		<xsl:for-each select="author">
-	  	  <tr>
-       		<td><a href="user_{@name}{$ext}"><xsl:value-of select="@name"/></a></td>
+       	  <xsl:variable name="ref"><xsl:value-of select="ds:getAuthorFilename(@name)"/></xsl:variable>
+       	  <tr>
+       		<td><a href="{$ref}{$ext}"><xsl:value-of select="@name"/></a></td>
        		<td>
           		<xsl:value-of select="@commits"/>
          		(<xsl:value-of select="@commitsPercent"/>%)
