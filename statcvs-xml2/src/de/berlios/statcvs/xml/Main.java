@@ -54,7 +54,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * 
  * @author Steffen Pingel
  * @author Tammo van Lessen
- * @version $Id: Main.java,v 1.30 2004-03-30 16:19:35 squig Exp $
+ * @version $Id: Main.java,v 1.31 2004-06-02 17:39:31 vanto Exp $
  */
 public class Main {
 
@@ -124,7 +124,7 @@ public class Main {
 				+ "  -include <pattern> include only files matching pattern, e.g. **/*.c;**/*.h\n"
 				+ "  -exclude <pattern> exclude matching files, e.g. tests/**;docs/**\n"
 				+ "  -title <title>     Project title to be used in reports\n"
-				+ "  -render <class>    class can be either html, xdoc, xml or a Java class name\n"
+				+ "  -renderer <class>  class can be either html, xdoc, xml or a Java class name\n"
 				+ "  -suite <file>      xml file that is used to generate the documents\n"
 				+ "  -weburl <url>      integrate with web repository installation at <url>\n"
 				+ "  -verbose           print extra progress information\n"
