@@ -68,7 +68,7 @@ public class DirectoryTree {
 				.addInteger("loc", dir.getCurrentLOC());
 		}
 		root.addContent(table);
-		return new Report(root);
+		return new Report(root, table);
 	}
 	
 	public static class DirectoryTreeElement extends ReportElement

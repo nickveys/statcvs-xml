@@ -329,7 +329,11 @@ public class ReportSettings extends Hashtable {
 	
 	public int getItemsPerPage(int defaultValue)
 	{
-		return getInt("itemsPerPage", defaultValue);
+		if (defaultValue == 0) {
+			throw new IllegalArgumentException("itemsPerPage may not be 0");
+		}
+		int items = getInt("itemsPerPage", defaultValue);
+		return (items == 0) ? defaultValue : items;
 	}
 
 	public int getPageNr() {

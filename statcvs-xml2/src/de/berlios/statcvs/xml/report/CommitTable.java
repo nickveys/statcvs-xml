@@ -89,7 +89,7 @@ public class CommitTable {
 			count++;
 		}
 		root.addContent(table);
-		return new Report(root);
+		return new Report(root, table);
 	}
 
 }

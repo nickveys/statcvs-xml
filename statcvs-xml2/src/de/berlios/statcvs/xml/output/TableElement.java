@@ -109,9 +109,14 @@ public class TableElement extends Element
 	/**
 	 * @see de.berlios.statcvs.xml.output.Separable#getPageCount()
 	 */
-	public int getPageCount() {
+	public int getPageCount() 
+	{
 		int items = getContent().size() - 1; // -1 == header
-		return settings.isPaging()?(int) Math.ceil((double)items / (double)settings.getItemsPerPage()):1;
+		return (isEmpty()) 
+			? 0 
+			: (settings.isPaging()) 
+			? (int)Math.ceil((double)items / settings.getItemsPerPage())
+			: 1;
 	}
 
 	public boolean isEmpty()
