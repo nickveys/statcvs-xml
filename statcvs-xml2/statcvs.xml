@@ -24,5 +24,6 @@
       <setting key="Output">**/output/*</setting>
       <setting key="Model">**/model/*</setting>
     </modules>
+    <commitlog.limit>10</commitlog.limit>
   </settings>
 </statcvs>

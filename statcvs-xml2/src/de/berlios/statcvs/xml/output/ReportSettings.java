@@ -187,13 +187,46 @@ public class ReportSettings extends Hashtable {
 
 	public Object get(Object key, Object defaultValue)
 	{
-		Object uber = uberSettings.get(key);
-		if (uber != null) {
-			return uber;
+		Object uberValue = uberSettings.get(key);
+		if (uberValue != null) {
+			return uberValue;
 		}
 		
+		if (!key.equals("id")) {
+			String id = getId();
+			if (id != null) {
+				ReportSettings rootSettings = getRootDefaults();
+				id += "." + key;
+				
+				int i = id.lastIndexOf(".");		
+				while (i != -1) {
+					Object idValue = rootSettings.get1(id, null);
+					if (idValue != null) {
+						return idValue;
+					}
+					
+					id = id.substring(0, i);
+					i = id.lastIndexOf(".");
+				}
+			}
+		}
+		
+		return get1(key, defaultValue);
+	}
+
+	protected Object get1(Object key, Object defaultValue)
+	{
 		Object o = super.get(key);
-		return (o != null) ? o : (defaults != null) ? defaults.get(key, defaultValue) : defaultValue;
+		return (o != null) ? o : (defaults != null) ? defaults.get1(key, defaultValue) : defaultValue;	
+	}
+
+	private ReportSettings getRootDefaults()
+	{
+		ReportSettings root = this;
+		while (root.defaults != null) {
+			root = root.defaults;
+		}
+		return root;
 	}
 
 	/**
@@ -292,6 +325,11 @@ public class ReportSettings extends Hashtable {
 		return (o != null) ? o.getID() : null;
 	}
 
+	public String getId()
+	{
+		return getString("id");
+	}
+	
 	/**
 	 * @param string
 	 * @param i
@@ -597,4 +635,12 @@ public class ReportSettings extends Hashtable {
 			return defaultPic;
 		}
     }
+    
+    public void setId(String id)
+    {
+    	put("id", (defaults != null && defaults.getId() != null) 
+    			? defaults.getId() + "." + id 
+    			: id);
+    }
+    
 }

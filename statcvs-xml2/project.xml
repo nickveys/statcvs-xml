@@ -105,7 +105,7 @@
 
   <build>
 	<sourceDirectory>src</sourceDirectory>
-    <unitTestSourceDirectory>tests-src</unitTestSourceDirectory>
+    <unitTestSourceDirectory>test-src</unitTestSourceDirectory>
 
     <unitTest>
       <includes>
@@ -139,13 +139,14 @@
 <!--	    <report>maven-changelog-plugin</report> -->
 <!--    <report>maven-clover-plugin</report> -->
 <!--    <report>maven-developer-activity-plugin</report> -->
-<!--    <report>maven-file-activity-plugin</report> -->
+<!--    <report>maven-clover-plugin</report> -->
     <report>maven-license-plugin</report>
     <report>maven-javadoc-plugin</report>
+    <report>maven-jcoverage-plugin</report>
     <report>maven-jxr-plugin</report>
+    <report>maven-junit-report-plugin</report>
 <!--    <report>maven-pmd-plugin</report> -->
 	<report>maven-statcvs-plugin</report>
-<!--    <report>maven-junit-report-plugin</report> -->
 <!--    <report>maven-linkcheck-plugin</report> -->
 <!--    <report>maven-tasklist-plugin</report> -->
   </reports>  

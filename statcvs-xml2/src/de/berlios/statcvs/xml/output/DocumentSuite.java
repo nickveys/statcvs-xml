@@ -90,6 +90,8 @@ public class DocumentSuite {
 
 	public StatCvsDocument createDocument(Element root, DocumentRenderer renderer, ReportSettings settings) throws IOException
 	{
+		settings.setId(settings.getString("filename"));
+		
 		// collect reports
 		ReportSettings reportSettings = new ReportSettings(settings);
 		
@@ -185,6 +187,8 @@ public class DocumentSuite {
 		
 		String className = root.getAttributeValue("class");
 		if (className != null) {
+			reportSettings.setId(className);
+			
 			if (className.indexOf(".") == -1) {
 				className = "de.berlios.statcvs.xml.report." + className;
 			}  
