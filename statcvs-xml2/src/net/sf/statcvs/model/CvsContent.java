@@ -47,6 +47,7 @@ public class CvsContent {
 	private Directory root;
 	private Date firstDate = null;
 	private Date lastDate = null;
+	private List commits;
 
 	/**
 	 * Inserts the information about one file into
@@ -67,6 +68,24 @@ public class CvsContent {
 		if (root == null) {
 			initRoot();
 		}
+	}
+
+	/**
+	 * Sets the list of commits.
+	 * TODO: This is just an ugly hack! Must be refactored, maybe by replacing addFile by addCommit
+	 * @param commits the list of commits
+	 */
+	public void setCommits(List commits) {
+		this.commits = commits;
+	}
+
+	/**
+	 * Returns a <tt>List</tt> of all {@link Commit}s.
+	 * 
+	 * @return all commits
+	 */
+	public List getCommits() {
+		return commits;
 	}
 
 	private void adjustStartAndEndDate(Date revisionDate) {

@@ -35,6 +35,8 @@ import java.util.Set;
  * message). The implementation allows for a tolerance of several minutes
  * between individual file commits, but author and message must be identical.
  * 
+ * TODO: Implement Comparable (by date)
+ * TODO: make ordering assumptions for addRevision and getRevisions() explicit (and use SortedSet to store revisions?)
  * @author Richard Cyganiak
  * @version $Id$
  */

@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.logging.Logger;
 
 import net.sf.statcvs.model.Author;
@@ -145,6 +146,12 @@ public class Builder implements CvsLogBuilder {
 		if (result.isEmpty()) {
 			throw new EmptyRepositoryException();
 		}
+
+		// Uh oh...
+		SortedSet revisions = result.getRevisions();
+		List commits = new CommitListBuilder(revisions).createCommitList();
+		result.setCommits(commits);
+
 		return result;
 	}
 
