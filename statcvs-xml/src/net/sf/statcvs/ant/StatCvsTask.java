@@ -18,13 +18,14 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: StatCvsTask.java,v $
-	$Date: 2003-07-04 15:17:27 $ 
+	$Date: 2003-07-04 21:33:31 $ 
 */
 package net.sf.statcvs.ant;
 
 import net.sf.statcvs.Main;
 import net.sf.statcvs.output.ConfigurationException;
 import net.sf.statcvs.output.ConfigurationOptions;
+import net.sf.statcvs.output.WebRepositoryFactory;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -36,7 +37,6 @@ import org.apache.tools.ant.Task;
  */
 public class StatCvsTask extends Task {
 	private String outputSuite;
-	private String webRepositoryType;
 	private String webRepositoryUrl;
 	private String title;
 	private String logFile;
@@ -63,7 +63,7 @@ public class StatCvsTask extends Task {
 			this.initProperties();
 			Main.run();
 		} catch (Exception e) {
-			throw new BuildException(e.getMessage());
+			throw new BuildException(e.getMessage(),e);
 		}
 	}
 	
@@ -90,14 +90,8 @@ public class StatCvsTask extends Task {
 		if (!showCredits) {
 			ConfigurationOptions.setShowCreditInformation(false);
 		}
-		if (webRepositoryType != null && webRepositoryUrl != null) {
-			if (webRepositoryType.equals("cvsweb")) {
-				ConfigurationOptions.setCvswebURL(webRepositoryUrl);
-			} else if (webRepositoryType.equals("viewcvs")) {
-				ConfigurationOptions.setViewCvsURL(webRepositoryUrl);
-			} else if (webRepositoryType.equals("chora")) {
-				ConfigurationOptions.setChoraURL(webRepositoryUrl);	
-			}
+		if (webRepositoryUrl != null) {
+			ConfigurationOptions.setWebRepository(WebRepositoryFactory.getInstance(webRepositoryUrl));
 		}
 		if (include != null) {
 			ConfigurationOptions.setIncludePattern(this.include);
@@ -159,16 +153,6 @@ public class StatCvsTask extends Task {
 	 */
 	public void setWebRepositoryUrl(String url) {
 		this.webRepositoryUrl = url;
-	}
-	
-	/**
-	 * @param url String representing the vendor of a 
-	 * Webrepository CVS installation
-	 * 
-	 * allowed values: "viewcvs", "cvsweb", "chora"
-	 */
-	public void setWebRepositoryType(String type) {
-		this.webRepositoryType = type;
 	}
 	
 	/**

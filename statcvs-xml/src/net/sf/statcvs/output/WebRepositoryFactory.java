@@ -15,23 +15,20 @@ import java.util.logging.Logger;
  */
 public class WebRepositoryFactory {
 	
-	private static Logger logger = Logger.getLogger("net.sf.statcvs.output.WebRepositoryFactory");
+	private static Logger logger = Logger.getLogger("net.sf.statcvs");
 	
 	public static WebRepositoryIntegration getInstance(String url) {
-		if (url.indexOf("cvs.php") != 0) {
+		if (url.indexOf("cvs.php") != -1) {
 			// chora
-			logger.info("Assuming web repository is chora");
 			return new ChoraIntegration(url);		
 		}
-		if (url.indexOf("cvsweb.cgi") != 0) {
+		if (url.indexOf("cvsweb.cgi") != -1) {
 			// cvsweb
-			logger.info("Assuming web repository is cvsweb");
-			return new ChoraIntegration(url);		
+			return new CvswebIntegration(url);		
 		}
-		if (url.indexOf("viewcvs.cgi") != 0) {
-			// view cvs
-			logger.info("Assuming web repository is viewcvs");
-			return new ChoraIntegration(url);		
+		if (url.indexOf("viewcvs.cgi") != -1) {
+			// viewcvs
+			return new ViewCvsIntegration(url);		
 		}
 		return null;	
 	}

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommandLineParser.java,v $
-	Created on $Date: 2003-07-04 20:03:58 $ 
+	Created on $Date: 2003-07-04 21:33:31 $ 
 */
 package net.sf.statcvs.output;
 
@@ -34,7 +34,7 @@ import net.sf.statcvs.output.xml.XMLRenderer;
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.5 2003-07-04 20:03:58 vanto Exp $
+ * @version $Id: CommandLineParser.java,v 1.6 2003-07-04 21:33:31 vanto Exp $
  */
 public class CommandLineParser {
 
@@ -117,7 +117,11 @@ public class CommandLineParser {
 			if (args.isEmpty()) {
 				throw new ConfigurationException("Missing argument for -weburl");
 			}
-			ConfigurationOptions.setWebRepository(WebRepositoryFactory.getInstance(popNextArg()));
+			WebRepositoryIntegration wri = WebRepositoryFactory.getInstance(popNextArg());
+			if (wri == null) {
+				throw new ConfigurationException("Cannot recognize web repository type. Please select it explicitly");
+			}
+			ConfigurationOptions.setWebRepository(wri);
 		}
 		else if (s.equals("viewcvs")) {
 			if (args.isEmpty()) {

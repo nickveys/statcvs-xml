@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Main.java,v $ 
-	Created on $Date: 2003-07-04 20:04:18 $ 
+	Created on $Date: 2003-07-04 21:33:31 $ 
 */
 package net.sf.statcvs;
 
@@ -46,7 +46,7 @@ import net.sf.statcvs.output.xml.OutputSettings;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.9 2003-07-04 20:04:18 vanto Exp $
+ * @version $Id: Main.java,v 1.10 2003-07-04 21:33:31 vanto Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -212,6 +212,9 @@ public class Main {
 	public static void generateSuite(CvsContent content) throws Exception {	
 		if (ConfigurationOptions.getOutputSuite() == null) {
 			ConfigurationOptions.setOutputSuite(HTMLRenderer.class.getName());
+		}
+		if (ConfigurationOptions.getWebRepository() != null) {
+			logger.info("Assuming web repository is "+ConfigurationOptions.getWebRepository().getName());
 		}
 		logger.info("Reading output settings");
 		String filename = getSettingsPath() + "output.properties";

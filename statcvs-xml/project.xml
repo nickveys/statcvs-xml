@@ -88,7 +88,30 @@
         <include>**/*Test.java</include>
       </includes>
     </unitTest>
+  	
+  	<resources>
+      <resource>
+        <directory>${basedir}/src/net/sf/statcvs/web-files</directory>
+      	<targetPath>net/sf/statcvs/web-files</targetPath>
+      </resource>
+      <resource>
+        <directory>${basedir}/src/net/sf/statcvs</directory>
+		<includes>
+			<include>*.properties</include>
+		</includes>
+      	<targetPath>net/sf/statcvs</targetPath>
+      </resource>
+      <resource>
+        <directory>${basedir}</directory>
+		<includes>
+			<include>*.xsl</include>
+		</includes>
+      </resource>
+    </resources>
+
+  	
   </build>
+  
   <reports>
 <!--    <report>maven-jdepend-plugin</report> -->
 <!--    <report>maven-checkstyle-plugin</report> -->
@@ -101,7 +124,7 @@
     <report>maven-javadoc-plugin</report>
     <report>maven-jxr-plugin</report>
 <!--    <report>maven-pmd-plugin</report> -->
-	<report>maven-statcvs-plugin</report>
+	<report>maven-statcvs-xml-plugin</report>
     <report>maven-junit-report-plugin</report>
 <!--    <report>maven-linkcheck-plugin</report> -->
     <report>maven-tasklist-plugin</report>
