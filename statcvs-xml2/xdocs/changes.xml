@@ -23,6 +23,13 @@
       <action dev="vanto" type="update">
 		The directory tree has been improved.
       </action>
+      <action dev="squig" type="update">
+		Updated jdom dependency from 1.0b9 to 1.0b10.
+      </action>
+      <action dev="squig" type="fix">
+        Bug #1745 (IllegalDataException when using non XML characters)
+        has been fixed. UTF-8 encoding is now used for encoding. 
+      </action>
       <action dev="squig" type="fix">
         Bug #1724 (ArrayIndexOutOfBoundsException when running on
         repositories with only a single commit) has been fixed.
