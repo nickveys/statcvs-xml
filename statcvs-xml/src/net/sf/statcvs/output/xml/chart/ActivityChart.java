@@ -62,12 +62,12 @@ public class ActivityChart extends AbstractBarChart {
 		String authorName = XMLSuite.escapeAuthorName(author.getName());
 		switch (type) {
 			case BY_HOUR :
-				setTitle(I18n.tr("Activity by Hour for",0,1)+author.getName());
+				setChartTitle(I18n.tr("Activity by Hour for",0,1)+author.getName());
 				setFilename("activity_time_"+authorName+".png");
 				setValuesByHour();
 				break;
 			case BY_DAY :
-				setTitle(I18n.tr("Activity by Day for",0,1)+author.getName());
+				setChartTitle(I18n.tr("Activity by Day for",0,1)+author.getName());
 				setFilename("activity_day_"+authorName+".png");
 				setValuesByDay();
 				break;

@@ -17,32 +17,31 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
-	$RCSfile: AbstractBarChart.java,v $
+	$RCSfile: AbstractStackedChart.java,v $
 	$Date: 2003-06-28 01:34:55 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.HorizontalCategoryAxis3D;
+import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.DefaultCategoryDataset;
 
 /**
- * AbtractBarChart
+ * AbstractStackedChart
  * 
  * @author Tammo van Lessen
  */
-public abstract class AbstractBarChart extends AbstractChart {
+public abstract class AbstractStackedChart extends AbstractChart {
 
 	DefaultCategoryDataset dataset;
-	
 	/**
 	 * @param filename
 	 * @param title
 	 */
-	public AbstractBarChart(String filename, String title) {
+	public AbstractStackedChart(String filename, String title) {
 		super(filename, title);
 		dataset = new DefaultCategoryDataset();
 		createChart();
@@ -53,7 +52,7 @@ public abstract class AbstractBarChart extends AbstractChart {
 	 */
 	private void createChart() {
 		// create the chart...
-		JFreeChart chart = ChartFactory.createVerticalBarChart3D(
+		JFreeChart chart = ChartFactory.createStackedVerticalBarChart3D(
 												  getTitle(),  // chart title
 												  "no desc",    // domain axis label
 												  "no desc",       // range axis label
@@ -63,12 +62,11 @@ public abstract class AbstractBarChart extends AbstractChart {
 												  false          // urls
 											  );
 		setChart(chart);  
-		//placeTitle();      
 	}
 
 	public void setCategoryAxisLabel(String text) {
 		CategoryPlot plot = getChart().getCategoryPlot();
-		HorizontalCategoryAxis3D axis = (HorizontalCategoryAxis3D) plot.getDomainAxis();
+		CategoryAxis axis = (CategoryAxis) plot.getDomainAxis();
 		axis.setLabel(text);
 	}
 
@@ -77,5 +75,4 @@ public abstract class AbstractBarChart extends AbstractChart {
 		ValueAxis axis = plot.getRangeAxis();
 		axis.setLabel(text);
 	}
-
 }
