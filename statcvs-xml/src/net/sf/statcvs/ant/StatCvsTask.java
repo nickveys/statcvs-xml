@@ -18,7 +18,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: StatCvsTask.java,v $
-	$Date: 2003-06-17 17:10:05 $ 
+	$Date: 2003-07-04 14:38:44 $ 
 */
 package net.sf.statcvs.ant;
 
@@ -35,6 +35,9 @@ import org.apache.tools.ant.Task;
  * @author Richard Cyganiak
  */
 public class StatCvsTask extends Task {
+	private String outputSuite;
+	private String webRepositoryType;
+	private String webRepositoryUrl;
 	private String title;
 	private String logFile;
 	private String pDir;
@@ -42,9 +45,6 @@ public class StatCvsTask extends Task {
 	private String cssFile;
 	private String notesFile;
 	private boolean showCredits = true;
-	private String viewcvs;
-	private String cvsweb;
-	private String chora;
 	private String include = null;
 	private String exclude = null;
 	
@@ -77,7 +77,7 @@ public class StatCvsTask extends Task {
 		// required params
 		ConfigurationOptions.setLogFileName(this.logFile);
 		ConfigurationOptions.setCheckedOutDirectory(this.pDir);
-
+		
 		// optional params
 		if (this.title != null) {
 			ConfigurationOptions.setProjectTitle(this.title);
@@ -94,20 +94,23 @@ public class StatCvsTask extends Task {
 		if (!showCredits) {
 			ConfigurationOptions.setShowCreditInformation(false);
 		}
-		if (viewcvs != null) {
-			ConfigurationOptions.setViewCvsURL(this.viewcvs);
-		}
-		if (cvsweb != null) {
-			ConfigurationOptions.setCvswebURL(this.cvsweb);
-		}
-		if (chora != null) {
-			ConfigurationOptions.setChoraURL(this.chora);
+		if (webRepositoryType != null && webRepositoryUrl != null) {
+			if (webRepositoryType.equals("cvsweb")) {
+				ConfigurationOptions.setCvswebURL(webRepositoryUrl);
+			} else if (webRepositoryType.equals("viewcvs")) {
+				ConfigurationOptions.setViewCvsURL(webRepositoryUrl);
+			} else if (webRepositoryType.equals("chora")) {
+				ConfigurationOptions.setChoraURL(webRepositoryUrl);	
+			}
 		}
 		if (include != null) {
 			ConfigurationOptions.setIncludePattern(this.include);
 		}
 		if (exclude != null) {
 			ConfigurationOptions.setExcludePattern(this.exclude);
+		}
+		if (outputSuite != null) {
+			ConfigurationOptions.setOutputSuite(outputSuite);
 		}
 	}
 
@@ -162,24 +165,21 @@ public class StatCvsTask extends Task {
 	}
 	
 	/**
-	 * @param viewcvs String representing the URL of a ViewCVS installation
+	 * @param url String representing the URL of a 
+	 * Webrepository CVS installation
 	 */
-	public void setViewcvsURL(String viewcvs) {
-		this.viewcvs = viewcvs;
+	public void setWebRepositoryUrl(String url) {
+		this.webRepositoryUrl = url;
 	}
-
+	
 	/**
-	 * @param cvsweb String representing the URL of a cvsweb installation
+	 * @param url String representing the vendor of a 
+	 * Webrepository CVS installation
+	 * 
+	 * allowed values: "viewcvs", "cvsweb", "chora"
 	 */
-	public void setCvswebURL(String cvsweb) {
-		this.cvsweb = cvsweb;
-	}
-
-	/**
-	 * @param chora String representing the URL of a Chora installation
-	 */
-	public void setChoraURL(String chora) {
-		this.chora = chora;
+	public void setWebRepositoryType(String type) {
+		this.webRepositoryType = type;
 	}
 	
 	/**
@@ -198,5 +198,9 @@ public class StatCvsTask extends Task {
 	 */
 	public void setExcludeFiles(String exclude) {
 		this.exclude = exclude;
+	}
+	
+	public void setOutputSuite(String suite) {
+		this.outputSuite = suite;
 	}
 }
