@@ -63,10 +63,6 @@ public class CvsContent {
 			}
 			adjustStartAndEndDate(revision.getDate());
             
-            // union symbolic names
-            if (revision.getSymbolicNames() != null) {
-                symbolicNames.addAll(revision.getSymbolicNames());
-            }
 		}
 		if (root == null) {
 			initRoot();
@@ -169,6 +165,15 @@ public class CvsContent {
 	 */
 	public Directory getRoot() {
 		return root;
+	}
+	
+	/**
+	 * Sets the list of symbolic names contained in this CvsContent.
+	 * @param symbolicNames
+	 */
+	public void setSymbolicNames(SortedSet symbolicNames)
+	{
+		this.symbolicNames = symbolicNames;
 	}
 	
 	/**

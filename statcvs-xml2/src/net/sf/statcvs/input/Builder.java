@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import net.sf.statcvs.model.Author;
@@ -170,6 +171,8 @@ public class Builder implements CvsLogBuilder {
 		SortedSet revisions = result.getRevisions();
 		List commits = new CommitListBuilder(revisions).createCommitList();
 		result.setCommits(commits);
+		
+		result.setSymbolicNames(new TreeSet(symbolicNames.entrySet()));
 
 		return result;
 	}
