@@ -164,7 +164,7 @@
          <td>tags</td>
          <td>LocChart</td>
          <td></td>
-         <td>A regular expression. Only the tags that match the
+         <td>A <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/Pattern.html">regular expression</a>. Only the tags that match the
          expression will be included.</td> 
       </tr>
       <tr>
