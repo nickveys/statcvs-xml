@@ -23,8 +23,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
@@ -38,7 +44,16 @@ import net.sf.statcvs.util.IntegerMap;
  */
 public class CSVOutputter {
 
-
+	public static final TimeZone utc = TimeZone.getTimeZone("UTC"); 
+	public static final DateFormat df = new SimpleDateFormat("MM/yyyy", Locale.US);
+	static {
+		df.setTimeZone(utc);
+	}
+	public static final Calendar cal = new GregorianCalendar(utc, Locale.US);
+	
+	public static final String SEPARATOR = ",";
+	private static final String LINEBREAK = "\r\n";
+	
 	public static void generate(ReportSettings settings, CvsContent content, File file) 
 		throws IOException
 	{
@@ -48,22 +63,36 @@ public class CSVOutputter {
 			IntegerMap locByAuthor = new IntegerMap();
 			
 			Date lastDate = null;
+			int lastMonth = -1;
+			int lastYear = -1;
 			
 			Iterator it = content.getRevisions().iterator();
 			while (it.hasNext()) {			
 				CvsRevision rev = (CvsRevision)it.next();
 				
-				totalLoc += rev.getLinesDelta();
-				locByAuthor.addInt(rev.getAuthor(), rev.getLinesDelta());
-				
 				if (lastDate == null) {
 					lastDate = rev.getDate();
-					dumpHeader(out, content);
+					cal.setTime(lastDate);
+					lastMonth = cal.get(Calendar.MONTH);
+					lastYear = cal.get(Calendar.YEAR);
+
+					dumpHeader(out, content, settings.getProjectName());
 				}
-				else if (!lastDate.equals(rev.getDate())) {
-					dump(out, content, lastDate, totalLoc, locByAuthor);
-					lastDate = rev.getDate();
+				else {
+					cal.setTime(rev.getDate());
+					if (lastMonth != cal.get(Calendar.MONTH)
+						 || lastYear != cal.get(Calendar.YEAR)) {
+						dump(out, content, lastDate, rev.getDate(), totalLoc, locByAuthor);
+						
+						lastDate = rev.getDate();
+						cal.setTime(lastDate);
+						lastMonth = cal.get(Calendar.MONTH);
+						lastYear = cal.get(Calendar.YEAR);
+					}
 				}
+				
+				totalLoc += rev.getLinesDelta();
+				locByAuthor.addInt(rev.getAuthor(), rev.getLinesDelta());
 			}
 			
 			if (lastDate != null) {
@@ -75,25 +104,48 @@ public class CSVOutputter {
 		}
 	}
 
-	public static void dumpHeader(Writer out, CvsContent content) 
+	public static void dumpHeader(Writer out, CvsContent content, String projectName) 
 		throws IOException
 	{
+		out.write("Project: ");
+		out.write(projectName);
+		out.write(LINEBREAK);
+		
 		out.write("Date");
-		out.write(";Total Lines of Code");
+		out.write(SEPARATOR);
+		out.write("Total LOC");
 		for (Iterator it = content.getAuthors().iterator(); it.hasNext();) {
-			out.write(";" + ((Author)it.next()).getName());
+			out.write(SEPARATOR);
+			out.write(((Author)it.next()).getName());
 		}
-		out.write("\r\n");
+		out.write(LINEBREAK);
 	}
 
+	public static void dump(Writer out, CvsContent content, Date date, Date nextDate, int totalLoc, IntegerMap locByAuthor) 
+		throws IOException
+	{
+		System.out.println("writing data for " + date + " - " + nextDate);
+
+		cal.setTime(nextDate);
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH);
+
+		cal.setTime(date);
+		while (cal.get(Calendar.YEAR) <  year || cal.get(Calendar.MONTH) < month) {
+			dump(out, content, cal.getTime(), totalLoc, locByAuthor);
+			cal.add(Calendar.MONTH, 1);
+		}
+	}
+	
 	public static void dump(Writer out, CvsContent content, Date date, int totalLoc, IntegerMap locByAuthor) 
 		throws IOException
 	{
-		out.write(date.getTime() + "");
-		out.write(";" + totalLoc);
+		System.out.println("writing data for " + date);
+		out.write(df.format(date));
+		out.write(SEPARATOR + totalLoc);
 		for (Iterator it = content.getAuthors().iterator(); it.hasNext();) {
-			out.write(";" + locByAuthor.get(it.next()));
+			out.write(SEPARATOR + locByAuthor.get(it.next()));
 		}
-		out.write("\r\n");
+		out.write(LINEBREAK);
 	}
 }

@@ -6,6 +6,7 @@ STATCVS_ARGS = -viewcvs http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/st
 
 LIBS = $(shell find lib/ -name "*.jar")
 CP = .:src:$(shell echo $(LIBS) | sed -e 's/ /:/g'):$(JAVA_HOME)/jre/lib/rt.jar
+CP = src/:$MAVEN_REPO/junit/jars/junit-3.8.1.jar:$MAVEN_REPO/jdom/jars/jdom-b10.jar:$MAVEN_REPO/jfreechart/jars/jfreechart-0.9.20.jar:$MAVEN_REPO/jcommon/jars/jcommon-0.9.5.jar:$MAVEN_REPO/commons-jexl/jars/commons-jexl-1.0-beta-1.jar:$MAVEN_REPO/commons-logging/jars/commons-logging-1.0.3.jar
 JDEPENDS = src/net/sf/statcvs/Main.java $(shell find src -name "*Renderer.java") \
            src/net/sf/statcvs/util/ConsoleOutErrHandler.java
 SRC_DIST = net/sf/statcvs/*.properties net/sf/statcvs/resources/*
@@ -91,3 +92,4 @@ deploy :
 	make all
 	make xdoc
 	maven site:deploy
+
