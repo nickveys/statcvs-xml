@@ -14,7 +14,11 @@
       </ul>
     </section>
 -->
-	<release version="0.9.5" date="2004-11-??">
+	<release version="0.9.5" date="2004-02-21">
+      <action dev="squig" type="fix">
+		Merged input layer changes from StatCvs that fix an out of
+		memory exception caused by an infinite loop.
+      </action>
       <action dev="squig" type="fix">
 		Removed $ext reference from html xslt to fix html report
 		generation with Java 5.0.

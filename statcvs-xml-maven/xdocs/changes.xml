@@ -28,10 +28,10 @@
   </properties>
 
   <body>
-	<release version="2.6" date="2004-11-??">
+	<release version="2.6" date="2005-02-21">
       <action dev="squig" type="add">
 		Two new properties have been added to include author pictures
-		and to lookup author fullnames in project.xml.
+		and to lookup authors' fullnames in the maven POM.
       </action>
     </release>
 	<release version="2.5" date="2004-08-06">
