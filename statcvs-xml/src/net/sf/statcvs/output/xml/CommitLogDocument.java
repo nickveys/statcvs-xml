@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommitLogDocument.java,v $
-	$Date: 2003-06-17 19:36:24 $ 
+	$Date: 2003-06-17 19:44:49 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -61,25 +61,4 @@ public class CommitLogDocument extends AbstractPageableDocument {
 	public Element getFooter() {
 		return new Element("foot");
 	}
-
-//  	public String toString() {
-//  		XMLOutputter outputter = new XMLOutputter("\t", true);
-//  		return outputter.outputString(this);
-//  	}
-	
-//  	public Document transform(String stylesheet) {
-//  		try {
-//  			Transformer transformer = TransformerFactory.newInstance()
-//  				.newTransformer(new StreamSource(stylesheet));
-
-//  			JDOMResult out = new JDOMResult();
-//  			transformer.transform(new JDOMSource(this), out);
-//  			return out.getDocument();
-//  		}
-//  		catch (TransformerException e) {
-//  			logger.warning("XSLT Trandformation failed");
-//  			e.printStackTrace(System.err);
-//  		}
-//  		return null;
-//  	}
 }
