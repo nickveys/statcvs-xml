@@ -15,6 +15,6 @@ praktischen Erfahrungen schildern:
  - Erstellen von Projekt-Dokumentation
  - Erhebung von Projekt- und Prozess-Metriken
 
-Tammo van Lessen und Steffen Pingel sind Softwartechnik Studenten und
+Tammo van Lessen und Steffen Pingel sind Softwartechnik-Studenten und
 Open-Source Entwickler, die Maven in ihren Projekten einsetzen und
 selbst mit Begeisterung Maven Plugins entwickeln.
