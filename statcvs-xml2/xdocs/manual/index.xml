@@ -134,6 +134,7 @@
             </dd>
 
            <dt>
+             <a name="filters"/>
              <tt>-include include-pattern-list</tt><br/>
              <tt>-exclude exclude-pattern-list</tt>
            </dt>
@@ -169,7 +170,7 @@
 
              <p>One more example:</p>
 
-             <p><pre>-include **/*.c;**/*.h -exclude legacy/**</pre></p>
+             <p><tt>-include **/*.c;**/*.h -exclude legacy/**</tt></p>
 
              <p>This matches all <tt>.c</tt> and <tt>.h</tt> files
              anywhere in the directory tree except those in the

@@ -8,11 +8,13 @@
 
 <body>
 
-  <section name="Introduction">
+  <section name="Settings">
 
     <p>StatCvs-XML features a highly customizable report generator
-    that is configurable through an XML file. This document describes
-    the structure of the XML file.</p>
+    that is configurable through XML. This document describes the
+    general settings. The settings file needs to be named
+    <tt><b>statcvs.xml</b></tt> and is read from the directory
+    StatCvs-XML was started from.</p>
 
     <p>If you are not familiar with the StatCvs-XML jargon like
     domain, view and grouping, please read about the <a
@@ -22,11 +24,166 @@
 
   <section name="Structure">
 
-    <p>The XML file is divided in document sections that each describe
-    a file that aggregates a set of reports.</p>
+    <p>The XML file has a root element named <tt>statcvs</tt> that
+    contains a <tt>settings</tt> element:</p>
+
+<source><![CDATA[
+<statcvs>
+  <settings>
+    <title>StatCvs-XML</title>
+    <itemsPerPage>20</itemsPerPage>
+    <modules type="map">
+      <setting key="Report">**/report/*</setting>
+      <setting key="Output">**/output/*</setting>
+      <setting key="Model">**/model/*</setting>
+    </modules>
+  </settings>
+</statcvs>
+]]></source>
+
+    <p>Each setting can either be specified by a tag with the
+    setting's name or by a special tag <tt>setting</tt> tag in case
+    the name of the setting includes whitespaces.</p>
+
+    <p>StatCvs-XML distinguishes two different types of settings:
+    strings and maps. In the example above the <tt>title</tt> and
+    <tt>itemsPerPage</tt> setting are strings whereas the
+    <tt>modules</tt> setting is a map, which is denoted by the type
+    argument. Maps basically contain a list of settings.</p>
 
   </section>
 
+  <section name="Settings">
+
+    <table>
+      <tr>
+         <th>Setting</th>
+         <th>Command Line</th>
+         <th>Default Value</th>
+         <th>Description</th>
+      </tr>
+      <tr>
+         <td>authors</td>
+         <td></td>
+         <td></td>
+         <td>Specifies a mapping between login names and real
+         names.See below for a <a href="#Authors">detailed 
+         description.</a></td> 
+      </tr>
+      <tr>
+         <td>exclude</td>
+         <td>-exclude</td>
+         <td></td>
+         <td>Specifies the files to exclude for the report
+         generation. See the <a
+         href="index.html#filters">description</a> of the respective
+         command line paramter.</td>
+      </tr>
+      <tr>
+         <td>include</td>
+         <td>-include</td>
+         <td></td>
+         <td>Specifies the files to include for the report
+         generation. See the <a
+         href="index.html#filters">description</a> of the respective
+         command line paramter.</td>
+      </tr>
+      <tr>
+         <td>localRepository</td>
+         <td><it>directory</it></td>
+         <td><it>current directory</it></td>
+         <td>Specifies the local working directory that contains the
+         checked out repository.</td>
+      </tr>
+      <tr>
+         <td>logFile</td>
+         <td><it>logfile</it></td>
+         <td>cvs.log</td>
+         <td>Specifies the filename of the cvs log file.</td>
+      </tr>
+      <tr>
+         <td>modules</td>
+         <td></td>
+         <td></td>
+         <td>Specifies a mapping between module names and file
+         filters. See below for a <a href="#Modules">detailed
+         description.</a></td>
+      </tr>
+      <tr>
+         <td>outputDir</td>
+         <td>-outputDir</td>
+         <td>statcvs-xml-out</td>
+         <td>Specifies the target directory for the report files.</td>
+      </tr>
+      <tr>
+         <td>renderer</td>
+         <td>-renderer</td>
+         <td>html</td>
+         <td>The document renderer. Values include <tt>html</tt>,
+         <tt>xdoc</tt> or <tt>xml</tt>. It is also possible to specify
+         the full qualified name of a Java class, that is available
+         from the classpath.</td>
+      </tr>
+      <tr>
+         <td>suite</td>
+         <td>-suite</td>
+         <td><tt>resources/suite.xml</tt></td>
+         <td>Specifies the filename of the <a
+         href="suite.html">document suite</a>.</td>
+      </tr>
+      <tr>
+         <td>title</td>
+         <td>-title</td>
+         <td><it>module name</it></td>
+         <td>Specifies the project name that is printed on each chart.
+         If the module name can not be determined, the default is
+         none.</td>
+      </tr>
+      <tr>
+         <td>viewCvs</td>
+         <td></td>
+         <td></td>
+         <td>The url of the ViewCVS web repository.</td>
+      </tr>
+      <tr>
+         <td>webRepository</td>
+         <td>-weburl</td>
+         <td></td>
+         <td>The url of the web repository.</td>
+      </tr>
+    </table>
+
+    <subsection name="Authors">
+
+      <p>The author map can be used to display real names instead of
+      login names in the charts and tables:</p>
+
+<source><![CDATA[
+<authors type="map">
+  <squig>Steffen Pingel</squig>
+  <vanto>Tammo van Lessen</vanto>
+</authors>
+]]></source>
+    </subsection>
+
+    <subsection name="Modules">
+
+      <p>Modules are a way to group files by a different criteria than
+      directory. For instance C++ projects might not have a hierachial
+      directory structure as Java projects have:</p>
+
+<source><![CDATA[
+<modules type="map">
+  <setting key="GUI">src/*dialog*;src/*window*;src/*widget*</setting>
+  <setting key="Model">src/*model*</setting>
+  <setting key="View">src/*view*</setting>
+  <setting key="Test">test-src/**</setting>
+</modules>
+]]></source>
+
+    </subsection>
+
+  </section>
 </body>
 
 </document>

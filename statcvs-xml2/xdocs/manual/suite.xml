@@ -1,0 +1,358 @@
+<?xml version="1.0"?>
+
+<document>
+
+<properties>
+ <title>Customizing</title>
+</properties>
+
+<body>
+
+  <section name="Document Suite">
+
+    <p>StatCvs-XML features a highly customizable report generator
+    that is configurable XML. This document describes
+    the suite file that is used to configure the documents and reports
+    to generate. The suite file can be specified with the
+    <tt>-suite</tt> command line parameter or the <tt>suite</tt>
+    setting in the <a href="settings.html">settings</a> file.</p>
+
+    <p>If you are not familiar with the StatCvs-XML jargon like
+    domain, view and grouping, please read about the <a
+    href="concepts.html"> concepts</a> first.</p>
+
+  </section>
+
+  <section name="Structure">
+
+    <p>The XML file has a root element named <tt>statcvs</tt> that
+    contains a multiple document sections that each describe a file
+    that aggregates a set of reports.</p>
+
+<source><![CDATA[
+<statcvs>
+  <document filename="commitlog" title="Commit Log">
+    <report class="CommitLogTable" paging="true" limit="100"/>
+  </document>
+
+  <document filename="index" title="CVS Statistics">
+    <report class="GeneralReport"/>
+    <report class="DocumentTable"/>
+    <report class="LocChart"/>
+  </document>
+</statcvs>
+]]></source>
+
+  </section>
+
+  <section name="Settings">
+
+    <p>The document can contain <tt>settings</tt> elements at any
+    point. Setting elements are evaluated in a linear and hierarchial
+    way, having a scope of their following sibling and child
+    elements. Settings are inherited, later values overwrite
+    previously specified settings.</p>
+
+    <p>Besides using <tt>settings</tt> elements, it is possible to
+    specify settings in arguments of <tt>document</tt> and
+    <tt>report</tt> elements.</p>
+
+    <subsection name="Document Settings">
+
+    <table>
+      <tr>
+         <th>Setting</th>
+         <th>Description</th>
+      </tr>
+      <tr>
+         <td>filename</td>
+         <td>The filename of the document without the extension. The
+         extension is appended by the renderer to match the output
+         format.</td> 
+      </tr>
+      <tr>
+         <td>foreach</td>
+         <td>
+           The document is generated multiple times, each time with a
+           different view. Possible values are:
+
+           <ul>
+             <li>author</li>
+             <li>directory</li>
+             <li>module</li>
+           </ul>
+         </td> 
+      </tr>
+      <tr>
+         <td>title</td>
+         <td>The title printed on the top of each document.</td> 
+      </tr>
+    </table>
+
+    </subsection>
+
+    <subsection name="Report Settings">
+
+    <p>Reports can be parameterized as well as documents. Most reports
+    only support a subset of all possible settings though, but may
+    define additional custom settings.</p>
+
+    <table>
+      <tr>
+         <th>Setting</th>
+         <th>Scope</th>
+         <th>Default Value</th>
+         <th>Description</th>
+      </tr>
+      <tr>
+         <td>groupby</td>
+         <td>report dependent</td>
+         <td>report dependent</td>
+         <td>
+           Specifies the criteria to group the data by:
+
+           <ul>
+             <li>author</li>
+             <li>day</li>
+             <li>directory</li>
+             <li>file</li>
+             <li>hour</li>
+             <li>module</li>
+          </ul>
+         </td> 
+      </tr>
+      <tr>
+         <td>heigth</td>
+         <td>charts</td>
+         <td><tt>*</tt></td>
+         <td>The heigth of charts whereas <tt>*</tt> means preferred witdth,
+         which defaults to 640 pixels. Charts may have a different
+         default heigth though.</td>
+      </tr>
+      <tr>
+         <td>inputFilter</td>
+         <td>all</td>
+         <td></td>
+         <td>A <a href="#Jexl">Jexl expression</a> filtering the input
+         data.</td>
+      </tr>
+      <tr>
+         <td>itemsPerPage</td>
+         <td>tables</td>
+         <td>20</td>
+         <td>Specifies the number of rows per page. Requires
+         <tt>paging=true</tt> to take effect. If <tt>limit</tt> is set
+         to a lower value than <tt>itemsPerPage</tt> no paging will
+         occur.</td>
+      </tr>
+      <tr>
+         <td>limit</td>
+         <td>tables</td>
+         <td>20</td>
+         <td>The maximum number of rows. Useful to print only the top
+         20 items or the 100 most recent commit log for instance.</td> 
+      </tr>
+      <tr>
+         <td>outputFilter</td>
+         <td>LocChart</td>
+         <td></td>
+         <td>A <a href="#Jexl">Jexl expression</a> filtering the
+         output.</td>
+      </tr>
+      <tr>
+         <td>title</td>
+         <td>all</td>
+         <td>report dependent</td>
+         <td>The title printed above the report.</td> 
+      </tr>
+      <tr>
+         <td>width</td>
+         <td>charts</td>
+         <td><tt>*</tt></td>
+         <td>The width of charts whereas <tt>*</tt> means
+         preferred witdth, 
+         which defaults to 640 pixels. Charts may have a different
+         default width though.</td>
+      </tr>
+   </table>
+
+   </subsection>
+
+  </section>
+
+  <section name="Reports">
+
+  <p>Below is a list of all reports shipped with StatCvs-XML. All
+  reports support the <tt>groupby</tt> setting, if not denoted
+  otherwise.</p>
+
+  <subsection name="Charts">
+
+    <table>
+      <tr>
+         <th>Class Name</th>
+         <th>Domain</th>
+         <th>Description</th>
+      </tr>
+      <tr>
+         <td>ActivityProgressionChart</td>
+         <td>revisions</td>
+         <td>Draws a scatter chart.</td> 
+      </tr>
+      <tr>
+         <td>AuthorsActivityChart</td>
+         <td>revisions</td>
+         <td>Draws a stacked bar chart comparing the number of
+         <it>added, removed and changed</it> lines of
+         code. <b>Currently broken.</b></td> 
+      </tr>
+      <tr>
+         <td>AvgFileSizeChart</td>
+         <td>revisions</td>
+         <td>Draws a time series chart, showing the average lines of
+         code per file over time.</td> 
+      </tr>
+      <tr>
+         <td>CommitActivityChart</td>
+         <td>revisions</td>
+         <td>Draws a chart for each group that displays the hour of
+         each commit over time plus a chart for all commits.</td> 
+      </tr>
+      <tr>
+         <td>CommitChart</td>
+         <td>revisions</td>
+         <td>Draws a bar chart, counting the number of commits.</td> 
+      </tr>
+      <tr>
+         <td>CommitsOverTimeChart</td>
+         <td>revisions</td>
+         <td>Draws a time series chart, showing the number of commits
+         over time.</td> 
+      </tr>
+      <tr>
+         <td>FileCountChart</td>
+         <td>revisions</td>
+         <td>Draws a time series chart, showing the number of files
+         over time.</td> 
+      </tr>
+      <tr>
+         <td>LocByAuthorChart</td>
+         <td>revisions</td>
+         <td>Draws a time series chart, showing the number of commits
+         over time for each author. Does not support <tt>groupby</tt>,
+         always operates on all revisions of all authors. The current
+         <tt>foreach</tt> author is highlighted.</td>
+      </tr>
+      <tr>
+         <td>LocChart</td>
+         <td>revisions</td>
+         <td>Draws a time series chart, showing the lines of code
+         over time.</td> 
+      </tr>
+      <tr>
+         <td>SizeChart</td>
+         <td>revisions</td>
+         <td>Draws a pie chart, comparing the lines of code</td>
+      </tr>
+    </table>
+
+  </subsection>
+
+  <subsection name="Tables">
+
+    <table>
+      <tr>
+         <th>Class Name</th>
+         <th>Domain</th>
+         <th>Description</th>
+      </tr>
+      <tr>
+         <td>AuthorCountTable</td>
+         <td>files</td>
+         <td>Prints a list the most active author for each month.</td> 
+      </tr>
+      <tr>
+         <td>AuthorOfTheMonthReport</td>
+         <td>revisions</td>
+         <td>Prints a list the most active author for each month.</td> 
+      </tr>
+      <tr>
+         <td>CommitLogTable</td>
+         <td>commits</td>
+         <td>Prints a tree-like list of all directories and their
+         respective loc count.</td> 
+      </tr>
+      <tr>
+         <td>CommitTable</td>
+         <td>revsisions</td>
+         <td>Prints statistics about the commits like the total lines
+         of code, lines of code per commit and so on.</td> 
+      </tr>
+      <tr>
+         <td>DirectoryTree</td>
+         <td>directories</td>
+         <td>Prints a tree-like list of all directories and their
+         respective loc count.</td> 
+      </tr>
+      <tr>
+         <td>DocumentTable</td>
+         <td></td>
+         <td>Prints a list of the documents generated up to that
+         point. Useful for the index page.</td> 
+      </tr>
+    </table>
+
+  </subsection>
+
+  </section>
+
+  <section name="Jexl">
+
+    <p>Jexl (Java Expression Language) is an <a
+    href="http://jakarta.apache.org/commons/jexl/">project</a> of the
+    Apache Software foundation.</p>
+
+    <p>The expressions used by StatCvs-XML are supposed to return a
+    value of type <tt>boolean</tt>.</p>
+  
+    <subsection name="Context">
+
+    <p>A list of variables accessible in the context of StatCvs-XML
+    expression.</p>
+
+    <table>
+      <tr>
+         <th>Name</th>
+         <th>Type</th>
+         <th>Description</th>
+      </tr>
+      <tr>
+         <td>date</td>
+         <td>java.util.Date</td>
+         <td>Only available if <tt>value</tt> is of type CvsRevision.</td>
+      </tr>
+      <tr>
+         <td>rev</td>
+         <td>net.sf.statcvs.input.CvsRevision</td>
+         <td>Only available if <tt>value</tt> is of type CvsRevision.</td>
+      </tr>
+      <tr>
+         <td>util</td>
+         <td>de.berlios.net.statcvs.xml.util.ScriptHelper</td>
+         <td>Contains useful static helper methods.</td>
+      </tr>
+      <tr>
+         <td>value</td>
+         <td>java.lang.Object</td>
+         <td>The object that is to be evaluated.</td>
+      </tr>
+    </table>
+
+    </subsection>
+
+  </section>
+
+</body>
+
+</document>
+  

@@ -16,6 +16,7 @@
 	  <item name="Manual" href="/manual/index.html" collapse="true">
 	    <item name="Concepts" href="/manual/concepts.html"/>
 	    <item name="Settings" href="/manual/settings.html"/>
+	    <item name="Document Suite" href="/manual/suite.html"/>
       </item>
 	  <item name="Download" href="http://developer.berlios.de/project/showfiles.php?group_id=872"/>
 	</menu>
