@@ -52,7 +52,7 @@ public class ReportSettings extends Hashtable {
 
 	public int getLimit()
 	{
-		return getLimit(30);
+		return getLimit(20);
 	}
 
 	public String getProjectName()

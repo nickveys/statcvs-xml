@@ -18,6 +18,7 @@
 
   <document  filename="directory%1" title="Directory Statistics%1" foreach="directory">
     <report class="LocChart"/>
+    <report class="AuthorsTable"/>
   </document>
 
   <document  filename="authors" title="Author Statistics">
@@ -29,7 +30,8 @@
 
   <document  filename="file_stats" title="File Statistics">
     <report class="FileCountChart"/>    
-    <report class="AvgFileSizeChart"/>    
+    <report class="AvgFileSizeChart"/>
+    <report class="SizePerFileTable"/>
     <report class="AuthorsPerFileTable"/>
     <report class="RevisionsPerFileTable"/>
   </document>
