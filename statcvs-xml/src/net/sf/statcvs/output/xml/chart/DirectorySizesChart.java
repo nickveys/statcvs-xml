@@ -64,6 +64,7 @@ public class DirectorySizesChart extends AbstractPieChart {
 		}
 
 		setValues(dirSizes);
+		placeTitle();
 	}
 
 	/**

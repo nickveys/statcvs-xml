@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractPieChart.java,v $
-	$Date: 2003-06-27 12:23:30 $ 
+	$Date: 2003-06-27 17:23:09 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -63,7 +63,6 @@ public abstract class AbstractPieChart extends AbstractChart {
 		plot.setForegroundAlpha(0.5f);
 
 		setChart(chart);
-		placeTitle();
 	}
 
 }
