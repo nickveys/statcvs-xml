@@ -143,7 +143,7 @@ public class CvsLocHistory {
 		Integer loc = (Integer)fileLocMap.get(file.getFilenameWithPath());
 		if (loc == null) {
 			try {
-				logger.info("history: invoking cvs to fetch first revision for: "+file.getFilenameWithPath());
+				logger.info("History: LOC count unknown, asking cvs: "+file.getFilenameWithPath());
 				Process cvs = Runtime.getRuntime().exec("cvs -q update -p -r 1.1 "+file.getFilenameWithPath(), 
 						null, workingDir);
 				BufferedReader cvsIn = new BufferedReader(new InputStreamReader(cvs.getInputStream()));
@@ -152,14 +152,13 @@ public class CvsLocHistory {
 				}
 				cvsIn.close();
 				cvs.destroy();
-				System.out.println("linecount = "+lineCount);
 				fileLocMap.put(file.getFilenameWithPath(), new Integer(lineCount));
 			} catch (IOException e) {
 				logger.info("Could not get linecount of "+file.getFilenameWithPath());
 			} 
 		} else {
 			lineCount = loc.intValue();
-			logger.finer("history: loc for file '"+file.getFilenameWithPath()+"': "+lineCount);
+			logger.finer("History: loc for file '"+file.getFilenameWithPath()+"': "+lineCount);
 		}
 		return lineCount;
 	}

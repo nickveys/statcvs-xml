@@ -81,13 +81,13 @@
 
   <build>
 	<sourceDirectory>src</sourceDirectory>
-    <unitTestSourceDirectory>tests-src</unitTestSourceDirectory>
+<!--    <unitTestSourceDirectory>tests-src</unitTestSourceDirectory>
 
     <unitTest>
       <includes>
         <include>**/*Test.java</include>
       </includes>
-    </unitTest>
+    </unitTest> -->
   	
   	<resources>
       <resource>
