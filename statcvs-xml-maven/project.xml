@@ -9,6 +9,7 @@
   <shortDescription>Provides CVS statistics</shortDescription>
   <logo>/images/statcvslogo.png</logo>
   <url>http://statcvs-xml.berlios.de/maven-plugin/</url>
+  <siteAddress>shell.berlios.de</siteAddress>
   <siteDirectory>/home/groups/statcvs-xml/htdocs/maven-plugin/</siteDirectory>
   <repository>
     <connection>scm:cvs:pserver:anonymous@cvs.berlios.de:/cvsroot/statcvs-xml:statcvs-xml/maven-statcvs-xml-plugin</connection>

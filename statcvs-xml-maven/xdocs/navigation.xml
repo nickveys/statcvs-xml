@@ -13,5 +13,9 @@
       <item href="/properties.html" name="Properties">
       </item>
     </menu>
+    <menu name="Development">
+      <item href="/changes.html" name="Changes">
+      </item>
+    </menu>
   </body>
 </project>
