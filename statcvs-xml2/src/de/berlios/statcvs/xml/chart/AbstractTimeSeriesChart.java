@@ -134,8 +134,9 @@ public class AbstractTimeSeriesChart extends AbstractChart {
 				visitorByGroup.put(group, visitor);
 			}
 			
+			int value = visitor.visit(rev);
 			if (predicate == null || predicate.matches(rev)) {
-				series.add(rev.getDate(), visitor.visit(rev));
+				series.add(rev.getDate(), value);
 			}
 		}
 		
