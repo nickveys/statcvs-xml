@@ -141,7 +141,6 @@ public abstract class Directory implements Comparable {
 	/**
 	 * Returns the number of code lines in this directory. The returned number
 	 * will be for the current revisions of all files.
-	 * TODO: Write tests!
 	 * @return LOC in this directory
 	 */
 	public int getCurrentLOC() {
@@ -157,7 +156,6 @@ public abstract class Directory implements Comparable {
 	/**
 	 * Returns the number of files in this directory. Deleted files are not
 	 * counted.
-	 * TODO: Write tests!
 	 * @return number of files in this directory
 	 */
 	public int getCurrentFileCount() {
@@ -176,7 +174,6 @@ public abstract class Directory implements Comparable {
 	 * Returns <code>true</code> if all files in this directory and its
 	 * subdirectories are deleted, or if it doesn't have any files and
 	 * subdirectories at all.
-	 * TODO: Write tests!
 	 * @return <code>true</code> if the directory is currently empty
 	 */
 	public boolean isEmpty() {

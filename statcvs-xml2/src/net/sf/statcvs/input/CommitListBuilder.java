@@ -23,6 +23,7 @@
 package net.sf.statcvs.input;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -33,15 +34,17 @@ import net.sf.statcvs.model.Commit;
 import net.sf.statcvs.model.CvsRevision;
 
 /**
- * Takes a {@link RevisionIterator}, which must be sorted by date,
- * and builds a <code>List</code> of {@link Commit}s from it.
- * The result list is sorted by date.
+ * Takes a set of revisions, and builds a <code>List</code> of 
+ * {@link Commit}s from it. The result list is sorted by date.
  * 
- * TODO: commits should be built at log creation time and this class moved to input package
+ * The implementation allows for a tolerance of several minutes
+ * between individual file commits, but author and message must be identical.
+ * 
  * @author Richard Cyganiak
  * @version $Id$
  */
 public class CommitListBuilder {
+	private static final int MAX_TIME_BETWEEN_CHANGES_MILLISECONDS = 300000;
 
 	private SortedSet revisions;
 	private Map currentCommits = new HashMap();
@@ -76,7 +79,7 @@ public class CommitListBuilder {
 			return;
 		}
 		Commit commit = (Commit) currentCommits.get(rev.getAuthor());
-		if (commit == null || !commit.isSameCommit(rev)) {
+		if (commit == null || !isSameCommit(commit, rev)) {
 			addNewCommit(rev);
 		} else {
 			addRevToCommit(commit, rev);
@@ -91,5 +94,32 @@ public class CommitListBuilder {
 	
 	protected void addRevToCommit(Commit commit, CvsRevision rev) {
 		commit.addRevision(rev);
+	}
+
+	/**
+	 * Returns <code>true</code> if change is part of the commit, that is if
+	 * they have the same author, the same message, and are within the same
+	 * timeframe.
+	 * 
+	 * @param commit the commit
+	 * @param rev the revision to check against this commit
+	 * @return <code>true</code> if change is part of this commit
+	 */
+	public static boolean isSameCommit(Commit commit, CvsRevision rev) {
+		return commit.getAuthor().equals(rev.getAuthor())
+				&& commit.getComment().equals(rev.getComment())
+				&& isInTimeFrame(commit, rev.getDate());
+	}
+
+	/**
+	 * Returns <code>true</code> if the date lies within the timespan of
+	 * the commit, plus/minus a tolerance.
+	 * 
+	 * @param date the date to check against this commit
+	 * @return <code>true</code> if the date lies within the timespan of the commit
+	 */
+	public static boolean isInTimeFrame(Commit commit, Date date) {
+		return date.getTime() > (commit.getDate().getTime() - MAX_TIME_BETWEEN_CHANGES_MILLISECONDS)
+				&& (date.getTime() < commit.getDate().getTime() + MAX_TIME_BETWEEN_CHANGES_MILLISECONDS);
 	}
 }
