@@ -92,8 +92,8 @@
 				  compression="true"
                   quiet="${maven.scm.cvs.quiet}"
 				  cvsRsh="${maven.scm.cvs.rsh}"
-				  cvsRoot="${maven.scm.cvs.root}"
-				  failonerror="true"/>
+				  cvsRoot="${maven.scm.cvs.root}"/>
+				  <!-- failonerror="true"/> -->
             </j:when>
             <j:otherwise>
               <ant:echo>checking out to ${maven.build.dir}/statcvs-xml...</ant:echo>
@@ -103,8 +103,8 @@
 				  compression="true"
                   quiet="${maven.scm.cvs.quiet}"
 				  cvsRsh="${maven.scm.cvs.rsh}"
-				  cvsRoot="${maven.scm.cvs.root}"
-				  failonerror="true"/>
+				  cvsRoot="${maven.scm.cvs.root}"/>
+				  <!-- failonerror="true"/> -->
             </j:otherwise>
           </j:choose>
         </j:if>
@@ -117,8 +117,8 @@
 			compression="true"
 			quiet="${maven.scm.cvs.quiet}"
 			cvsRsh="${maven.scm.cvs.rsh}"
-			cvsRoot="${maven.scm.cvs.root}"
-			failonerror="true"/>
+			cvsRoot="${maven.scm.cvs.root}"/>
+			<!-- failonerror="true"/> -->
 
         <property name="maven.docs.dest" 
             value="${pom.getPluginContext('maven-xdoc-plugin').getVariable('maven.docs.dest')}"/>
@@ -129,7 +129,7 @@
 
         <ant:java classname="de.berlios.statcvs.xml.Main" fork="true">
           <ant:arg line="-output-dir ${maven.gen.docs}/statcvs-xml"/>
-          <ant:arg line="-title '${pom.name}'"/>
+          <ant:arg line="-title '${statcvs.title}'"/>
           <ant:arg line="-renderer xdoc"/> 
           <ant:arg line="-verbose"/> 
           <ant:arg line="-weburl ${pom.repository.url}"/>
