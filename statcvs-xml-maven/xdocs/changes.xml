@@ -28,6 +28,12 @@
   </properties>
 
   <body>
+	<release version="2.6" date="2004-11-??">
+      <action dev="squig" type="add">
+		Two new properties have been added to include author pictures
+		and to lookup author fullnames in project.xml.
+      </action>
+    </release>
 	<release version="2.5" date="2004-08-06">
       <action dev="vanto" type="fix">
 		A problem with directory names that contain spaces has been fixed.

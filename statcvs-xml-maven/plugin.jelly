@@ -216,6 +216,8 @@
 	<ant:property environment="env"/>
 	<j:set var="maven_opts" value="${env.MAVEN_OPTS}"/>
 
+	<j:set var="parsePOM" value="${statcvs.parsePOM}"/>
+	<j:set var="authorPictures" value="${statcvs.authorPictures}"/>
 	<j:set var="include" value="${statcvs.include}"/>
 	<j:set var="exclude" value="${statcvs.exclude}"/>
 	<j:set var="weburl" value="${pom.repository.url}"/>
@@ -243,6 +245,12 @@
 	  </j:if>
 	  <ant:arg value="${statcvs.logfile}"/>
 	  <ant:arg value="${statcvs.repository}"/>
+	  <j:if test="${statcvs.parsePOM}">
+		<ant:arg line="-maven"/> 
+	  </j:if>
+	  <j:if test="!${statcvs.authorPictures}">
+		<ant:arg line="-no-images"/> 
+	  </j:if>
 	  <ant:classpath>
 		<ant:pathelement location="${plugin.getDependencyPath('statcvs:statcvs-xml')}"/>
 		<ant:pathelement location="${plugin.getDependencyPath('jfreechart:jfreechart')}"/>
