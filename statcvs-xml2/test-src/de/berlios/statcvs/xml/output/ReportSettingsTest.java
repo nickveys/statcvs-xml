@@ -72,6 +72,19 @@ public class ReportSettingsTest extends TestCase {
 		assertEquals(settings2.get("foo"), "bar");
 	}
 
+	public void testGetIdFallback()
+	{
+		settings1.setId("s1");
+		settings2.setId("s2");
+		
+		rootSettings.put("s1.foo", "bar");
+		settings1.put("foo", "baz");
+		settings2.put("foo", "baz");
+		
+		assertEquals(settings1.get("foo"), "bar");
+		assertEquals(settings2.get("foo"), "bar");
+	}
+
 	public void testGetUber()
 	{
 		uberSettings.put("foo", "bar");

@@ -90,7 +90,8 @@ public class DocumentSuite {
 
 	public StatCvsDocument createDocument(Element root, DocumentRenderer renderer, ReportSettings settings) throws IOException
 	{
-		settings.setId(settings.getString("filename"));
+		ReportSettings documentSettings = readAttributes(settings, root);
+		settings.setId(documentSettings.getString("filename"));
 		
 		// collect reports
 		ReportSettings reportSettings = new ReportSettings(settings);
@@ -116,7 +117,6 @@ public class DocumentSuite {
 		// render documents
 		StatCvsDocument firstPage = null;
 		for (int i = 0; i < maxPages; i++) {
-			ReportSettings documentSettings = readAttributes(settings, root);
 			documentSettings.setPageNr(i);
 			
 			StatCvsDocument document = new StatCvsDocument(documentSettings);

@@ -196,17 +196,17 @@ public class ReportSettings extends Hashtable {
 			String id = getId();
 			if (id != null) {
 				ReportSettings rootSettings = getRootDefaults();
-				id += "." + key;
-				
-				int i = id.lastIndexOf(".");		
-				while (i != -1) {
-					Object idValue = rootSettings.get1(id, null);
+				while (true) {
+					Object idValue = rootSettings.get1(id + "." + key, null);
 					if (idValue != null) {
 						return idValue;
 					}
-					
+
+					int i = id.lastIndexOf(".");
+					if (i == -1) {
+						break;
+					}
 					id = id.substring(0, i);
-					i = id.lastIndexOf(".");
 				}
 			}
 		}

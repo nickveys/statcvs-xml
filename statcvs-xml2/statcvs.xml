@@ -24,6 +24,6 @@
       <setting key="Output">**/output/*</setting>
       <setting key="Model">**/model/*</setting>
     </modules>
-    <commitlog.limit>10</commitlog.limit>
+    <setting key="commitlog.limit.MostCommonCommentsTable">10</setting>
   </settings>
 </statcvs>
