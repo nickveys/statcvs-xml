@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Main.java,v $ 
-	Created on $Date: 2003-07-04 21:33:31 $ 
+	Created on $Date: 2003-07-05 01:36:40 $ 
 */
 package net.sf.statcvs;
 
@@ -46,7 +46,7 @@ import net.sf.statcvs.output.xml.OutputSettings;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.10 2003-07-04 21:33:31 vanto Exp $
+ * @version $Id: Main.java,v 1.11 2003-07-05 01:36:40 vanto Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -111,8 +111,8 @@ public class Main {
 				+ "  -verbose           print extra progress information\n"
 				+ "  -output-suite [class] use the xml renderer\n"
 				+ "\n"
-				+ "If statcvs cannot recognize the type of your web repository, please use the"
-				+ "following switches:"
+				+ "If statcvs cannot recognize the type of your web repository, please use the\n"
+				+ "following switches:\n"
 				+ "  -viewcvs <url>     integrate with viewcvs installation at <url>"
 				+ "  -cvsweb <url>      integrate with cvsweb installation at <url>"
 				+ "  -chora <url>       integrate with chora installation at <url>"
