@@ -15,11 +15,11 @@
 
   <document  filename="recent_activity" title="Recent Activity">
     <settings>
-      <inputFilter>util.atMostDaysOld(rev.getDate(), 30)</inputFilter> 
+      <inputFilter>util.atMostDaysOld(date, 30)</inputFilter> 
     </settings>
+    <report class="CommitsOverTimeChart"/>
     <report class="CommitTable" groupby="author"/>
     <report class="CommitTable" groupby="file"/>
-    <report class="LocChart" filename="recent_loc.png"/>
   </document>
 
   <document  filename="authors" title="Author Statistics">

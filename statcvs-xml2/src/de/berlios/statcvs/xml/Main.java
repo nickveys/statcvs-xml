@@ -53,10 +53,9 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.16 2004-02-29 00:43:23 squig Exp $
+ * @version $Id: Main.java,v 1.17 2004-02-29 17:12:02 squig Exp $
  */
 public class Main {
-	private static String projectName;
 
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
 
@@ -201,7 +200,7 @@ public class Main {
 		} 
 		FilePatternMatcher excludeMatcher = null;
 		if (settings.getString("exclude") != null) {
-			includeMatcher = new FilePatternMatcher(settings.getString("include"));
+			excludeMatcher = new FilePatternMatcher(settings.getString("exclude"));
 		} 
 		
 		String logFilename = settings.getString("logFile", "cvs.log");
@@ -211,7 +210,9 @@ public class Main {
 		RepositoryFileManager repFileMan
 			= new RepositoryFileManager(settings.getString("localRepository", "."));
 		Builder builder = new Builder(repFileMan, includeMatcher, excludeMatcher);
-		projectName = builder.getProjectName();
+		if (builder.getProjectName() != null) {
+			settings.put("projectName", builder.getProjectName());
+		}
 		new CvsLogfileParser(logReader, builder).parse();
 		CvsContent content = builder.createCvsContent(settings.getBoolean("useHistory", false));
 

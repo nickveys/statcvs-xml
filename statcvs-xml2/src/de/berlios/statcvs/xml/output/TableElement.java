@@ -114,6 +114,11 @@ public class TableElement extends Element
 		return settings.isPaging()?(int) Math.ceil((double)items / (double)settings.getItemsPerPage()):1;
 	}
 
+	public boolean isEmpty()
+	{
+		return getChildren().size() == 1;
+	}
+
 	public class RowElement extends Element
 	{
 		int columnCount = 0;

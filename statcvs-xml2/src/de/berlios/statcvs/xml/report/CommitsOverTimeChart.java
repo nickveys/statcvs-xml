@@ -20,6 +20,7 @@
 package de.berlios.statcvs.xml.report;
 
 import java.awt.BasicStroke;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -40,27 +41,21 @@ import de.berlios.statcvs.xml.output.ReportSettings;
 /**
  * LocChart
  * 
- * @author Tammo van Lessen
  * @author Steffen Pingel
  */
-public class LocChart extends AbstractTimeSeriesChart {
+public class CommitsOverTimeChart extends AbstractTimeSeriesChart {
     
     private CvsContent content;
-	
-	protected LocChart(CvsContent content, ReportSettings settings, String title)
+
+	public CommitsOverTimeChart(CvsContent content, ReportSettings settings) 
 	{
-		super(settings, "loc%1.png", title, I18n.tr("Lines"));
+		super(settings, "commits_time%1.png", I18n.tr("Commits%1"), I18n.tr("Commits"));
 
 		this.content = content;
-	}
-	
-	public LocChart(CvsContent content, ReportSettings settings) 
-	{
-		this(content, settings, I18n.tr("Lines Of Code%1"));
         
         Grouper grouper = settings.getGrouper();
         if (grouper != null) {
-        	Map serieses = createTimeSerieses(grouper, settings.getRevisionIterator(content), new RevisionVisitorFactory(LOCCalculator.class.getName()));
+        	Map serieses = createTimeSerieses(grouper, settings.getRevisionIterator(content), new RevisionVisitorFactory(Calculator.class.getName()));
         	
         	Object feo = settings.getForEachObject();
         	
@@ -79,7 +74,7 @@ public class LocChart extends AbstractTimeSeriesChart {
 			setup(true);
         }
         else {
-			addTimeSeries("LOC", settings.getRevisionIterator(content));
+			addTimeSeries(createTimeSeries("Commits", settings.getRevisionIterator(content), new Calculator()));
 			addSymbolicNames(settings.getSymbolicNameIterator(content));
 			setup(false);
         }
@@ -87,23 +82,21 @@ public class LocChart extends AbstractTimeSeriesChart {
 
 	public static Report generate(CvsContent content, ReportSettings settings)
 	{
-		LocChart chart = new LocChart(content, settings);
+		CommitsOverTimeChart chart = new CommitsOverTimeChart(content, settings);
 		return (chart.hasData()) ? new Report(new ChartReportElement(chart)) : null;
 	}
 
-	protected void addTimeSeries(String title, Iterator it)
+	public static class Calculator implements RevisionVisitor
 	{
-		TimeSeries series = createTimeSeries(title, it, new LOCCalculator());
-		addTimeSeries(series, content.getFirstDate(), 0);
-	}
-	
-	public static class LOCCalculator implements RevisionVisitor
-	{
-		int loc = 0;
+		Date lastDate = null;
+		int commits = 0;
 		public int visit(CvsRevision rev)
 		{
-			loc += rev.getLinesDelta();
-			return loc;
+			if (lastDate == null || !lastDate.equals(rev.getDate())) {
+				commits = 0;
+				lastDate = rev.getDate();
+			}
+			return ++commits;
 		}
 	}
 

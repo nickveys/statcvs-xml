@@ -34,7 +34,7 @@ public class ScriptHelper {
 
 	public static boolean atMostDaysOld(Date date, int days)
 	{
-		return atMost(date, days * 24 * 60 * 60 * 1000);
+		return atMost(date, (long)days * 24 * 60 * 60 * 1000);
 	}
 	
 	public static boolean isOn(Date date, int year, int month, int day)

@@ -8,6 +8,7 @@
       <setting key="vanto">Tammo van Lessen</setting>
     </authors>
     
+    <projectName>StatCVS-XML</projectName>
     <outputDir>xdocs/statcvs-xml</outputDir>
     <renderer>xdoc</renderer>
     <include>src/de/berlios/statcvs/xml/**/*.java</include>

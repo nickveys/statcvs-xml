@@ -77,6 +77,7 @@ public class ReportSettings extends Hashtable {
 				context.getVars().put("rev", o);
 				context.getVars().put("date", ((CvsRevision)o).getDate());
 			}
+			context.getVars().put("value", o);
 
 			try {
 				Object res = expression.evaluate(context);
