@@ -59,6 +59,7 @@
                         <arg line="-verbose"/> 
                         <arg line="-weburl http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml/"/>
                         <arg line="-title ${pom.name}"/>
+                        <arg line="-use-history"/>
                         <arg value="${statcvs.logfile}"/>
                         <arg value="${basedir}/"/>
                         <classpath>
