@@ -29,7 +29,7 @@
     </connection>
     <developerConnection>scm:cvs:ext:${maven.username}@cvs.sf.net:/cvsroot/statcvs-xml:statcvs-xml</developerConnection>
     <url>
-      http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/
+      http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml/
     </url>
   </repository>
 
