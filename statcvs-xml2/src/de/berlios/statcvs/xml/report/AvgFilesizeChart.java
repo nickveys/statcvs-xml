@@ -1,7 +1,8 @@
 package de.berlios.statcvs.xml.report;
 
+import java.awt.BasicStroke;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
@@ -31,10 +32,21 @@ public class AvgFilesizeChart extends AbstractTimeSeriesChart {
 	
 		Grouper grouper = settings.getGrouper();
 		if (grouper != null) {
-			List serieses = createTimeSerieses(grouper, settings.getRevisionIterator(content), new RevisionVisitorFactory(Calculator.class.getName()));
-			for (Iterator it = serieses.iterator(); it.hasNext();) {
-				addTimeSeries((TimeSeries)it.next());
+			Map serieses = createTimeSerieses(grouper, settings.getRevisionIterator(content), new RevisionVisitorFactory(Calculator.class.getName()));
+			
+			Object feo = settings.getForEachObject();
+			
+			for (Iterator it = serieses.keySet().iterator(); it.hasNext();) {
+				Object group = it.next();
+				addTimeSeries((TimeSeries)serieses.get(group));
+				
+				if (group == settings.getForEachObject()) {
+					// make line thicker
+					getChart().getXYPlot().getRenderer().setSeriesStroke(getSeriesCount() - 1, new BasicStroke(2,BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
+				}
+				
 			}
+			
 			setup(true);
 		}
 		else {

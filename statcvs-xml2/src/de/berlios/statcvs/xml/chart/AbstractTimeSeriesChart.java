@@ -19,11 +19,10 @@
 */
 package de.berlios.statcvs.xml.chart;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.SymbolicName;
@@ -39,7 +38,6 @@ import org.jfree.data.time.TimeSeriesCollection;
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.output.ReportSettings;
-import de.berlios.statcvs.xml.output.ReportSettings.Predicate;
 
 /**
  * TimeLineChart
@@ -100,6 +98,11 @@ public class AbstractTimeSeriesChart extends AbstractChart {
 		tsc.addSeries(series);
 	}
 
+	protected int getSeriesCount()
+	{
+		return tsc.getSeriesCount();
+	}
+	
 	protected TimeSeries createTimeSeries(String title, Iterator it, RevisionVisitor visitor) 
 	{
 		DateTimeSeries result = new DateTimeSeries(title);
@@ -113,7 +116,7 @@ public class AbstractTimeSeriesChart extends AbstractChart {
 		return result;
 	}
 
-	protected List createTimeSerieses(Grouper grouper, Iterator it, RevisionVisitorFactory factory) 
+	protected Map createTimeSerieses(Grouper grouper, Iterator it, RevisionVisitorFactory factory) 
 	{
 		Hashtable timeSeriesByGroup = new Hashtable();
 		Hashtable visitorByGroup = new Hashtable();
@@ -136,12 +139,11 @@ public class AbstractTimeSeriesChart extends AbstractChart {
 			}
 		}
 		
-		List list = new ArrayList(timeSeriesByGroup.values());
-		for (Iterator it2 = list.iterator(); it2.hasNext();) {
+		for (Iterator it2 = timeSeriesByGroup.values().iterator(); it2.hasNext();) {
 			((DateTimeSeries)it2.next()).addLast();
 		}
 		
-		return list;
+		return timeSeriesByGroup;
 	}
 
 	public static class DateTimeSeries extends TimeSeries {
