@@ -30,7 +30,7 @@
   <body>
 	<release version="2.4" date="2004-04-17">
       <action dev="squig" type="fix">
-		Fixed groupId tags of statcvs dependency.
+		Fixed groupId tags of statcvs dependency (patch by Heritier Arnaud).
       </action>
     </release>
 	<release version="2.3" date="2004-04-05">
