@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Main.java,v $ 
-	Created on $Date: 2003-06-17 17:10:05 $ 
+	Created on $Date: 2003-06-18 21:22:43 $ 
 */
 package net.sf.statcvs;
 
@@ -44,7 +44,7 @@ import net.sf.statcvs.output.HTMLOutput;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.2 2003-06-17 17:10:05 vanto Exp $
+ * @version $Id: Main.java,v 1.3 2003-06-18 21:22:43 squig Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -82,6 +82,7 @@ public class Main {
 		} catch (OutOfMemoryError oome) {
 			printOutOfMemMessageAndExit();
 		} catch (Exception ioex) {
+			ioex.printStackTrace();
 			printErrorMessageAndExit(ioex.getMessage());
 		}
 

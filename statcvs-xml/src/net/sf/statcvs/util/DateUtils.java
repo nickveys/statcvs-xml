@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: DateUtils.java,v $ 
-	Created on $Date: 2003-06-17 23:05:41 $ 
+	Created on $Date: 2003-06-18 21:22:43 $ 
 */
 package net.sf.statcvs.util;
 
@@ -33,7 +33,7 @@ import java.util.Locale;
 /** 
  * Utility functions for date handling
  * @author Lukasz Pekacki
- * @version $Id: DateUtils.java,v 1.2 2003-06-17 23:05:41 squig Exp $
+ * @version $Id: DateUtils.java,v 1.3 2003-06-18 21:22:43 squig Exp $
  */
 public class DateUtils {
 	private static final String LOG_TIMESTAMP_FORMAT =
@@ -52,12 +52,10 @@ public class DateUtils {
 		new SimpleDateFormat();//Messages.getString("DATE_TIME_FORMAT"));
 
 	/**
-	 * Method currentDate.
-	 * @return String of the today date
+	 * @return current date
 	 */
-	public static String currentDate() {
-		Calendar cal = Calendar.getInstance();
-		return outputDateFormat.format(cal.getTime());
+	public static Date currentDate() {
+		return Calendar.getInstance().getTime();
 	}
 
 	/**

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: DirectorySizesDocument.java,v $ 
-	Created on $Date: 2003-06-18 17:36:00 $ 
+	Created on $Date: 2003-06-18 21:22:43 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -58,7 +58,6 @@ public class DirectorySizesDocument extends StatCvsDocument {
 		setRootElement(root);
 		
 		root.addContent(getModulesReport());
-				
 	}
 
 	/**

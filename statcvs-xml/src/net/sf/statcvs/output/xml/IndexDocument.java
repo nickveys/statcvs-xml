@@ -18,11 +18,13 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: IndexDocument.java,v $ 
-	Created on $Date: 2003-06-18 17:36:00 $ 
+	Created on $Date: 2003-06-18 21:22:43 $ 
 */
 package net.sf.statcvs.output.xml;
 
-import net.sf.statcvs.Messages;
+import java.util.*;
+
+import net.sf.statcvs.*;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.RevisionIterator;
 import net.sf.statcvs.model.RevisionSortIterator;
@@ -43,22 +45,18 @@ import com.jrefinery.data.BasicTimeSeries;
 public class IndexDocument extends StatCvsDocument {
 
 	private static final String LOC_IMAGE_FILENAME = "loc_small.png";
-	private CvsContent cvsContent;
+	private CvsContent content;
 	
 	/**
 	 */
 	public IndexDocument(CvsContent content) {
-		super("index");
+		super("Development statistics for " 
+			  + content.getModuleName(), "index");
 
-		this.cvsContent = content;
+		this.content = content;
 
-		Element root = new Element("document");
-		root.setAttribute("title", "Development statistics for " 
-						  + content.getModuleName());
-		setRootElement(root);
-
-		root.addContent(createReportRefs());
-		root.addContent(createLOCReport());
+		getRootElement().addContent(createReportRefs());
+		getRootElement().addContent(createLOCReport());
 	}
 
 	/**
@@ -72,10 +70,10 @@ public class IndexDocument extends StatCvsDocument {
 
 	private Chart createLOCChart(String filename,
 										int width, int height) {
-		String projectName = cvsContent.getModuleName();
+		String projectName = content.getModuleName();
 		String subtitle = Messages.getString("TIME_LOC_SUBTITLE");
 		RevisionIterator it
-			= new RevisionSortIterator(cvsContent.getRevisionIterator());
+			= new RevisionSortIterator(content.getRevisionIterator());
 		BasicTimeSeries series = getTimeSeriesFromIterator(it, subtitle);
 		if (series == null) {
 			return null;
@@ -88,41 +86,25 @@ public class IndexDocument extends StatCvsDocument {
 		Element reportRoot = new Element("report");
 		reportRoot.setAttribute("name", "Modules");
 
-		Element element = new Element("period");
-		element.setAttribute("from", 
-							 DateUtils.formatDate(cvsContent.getFirstDate()));
-		element.setAttribute("to", 
-							 DateUtils.formatDate(cvsContent.getLastDate()));
-		reportRoot.addContent(element);
+		reportRoot.addContent(new PeriodElement(I18n.tr("Summary Period"),
+												content.getFirstDate(),
+												content.getLastDate()));
 
-		element = new Element("generated");
-		element.setAttribute("date", DateUtils.currentDate());
-		
-		reportRoot.addContent(element);
+		reportRoot.addContent(new PeriodElement(I18n.tr("Generated"),
+												DateUtils.currentDate()));
 
-		reportRoot.addContent
-			(createReportRef("authors", 
-							  Messages.getString("CPU_TITLE")));
-		reportRoot.addContent
-			(createReportRef("commit_log",
-							  Messages.getString("COMMIT_LOG_TITLE")));
-		reportRoot.addContent
-			(createReportRef("loc",
-							  Messages.getString("LOC_TITLE")));
-		reportRoot.addContent
-			(createReportRef("file_sizes",
-							  Messages.getString("FILE_SIZES_TITLE")));
-		reportRoot.addContent
-			(createReportRef("dir_sizes",
-							  Messages.getString("DIRECTORY_SIZES_TITLE")));
+		Element list = new Element("reports");
+		reportRoot.addContent(list);
+
+		list.addContent(new LinkElement("authors", I18n.tr("Authors")));
+		list.addContent(new LinkElement("commit_log", I18n.tr("Commit Log")));
+		list.addContent(new LinkElement("loc", I18n.tr("Lines Of Code")));
+		list.addContent(new LinkElement("file_sizes", 
+										I18n.tr("File Sizes And Counts")));
+		list.addContent(new LinkElement("dir_sizes", 
+										I18n.tr("Directory Sizes")));
+							 
 		return reportRoot;
-	}
-
-	private Element createReportRef(String module, String text) {
-		Element element = new Element("link");
-		element.setAttribute("ref", module);
-		element.setText(text);
-		return element;
 	}
 
 	private BasicTimeSeries getTimeSeriesFromIterator
@@ -138,15 +120,13 @@ public class IndexDocument extends StatCvsDocument {
 		Element reportRoot = new Element("report");
 		reportRoot.setAttribute("name", "Lines Of Code");
 
-		Element element = new Element("img");
-		element.setAttribute("src", LOC_IMAGE_FILENAME);
-		reportRoot.addContent(element);
+		reportRoot.addContent(new ImageElement (LOC_IMAGE_FILENAME));
+		reportRoot.addContent
+			(new ValueElement ("loc", content.getCurrentLOC(),
+							   I18n.tr("Lines Of Code")));
 
-		element = new Element("loc");
-		element.setAttribute("total", cvsContent.getCurrentLOC() + "");
-		element.setAttribute("date", 
-							 DateUtils.formatDateAndTime(cvsContent.getLastDate()));
-		reportRoot.addContent(element);
+//  		element.setAttribute("date", 
+//  							 DateUtils.formatDateAndTime(content.getLastDate()));
 
 		return reportRoot;
 	}
