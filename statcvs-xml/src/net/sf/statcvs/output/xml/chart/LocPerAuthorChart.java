@@ -18,7 +18,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: LocPerAuthorChart.java,v $
-	$Date: 2003-06-28 11:12:27 $
+	$Date: 2003-06-28 11:25:43 $
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -82,7 +82,7 @@ public class LocPerAuthorChart extends TimeLineChart {
 				setFilename("loc_"+AuthorDocument.escapeAuthorName(author.getName())+".png");
 				// make line thicker
 				if (author.equals(aut)) {
-					getChart().getXYPlot().getRenderer().setSeriesStroke(i, new BasicStroke(2));
+					getChart().getXYPlot().getRenderer().setSeriesStroke(i, new BasicStroke(2,BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
 				}
 			}
 			i++;
