@@ -43,6 +43,8 @@ import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.model.SymbolicName;
 
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.LegendItem;
+import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.PlotState;
@@ -77,8 +79,9 @@ public class EvolutionMatrixChart extends AbstractChart {
 		tooltipMap = new TooltipMapElement("evomatrix");
 	
 		setChart(new JFreeChart(settings.getProjectName(), null, 
-				 new EvolutionMatrixPlot(content, settings), false));
+				 new EvolutionMatrixPlot(content, settings), true));
 		setup(true);
+		
     }
     
 	/**
@@ -202,7 +205,7 @@ public class EvolutionMatrixChart extends AbstractChart {
 
 			// set drawing settings
 			Stroke oldStroke = g2.getStroke();
-			Stroke itemStroke = new BasicStroke(LINE_HEIGHT);
+			Stroke itemStroke = new BasicStroke(1);
 			Stroke borderStroke = new BasicStroke(1); 
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
 								RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -223,20 +226,22 @@ public class EvolutionMatrixChart extends AbstractChart {
 					Iterator fit = dir.getFiles().iterator();
 
 					if (dir.getFiles().size() != 0) {
-						y += (g2.getFontMetrics().getStringBounds(dir.getName(), g2).getHeight() / 2) - 1;
-
+						//y += (g2.getFontMetrics().getStringBounds(dir.getName(), g2).getHeight() / 2) - 1;
+						y += (TEXT_HEIGHT / 2) + 1;
 						if (x == plotArea.getX()) {
 							g2.setColor(new Color(0xCCCCCC));
 							
 							g2.setStroke(borderStroke);
 							
 							Rectangle2D r = g2.getFontMetrics().getStringBounds(dir.getName(), g2);
-							g2.fill3DRect((int)x-3, (int)(y+r.getY()+1), (int)plotArea.getWidth(), (int)r.getHeight(), true);
+							g2.fill3DRect((int)x - 3, (int)(y+r.getY() + 1), 
+									(int)plotArea.getWidth(), (int)r.getHeight(), true);
 							g2.setColor(Color.black);
 							g2.drawString(dir.getPath(), (float)x, (float)y);
 							
 						}
-						y += LINE_HEIGHT + 1;
+						//y += TEXT_HEIGHT;
+						y += LINE_HEIGHT;// + 1;
 
 					}
 					
@@ -248,6 +253,10 @@ public class EvolutionMatrixChart extends AbstractChart {
 						
 						g2.setStroke(itemStroke);
 							
+						// draw light gray shadow - in contrast to small yellow lines.
+						g2.setColor(Color.lightGray);									
+						drawLine(g2, plotArea, x-1, y, 0, LINE_HEIGHT);
+
 						// tagged file
 						if (eFile != null) {
 							
@@ -280,23 +289,27 @@ public class EvolutionMatrixChart extends AbstractChart {
 							if (eFile.isInVersion(ver)) {
 								// draw existing file
 								int length = (int)((eFile.getScore(ver)) * (vspace - 10));
-								g2.drawLine((int)x, (int)y, (int)x + length, (int)y);
+								//g2.drawLine((int)x, (int)y, (int)x + length, (int)y);
+								drawLine(g2, plotArea, x, y, length, LINE_HEIGHT);
 							} else if (eFile.isInVersion(lastVersion)) {
 								// draw deleted file with score of the last known version
 								int length = (int)((eFile.getScore(lastVersion)) * (vspace - 10));
-								g2.drawLine((int)x, (int)y, (int)x + length, (int)y);
+								//g2.drawLine((int)x, (int)y, (int)x + length, (int)y);
+								drawLine(g2, plotArea, x, y, length, LINE_HEIGHT);
 							}
 							
 							// mark changes
-							g2.setColor(Color.yellow);
-							//g2.setStroke(new BasicStroke(2));
+
 							if (lastVersion != null 
 								&& eFile.getRevision(ver) != null
 								&& eFile.getRevision(lastVersion) != null
 								&& !eFile.hasSameRevision(lastVersion, ver)) {
-									
+
+								// draw changes yellow
+								g2.setColor(Color.yellow);
 								int length = (int)((eFile.getChangedScore(lastVersion, ver)) * (vspace - 10));
-								g2.drawLine((int)x, (int)y, (int)x + length, (int)y);								
+								//g2.drawLine((int)x, (int)y, (int)x + length, (int)y);
+								drawLine(g2, plotArea, x, y, length, LINE_HEIGHT);								
 							}
 						} else {
 							// file was never tagged
@@ -306,12 +319,14 @@ public class EvolutionMatrixChart extends AbstractChart {
 							//g2.drawLine((int)x, (int)y, (int)x, (int)y);
 						}
 						
+						CvsRevision linkRev = (eFile == null)?null:eFile.getRevision(ver);
 						String link 
 							= (getSettings().getWebRepository() == null)
 							? "#"
-							: getSettings().getWebRepository().getFileHistoryUrl(file);
+							: (linkRev == null)?getSettings().getWebRepository().getFileHistoryUrl(file)
+								:getSettings().getWebRepository().getFileViewUrl(eFile.getRevision(ver));
 						
-						tooltipMap.addRectArea((int)x, (int)y, (int)(x + plotArea.getWidth()), 
+						tooltipMap.addRectArea((int)x, (int)y, (int)(x + vspace), 
 							(int)y + LINE_HEIGHT, file.getFilenameWithPath(),
 							link);
 							
@@ -327,6 +342,16 @@ public class EvolutionMatrixChart extends AbstractChart {
 				// remember last version
 				lastVersion = ver;	
 			}
+			
+			g2.setStroke(oldStroke);
+        }
+        
+        private void drawLine(Graphics2D g2, Rectangle2D plotArea, 
+        						double x, double y, int length, int width)
+        {
+        	for (int i = 0; i < width; i++) {
+				g2.drawLine((int)x, (int)y + i, (int)x + length, (int)y + i);
+        	}
         }
         
         public int getHeight() 
@@ -338,11 +363,41 @@ public class EvolutionMatrixChart extends AbstractChart {
         			dirCount++;
         		}
         	}
-        	
+
         	return getInsets().bottom + getInsets().bottom + (4*SPACER) + 
         		(content.getFiles().size() * (LINE_HEIGHT + 1))
         		+ (dirCount * TEXT_HEIGHT);
         }
+        /**
+         * @see org.jfree.chart.plot.Plot#getLegendItems()
+         */
+        public LegendItemCollection getLegendItems() {
+            LegendItemCollection result = new LegendItemCollection();
+            Stroke stroke = new BasicStroke(1);
+            
+            LegendItem le = new LegendItem(I18n.tr("Added file"), "", null, 
+            							Color.green, Color.black, stroke);
+            result.add(le);
+            
+			le = new LegendItem(I18n.tr("Modified file"), "", null, 
+										Color.red, Color.black, stroke);
+			result.add(le);
+
+			le = new LegendItem(I18n.tr("Untouched file"), "", null, 
+										Color.gray, Color.black, stroke);
+			result.add(le);
+
+			le = new LegendItem(I18n.tr("Removed file"), "", null, 
+										Color.black, Color.black, stroke);
+			result.add(le);
+
+			le = new LegendItem(I18n.tr("Changes"), "", null, 
+										Color.yellow, Color.black, stroke);
+			result.add(le);
+
+            return result;
+        }
+
 	}
 	
 	
@@ -485,6 +540,7 @@ public class EvolutionMatrixChart extends AbstractChart {
 					revCount++;	
 				}
 			}
+			
 			if (getRevision(thisV).getLines() != 0) {
 				return (double)change / getRevision(thisV).getLines();	
 			} 
