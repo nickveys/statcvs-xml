@@ -22,6 +22,9 @@
 */
 package net.sf.statcvs.output;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
@@ -33,8 +36,8 @@ import net.sf.statcvs.model.Directory;
  * @version $Id$
  */
 public class ChoraIntegration implements WebRepositoryIntegration {
-
 	private String baseURL;
+	private Set atticFileNames = new HashSet();
 
 	/**
 	 * @param baseURL base URL of the Chora installation 
@@ -65,7 +68,7 @@ public class ChoraIntegration implements WebRepositoryIntegration {
 	 * @see net.sf.statcvs.output.WebRepositoryIntegration#getFileHistoryUrl
 	 */
 	public String getFileHistoryUrl(CvsFile file) {
-		if (file.isInAttic()) {
+		if (isInAttic(file)) {
 			String path = file.getDirectory().getPath();
 			String filename = file.getFilename();
 			return baseURL + "/" + path + "Attic/" + filename;
@@ -86,7 +89,7 @@ public class ChoraIntegration implements WebRepositoryIntegration {
 	 */
 	public String getFileViewUrl(CvsRevision revision) {
 		return getFileHistoryUrl(revision.getFile()) + "?r="
-				+ revision.getRevision();
+				+ revision.getRevisionNumber();
 	}
 
 	/**
@@ -97,7 +100,18 @@ public class ChoraIntegration implements WebRepositoryIntegration {
 			throw new IllegalArgumentException("revisions must be of the same file");
 		}
 		return getFileHistoryUrl(oldRevision.getFile())
-				+ "?r1=" + oldRevision.getRevision()
-				+ "&r2=" + newRevision.getRevision();
+				+ "?r1=" + oldRevision.getRevisionNumber()
+				+ "&r2=" + newRevision.getRevisionNumber();
+	}
+	
+	/**
+	 * @see net.sf.statcvs.output.WebRepositoryIntegration#setAtticFileNames(java.util.Set)
+	 */
+	public void setAtticFileNames(Set atticFileNames) {
+		this.atticFileNames = atticFileNames;
+	}
+
+	private boolean isInAttic(CvsFile file) {
+		return atticFileNames.contains(file.getFilenameWithPath());
 	}
 }
