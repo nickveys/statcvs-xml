@@ -18,14 +18,14 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Main.java,v $ 
-	Created on $Date: 2003-06-17 16:43:03 $ 
+	Created on $Date: 2003-06-17 17:10:05 $ 
 */
 package net.sf.statcvs;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -34,17 +34,17 @@ import net.sf.statcvs.input.CvsLogfileParser;
 import net.sf.statcvs.input.LogSyntaxException;
 import net.sf.statcvs.input.RepositoryFileManager;
 import net.sf.statcvs.model.CvsContent;
-import net.sf.statcvs.output.*;
+import net.sf.statcvs.output.CommandLineParser;
 import net.sf.statcvs.output.ConfigurationException;
 import net.sf.statcvs.output.ConfigurationOptions;
-import net.sf.statcvs.output.xml.*;
+import net.sf.statcvs.output.HTMLOutput;
 
 /**
  * StatCvs Main Class; it starts the application and controls command-line
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.1 2003-06-17 16:43:03 vanto Exp $
+ * @version $Id: Main.java,v 1.2 2003-06-17 17:10:05 vanto Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
