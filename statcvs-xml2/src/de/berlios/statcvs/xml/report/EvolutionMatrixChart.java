@@ -173,9 +173,12 @@ public class EvolutionMatrixChart extends AbstractChart {
         }
 
         /**
-         * @see org.jfree.chart.plot.Plot#draw(java.awt.Graphics2D, java.awt.geom.Rectangle2D, org.jfree.chart.plot.PlotState, org.jfree.chart.plot.PlotRenderingInfo)
+         * @see org.jfree.chart.plot.Plot#draw(java.awt.Graphics2D, 
+         * 		java.awt.geom.Rectangle2D, org.jfree.chart.plot.PlotState, 
+         * 		org.jfree.chart.plot.PlotRenderingInfo)
          */
-        public void draw(Graphics2D g2, Rectangle2D plotArea, PlotState state, PlotRenderingInfo info) 
+        public void draw(Graphics2D g2, Rectangle2D plotArea, 
+        				  PlotState state, PlotRenderingInfo info) 
         {
 			// record the plot area...
 			if (info != null) {
@@ -205,7 +208,8 @@ public class EvolutionMatrixChart extends AbstractChart {
 			Stroke oldStroke = g2.getStroke();
 			Stroke itemStroke = new BasicStroke(LINE_WIDTH);
 			Stroke borderStroke = new BasicStroke(1); 
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+								RenderingHints.VALUE_ANTIALIAS_OFF);
 
 			Version lastVersion = null;
 			while (verIt.hasNext()) {
@@ -246,7 +250,9 @@ public class EvolutionMatrixChart extends AbstractChart {
 									g2.setColor(Color.green);
 								} else if (eFile.hasSameRevision(lastVersion, ver)) {
 									g2.setColor(Color.gray);
-								} else if (!eFile.isInVersion(ver) && eFile.isInVersion(lastVersion)) {
+								} else if (!eFile.isInVersion(ver) 
+									&& eFile.isInVersion(lastVersion)) {
+										
 									g2.setColor(Color.black);
 								} else {
 									g2.setColor(Color.red);
@@ -270,7 +276,9 @@ public class EvolutionMatrixChart extends AbstractChart {
 							// mark changes
 							g2.setColor(Color.yellow);
 							//g2.setStroke(new BasicStroke(2));
-							if (lastVersion != null && !eFile.hasSameRevision(lastVersion, ver)) {
+							if (lastVersion != null 
+								&& !eFile.hasSameRevision(lastVersion, ver)) {
+									
 								int length = (int)((eFile.getChangedScore(lastVersion, ver)) * (vspace - 10));
 								g2.drawLine((int)x, (int)y, (int)x + length, (int)y);								
 							}
@@ -298,7 +306,8 @@ public class EvolutionMatrixChart extends AbstractChart {
         
         public int getHeight() 
         {
-        	return getInsets().bottom + getInsets().bottom + (2*SPACER) + (content.getFiles().size() * (LINE_WIDTH + 1));
+        	return getInsets().bottom + getInsets().bottom + (2*SPACER) + 
+        		(content.getFiles().size() * (LINE_WIDTH + 1));
         }
 	}
 	
@@ -425,7 +434,8 @@ public class EvolutionMatrixChart extends AbstractChart {
 		
 		public boolean hasSameRevision(Version v1, Version v2)
 		{
-			return getRevision(v1) == getRevision(v2);
+			return (getRevision(v1) == getRevision(v2))
+				&& ((getRevision(v1) != null));
 		}
 	}
 
