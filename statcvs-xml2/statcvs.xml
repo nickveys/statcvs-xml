@@ -8,8 +8,8 @@
     <projectName>StatCVS-XML</projectName>
     <outputDir>xdocs/statcvs-xml</outputDir>
     <renderer>xdoc</renderer>
-    <include>src/net/**/*.java</include>
-<!--	<include>**/*.java</include> -->
+<!--    <include>src/net/**/*.java</include> -->
+	<include>**/*.java</include>
 <!--    <include>src/de/berlios/statcvs/xml/**/*.java</include> -->
 <!--    <include>xdocs/**/statcvs*.png</include> -->
     <modules type="map">
