@@ -2,7 +2,7 @@ JAVA_HOME =
 
 CVS_LOG = cvs.log
 CVS_PATH = .
-STATCVS_ARGS = -viewcvs http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml/
+STATCVS_ARGS = -viewcvs http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml/ -verbose
 
 LIBS = $(shell find lib/ -name "*.jar")
 CP = .:src:$(shell echo $(LIBS) | sed -e 's/ /:/g'):$(JAVA_HOME)/jre/lib/rt.jar

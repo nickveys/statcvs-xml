@@ -18,13 +18,13 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Main.java,v $ 
-	Created on $Date: 2003-06-18 21:22:43 $ 
+	Created on $Date: 2003-06-25 12:19:19 $ 
 */
 package net.sf.statcvs;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -38,13 +38,14 @@ import net.sf.statcvs.output.CommandLineParser;
 import net.sf.statcvs.output.ConfigurationException;
 import net.sf.statcvs.output.ConfigurationOptions;
 import net.sf.statcvs.output.HTMLOutput;
+import net.sf.statcvs.output.xml.*;
 
 /**
  * StatCvs Main Class; it starts the application and controls command-line
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.3 2003-06-18 21:22:43 squig Exp $
+ * @version $Id: Main.java,v 1.4 2003-06-25 12:19:19 squig Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -202,16 +203,38 @@ public class Main {
 	 * must be initialized before calling this method.
 	 * @throws Exception if somethings goes wrong
 	 */
-	public static void generateSuite(CvsContent content) throws Exception {
-		logger.info("Creating output");
-		
+	public static void generateSuite(CvsContent content) throws Exception {	
 		if (ConfigurationOptions.getOutputSuite() != null) {
+			logger.info("Reading output settings");
+			String filename = getSettingsPath() + "output.properties";
+			try {
+				OutputSettings.getInstance().read(filename);
+			}
+			catch (IOException e) {
+				logger.warning("Could not read settings: " 
+							   + e.getMessage());
+			}
+
+			logger.info("Creating suite");
+
 			Class c = Class.forName(ConfigurationOptions.getOutputSuite());
 			Method m = c.getMethod("generate", new Class[] { CvsContent.class });
 			m.invoke(null, new Object[] { content });
 		}
 		else {
+			logger.info("Creating output");
 			new HTMLOutput(content).createHTMLSuite();
 		}
 	}
+
+    public static String getSettingsPath()
+    {
+		StringBuffer sb = new StringBuffer();
+		sb.append(System.getProperty("user.home"));
+		sb.append(File.separatorChar);
+		sb.append(".statcvs");
+		sb.append(File.separatorChar);
+		return sb.toString();
+    }
+
 }

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLOutput.java,v $
-	$Date: 2003-06-17 22:28:20 $ 
+	$Date: 2003-06-25 12:19:19 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -105,6 +105,7 @@ public class XMLOutput implements DocumentRenderer {
 	
 	private void renderPages(StatCvsDocument document) throws IOException {
 		AbstractPageableDocument p = (AbstractPageableDocument)document;
+		p.setItemsPerPage(OutputSettings.getInstance().get("itemsPerPage", 10));
 		for (int i=0; i < p.getPageCount(); i++) {
 			renderSingle(new StatCvsDocument(p.getPage(i), p.getFilename(i)));					
 		}
