@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: LocChart.java,v $
-	$Date: 2003-07-06 21:26:39 $ 
+	$Date: 2003-07-24 00:40:06 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -142,7 +142,9 @@ public class LocChart extends TimeLineChart {
 			CvsRevision rev = (CvsRevision) it.next();
 			updateSymbolicNamesMap(rev);
 			if (!rev.getFile().isBinary()) {
+				
 				loc += rev.getLinesOfCodeChange();	
+				//loc = rev.getEffectiveLinesOfCode();
 			}
 			locTL.addTimePoint(rev.getDate(), loc);
 		}

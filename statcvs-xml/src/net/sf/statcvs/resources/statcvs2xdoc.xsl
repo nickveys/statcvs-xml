@@ -292,10 +292,13 @@
 			<xsl:otherwise><img src="folder.png"/></xsl:otherwise>
 		  </xsl:choose>
 		  <xsl:call-template name="func:make-link">
-			<xsl:with-param name="url">
-			     <xsl:value-of select="@url"/><xsl:value-of select="$ext"/>
-			</xsl:with-param>
 		    <xsl:with-param name="text" select="@name"/>
+			<xsl:with-param name="url">
+			<xsl:if test="not(@removed)">
+			     <xsl:value-of select="@url"/><xsl:value-of select="$ext"/>
+			</xsl:if>
+			</xsl:with-param>
+
 		  </xsl:call-template>
 		  </td>
 		  <td><xsl:value-of select="@files"/></td>
@@ -325,7 +328,7 @@
     <xsl:param name="url"/>
     <xsl:param name="text"/>
 	<xsl:choose>
-		<xsl:when test="$url">
+		<xsl:when test="$url!=''">
               <xsl:element name="a">
                 <xsl:attribute name="href"><xsl:value-of select="$url"/></xsl:attribute>
                 <xsl:value-of select="$text"/>

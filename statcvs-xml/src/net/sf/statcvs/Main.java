@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Main.java,v $ 
-	Created on $Date: 2003-07-06 21:34:18 $ 
+	Created on $Date: 2003-07-24 00:40:06 $ 
 */
 package net.sf.statcvs;
 
@@ -38,14 +38,16 @@ import net.sf.statcvs.input.RepositoryFileManager;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.output.HTMLRenderer;
 import net.sf.statcvs.output.OutputSettings;
+import net.sf.statcvs.util.CvsLogUtils;
 import net.sf.statcvs.util.LogFormatter;
+import net.sf.statcvs.util.LookaheadReader;
 
 /**
  * StatCvs Main Class; it starts the application and controls command-line
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.16 2003-07-06 21:34:18 vanto Exp $
+ * @version $Id: Main.java,v 1.17 2003-07-24 00:40:06 vanto Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -149,19 +151,28 @@ public class Main {
 		long startTime = System.currentTimeMillis();
 		
 		initLogger();
-		
-		CvsContent content = readLogFile();
+
 		boolean useHistory = Settings.getUseHistory();
 		boolean createHistory = Settings.getGenerateHistory();
+		String logfile = Settings.getLogFileName();
+		
+		String moduleName = getModuleName(logfile);
 
-		if (useHistory && createHistory) {
-			CvsLocHistory hist = CvsLocHistory.getInstance();
-			hist.generate(content);
-			hist.save(content.getModuleName());
-			content = readLogFile();
+		CvsLocHistory hist = CvsLocHistory.getInstance();
+		if (Settings.getUseHistory()) {
+			hist.load(moduleName);
 		}
 
-		CvsLocHistory.getInstance().save(content.getModuleName());
+		if (useHistory && createHistory) {
+			hist.generate();
+		}
+
+		CvsContent content = readLogFile(logfile);
+		
+		if (hist.isChanged()) {
+			hist.save(moduleName);
+		}
+		 
 		generateSuite(content);
 		long endTime = System.currentTimeMillis();
 		long memoryUsedOnEnd = Runtime.getRuntime().totalMemory();
@@ -170,6 +181,44 @@ public class Main {
 		logger.info("memory usage: "
 					+ (((double) memoryUsedOnEnd 
 						- memoryUsedOnStart) / 1024) + " kb");
+	}
+
+	/**
+	 * @param string
+	 * @return
+	 */
+	private static String getModuleName(String logfile) throws LogSyntaxException, IOException {
+		LookaheadReader logReader = new LookaheadReader(new FileReader(logfile));
+		
+		while (logReader.getCurrentLine().startsWith("? ")) {
+			logReader.getNextLine();
+		}
+		if (!logReader.isAfterEnd() && !"".equals(logReader.getCurrentLine())) {
+			throw new LogSyntaxException("expected '?' or empty line at line "
+					+ logReader.getLineNumber() + ", but found '"
+					+ logReader.getCurrentLine() + "'");
+		}
+		while (!logReader.isAfterEnd() && logReader.getCurrentLine().equals("")) {
+			logReader.getNextLine();
+		}
+
+		String line = logReader.getCurrentLine();
+		if (!line.startsWith("RCS file: ")) {
+			throw new LogSyntaxException(
+				"line " + logReader.getLineNumber() + ": expected '"
+						+ "RCS file: " + "' but found '" + line + "'");
+		}
+		String rcsFile = line.substring("RCS file: ".length());
+
+		line = logReader.getNextLine();
+		if (!line.startsWith("Working file: ")) {
+			throw new LogSyntaxException(
+				"line " + logReader.getLineNumber() + ": expected '"
+						+ "Working file: " + "' but found '" + line + "'");
+		}
+		String workingFile = line.substring("Working file: ".length());
+
+		return CvsLogUtils.getModuleName(rcsFile, workingFile);
 	}
 
 	public static void initLogger() throws LogSyntaxException {
@@ -187,7 +236,7 @@ public class Main {
 	 * @throws LogSyntaxException if the logfile contains unexpected syntax
 	 * @throws IOException if the log file can not be read
 	 */
-	public static CvsContent readLogFile() 
+	public static CvsContent readLogFile(String logfile) 
 		throws ConfigurationException, IOException, LogSyntaxException
 	{
 		if (Settings.getLogFileName() == null) {
@@ -197,10 +246,10 @@ public class Main {
 			throw new ConfigurationException("Missing checked out directory");
 		}
 		
+		Reader logReader = new FileReader(logfile);
+		
 		logger.info("Parsing CVS log '"
 				+ Settings.getLogFileName() + "'");
-
-		Reader logReader = new FileReader(Settings.getLogFileName());
 		RepositoryFileManager repFileMan
 			= new RepositoryFileManager
 				(Settings.getCheckedOutDirectory());

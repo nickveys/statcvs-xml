@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ModulesTreeReport.java,v $
-	$Date: 2003-07-06 21:26:39 $ 
+	$Date: 2003-07-24 00:40:06 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -83,9 +83,10 @@ public class ModulesTreeReport extends ReportElement {
 			module.setAttribute("loc", ""+dir.getCurrentLOC());
 			if (dir.isEmpty()) {
 				module.setAttribute("removed", "true");
+			} else {
+				module.setAttribute("url",ModuleDocument.getModulePageUrl(dir));	
 			}
 
-			module.setAttribute("url",ModuleDocument.getModulePageUrl(dir));
 			modules.addContent(module);
 		}
 		addContent(modules);

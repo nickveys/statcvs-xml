@@ -18,11 +18,12 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: FileUtils.java,v $ 
-	Created on $Date: 2003-07-06 21:26:39 $ 
+	Created on $Date: 2003-07-24 00:40:06 $ 
 */
 package net.sf.statcvs.util;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -31,6 +32,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.sf.statcvs.Main;
 import net.sf.statcvs.Settings;
@@ -39,7 +42,7 @@ import net.sf.statcvs.Settings;
  * Some helpful file functions
  * TODO: Remove redundancy and dependency on ConfigurationOptions, write tests
  * @author Lukasz Pekacki
- * @version $Id: FileUtils.java,v 1.4 2003-07-06 21:26:39 vanto Exp $
+ * @version $Id: FileUtils.java,v 1.5 2003-07-24 00:40:06 vanto Exp $
  */
 public class FileUtils {
     /**
@@ -227,4 +230,62 @@ public class FileUtils {
 		return null;
 	}
 
+	/**
+	 * Deletes directory and all subdirectories
+	 * 
+	 * @param dir
+	 * @return
+	 */
+	public static boolean deleteDir(File dir) {
+		if (dir.isDirectory()) {
+			String[] children = dir.list();
+			for (int i=0; i<children.length; i++) {
+				if (!deleteDir(new File(dir, children[i]))) {
+					return false;
+				}
+			}
+		}
+		return dir.delete();
+	}
+
+	/**
+	 * Returns all directories (with trailling seperator)
+	 * relative to startDir but with
+	 * absolute paths. CVS-dirs are ignored
+	 * CONTAINS ITSELF!
+	 * 
+	 * @param startDir the starting dir
+	 * @return List of dirpaths
+	 */
+	public static String[] getDirectories(String startDir) {
+		List dirs = new ArrayList();
+		dirs.add(startDir+File.separatorChar);
+		
+		File start = new File(startDir);
+		File[] dirlist = start.listFiles(new DirFileFilter());
+		for (int i = 0; i<dirlist.length; i++) {
+			String[] subdirs = getDirectories(dirlist[i].getAbsolutePath());
+			for (int j = 0; j < subdirs.length; j++) {
+				dirs.add(subdirs[j]); 
+			}
+		}
+		return (String[])dirs.toArray(new String[0]);
+	}
+	
+	/**
+	 * DirFileFilter
+	 * Accepts only directories except CVS
+	 * 
+	 * @author Tammo van Lessen
+	 * @version $Id: FileUtils.java,v 1.5 2003-07-24 00:40:06 vanto Exp $
+	 */
+	private static class DirFileFilter implements FileFilter {
+
+		/**
+		 * @see java.io.FileFilter#accept(java.io.File)
+		 */
+		public boolean accept(File pathname) {
+			return pathname.isDirectory() && !pathname.getName().equals("CVS");
+		}
+	}
 }

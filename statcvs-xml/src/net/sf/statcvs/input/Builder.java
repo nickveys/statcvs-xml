@@ -18,12 +18,11 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Builder.java,v $
-	$Date: 2003-07-07 11:11:05 $
+	$Date: 2003-07-24 00:40:06 $
 */
 package net.sf.statcvs.input;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -54,7 +53,7 @@ import net.sf.statcvs.util.FileUtils;
  * for each author name and path.</p>
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: Builder.java,v 1.6 2003-07-07 11:11:05 vanto Exp $
+ * @version $Id: Builder.java,v 1.7 2003-07-24 00:40:06 vanto Exp $
  */
 public class Builder {
 
@@ -102,6 +101,15 @@ public class Builder {
 	 */
 	public void finish() {
 		cvsContent = new CvsContent(currentModuleName, files);
+
+		// TODO: refactor this to Main.run()
+		// insert directories to dir tree who arent mentioned in the cvslog
+		if (Settings.getUseHistory()) {
+			String[] dirs = CvsLocHistory.getInstance().getDirectories();
+			for (int i=0; i<dirs.length; i++) {
+				getDirectoryForPath(dirs[i]);
+			}
+		}
 	}
 	
 	/**
@@ -219,11 +227,10 @@ public class Builder {
 
 		CvsRevision previous = null;
 		List revisions = file.getRevisions();
-		Collections.reverse(revisions);
-		for (int i=0; i<revisions.size(); i++) {
+		for (int i=revisions.size()-1; i>=0; i--) {
 			CvsRevision rev = (CvsRevision)revisions.get(i);
 			if (rev.isInitialRevision()) {
-				currentLinesOfCode = CvsLocHistory.getInstance().getLinesOfCode(file); 
+				currentLinesOfCode += CvsLocHistory.getInstance().getLinesOfCode(file); 
 			} else {
 				currentLinesOfCode += rev.getLinesAdded();
 				currentLinesOfCode -= rev.getLinesRemoved();

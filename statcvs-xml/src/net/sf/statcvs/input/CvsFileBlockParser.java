@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsFileBlockParser.java,v $ 
-	Created on $Date: 2003-07-07 11:11:05 $ 
+	Created on $Date: 2003-07-24 00:40:06 $ 
 */
 
 package net.sf.statcvs.input;
@@ -38,7 +38,7 @@ import net.sf.statcvs.util.LookaheadReader;
  * 
  * @author Anja Jentzsch
  * @author Richard Cyganiak
- * @version $Id: CvsFileBlockParser.java,v 1.6 2003-07-07 11:11:05 vanto Exp $
+ * @version $Id: CvsFileBlockParser.java,v 1.7 2003-07-24 00:40:06 vanto Exp $
  */
 public class CvsFileBlockParser {
 
@@ -67,9 +67,9 @@ public class CvsFileBlockParser {
 		
 		builder.buildSetModuleName(CvsLogUtils.getModuleName(rcsFile, workingFile));
 		// initialize history
-		if (Settings.getUseHistory()) {
-			CvsLocHistory.getInstance().load(CvsLogUtils.getModuleName(rcsFile, workingFile));
-		}
+//		if (Settings.getUseHistory()) {
+//			CvsLocHistory.getInstance().load(CvsLogUtils.getModuleName(rcsFile, workingFile));
+//		}
 		
 		boolean isInAttic = CvsLogUtils.isInAttic(rcsFile, workingFile);
 		requireLine(logReader.getNextLine(), "head:");

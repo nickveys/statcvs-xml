@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommitLogReport.java,v $
-	$Date: 2003-07-06 21:26:39 $ 
+	$Date: 2003-07-24 00:40:06 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -122,7 +122,7 @@ public class CommitLogReport extends ReportElement {
 		this();
 
 		CommitListBuilder builder 
-			= new CommitListBuilder(author.getRevisionIterator());
+			= new CommitListBuilder(new RevisionSortIterator(author.getRevisionIterator()));
 		List commits = builder.createCommitList();
 		Collections.reverse(commits);
 		
@@ -152,7 +152,7 @@ public class CommitLogReport extends ReportElement {
 		this();
 
 		CommitListBuilder builder 
-			= new CommitListBuilder(dir.getRevisionIterator());
+			= new CommitListBuilder(new RevisionSortIterator(dir.getRevisionIterator()));
 		List commits = builder.createCommitList();
 		Collections.reverse(commits);
 

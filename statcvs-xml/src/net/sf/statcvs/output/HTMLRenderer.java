@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: HTMLRenderer.java,v $
-	$Date: 2003-07-06 22:39:44 $ 
+	$Date: 2003-07-24 00:40:06 $ 
 */
 package net.sf.statcvs.output;
 
@@ -59,10 +59,6 @@ public class HTMLRenderer extends XMLRenderer {
 		xout.setOmitDeclaration(true);
 		xout.setOmitEncoding(true);
 		setOutputter(xout);
-
-		if (transformer != null) {
-			logger.info("Using transformer "+transformer.getClass().getName());
-		}
 	}
 
 	/**

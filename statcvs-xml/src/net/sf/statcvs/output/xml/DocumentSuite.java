@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: DocumentSuite.java,v $
-	$Date: 2003-07-06 21:26:39 $ 
+	$Date: 2003-07-24 00:40:06 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -69,7 +69,9 @@ public class DocumentSuite {
 		// module pages
 		for (Iterator i = content.getDirectories().iterator(); i.hasNext(); ) {
 			Directory dir = (Directory)i.next();
-			renderer.render(new ModuleDocument(content, dir));
+			if (!dir.isEmpty()) {
+				renderer.render(new ModuleDocument(content, dir));
+			}
 		}
 
 		renderer.postRender();
