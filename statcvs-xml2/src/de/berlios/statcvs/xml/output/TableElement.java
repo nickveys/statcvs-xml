@@ -52,9 +52,17 @@ public class TableElement extends Element
 		
 		Element row = new Element("tr");
 		for (int i = 0; i < headers.length; i++) {
-			row.addContent(new Element("th").addContent(headers[i]));
+			if (showColumn(i)) {
+				row.addContent(new Element("th").addContent(headers[i]));
+			}
 		}
 		addContent(row);
+	}
+	
+	public boolean showColumn(int i)
+	{
+		return settings.getString("showColumns", "123456789")
+			.indexOf(Integer.toString(i)) != -1;
 	}
 	
 	public RowElement addRow()
@@ -111,7 +119,7 @@ public class TableElement extends Element
 		
 		public Element addContent(Element element)
 		{
-			return (settings.getString("showColumns", "123456789").indexOf(Integer.toString(++columnCount)) != -1)
+			return (showColumn(++columnCount))
 				? super.addContent(element)
 				: null;
 		}

@@ -28,7 +28,7 @@
 
   <document  filename="directory%1" title="Directory Statistics%1" foreach="directory">
     <report class="LocChart"/>
-    <report class="CommitTable" groupby="author" showColumns="2"/>
+    <report class="CommitTable" groupby="author"/>
   </document>
 
   <document  filename="recent_activity" title="Recent Activity">
@@ -50,8 +50,8 @@
   <document  filename="file_stats" title="File Statistics">
     <report class="FileCountChart"/>    
     <report class="AvgFilesizeChart"/>
-    <report class="CommitTable" groupby="file" orderby="loc" showColums="1" showPercent="false"/>
-    <report class="CommitTable" groupby="file" orderby="revisions" showColums="2" showPercent="false" title="Lines of Code%1"/>
+    <report class="CommitTable" groupby="file" orderby="loc" showColumns="1,2" showPercent="false"/>
+    <report class="CommitTable" groupby="file" orderby="revisions" showColumns="1,3" showPercent="false" title="Lines of Code%1"/>
     <report class="AuthorCountTable" groupby="file" paging="true" itemsPerPage="4"/>
   </document>
   
