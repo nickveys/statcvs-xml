@@ -59,15 +59,22 @@
   <dependencies>
      <dependency>
       <id>ant</id>
-      <jar>ant.jar</jar>
+      <version>1.5</version>
+      <jar>ant-1.5.jar</jar>
      </dependency>
      <dependency>
       <id>jdom</id>
-      <jar>jdom.jar</jar>
+      <version>b9</version>
+      <jar>jdom-b9.jar</jar>
      </dependency>
      <dependency>
       <id>jfreechart</id>
-      <jar>jfreechart.jar</jar>
+<!--
+      <version>0.7.3</version>
+      <jar>jfreechart-0.7.3.jar</jar>
+-->
+      <version>0.9.8</version>
+      <jar>jfreechart-0.9.8.jar</jar>
      </dependency>
   </dependencies>
 
