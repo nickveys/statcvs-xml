@@ -15,6 +15,10 @@
     </section>
 -->
 	<release version="0.9.4" date="CVS">
+	  <action dev="vanto" type="update">
+	  	New setting added: html-xsl allows you to define an alternative xsl-
+	  	stylesheet for html generatation.
+	  </action>
       <action dev="vanto" type="update">
 		The Imagemap in the Software Evolution Chart is now disabled by default 
 		and can be enabled by the setting-directive in statcvs.xml 

@@ -79,8 +79,11 @@ public class HTMLRenderer extends XMLRenderer {
 	 */
 	public static DocumentRenderer create(CvsContent content, ReportSettings settings) throws IOException 
 	{
-		StreamSource source = new StreamSource
-			(FileHelper.getResource("resources/statcvs2html.xsl").toString());
+		String stylesheet = settings.getString("html-xsl", "resources/statcvs2html.xsl"); 
+	    logger.info("Using " + stylesheet + " as stylesheet");
+	    
+	    StreamSource source = new StreamSource
+			(FileHelper.getResource(stylesheet).toString());
 		Transformer transformer;
 
 		try {
