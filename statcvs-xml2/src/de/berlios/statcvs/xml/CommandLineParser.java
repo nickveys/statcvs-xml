@@ -29,7 +29,7 @@ import java.util.logging.Level;
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.15 2004-11-10 16:18:52 squig Exp $
+ * @version $Id: CommandLineParser.java,v 1.16 2004-11-10 16:31:33 squig Exp $
  */
 public class CommandLineParser {
 
@@ -125,7 +125,7 @@ public class CommandLineParser {
 		} else if (s.equals("maven")) {
 			settings.put("maven", "project.xml");
 		} else if (s.equals("no-images")) {
-		    settings.put("no-images", "true");
+		    settings.put("showImages", "false");
 		} else {
 			throw new InvalidCommandLineException("Unrecognized option -" + s);
 		}
