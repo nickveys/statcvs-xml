@@ -14,9 +14,9 @@
       </ul>
     </section>
 -->
-	<release version="0.9.4" date="CVS">
+	<release version="0.9.4" date="2004-08-06">
       <action dev="vanto" type="update">
-		Upgrade to jfreechart 0.9.20.
+		Upgrade to JFreeChart 0.9.20.
       </action>
       <action dev="vanto" type="update">
 		Bug #2011 Patch from Felipe Hoffa (fix for parsing new cvs log date format)

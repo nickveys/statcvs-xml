@@ -28,9 +28,13 @@
   </properties>
 
   <body>
-	<release version="2.5" date="in CVS">
+	<release version="2.5" date="2004-08-06">
       <action dev="vanto" type="fix">
-		Fixed problem with directory names which contain spaces.
+		A problem with directory names that contain spaces has been fixed.
+      </action>
+      <action dev="squig" type="update">
+		The dependency on StatCvs-XML has been updated to version
+		0.9.4.
       </action>
     </release>
 	<release version="2.4" date="2004-04-17">

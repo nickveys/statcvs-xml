@@ -173,5 +173,4 @@
   <reports>
     <report>maven-changes-plugin</report>
   </reports>
-
 </project>

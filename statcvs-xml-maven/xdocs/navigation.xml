@@ -25,11 +25,9 @@
       <item href="http://statcvs-xml.berlios.de/" name="StatCvs-XML"/>
       <item href="http://maven.apache.org/" name="Maven"/>
     </links>
-    <menu name="General Information">
-      <item href="/index.html" name="Overview"/>
+    <menu name="Overview">
       <item href="/goals.html" name="Goals"/>
       <item href="/properties.html" name="Properties"/>
-      <item href="http://developer.berlios.de/project/showfiles.php?group_id=872" name="Download"/>
     </menu>
   </body>
 </project>
