@@ -479,4 +479,20 @@ public class ReportSettings extends Hashtable {
 		this.put("_groupby", grouper);		
 	}
 
+	/**
+	 * @return
+	 */
+	public Predicate getOutputPredicate() 
+	{
+		String filter = getString("outputFilter");
+		try {
+			if (filter != null) {
+				return new ExpressionPredicate(filter);
+			}
+		} 
+		catch (Exception e) {
+		}
+		return null;
+	}
+
 }

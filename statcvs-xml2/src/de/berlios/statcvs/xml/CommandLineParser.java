@@ -23,17 +23,12 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import net.sf.statcvs.output.ChoraIntegration;
-import net.sf.statcvs.output.CvswebIntegration;
-import net.sf.statcvs.output.ViewCvsIntegration;
-import de.berlios.statcvs.xml.output.XDocRenderer;
-
 /**
  * Takes a command line, like given to the {@link net.sf.statcvs.Main#main} method,
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.8 2004-02-26 16:45:48 squig Exp $
+ * @version $Id: CommandLineParser.java,v 1.9 2004-02-27 15:53:39 squig Exp $
  */
 public class CommandLineParser {
 

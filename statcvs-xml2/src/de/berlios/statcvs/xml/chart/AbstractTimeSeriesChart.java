@@ -39,6 +39,7 @@ import org.jfree.data.time.TimeSeriesCollection;
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.output.ReportSettings;
+import de.berlios.statcvs.xml.output.ReportSettings.Predicate;
 
 /**
  * TimeLineChart
@@ -117,6 +118,7 @@ public class AbstractTimeSeriesChart extends AbstractChart {
 		Hashtable timeSeriesByGroup = new Hashtable();
 		Hashtable visitorByGroup = new Hashtable();
 
+		ReportSettings.Predicate predicate = getSettings().getOutputPredicate();
 		while (it.hasNext()) {
 			CvsRevision rev = (CvsRevision)it.next();
 			Object group = grouper.getGroup(rev);
@@ -128,8 +130,10 @@ public class AbstractTimeSeriesChart extends AbstractChart {
 				visitor = factory.create(group);
 				visitorByGroup.put(group, visitor);
 			}
-			 
-			series.add(rev.getDate(), visitor.visit(rev));
+			
+			if (predicate == null || predicate.matches(rev)) {
+				series.add(rev.getDate(), visitor.visit(rev));
+			}
 		}
 		
 		List list = new ArrayList(timeSeriesByGroup.values());

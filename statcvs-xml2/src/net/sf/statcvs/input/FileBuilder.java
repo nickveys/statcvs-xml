@@ -195,7 +195,7 @@ public class FileBuilder {
 //		}
 		try {
 			if (filesHaveInitialRevision) {
-				return builder.getLOC(name) + locDelta;
+				return (lastAdded.isAddOnSubbranch()) ? locDelta : builder.getLOC(name) + locDelta;
 			}
 			else {
 				return builder.getLOC(name);

@@ -195,4 +195,11 @@ public abstract class AbstractChart {
 		axis.setLabel(text);
 	}
 
+	/**
+	 * @return Returns the settings.
+	 */
+	public ReportSettings getSettings() {
+		return settings;
+	}
+
 }
