@@ -3,25 +3,31 @@
 \frame{
   \frametitle{Zusammenfassung}
 
-  Maven ist ein brauchbares Tool
+  \begin{columns}
+    %\begin{column}{6cm}
+	\begin{minipage}[t]{6cm}
+  Maven ist ein {\bf brauchbares} Tool
   
   \begin{itemize}
-  \item Sehr einfache Erstellung von Projekt Seiten
-  \item Sehr einfache Erhebung von Projekt und Prozess Metriken
-  \item Sehr einfaches Build und Release
-  \item Sehr einfaches Deployment 
+  \item Sehr einfache Erstellung von Projektdokumentation
+  \item Sehr einfache Erhebung von Projekt- und Prozess-Metriken
+  \item Sehr einfaches Building und Releasing, Deploying 
   \item Automatische Auflösung von Abhängigkeiten
   \end{itemize}  
-    
-  Manches ist noch nicht ganz ausgereift
+    \end{minipage}
+    \begin{minipage}[t]{6cm}
+  Manches ist noch {\bf nicht ausgereift}
 
   \begin{itemize}
-  \item Lange Startzeiten (auf marvin ca. 16s)
+  \item Lange Startzeiten (auf marvin ca. 4s)
   \item Viele Reports sind Java spezifisch
   \item Anpassung der Webseiten schwierig
-  \item Keine Unterstützung für I18n
+  \item Keine I18n Unterstützung
   \item Generierte Webseiten enthalten viele Leerzeilen
+  \item Aufruf aus ``falschen'' Verzeichnissen führt zu {\it sehr} wirren Meldungen
   \end{itemize}
+    \end{minipage}
+  \end{columns}
 }
   
 \subsection{Resourcen}

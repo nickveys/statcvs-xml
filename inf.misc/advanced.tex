@@ -4,9 +4,13 @@
 \frame[all:1]{
   \frametitle{Command Line Optionen}
 
-  Aufruf
+  {\bf Aufruf}
+
+  \vspace{0.5cm}
 
   \verb+maven [options] [goal [goal2 [goal3] ...]]+
+
+  \vspace{0.5cm}
 
   Eine Übersicht der wichtigsten Parameter:
 
@@ -38,41 +42,31 @@ maven.username=nick\end{alltt}
   \end{block}
 }
 
-\subsection{Stolperfallen}
-\frame[all:1]{
-  \frametitle{Stolperfallen}
-  
-  \begin{itemize}
-  \item {\bf Aufruf aus dem falschen Verzeichnis}\\
-  Je nach Goal werden {\it sehr} wirre Fehlermeldungen angezeigt
-  \end{itemize}
-}
-
 \section{Customizing}
 
 \subsection{Customizing}
 \frame[all:1]{
-  \frametitle{Customizing}
+  \frametitle{Jelly Stylesheet Library (JSL)}
   
   \begin{itemize}
-  \item Jelly: Code und Layout bunt durcheinander gemischt
-  \item xnap.jsl Ein Beispiel für ein 3 Column Layout
+  \item In JSL sind Code und Layout bunt durcheinander gemischt
+  \item xnap.jsl: Ein Beispiel für ein 3 Column Layout
   \item Includieren von php Skripten 
   \end{itemize}
 
-  \begin{example}
+  \begin{exampleblock}{faq.xml}
+    \begin{alltt}
+<section name="FAQ">
+<p><include file="faq.php"/></p>\end{alltt}
+  \end{exampleblock}
+
+  \begin{exampleblock}{xnap.jsl}
     \begin{alltt}
 <jsl:template match="include" trim="false">
  <x:set var="_file" select="string(@file)"/>
  <jsl:comment>#include virtual="${_file}"</jsl:comment>
 </jsl:template>\end{alltt}
-  \end{example}
-
-  \begin{example}
-    \begin{alltt}
-<section name="FAQ">
-<p><include file="faq.php"/></p>\end{alltt}
-  \end{example}
+  \end{exampleblock}
 }
 
 %%% Local Variables: 
