@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Main.java,v $ 
-	Created on $Date: 2003-06-25 12:19:19 $ 
+	Created on $Date: 2003-07-01 22:56:39 $ 
 */
 package net.sf.statcvs;
 
@@ -45,7 +45,7 @@ import net.sf.statcvs.output.xml.*;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.4 2003-06-25 12:19:19 squig Exp $
+ * @version $Id: Main.java,v 1.5 2003-07-01 22:56:39 vanto Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -215,7 +215,7 @@ public class Main {
 							   + e.getMessage());
 			}
 
-			logger.info("Creating suite");
+			logger.info("Creating suite using "+ConfigurationOptions.getOutputSuite());
 
 			Class c = Class.forName(ConfigurationOptions.getOutputSuite());
 			Method m = c.getMethod("generate", new Class[] { CvsContent.class });

@@ -18,12 +18,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ModulesTreeReport.java,v $
-	$Date: 2003-06-28 11:12:27 $ 
+	$Date: 2003-07-01 22:56:39 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Logger;
@@ -82,6 +81,9 @@ public class ModulesTreeReport extends ReportElement {
 			module.setAttribute("depth", ""+dir.getDepth());
 			module.setAttribute("files", ""+dir.getCurrentFileCount());
 			module.setAttribute("loc", ""+dir.getCurrentLOC());
+			if (dir.isEmpty()) {
+				module.setAttribute("removed", "true");
+			}
 
 			module.setAttribute("url",ModuleDocument.getModulePageUrl(dir));
 			modules.addContent(module);
@@ -92,8 +94,10 @@ public class ModulesTreeReport extends ReportElement {
 			FileUtils.copyFile(
 					Main.class.getResourceAsStream("web-files/" + "folder.png"),
 					new File(ConfigurationOptions.getOutputDir() + "folder.png"));
-		} catch (FileNotFoundException e) {
-			logger.warning(e.getMessage());
+			FileUtils.copyFile(
+					Main.class.getResourceAsStream("web-files/" + "folder-deleted.png"),
+					new File(ConfigurationOptions.getOutputDir() + "folder-deleted.png"));
+
 		} catch (IOException e) {
 			logger.warning(e.getMessage());
 		}

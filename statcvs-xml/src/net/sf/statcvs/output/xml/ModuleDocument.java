@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ModuleDocument.java,v $ 
-	Created on $Date: 2003-06-28 11:12:27 $ 
+	Created on $Date: 2003-07-01 22:56:39 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -103,7 +103,7 @@ public class ModuleDocument extends StatCvsDocument {
 		return module.substring(0, module.length() - 1).replaceAll("/", "_");
 	}
 	public static String getModulePageUrl(Directory dir) {
-		return "module_"+escapeModuleName(dir);
+		return "module"+escapeModuleName(dir);
 	}
 
 }

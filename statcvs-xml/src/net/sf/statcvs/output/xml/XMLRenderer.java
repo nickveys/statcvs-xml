@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLRenderer.java,v $
-	$Date: 2003-06-28 11:12:27 $ 
+	$Date: 2003-07-01 22:56:39 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -31,9 +31,9 @@ import javax.xml.transform.TransformerException;
 
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.output.xml.chart.AbstractChart;
+import net.sf.statcvs.output.xml.util.XMLOutputter;
 import net.sf.statcvs.util.FileUtils;
 
-import org.jdom.output.XMLOutputter;
 import org.jdom.transform.JDOMResult;
 import org.jdom.transform.JDOMSource;
 
@@ -45,28 +45,41 @@ import org.jdom.transform.JDOMSource;
 public class XMLRenderer implements DocumentRenderer {
 
 	private static Logger logger
-		= Logger.getLogger("net.sf.statcvs.output.XMLOutput");
+		= Logger.getLogger("net.sf.statcvs.output.XMLRenderer");
 
 	private XMLOutputter out;
-	private Transformer transformer;
-
+	Transformer transformer;
+	private String extension;
+	
 	public XMLRenderer(Transformer transformer) {
 		this.transformer = transformer;
+		setExtension(".xml");
+		setOutputter(new XMLOutputter());
 
-		out = new XMLOutputter();
-		out.setTextNormalize(true);
-		out.setIndent("  ");
-		out.setNewlines(true);
 		if (transformer != null) {
 			logger.info("Using transformer "+transformer.getClass().getName());
 		}
-		
 	}
 
 	public XMLRenderer() {
 		this(null);
 	}
 
+	public void setOutputter(XMLOutputter outputter) {
+		out = outputter;
+		out.setTextNormalize(true);
+		out.setIndent("  ");
+		out.setNewlines(true);
+	}
+	
+	public void setExtension(String ext) {
+		this.extension = ext;
+	}
+	
+	public String getExtension() {
+		return this.extension;
+	}
+	
 	public static void generate(CvsContent content) throws IOException
 	{
 		DocumentSuite.generate(content, new XMLRenderer());
@@ -84,7 +97,7 @@ public class XMLRenderer implements DocumentRenderer {
 
 	private void renderSingle(StatCvsDocument document) throws IOException {
 		FileWriter writer = new FileWriter
-			(FileUtils.getFilenameWithDirectory(document.getFilename()+".xml"));
+			(FileUtils.getFilenameWithDirectory(document.getFilename()+extension));
 
 		try {
 			if (transformer != null) {

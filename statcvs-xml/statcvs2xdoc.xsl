@@ -4,9 +4,6 @@
    A simple XSL file from Tammo van Lessen
    Transforms Commitlog to xdoc
 -->
-<!-- 
-	TODO: make the a href only if url-attrib is set!!! 
--->
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:func="http://statcvs-xml.berlios.de/functions"
@@ -283,7 +280,10 @@
 		  <xsl:call-template name="func:spacer">
 		    <xsl:with-param name="num" select="@depth"/>
 		  </xsl:call-template>
-		  <img src="folder.png"/>
+		  <xsl:choose>
+			<xsl:when test="@removed"><img src="folder.png"/></xsl:when>
+			<xsl:otherwise><img src="folder.png"/></xsl:otherwise>
+		  </xsl:choose>
 		  <xsl:call-template name="func:make-link">
 			<xsl:with-param name="url">
 			     <xsl:value-of select="@url"/><xsl:value-of select="$ext"/>
@@ -333,7 +333,7 @@
   <xsl:template name="func:spacer">
     <xsl:param name="num"/>
 	<xsl:if test="$num &gt; 0">
-	  <img src="" width="7" height="5"/>
+  	  <xsl:text disable-output-escaping="yes"><![CDATA[&#160;&#160;&#160;&#160;]]></xsl:text>
 	  <xsl:call-template name="func:spacer">
 	    <xsl:with-param name="num" select="number($num)-1"/>
 	  </xsl:call-template>

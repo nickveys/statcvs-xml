@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: HTMLOutputter.java,v $
-	$Date: 2003-07-01 20:49:52 $ 
+	$Date: 2003-07-01 22:56:39 $ 
 */
 package net.sf.statcvs.output.xml.util;
 
@@ -50,7 +50,7 @@ public class HTMLOutputter extends XMLOutputter {
 			"link",
 			"meta",
 			"param",			
-			"li"
+			//"li"
 		};
 
 	/**
@@ -62,8 +62,63 @@ public class HTMLOutputter extends XMLOutputter {
 					throws IOException {
 		
 		if (!isEmptyHtmlElement(element.getQualifiedName())) {
+			// dont print namespaces
+			while (namespaces.size() > 0) {
+				namespaces.pop();
+			}
 			super.printElement(element, out, level, namespaces); 
 		} else {
+
+			/*List content = element.getContent();
+			int start = skipLeadingWhite(content, 0);
+			int size = content.size();
+			if (start >= size) {
+				// Case content is empty or all insignificant whitespace
+				if (currentFormat.expandEmptyElements) {
+					out.write("></");
+					out.write(element.getQualifiedName());
+					out.write(">");
+				}
+				else {
+					out.write(" />");
+				}
+			}
+			else {
+				out.write(">");
+
+				// For a special case where the content is only CDATA
+				// or Text we don't want to indent after the start or
+				// before the end tag.
+
+				if (nextNonText(content, start) < size) {
+					// Case Mixed Content - normal indentation
+					newline(out);
+					printContentRange(out, content, start, size,
+									  level + 1, namespaces);
+					newline(out);
+					indent(out, level);
+				}
+				else {
+					// Case all CDATA or Text - no indentation
+					printTextRange(out, content, start, size);
+				}
+				out.write("</");
+				out.write(element.getQualifiedName());
+				out.write(">");
+			}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
 			out.write("<");
 			out.write(element.getQualifiedName());
 			List attributes = element.getAttributes();
