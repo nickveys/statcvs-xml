@@ -91,6 +91,15 @@ public class TextElement extends Element {
 			return this;
 		}
 		
+		public ListElement addString(String text)
+		{
+			Element item = new Element("li");
+			item.setText(text);
+			addContent(item);
+			
+			return this;
+		}
+		
 	}
 
 }

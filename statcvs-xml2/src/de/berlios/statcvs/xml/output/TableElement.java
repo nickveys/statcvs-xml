@@ -318,10 +318,23 @@ public class TableElement extends Element
 		 * @param string
 		 * @param date
 		 */
-		public void addDate(String key, Date date) 
+		public RowElement addDate(String key, Date date) 
 		{
-			addString(key, Formatter.formatDate(date));
+			return addString(key, Formatter.formatDate(date));
 		}
+
+        /**
+         * @param key
+         * @param percent 0 <= percent <= 1
+         */
+        public RowElement addPercent(String key, double percent) {
+			Element number = new Element("number");
+			number.setAttribute("key", key);
+			number.setAttribute("percentage", Formatter.formatNumber(percent, 1));
+			
+			addContent(number);
+			return this;
+        }
 		
 	}
 	
