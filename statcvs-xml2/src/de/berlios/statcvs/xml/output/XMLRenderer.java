@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLRenderer.java,v $
-	$Date: 2004-02-26 16:12:53 $ 
+	$Date: 2004-02-29 00:39:29 $ 
 */
 package de.berlios.statcvs.xml.output;
 
@@ -76,9 +76,9 @@ public class XMLRenderer implements DocumentRenderer {
 	/**
 	 * Invoked by Main.
 	 */
-	public static void generate(CvsContent content, File outputPath) throws IOException
+	public static DocumentRenderer create(CvsContent content, ReportSettings settings)
 	{
-		//DocumentSuite.generate(content, new XMLRenderer(outputPath));
+		return new XMLRenderer(settings.getOutputPath());
 	}
 
 	public void setOutputter(XMLOutputter outputter) {

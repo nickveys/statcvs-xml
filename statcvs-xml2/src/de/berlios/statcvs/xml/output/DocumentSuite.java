@@ -121,8 +121,13 @@ public class DocumentSuite {
 			ReportSettings localSettings = readAttributes(settings, root);
 			localSettings.setPageNr(i);
 			StatCvsDocument document = new StatCvsDocument(localSettings);
-			System.out.println(createPagerElement(i, maxPages));
-			document.getRootElement().addContent(createPagerElement(i, maxPages));
+
+			if (i == 0) {
+				firstPage = document;
+				logger.info("First:"+firstPage.getTitle());
+			}
+
+			document.getRootElement().addContent(createPagerElement(i, maxPages, firstPage.getFilename()));
 			for (int r = 0; r < reports.size(); r++) {
 				ReportElement re = ((Report)reports.get(r)).getPage(i);
 				if (re != null) {
@@ -132,23 +137,19 @@ public class DocumentSuite {
 			logger.info(i+":"+document.getTitle());
 			
 			renderer.render(document);
-			
-			if (i == 0) {
-				firstPage = document;
-				logger.info("First:"+firstPage.getTitle());
-			}
 		}
 	
 		return firstPage;
 	}
 
-	private Element createPagerElement(int currPage, int total) {
+	private Element createPagerElement(int currPage, int total, String baseName) {
+		
 		Element pager = new Element("pager");
 		pager.setAttribute("current", ""+(currPage + 1));
 		pager.setAttribute("total", ""+total);
 		for (int i=0; i < total; i++) {
 			Element page = new Element("page");
-			//page.setAttribute("filename", getFilename(i));
+			page.setAttribute("filename", baseName + ((i == 0)?"":"_"+i));
 			page.setAttribute("nr", ""+(i+1));
 			pager.addContent(page);
 		}

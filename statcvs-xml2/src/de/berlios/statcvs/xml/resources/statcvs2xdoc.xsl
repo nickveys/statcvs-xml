@@ -18,6 +18,7 @@
          <title><xsl:value-of select="@title"/></title>
        </properties>
        <body>
+	     <xsl:apply-templates select="pager"/>
 	     <xsl:apply-templates select="report"/>
        </body>
     </document>
