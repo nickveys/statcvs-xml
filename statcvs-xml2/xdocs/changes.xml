@@ -6,6 +6,14 @@
 
   <body>
 	<release version="0.9.2" date="2004-03-16">
+      <action dev="vanto" type="update">
+		So long as jelly opens br tags and inserts some weird 
+		whitespaces between, all br tags has been replaced by div tags.
+      </action>
+      <action dev="vanto" type="fix">
+		Bug #1480 has been hopefully fixed. All commit comments are 
+		wrapped in a CDATA element now.
+      </action>
       <action dev="vanto" type="add">
 		A new report with a list of the most common commit comments
 		has been added.
