@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: HTMLRenderer.java,v $
-	$Date: 2003-07-01 22:56:39 $ 
+	$Date: 2003-07-01 23:32:09 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -39,8 +39,6 @@ import net.sf.statcvs.output.xml.util.HTMLOutputter;
 import net.sf.statcvs.output.xml.util.XMLOutputter;
 import net.sf.statcvs.util.FileUtils;
 
-import org.jdom.DocType;
-
 
 /**
  * HTMLRenderer
@@ -57,8 +55,8 @@ public class HTMLRenderer extends XMLRenderer {
 		setExtension(".html");
 		XMLOutputter xout = new HTMLOutputter();
 		xout.setEncoding("ISO-8859-1");
-		xout.setOmitDeclaration(false);
-		xout.setOmitEncoding(false);
+		xout.setOmitDeclaration(true);
+		xout.setOmitEncoding(true);
 		setOutputter(xout);
 		
 		try {
@@ -92,10 +90,6 @@ public class HTMLRenderer extends XMLRenderer {
 	 * @see net.sf.statcvs.output.xml.DocumentRenderer#render(net.sf.statcvs.output.xml.StatCvsDocument)
 	 */
 	public void render(StatCvsDocument document) throws IOException {
-		DocType type     = new DocType("html", "-//W3C//DTD HTML 4.01//EN", 
-											 "http://www.w3.org/TR/html4/strict.dtd");
-
-		document.setDocType(type);
 		super.render(document);
 	}
 

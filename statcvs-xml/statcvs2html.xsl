@@ -7,7 +7,7 @@
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:output method="html"/>
+  <xsl:output method="html" indent="yes" encoding="ISO-8859-1"/>
   <xsl:param name="ext"/>
   <xsl:include href="statcvs2xdoc.xsl"/>
 
@@ -20,6 +20,7 @@
 	     <link rel="stylesheet" href="statcvs.css" type="text/css"/>
        </head>
        <body>
+	     <h1><xsl:value-of select="@title"/></h1>
 	     <xsl:apply-templates select="report"/>
        </body>
     </html>

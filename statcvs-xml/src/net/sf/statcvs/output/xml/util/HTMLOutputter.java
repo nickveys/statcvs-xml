@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: HTMLOutputter.java,v $
-	$Date: 2003-07-01 22:56:39 $ 
+	$Date: 2003-07-01 23:32:09 $ 
 */
 package net.sf.statcvs.output.xml.util;
 
@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
+import org.jdom.DocType;
+import org.jdom.Document;
 import org.jdom.Element;
 
 /**
@@ -137,6 +139,17 @@ public class HTMLOutputter extends XMLOutputter {
 		for (int i = 0; !aReturn && i < elementsWithoutEndTags.length; i++)
 			aReturn = elementsWithoutEndTags[i].equals(elementName);
 		return aReturn;
+	}
+
+	/**
+	 * @see org.jdom.output.XMLOutputter#output(org.jdom.Document, java.io.Writer)
+	 */
+	public void output(Document document, Writer out) throws IOException {
+		DocType type     = new DocType("html", "-//W3C//DTD HTML 4.01//EN", 
+											 "http://www.w3.org/TR/html4/strict.dtd");
+
+		document.setDocType(type);
+		super.output(document, out);
 	}
 
 }
