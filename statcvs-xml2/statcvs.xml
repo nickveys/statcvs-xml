@@ -3,7 +3,7 @@
     <webRepository>
       http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml2/
     </webRepository>
-
+	<tags>^statcvs-xml-\d_\d.*</tags>
 	<showImages>true</showImages>
     <projectName>StatCVS-XML</projectName>
     <outputDir>xdocs/statcvs-xml</outputDir>
