@@ -51,7 +51,7 @@ public class RevisionData {
 	}
 
 	/**
-	 * @param loginName The loginName to set.
+	 * @param authorName The loginName to set.
 	 */
 	public void setLoginName(String authorName) {
 		this.loginName = authorName;
@@ -86,14 +86,19 @@ public class RevisionData {
 	}
 
 	/**
-	 * @return
+	 * Checks if the revision contains numbers for the added
+	 * and removed lines.
+	 * @return true if the revision contains numbers for the
+	 * 		added and removed lines
 	 */
 	public boolean hasNoLines() {
 		return hasNoLines;
 	}
 
 	/**
-	 * @param linesRemoved The linesRemoved to set.
+	 * Sets the number of added and removed lines.
+	 * @param added The number of added lines
+	 * @param removed The number of removed lines
 	 */
 	public void setLines(int added, int removed) {
 		this.linesAdded = added;
@@ -109,7 +114,8 @@ public class RevisionData {
 	}
 
 	/**
-	 * @param revisionNumber The revisionNumber to set.
+	 * Sets the revision number.
+	 * @param revision The revision number
 	 */
 	public void setRevisionNumber(String revision) {
 		this.revisionNumber = revision;

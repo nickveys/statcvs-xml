@@ -61,31 +61,32 @@ public class CvsLogfileParser {
 	 * @throws LogSyntaxException if syntax errors in log
 	 * @throws IOException if errors while reading from the log Reader
 	 */
-	public void parse() throws LogSyntaxException, IOException, EmptyRepositoryException {
+	public void parse() throws LogSyntaxException, IOException {
         long startTime = System.currentTimeMillis();
 		logger.fine("starting to parse...");
 		eatNonCheckedInFileLines();
-		if (logReader.isAfterEnd()) {
-			throw new LogSyntaxException("empty logfile!");
+		if (!this.logReader.hasNextLine()) {
+			throw new LogSyntaxException("Empty logfile!");
 		}
-		if (!logReader.isAfterEnd() && !"".equals(logReader.getCurrentLine())) {
-			throw new LogSyntaxException("expected '?' or empty line at line "
-					+ logReader.getLineNumber() + ", but found '"
-					+ logReader.getCurrentLine() + "'");
+		if (!"".equals(this.logReader.getCurrentLine())) {
+			throw new LogSyntaxException("Expected '?' or empty line at line "
+					+ this.logReader.getLineNumber() + ", but found '"
+					+ this.logReader.getCurrentLine() + "'");
 		}
 		eatEmptyLines();
 //		TODO: uncomment when tag/branch reports are added 
 //		boolean isLogWithoutSymbolicNames = false;
 		boolean isFirstFile = true;
 		do {
-			CvsFileBlockParser parser = new CvsFileBlockParser(logReader, builder, isFirstFile);
+			CvsFileBlockParser parser = new CvsFileBlockParser(
+					this.logReader, this.builder, isFirstFile);
 			parser.parse();
 			isFirstFile = false;
 //			if (parser.isLogWithoutSymbolicNames()) {
 //				isLogWithoutSymbolicNames = true;
 //			}
 			eatEmptyLines();
-		} while (!logReader.isAfterEnd());
+		} while (this.logReader.hasNextLine());
 //		if (isLogWithoutSymbolicNames) {
 //			logger.warning("Log was created with '-N' switch of 'cvs log', some reports will be missing!");
 //		}
@@ -93,15 +94,21 @@ public class CvsLogfileParser {
 				+ (System.currentTimeMillis() - startTime) + " ms.");
 	}
 
-	private void eatNonCheckedInFileLines() throws LogSyntaxException, IOException {
-		while (!logReader.isAfterEnd() && logReader.getCurrentLine().startsWith("? ")) {
-			logReader.getNextLine();
+	private void eatNonCheckedInFileLines() throws IOException {
+		while (this.logReader.hasNextLine() &&
+				this.logReader.nextLine().startsWith("? ")) {
+			// ignore lines starting with "? "
 		}
 	}
 
+	/**
+	 * Calls nextLine() on the reader until EOF or a non-empty line
+	 * is found
+	 */
 	private void eatEmptyLines() throws IOException {
-		while (!logReader.isAfterEnd() && logReader.getCurrentLine().equals("")) {
-			logReader.getNextLine();
+		while (this.logReader.hasNextLine() &&
+				"".equals(this.logReader.nextLine())) {
+			// ignore empty lines
 		}
 	}
 }

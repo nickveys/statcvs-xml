@@ -253,15 +253,15 @@ public class IntegerMap {
 	 */
 	private class SortByValueComparator implements Comparator {
 		
-		private Map map;
+		private Map mapToBeSorted;
 
 		public SortByValueComparator(Map map) {
-			this.map = map;
+			this.mapToBeSorted = map;
 		}
 
 		public int compare(Object o1, Object o2) {
-			int i1 = ((Integer) map.get(o1)).intValue();
-			int i2 = ((Integer) map.get(o2)).intValue();
+			int i1 = ((Integer) this.mapToBeSorted.get(o1)).intValue();
+			int i2 = ((Integer) this.mapToBeSorted.get(o2)).intValue();
 			if (i1 < i2) {
 				return -1;
 			} else if (i1 > i2) {

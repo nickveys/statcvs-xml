@@ -22,84 +22,100 @@
 */
 package net.sf.statcvs.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.LineNumberReader;
 import java.io.Reader;
+import java.util.NoSuchElementException;
 
 /**
- * Wraps a {@link java.io.Reader} for line-by-line access. Allows reading
- * the current line multiple times. At construction time, the
- * <tt>LookaheadReader</tt> points to line 1 of the source reader. Calls to
- * {@link #getCurrentLine} will return the first line of the source reader.
- * A call to {@link #getNextLine} causes a readLine from the source reader.
- * Subsequent calls to <tt>getCurrentLine()</tt> will return the second line
- * of the source reader.
+ * <p>Wraps a {@link java.io.Reader} for line-by-line access.
+ * This works like {@link java.util.Iterator}: {@link #hasNextLine}
+ * returns true if another line can be read; {@link #nextLine} reads
+ * the next line and returns it. Additionally, {@link #getCurrentLine}
+ * can be used to access multiple times the line returned by
+ * <tt>nextLine()</tt>.</p>
  * 
- * @author Richard Cyganiak <rcyg@gmx.de>
+ * <p>At construction time, <tt>getCurrentLine()</tt> is undefined.
+ * <tt>nextLine()</tt> must be called once to read the first line.</p>
+ * 
+ * @author Richard Cyganiak (richard@cyganiak.de)
  * @version $Id$
  */
 public class LookaheadReader {
-
-	private LineNumberReader reader;
+	private BufferedReader reader;
 	private String currentLine = null;
+	private String nextLine = null;
+	private boolean afterEnd = false;
+	private int lineNumber = 0;
 
 	/**
-	 * Constructor
-	 * @param reader a <tt>BufferedReader</tt>
+	 * Creates a LookaheadReader from a source reader.
+	 * @param reader a reader whose contents will be returned by the
+	 * 			LookaheadReader
 	 */
 	public LookaheadReader(Reader reader) {
-		this.reader = new LineNumberReader(reader);
+		this.reader = new BufferedReader(reader);
 	}
 	
 	/**
 	 * Returns the current line without reading a line from the source
-	 * reader. At construction time, the source reader's first line is
-	 * the current line.
-	 * @return the current line, or <tt>null</tt> if at the end of the
-	 *         source reader
-	 * @throws IOException on error while reading the source reader 
+	 * reader. Will throw an exception if {@link #nextLine} was not
+	 * called before.
+	 * @return The line returned by the previous call to {@link #nextLine()}
+	 * @throws NoSuchElementException if {@link #nextLine} was not yet called
 	 */
-	public String getCurrentLine() throws IOException {
-		fetchLine();
-		return currentLine;
+	public String getCurrentLine() {
+		if (this.currentLine == null) {
+			throw new NoSuchElementException("Call to getCurrentLine() before nextLine() was called");
+		}
+		return this.currentLine;
 	}
 	
 	/**
 	 * Reads and returns a line from the source reader. The result of
-	 * this call will be the new current line.
-	 * @return the next line of the source reader, or <tt>null</tt> if at
-	 *         the end of the source reader
-	 * @throws IOException on error while reading the source reader 
+	 * this call will be the new current line. Will throw an exception
+	 * if trying to read from after the end of the source reader.
+	 * @return The next line of the source reader
+	 * @throws IOException on error while reading the source reader
+	 * @throws NoSuchElementException if {@link #hasNextLine} is false 
 	 */
-	public String getNextLine() throws IOException {
-		currentLine = null;
-		return getCurrentLine();
-	}
-	
-	/**
-	 * Returns the current line number
-	 * @return the current line number, starting at 1
-	 * @throws IOException on error while reading the underlying reader 
-	 */
-	public int getLineNumber() throws IOException {
-		fetchLine();
-		return reader.getLineNumber();
+	public String nextLine() throws IOException {
+		if (!hasNextLine()) {
+			throw new NoSuchElementException("Call to nextLine() when hasNextLine() is false");
+		}
+		this.currentLine = this.nextLine;
+		this.nextLine = null;
+		this.lineNumber++;
+		return this.currentLine;
 	}
 
 	/**
-	 * Returns <tt>true</tt> if the last call to {@link #getNextLine}
-	 * returned null
-	 * @return <tt>true</tt> if pointer is behind the end of the source reader 
+	 * Checks if more lines are available for reading.
+	 * @return <tt>true</tt> if at least one more line can be read
 	 * @throws IOException on error while reading the source reader
 	 */
-	public boolean isAfterEnd() throws IOException {
-		fetchLine();
-		return currentLine == null; 
+	public boolean hasNextLine() throws IOException {
+		if (this.afterEnd) {
+			return false;
+		}
+		if (this.nextLine != null) {
+			return true;
+		}
+		this.nextLine = this.reader.readLine();
+		if (this.nextLine != null) {
+			return true;
+		}
+		this.afterEnd = true;
+		return false;
 	}
 
-	private void fetchLine() throws IOException {
-		if (currentLine == null) {
-			currentLine = reader.readLine();
-		}
+	/**
+	 * Returns the number of the line that would be returned by
+	 * {@link #getCurrentLine}, or 0 before the first
+	 * call to {@link #nextLine}. The first line has line number 1.
+	 * @return the current line number
+	 */
+	public int getLineNumber() {
+		return this.lineNumber;
 	}
 }
