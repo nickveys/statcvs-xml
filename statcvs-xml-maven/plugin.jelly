@@ -71,13 +71,13 @@
     <j:choose>
       <j:when test="${maven.mode.online}">
         <ant:mkdir dir="${maven.build.dir}"/>
-        <ant:property name="statcvs.logfile" 
-            value="${maven.build.dir}/statcvs.log"/>
+        <j:set var="statcvs.logfile" 
+            value="${maven.build.dir}/statcvs-xml.log"/>
         <ant:property name="statcvs.repository" value="${basedir}"/>
 
         <j:if test="${statcvs.history}">
-          <ant:property name="statcvs.repository" 
-              value="${maven.build.dir}/statcvs-xml"/>
+          <j:set var="statcvs.repository" 
+              value="${maven.build.dir}/statcvs-xml/${maven.scm.cvs.module}"/>
 
 		  <util:available file="${statcvs.repository}">
             <j:set var="repositoryPresent" value="true"/>
@@ -85,9 +85,9 @@
 
 	      <j:choose>
             <j:when test="${repositoryPresent}">
-              <ant:echo>checking out...</ant:echo>
+              <ant:echo>updating...</ant:echo>
 			  <ant:cvs
-                  command="checkout -r1.1 ${maven.scm.cvs.module}" 
+                  command="update -r1.1" 
                   dest="${statcvs.repository}"
 				  compression="true"
                   quiet="${maven.scm.cvs.quiet}"
@@ -96,10 +96,10 @@
 				  failonerror="true"/>
             </j:when>
             <j:otherwise>
-              <ant:echo>updating...</ant:echo>
+              <ant:echo>checking out to ${maven.build.dir}/statcvs-xml...</ant:echo>
 			  <ant:cvs
-                  command="update -r1.1" 
-                  dest="${statcvs.repository}"
+                  command="checkout -r1.1 ${maven.scm.cvs.module}" 
+                  dest="${maven.build.dir}/statcvs-xml"
 				  compression="true"
                   quiet="${maven.scm.cvs.quiet}"
 				  cvsRsh="${maven.scm.cvs.rsh}"
@@ -110,6 +110,7 @@
         </j:if>
 
         <ant:echo>fetching cvs logs...</ant:echo>
+        <ant:echo>${statcvs.repository}</ant:echo>
 		<ant:cvs
 			command="log" 
 			output="${statcvs.logfile}"
