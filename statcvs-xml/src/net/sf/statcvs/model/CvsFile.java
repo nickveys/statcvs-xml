@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsFile.java,v $ 
-	Created on $Date: 2003-07-24 00:40:06 $ 
+	Created on $Date: 2003-07-24 00:44:26 $ 
 */
 package net.sf.statcvs.model;
 
@@ -31,7 +31,7 @@ import java.util.List;
  * 
  * @author Manuel Schulze
  * @author Richard Cyganiak
- * @version $Id: CvsFile.java,v 1.3 2003-07-24 00:40:06 vanto Exp $
+ * @version $Id: CvsFile.java,v 1.4 2003-07-24 00:44:26 vanto Exp $
  */
 public class CvsFile implements Comparable {
 	private String workingname;
@@ -91,7 +91,6 @@ public class CvsFile implements Comparable {
 	 * @return the latest revision of this file
 	 */
 	public CvsRevision getLatestRevision() {
-		System.out.println(this.revisions.size()+": "+((CvsRevision)this.revisions.get(0)).getRevision() + "-"+((CvsRevision)this.revisions.get(revisions.size()-1)).getRevision());
 		return (CvsRevision) this.revisions.get(0);
 	}
 
