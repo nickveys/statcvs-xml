@@ -269,8 +269,13 @@ public class TableElement extends Element
 					file.setAttribute("action", "deleted");
 				} else {
 					file.setAttribute("action", "changed");
-					file.setAttribute("added", ""+rev.getLinesAdded());
-					file.setAttribute("removed", ""+rev.getLinesRemoved());
+					
+					int delta = rev.getLinesDelta();
+					int linesAdded = rev.getReplacedLines() + ((delta > 0) ? delta : 0);
+					int linesRemoved = rev.getReplacedLines() - ((delta < 0) ? delta : 0);
+
+					file.setAttribute("added", "" + linesAdded);
+					file.setAttribute("removed", "" + linesRemoved);
 				}
 				
 			}

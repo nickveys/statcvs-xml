@@ -56,7 +56,8 @@ public class CommitLogTable {
 			RowElement row = table.addRow();
 			row.addString("date", df.format(commit.getDate()));
 			row.addAuthor(commit.getAuthor());
-			row.addString("comment", commit.getComment());
+			//row.addString("comment", commit.getComment());
+			row.addCommit(commit);
 		}
 		report.addContent(table);
 		return new Report(report, table);
