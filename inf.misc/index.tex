@@ -1,0 +1,60 @@
+\documentclass[compress]{beamer}
+
+%\usepackage{beamerthemesplitcondensed}
+\usepackage{beamertemplates}
+\usepackage{beamerthemesplit}
+\usepackage[german]{babel}
+\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+\usepackage{amsmath,amssymb}
+\usepackage[latin1]{inputenc}
+\usepackage{colortbl}
+\usepackage{listings}
+% The following info should normally be given in you main file:
+%
+
+\pgfdeclareimage[height=1cm]{unilogo}{logomitte}
+
+\hypersetup{%
+  pdftitle={Tracing von (Open-Source) Projekten mit Maven},%
+  pdfauthor={Tammo van Lessen, Steffen Pingel},
+  pdfsubject={inf.misc},
+  pdfkeywords={Maven, Project Tracing, statcvs, xnap}}
+
+\title[Mavenize your projects!]{Tracing von (Open-Source) Projekten mit Maven}
+\author{
+    Steffen Pingel, Tammo van Lessen}
+\institute[Univerität Stuttgart]{
+  Fakultät für Elektrotechnik und Informatik\\
+  Universität Stuttgart}
+\date[inf.misc 2004]{inf.misc, 08.01.2004}
+
+\logo{\pgfuseimage{unilogo}}
+
+\beamertemplateshadingbackground{red!10}{structure!10}
+%\beamertemplatetransparentcovereddynamic
+\beamertemplatetransparentcovered
+%\beamertemplateballitem
+\beamertemplatesolidbuttons
+\beamertemplateroundedblocks
+
+\begin{document}
+\frame{\titlepage}
+\section[Outline]{}
+\frame{\tableofcontents}
+
+\part{Maven Basics}
+\frame{\partpage}
+\include{basics}
+\part{Maven Plugins}
+\frame{\partpage}
+\include{plugins}
+\part{Unser Fazit}
+\include{fazit}
+
+\frame{\tableofcontents[current, shadesubsections]}
+
+\frame{
+        \Huge{Vielen Dank!}
+    
+}
+\end{document}
