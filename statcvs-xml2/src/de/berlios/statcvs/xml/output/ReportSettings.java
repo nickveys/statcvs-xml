@@ -456,16 +456,16 @@ public class ReportSettings extends Hashtable {
 		}
 		
 		if (getString("webRepository") != null) {
-			repository = WebRepositoryFactory.getInstance(getString("webRepository").trim());
+			repository = WebRepositoryFactory.getInstance(getString("webRepository"));
 		} 
 		else if (getString("viewcvs") != null) {
-			repository = new ViewCvsIntegration(getString("viewcvs").trim());
+			repository = new ViewCvsIntegration(getString("viewcvs"));
 		} 
 		else if (getString("cvsweb") != null) {
-			repository = new CvswebIntegration(getString("cvsweb").trim());
+			repository = new CvswebIntegration(getString("cvsweb"));
 		} 
 		else if (getString("chora") != null) {
-			repository = new ChoraIntegration(getString("chora").trim());
+			repository = new ChoraIntegration(getString("chora"));
 		}
 		
 		if (repository != null) {
@@ -514,7 +514,7 @@ public class ReportSettings extends Hashtable {
 			return map;
 		}
 		else {
-			return (setting.getText() == null) ? "" : setting.getText();
+			return (setting.getText() == null) ? "" : setting.getTextTrim();
 		}
 	}
 	
