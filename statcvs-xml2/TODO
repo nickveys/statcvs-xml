@@ -1,0 +1,4 @@
+- AbstractChart.setup(settings)
+  + showLegend
+  + showCredit
+- Grouper.getGroups(CvsContent, ReportSettings settings)
