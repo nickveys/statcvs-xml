@@ -18,12 +18,14 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsFileBlockParser.java,v $ 
-	Created on $Date: 2003-06-17 16:43:03 $ 
+	Created on $Date: 2003-07-05 16:30:33 $ 
 */
 
 package net.sf.statcvs.input;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.sf.statcvs.output.ConfigurationOptions;
 import net.sf.statcvs.util.CvsLogUtils;
@@ -36,7 +38,7 @@ import net.sf.statcvs.util.LookaheadReader;
  * 
  * @author Anja Jentzsch
  * @author Richard Cyganiak
- * @version $Id: CvsFileBlockParser.java,v 1.1 2003-06-17 16:43:03 vanto Exp $
+ * @version $Id: CvsFileBlockParser.java,v 1.2 2003-07-05 16:30:33 vanto Exp $
  */
 public class CvsFileBlockParser {
 
@@ -67,13 +69,15 @@ public class CvsFileBlockParser {
 		requireLine(logReader.getNextLine(), "branch:");
 		requireLine(logReader.getNextLine(), "locks:");
 		parseLocksAndAccessList();
-		parseSymbolicNames();
+		Map symbolicNames = new HashMap();
+		parseSymbolicNames(symbolicNames);
 		String keywordSubst = parseSingleLine(logReader.getCurrentLine(),
 				"keyword substitution: ");
 		boolean isBinary = isBinary(keywordSubst);
 		requireLine(logReader.getNextLine(), "total revisions:");
 		parseDescription();
 		builder.buildFileBegin(workingFile, isBinary, isInAttic);
+		builder.buildFileSymbolicNames(symbolicNames);
 		new CvsRevisionParser(logReader, builder).parse();
 		builder.buildFileEnd();
 		if (ConfigurationOptions.getProjectName() == null) {
@@ -100,7 +104,7 @@ public class CvsFileBlockParser {
 		parseSingleLine(line, lineStart); // ignore this line
 	}
 
-	private void parseSymbolicNames()
+	private void parseSymbolicNames(Map symNames)
 			throws IOException, LogSyntaxException {
 
 		while (true) {
@@ -108,10 +112,10 @@ public class CvsFileBlockParser {
 			if (line.startsWith("keyword substitution: ")) {
 				return;
 			}
-			//TODO: Do something with tagName and tagRevision
-//			int firstColon = line.indexOf(':');
-//			String tagName = line.substring(1, firstColon);
-//			String tagRevision = line.substring(firstColon + 2);
+			int firstColon = line.indexOf(':');
+			String tagName = line.substring(1, firstColon);
+			String tagRevision = line.substring(firstColon + 2);
+			symNames.put(tagRevision, tagName);
 		}
 	}
 

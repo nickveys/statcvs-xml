@@ -18,11 +18,13 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsRevision.java,v $ 
-	Created on $Date: 2003-06-17 16:43:02 $ 
+	Created on $Date: 2003-07-05 16:30:33 $ 
 */
 package net.sf.statcvs.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Object which contains information about one revision of a file.
@@ -41,7 +43,7 @@ import java.util.Date;
  *   
  * @author Manuel Schulze
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CvsRevision.java,v 1.1 2003-06-17 16:43:02 vanto Exp $
+ * @version $Id: CvsRevision.java,v 1.2 2003-07-05 16:30:33 vanto Exp $
  */
 public class CvsRevision {
 
@@ -74,6 +76,7 @@ public class CvsRevision {
 	private int linesOfCode = 0;
 	private String comment = null;
 	private CvsFile file = null;
+	private List symbolicNames = new ArrayList();
 
 	/**
 	 * Creates a new revision of a file with the
@@ -107,6 +110,14 @@ public class CvsRevision {
 	 */
 	public Author getAuthor() {
 		return author;
+	}
+
+	/**
+	 * Returns the symbolic names of this revision
+	 * @return the symbolic names of this revision
+	 */
+	public String[] getSymbolicNames() {
+		return (String[])symbolicNames.toArray(new String[0]);
 	}
 
 	/**
@@ -163,6 +174,14 @@ public class CvsRevision {
 	 */
 	public void setAuthor(Author author) {
 		this.author = author;
+	}
+
+	/**
+	 * Adds a symbolic name
+	 * @param symname The symbolic name to set
+	 */
+	public void addSymbolicName(String symname) {
+		symbolicNames.add(symname);
 	}
 
 	/**

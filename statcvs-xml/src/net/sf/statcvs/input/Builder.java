@@ -18,7 +18,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Builder.java,v $
-	$Date: 2003-06-17 16:43:03 $
+	$Date: 2003-07-05 16:30:33 $
 */
 package net.sf.statcvs.input;
 
@@ -53,7 +53,7 @@ import net.sf.statcvs.util.FileUtils;
  * for each author name and path.</p>
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: Builder.java,v 1.1 2003-06-17 16:43:03 vanto Exp $
+ * @version $Id: Builder.java,v 1.2 2003-07-05 16:30:33 vanto Exp $
  */
 public class Builder {
 
@@ -77,6 +77,7 @@ public class Builder {
 	private int currentRevState;
 	private int currentRevLinesAdded;
 	private int currentRevLinesRemoved;
+	private Map currentSymbolicNames;
 
 	private CvsContent cvsContent;
 
@@ -147,8 +148,17 @@ public class Builder {
 		currentFileBinary = isBinary;
 		currentFileInAttic = isInAttic;
 		currentFileRevisions = new ArrayList();
+		currentSymbolicNames = null;
 	}
 
+	/**
+	 * Sets the symbolic names map for the current file
+	 * @param date the date
+	 */
+	public void buildFileSymbolicNames(Map symNames) {
+		currentSymbolicNames = symNames;
+	}
+	
 	/**
 	 * Finishes building a file.
 	 */
@@ -166,6 +176,11 @@ public class Builder {
 		while (it.hasNext()) {
 			CvsRevision rev = (CvsRevision) it.next();
 			rev.getAuthor().addRevision(rev);
+			//process symbolic names
+			String symname = (String)currentSymbolicNames.get(rev.getRevision());
+			if (symname != null) {
+				rev.addSymbolicName(symname);
+			}
 		} 
 
 		calculateLinesOfCode(file);
