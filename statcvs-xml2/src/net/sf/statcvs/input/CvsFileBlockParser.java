@@ -67,33 +67,31 @@ public class CvsFileBlockParser {
 	 * @throws IOException on read/write error
 	 */
 	public void parse() throws LogSyntaxException, IOException {
-		String rcsFile = parseSingleLine(logReader.getCurrentLine(), "RCS file: ");
-		String workingFile = parseSingleLine(logReader.getNextLine(), "Working file: ");
+		String rcsFile = parseSingleLine(this.logReader.getCurrentLine(), "RCS file: ");
+		String workingFile = parseSingleLine(this.logReader.nextLine(), "Working file: ");
 		boolean isInAttic = CvsLogUtils.isInAttic(rcsFile, workingFile);
-		requireLine(logReader.getNextLine(), "head:");
-		requireLine(logReader.getNextLine(), "branch:");
-		requireLine(logReader.getNextLine(), "locks:");
+		requireLine(this.logReader.nextLine(), "head:");
+		requireLine(this.logReader.nextLine(), "branch:");
+		requireLine(this.logReader.nextLine(), "locks:");
 		parseLocksAndAccessList();
 		parseSymbolicNames();
-		String keywordSubst = parseSingleLine(logReader.getCurrentLine(),
-				"keyword substitution: ");	
+		String keywordSubst = parseSingleLine(this.logReader.getCurrentLine(),
+				"keyword substitution: ");
 		boolean isBinary = false;
 		try {
 			isBinary = CvsLogUtils.isBinaryKeywordSubst(keywordSubst);
 		} catch (IllegalArgumentException unknownKeywordSubst) {
 			logger.warning("unknown keyword substitution '" + keywordSubst
-					+ "' in line " + logReader.getLineNumber());
+					+ "' in line " + this.logReader.getLineNumber());
 		}
-		requireLine(logReader.getNextLine(), "total revisions:");
+		requireLine(this.logReader.nextLine(), "total revisions:");
 		parseDescription();
-		if (isFirstFile) {
-			builder.buildModule(CvsLogUtils.getModuleName(rcsFile, workingFile));
+		if (this.isFirstFile) {
+			this.builder.buildModule(CvsLogUtils.getModuleName(rcsFile, workingFile));
 		}
-		builder.buildFile(workingFile, isBinary, isInAttic);
-		if (CvsRevisionParser.FILE_DELIMITER.equals(logReader.getCurrentLine())) {
-			logReader.getNextLine();
-		} else {
-			new CvsRevisionParser(logReader, builder).parse();
+		this.builder.buildFile(workingFile, isBinary, isInAttic);
+		if (!CvsRevisionParser.FILE_DELIMITER.equals(this.logReader.getCurrentLine())) {
+			new CvsRevisionParser(this.logReader, this.builder).parse();
 		}
 	}
 
@@ -105,15 +103,15 @@ public class CvsFileBlockParser {
 	 * with the "-N" switch of "cvs log"
 	 */
 	public boolean isLogWithoutSymbolicNames() {
-		return isLogWithoutSymbolicNames;
+		return this.isLogWithoutSymbolicNames;
 	}
 
 	private String parseSingleLine(String line, String lineStart)
-			throws IOException, LogSyntaxException {
+			throws LogSyntaxException {
 
 		if (!line.startsWith(lineStart)) {
 			throw new LogSyntaxException(
-				"line " + logReader.getLineNumber() + ": expected '"
+				"line " + this.logReader.getLineNumber() + ": expected '"
 						+ lineStart + "' but found '" + line + "'");
 		}
 
@@ -121,53 +119,50 @@ public class CvsFileBlockParser {
 	}
 
 	private void requireLine(String line, String lineStart)
-			throws IOException, LogSyntaxException {
+			throws LogSyntaxException {
 
 		parseSingleLine(line, lineStart); // ignore this line
 	}
 
-	private void parseSymbolicNames()
-			throws IOException, LogSyntaxException {
-
-		String line;
-		if (logReader.getCurrentLine().equals("symbolic names:")) {
-			line = logReader.getNextLine();
-		} else {
-			isLogWithoutSymbolicNames = true;
-			line = logReader.getCurrentLine();
+	private void parseSymbolicNames() throws IOException {
+		if (this.logReader.getCurrentLine().startsWith("keyword substitution: ")) {
+			return;
 		}
-		while (line != null && !line.startsWith("keyword substitution: ")) {
+		String line;
+		while (true) {
+			line = this.logReader.nextLine();
+			if (line.startsWith("keyword substitution: ")) {
+				return;
+			}
 			//TODO: Do something with tagName and tagRevision
 //			int firstColon = line.indexOf(':');
 //			String tagName = line.substring(1, firstColon);
-//			String tagRevision = line.substring(firstColon + 2);
-			line = logReader.getNextLine();
+//			String tagRevision = line.substring(firstColon + 2);			
 		}
 	}
 
-	private void parseLocksAndAccessList()
-			throws IOException, LogSyntaxException {
-
+	private void parseLocksAndAccessList() throws IOException {
+		while (!"access list:".equals(this.logReader.nextLine())) {
+			// ignore locks lines until "access list:" is reached
+		}
 		String line;
 		do {
-			line = logReader.getNextLine();
-		} while (line != null && !line.equals("access list:"));
-		do {
-			line = logReader.getNextLine();
-		} while (line != null
-				&& !line.equals("symbolic names:")
-				&& !line.startsWith("keyword substitution: "));
+			line = this.logReader.nextLine();
+			// ignore access list lines until next section is reached
+		} while (!line.equals("symbolic names:") &&
+				!line.startsWith("keyword substitution: "));
 	}
 
 	private void parseDescription() throws LogSyntaxException, IOException {
-		String line = logReader.getNextLine();
+		String line = this.logReader.nextLine();
 		if (line.equals(CvsRevisionParser.FILE_DELIMITER)) {
-			throw new LogSyntaxException(
-				"line " + logReader.getLineNumber() + ": missing description; please don't use the -h switch of 'cvs log'!");
+			throw new LogSyntaxException("line " +
+					this.logReader.getLineNumber() +
+					": missing description; please don't use the -h switch of 'cvs log'!");
 		}
-		requireLine(logReader.getCurrentLine(), "description:");
-		while (!isDescriptionDelimiter(logReader.getCurrentLine())) {
-			logReader.getNextLine();
+		requireLine(this.logReader.getCurrentLine(), "description:");
+		while (!isDescriptionDelimiter(this.logReader.nextLine())) {
+			// ignore description lines
 		}
 	}
 	

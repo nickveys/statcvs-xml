@@ -180,9 +180,8 @@ public class CvsRevision implements Comparable {
 	public int getNewLines() {
 		if (getLinesDelta() > 0) {
 			return getLinesDelta() + getReplacedLines();
-		} else {
-			return getReplacedLines();
 		}
+		return getReplacedLines();
 	}
 	
 	/**
@@ -293,7 +292,7 @@ public class CvsRevision implements Comparable {
 	//TODO: remove all deprecated methods when they are no longer used by StatCvs-XML
 
 	/**
-	 * @deprecated Use {@link #getLinesDelta()} and {@link #getLinesReplaced()} instead.
+	 * @deprecated Use {@link #getLinesDelta()} and {@link #getReplacedLines()} instead.
 	 */
 	public int getLinesAdded() {
 		if (isInitialRevision() && getPreviousRevision() != null) {
@@ -303,7 +302,7 @@ public class CvsRevision implements Comparable {
 	}
 	
 	/**
-	 * @deprecated Use {@link #getLinesDelta()} and {@link #getLinesReplaced()} instead.
+	 * @deprecated Use {@link #getLinesDelta()} and {@link #getReplacedLines()} instead.
 	 */
 	public int getLinesRemoved() {
 		if (isDead()) {
@@ -311,9 +310,8 @@ public class CvsRevision implements Comparable {
 		}
 		if (getLinesDelta() < 0) {
 			return -getLinesDelta() + getReplacedLines();
-		} else {
-			return getReplacedLines();
 		}
+		return getReplacedLines();
 	}
 	
 	/**
@@ -353,9 +351,8 @@ public class CvsRevision implements Comparable {
 	public int getRemovingValue() {
 		if (getLinesDelta() > 0) {
 			return getReplacedLines();
-		} else {
-			return -getLinesDelta() + getReplacedLines();
 		}
+		return -getLinesDelta() + getReplacedLines();
 	}
 	
 	/**
