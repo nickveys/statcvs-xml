@@ -13,33 +13,55 @@
         \item Basiert auf Jelly (XML Scripting Engine) %vorher antbasiert
         \item Plugin-Architektur %java halt
     \end{itemize}
-    
+    \vspace{0.5cm}
+    Aktuelle Version ist 1.0rc1 (Stand: Februar 2004)
 }
 
-\frame{
-    \frametitle{Ziele}
-    \begin{itemize}
-        \item einfach gestalteter Buildprozess
-        \item Einheitliches Buildsystem 
-        \item Informationserzeugung zum Projekt und dessen Qualität
-        \item Providing guidelines for thorough testing practices 
-Providing coherent visualization of project information 
-Allowing transparent migration to new features 
+% \frame{
+%     \frametitle{Konzepte}
+%     \begin{itemize}
+%         \item Goals (=Targets)
+%         \item Projekt-Metainformationen im sog. POM
+%         \item Anpassung sämtlicher Parameter.
+%         \item Verwaltung aller Projekt-Dependencies in einem Repository
+%     \end{itemize}
+% }
+
+\subsection{Installation}
+\frame[all:1]{
+    \frametitle{Installation von Maven}
+    \begin{enumerate}
+        \item Download von http://maven.apache.org/start/download.html
+        \item Entpacken (z.B. nach /usr/share/maven-1.0rc1)
+        \item{Umgebungsvariablen anpassen \begin{enumerate}
+            \item{\begin{alltt}\$MAVEN_HOME=/usr/share/maven-1.0rc1 \end{alltt}}
+            \item \begin{alltt}\$PATH\end{alltt} erweitern um \begin{alltt}\$MAVEN_HOME/bin\end{alltt}
+        \end{enumerate}}
+        \item (Optional) lokales Repository erstellen \begin{enumerate}
+            \item Unix: \begin{alltt}\$MAVEN_HOME/bin/install_repo.sh \$HOME/.maven/repository \end{alltt} 
+            %\item Windows: \begin{alltt}\%MAVEN_HOME\%install_repo.bat \%HOME\%\.maven\repository\end{alltt}
+        \end{enumerate}
    
-    \end{itemize}
+   \end{enumerate}
 }
 
 \frame{
-    \frametitle{Konzepte}
+    \frametitle{Neues Projekt starten}
+    Es gibt 2 Möglichkeiten, mit Maven zu beginnen.
     \begin{itemize}
-        \item Goals (=Targets)
-        \item Projekt-Metainformationen im sog. POM
-        \item Anpassung sämtlicher Parameter.
-        \item Verwaltung aller Projekt-Dependencies in einem Repository
+        \item manuell
+        \item automatisch
     \end{itemize}
+    \vspace{0.5cm}
+    \begin{block}{Projekt anlegen lassen}
+        \~ > maven genapp
+    \end{block}
+    \vspace{0.5cm}
+    \invisible<1>{\bf Demonstation}
 }
 
-\subsection{Verzeichnisstruktur}
+\section{Konzepte}
+\subsection[Verzeichnisse]{Verzeichnisstruktur}
 \frame[all:1]{
     \frametitle{Verzeichnisstruktur}
     Maven wünscht sich eine besondere Projektgliederung
@@ -65,17 +87,36 @@ statcvs-xml
     \end{alltt}
 }
 
-\subsection{Goals}
-\frame[all:1]{
-    \frametitle{Goals}
+\subsection[POM]{Projekt Object Model}
+\frame{
+    \frametitle{Projekt Object Model (POM)}
     \begin{itemize}
-        \item Goals sind Funktionen im Buildprozess.
-        \item in Jelly-XML definiert.
-        \item Jedes Goal hat ein Pre- und Post-Goal
-        \item Definition in maven.xml
-        \item Start von der Konsole
-        \item Start aus anderen Goals heraus
+        \item Enthält Projekt-Metadaten \begin{enumerate}
+            \item Projektname, -version, -beschreibung, -lizenz
+            \item Projekt-Homepage, Links zu Issuetracking, Mailinglisten
+            \item CVS-Repository (Versionen, Branches)
+            \item Projekt-Team
+            \item Dependencies (Bibliotheken)
+            \item Buildprozess
+            \item Projekt-Reports
+        \end{enumerate}
+        \item in project.xml im Projektverzeichnis
     \end{itemize}
+    \vspace{0.5cm}
+    \invisible<1>{\bf Demonstation}    
+}
+
+\subsection[Goals]{maven.xml}
+\frame[all:1]{
+    \frametitle{maven.xml}
+        Enthält alle projektspezifischen Build-Targets, sogenannte Goals.
+        \begin{itemize}
+            \item Goals sind Funktionen im Buildprozess.
+            \item in Jelly-XML definiert.
+            \item Jedes Goal hat ein Pre- und Post-Goal
+            \item Start von der Konsole
+            \item Start aus anderen Goals heraus
+        \end{itemize}
     \begin{Beispiel}
         \begin{alltt}
 <goal name="site-update" description="Updates the web site automatically">
@@ -87,18 +128,7 @@ statcvs-xml
     \end{Beispiel}
 }
 
-\subsection[POM]{Project Object Model}
-\frame{
-    \frametitle{Project Object Model}
-    \begin{itemize}
-        \item Jedes Projekt hat sein eigenes POM
-        \item Beschreibt das Projekt (Metainformationen)
-        \item Projekt-Abhängigkeiten zu Libraries
-        \item Definition des Build-Prozesses
-    \end{itemize}
-}
-
-\subsection{Properties}
+\subsection[Properties]{Properties}
 \frame{
     \frametitle{Konfigurierbarkeit}
     (Fast) alle Build- und Plugin-Parameter lassen sich anpassen.
@@ -117,10 +147,19 @@ statcvs-xml
     Lokale Anpassungen nur in den letzten beiden!
 }
 
-\subsection[xdoc]{Dokumentation}
+\frame{
+    \frametitle{Repositories}
+}
+
+\frame{
+    \frametitle{Plugin-Architektur}
+    merging von maven.xml und properties
+    reports melden sich an
+}
+
 \frame[all:1]{
     \frametitle{Dokumentation}
-    Sämtliche Projektdokumentation in \bf{xdoc}
+    Sämtliche Projektdokumentation in {\bf xdoc}
     \begin{itemize}
         \item Erweitertes (X)HTML
         \item muss well-formed sein
@@ -144,13 +183,35 @@ statcvs-xml
     \end{Beispiel}
 }
 
-\section{Installation}
+\subsection[Build]{Build}
 \frame{
-    \frametitle{Installation}
-maven genapp
-Verzeichnisstruktur
+    \frametitle{Buildprozess starten}
 }
-\section{Konzepte}
+
+\subsection[Dist]{Release erstellen}
+\frame{
+    \frametitle{Release erstellen}
+}
+
+\frame{
+    \frametitle{Distribution deployen}
+}
+
+\subsection[Doc]{Dokumentation erstellen}
+\frame{
+    \frametitle{Dokumentation erstellen}
+}
+
+\frame{
+    \frametitle{Dokumentation deployen}
+}
+
+\subsection{cleanup}
+\frame{
+    \frametitle{Sauber machen}
+}
+
+
 % 3 Kerndateien
 % TARGET=GOAL (post/preGoal)
 %A project is described with
@@ -168,15 +229,15 @@ Verzeichnisstruktur
 %from a remote repository
 %and stored into a local
 %repository
-\subsection{Architektur}
+%\subsection{Architektur}
 %grafik
-\subsection[POM]{Project Object Model}
+%\subsection[POM]{Project Object Model}
 % projekt eigenschaften
-\subsection[PP]{Project Properties}
+%\subsection[PP]{Project Properties}
 % customizing von plugins
-\subsection{Repositories}
+%\subsection{Repositories}
 
-\section{Beispiel}
+%\section{Beispiel}
 
 %%% Local Variables: 
 %%% TeX-master: "index"
