@@ -227,7 +227,7 @@
       </xsl:call-template>
       <xsl:choose>
          <xsl:when test="@removed"><img src="folder-deleted.png"/></xsl:when>
-         <xsl:when test="((@depth &lt; following::directoryTree/@depth)) and not(@removed)"><img src="folder-open.png"/></xsl:when>
+         <xsl:when test="@depth &lt; following::directoryTree[1]/@depth and not(@removed)"><img src="folder-open.png"/></xsl:when>
          <xsl:otherwise><img src="folder.png"/></xsl:otherwise>
       </xsl:choose>
       <xsl:call-template name="func:make-link">
