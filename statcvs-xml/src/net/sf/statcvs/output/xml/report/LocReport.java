@@ -17,7 +17,7 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
-	$RCSfile: AuthorsReport.java,v $
+	$RCSfile: LocReport.java,v $
 	$Date: 2003-06-24 17:40:11 $ 
 */
 package net.sf.statcvs.output.xml.report;
@@ -29,14 +29,14 @@ import net.sf.statcvs.I18n;
  * 
  * @author Steffen Pingel
  */
-public class AuthorsReport extends ReportElement {
+public class LocReport extends ReportElement {
 
 	/**
 	 * 
 	 */
-	public AuthorsReport() 
+	public LocReport() 
 	{
-		super(I18n.tr("Authors"));
+		super(I18n.tr("Lines Of Code"));
 
 
 	}

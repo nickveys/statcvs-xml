@@ -18,9 +18,9 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ReportElement.java,v $
-	$Date: 2003-06-24 12:47:35 $ 
+	$Date: 2003-06-24 17:40:11 $ 
 */
-package net.sf.statcvs.output.xml;
+package net.sf.statcvs.output.xml.report;
 
 import org.jdom.Element;
 

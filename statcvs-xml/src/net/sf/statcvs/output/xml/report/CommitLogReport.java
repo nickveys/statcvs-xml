@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommitLogReport.java,v $
-	$Date: 2003-06-24 12:47:35 $ 
+	$Date: 2003-06-24 17:40:11 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -50,6 +50,7 @@ import org.jdom.Element;
  */
 public class CommitLogReport extends ReportElement {
 
+	private Element commitsEl;
 	private Map revisions = new HashMap();
 	
 	/**
@@ -58,6 +59,8 @@ public class CommitLogReport extends ReportElement {
 	private CommitLogReport() 
 	{
 		super("commitlog");
+		commitsEl = new Element("commitlog");
+		addContent(commitsEl);		
 	}
 
 	/**
@@ -115,7 +118,7 @@ public class CommitLogReport extends ReportElement {
 		addCommits(commits);
 	}
 
-	private addCommits(List commits)
+	private void addCommits(List commits)
 	{ 
 		Iterator commIt = commits.iterator();
 		while (commIt.hasNext()) {
@@ -141,7 +144,7 @@ public class CommitLogReport extends ReportElement {
 
 			comEl.addContent(createFilesElement(commit));
 			
-			addContent(comEl);
+			commitsEl.addContent(comEl);
 		}
 		
 	}
