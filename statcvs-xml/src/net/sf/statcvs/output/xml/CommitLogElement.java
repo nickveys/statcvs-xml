@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommitLogElement.java,v $
-	$Date: 2003-06-17 16:43:02 $ 
+	$Date: 2003-06-17 17:32:18 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -77,8 +77,8 @@ public class CommitLogElement extends Element {
 			//comel.setAttribute("date", commit.getDate().toString());
 			comEl.setAttribute("date", DateUtils.formatDateAndTime(commit.getDate()));
 			
-			comEl.setAttribute("changes", Integer.toString(commit.getChangeCount()));						
-			comEl.setAttribute("changedloc", Integer.toString(locSum));
+			comEl.setAttribute("changedfiles", Integer.toString(commit.getChangeCount()));						
+			comEl.setAttribute("changedlines", Integer.toString(locSum));
 			comEl.addContent(new Element("comment").setText(commit.getComment()));
 
 			comEl.addContent(createFilesElement(commit));
