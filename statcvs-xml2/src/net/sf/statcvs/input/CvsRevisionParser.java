@@ -102,7 +102,7 @@ public class CvsRevisionParser {
 						+ "' in line " + logReader.getLineNumber());
 		}
 		String revNo = logReader.getCurrentLine().substring("revision ".length());
-		revision.setRevision(revNo);
+		revision.setRevisionNumber(revNo);
 		parseDateLine(logReader.getNextLine());
 		if (logReader.getNextLine().startsWith("branches:")) {
 			logReader.getNextLine();
@@ -150,7 +150,7 @@ public class CvsRevisionParser {
 
 		// get the author name
 		int endOfAuthorIndex = line.indexOf(';', endOfDateIndex + 1);
-		revision.setAuthorName(
+		revision.setLoginName(
 				line.substring(endOfDateIndex + 11, endOfAuthorIndex));
 
 		// get the file state (because this revision might be "dead")

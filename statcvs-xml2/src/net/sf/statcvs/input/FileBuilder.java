@@ -16,6 +16,9 @@
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+    
+	$RCSfile$
+	$Date$
 */
 package net.sf.statcvs.input;
 
@@ -29,7 +32,6 @@ import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import net.sf.statcvs.model.CvsFile;
-import net.sf.statcvs.model.CvsRevision;
 
 /**
  * <p>Builds a {@link CvsFile} with {@link CvsRevision}s from logging data.
@@ -49,8 +51,6 @@ import net.sf.statcvs.model.CvsRevision;
  * problem is solved by first collecting all information about one file in
  * this class, and then, with all information present, deciding if we want
  * to create the model instances or not.</p>
- * 
- * TODO: Move buildXXXRevision methods to CvsFile or CvsRevision
  * 
  * @author Richard Cyganiak <richard@cyganiak.de>
  * @author Tammo van Lessen
@@ -93,6 +93,9 @@ public class FileBuilder {
 	public void addRevisionData(RevisionData data) {
 		if (!data.isOnTrunk()) {
 			return;
+		}
+		if (isBinary) {
+			data.setLines(0, 0);
 		}
 		this.revisions.add(data);
 		lastAdded = data;
@@ -148,7 +151,7 @@ public class FileBuilder {
 				buildDeletionRevision(file, previousData, previousLOC, symbolicNames);
 			} else {
 				logger.warning("illegal state in "
-						+ file.getFilenameWithPath() + ":" + previousData.getRevision());
+						+ file.getFilenameWithPath() + ":" + previousData.getRevisionNumber());
 			}
 		}
 
@@ -168,7 +171,7 @@ public class FileBuilder {
 			// ignore
 		} else {
 			logger.warning("illegal state in "
-					+ file.getFilenameWithPath() + ":" + currentData.getRevision());
+					+ file.getFilenameWithPath() + ":" + currentData.getRevisionNumber());
 		}
 		return file;
 	}
@@ -239,59 +242,32 @@ public class FileBuilder {
 	 * @return the change in LOC count
 	 */
 	private int getLOCChange(RevisionData data) {
-		if (isBinary) {
-			return 0;
-		}
 		return data.getLinesAdded() - data.getLinesRemoved();
 	}
 
 	private void buildCreationRevision(CvsFile file, RevisionData data, int loc, SortedSet symbolicNames) {
-		if (isBinary) {
-			new CvsRevision(file, data.getRevision(),
-					CvsRevision.TYPE_CREATION, builder.getAuthor(data.getAuthorName()),
-					data.getDate(), data.getComment(), 0, 0, 0, symbolicNames);			
-		} else {
-			new CvsRevision(file, data.getRevision(),
-					CvsRevision.TYPE_CREATION, builder.getAuthor(data.getAuthorName()),
-					data.getDate(), data.getComment(), loc, loc, 0, symbolicNames);
-		}
+		file.addInitialRevision(data.getRevisionNumber(),
+				builder.getAuthor(data.getLoginName()), data.getDate(),
+				data.getComment(), loc, symbolicNames);
 	}
 
 	private void buildChangeRevision(CvsFile file, RevisionData data, int loc, SortedSet symbolicNames) {
-		if (isBinary) {
-			new CvsRevision(file, data.getRevision(),
-					CvsRevision.TYPE_CHANGE, builder.getAuthor(data.getAuthorName()),
-					data.getDate(), data.getComment(), 0, 0, 0, symbolicNames);			
-		} else {
-			new CvsRevision(file, data.getRevision(),
-					CvsRevision.TYPE_CHANGE, builder.getAuthor(data.getAuthorName()),
-					data.getDate(), data.getComment(), 
-					loc, data.getLinesAdded() - data.getLinesRemoved(),
-					Math.min(data.getLinesAdded(), data.getLinesRemoved()), symbolicNames);	
-		}
+		file.addChangeRevision(data.getRevisionNumber(),
+				builder.getAuthor(data.getLoginName()), data.getDate(),
+				data.getComment(), loc,
+				data.getLinesAdded() - data.getLinesRemoved(),
+				Math.min(data.getLinesAdded(), data.getLinesRemoved()), symbolicNames);	
 	}
 
 	private void buildDeletionRevision(CvsFile file, RevisionData data, int loc, SortedSet symbolicNames) {
-		if (isBinary) {
-			new CvsRevision(file, data.getRevision(),
-					CvsRevision.TYPE_DELETION, builder.getAuthor(data.getAuthorName()),
-					data.getDate(), data.getComment(), 0, 0, 0, symbolicNames);
-		} else {
-			new CvsRevision(file, data.getRevision(),
-					CvsRevision.TYPE_DELETION, builder.getAuthor(data.getAuthorName()),
-					data.getDate(), data.getComment(), 0, -loc, 0, symbolicNames);
-		}
+		file.addDeletionRevision(data.getRevisionNumber(),
+				builder.getAuthor(data.getLoginName()), data.getDate(),
+				data.getComment(), loc, symbolicNames);
 	}
 
 	private void buildBeginOfLogRevision(CvsFile file, Date beginOfLogDate, int loc, SortedSet symbolicNames) {
 		Date date = new Date(beginOfLogDate.getTime() - 60000);
-		if (isBinary) {
-			new CvsRevision(file, "0.0",
-					CvsRevision.TYPE_BEGIN_OF_LOG, null, date, null, 0, 0, 0, symbolicNames);
-		} else {
-			new CvsRevision(file, "0.0",
-					CvsRevision.TYPE_BEGIN_OF_LOG, null, date, null, loc, 0, 0, symbolicNames);			
-		}
+		file.addBeginOfLogRevision(date, loc, symbolicNames);
 	}
 
 	/**
@@ -343,11 +319,11 @@ public class FileBuilder {
         while (symIt.hasNext()) {
             String symName = (String)symIt.next();
             String rev = (String)revBySymnames.get(symName);
-            if (revisionData.getRevision().equals(rev)) {
+            if (revisionData.getRevisionNumber().equals(rev)) {
                 if (symbolicNames == null) {
                     symbolicNames = new TreeSet();
                 }
-                logger.fine("adding revision "+name+","+revisionData.getRevision()+" to symname "+symName);
+                logger.fine("adding revision "+name+","+revisionData.getRevisionNumber()+" to symname "+symName);
                 symbolicNames.add(builder.getSymbolicName(symName));
             }
         }
