@@ -24,11 +24,13 @@
 package net.sf.statcvs.input;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
-import net.sf.statcvs.util.DateUtils;
 import net.sf.statcvs.util.LookaheadReader;
 
 /**
@@ -54,6 +56,12 @@ public class CvsRevisionParser {
 	public static final String FILE_DELIMITER
 			= "======================================"
 			+ "=======================================";
+
+	private static final String LOG_TIMESTAMP_FORMAT =
+		"yyyy/MM/dd HH:mm:ss zzz";
+	private static final Locale LOG_TIMESTAMP_LOCALE = Locale.US;
+	private static SimpleDateFormat logTimeFormat =
+		new SimpleDateFormat(LOG_TIMESTAMP_FORMAT, LOG_TIMESTAMP_LOCALE);
 
 	private LookaheadReader logReader;
 	private CvsLogBuilder builder;
@@ -133,7 +141,7 @@ public class CvsRevisionParser {
 		// get the creation date
 		int endOfDateIndex = line.indexOf(';', 6);
 		String dateString = line.substring(6, endOfDateIndex) + " GMT";
-		Date date = DateUtils.convertFromLogTime(dateString);
+		Date date = convertFromLogTime(dateString);
 		if (date == null) {
 			throw new LogSyntaxException(
 					"unexpected date format in line " + logReader.getLineNumber());
@@ -186,5 +194,20 @@ public class CvsRevisionParser {
 		logger.warning("unknown file state '" + state + "' at line "
 				+ logReader.getLineNumber());
 		return false;
+	}
+
+
+	/**
+	 * Returns a date from a given modTime String of a cvs logfile
+	 * @param modTime modTime String of a cvs logfile
+	 * @return Date date from a given modTime String of a cvs logfile
+	 */
+	private static Date convertFromLogTime(String modTime) {
+		try {
+			return logTimeFormat.parse(modTime);
+		} catch (ParseException e) {
+			// fallback is to return null
+			return null;
+		}
 	}
 }

@@ -37,6 +37,7 @@ import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.model.DirectoryImpl;
 import net.sf.statcvs.model.DirectoryRoot;
+import net.sf.statcvs.util.FilePatternMatcher;
 import net.sf.statcvs.util.FileUtils;
 
 /**
@@ -56,6 +57,8 @@ public class Builder implements CvsLogBuilder {
 	private static Logger logger = Logger.getLogger(Builder.class.getName());
 
 	private final RepositoryFileManager repositoryFileManager;
+	private final FilePatternMatcher includePattern;
+	private final FilePatternMatcher excludePattern;
 
 	private final Map authors = new HashMap();
 	private final Map directories = new HashMap();
@@ -63,15 +66,24 @@ public class Builder implements CvsLogBuilder {
 	
 	private FileBuilder currentFileBuilder = null;
 	private Date startDate = null;
+	private String projectName = null;
 
 	/**
 	 * Creates a new <tt>Builder</tt>
 	 * @param repositoryFileManager the {@link RepositoryFileManager} that
 	 * 								can be used to retrieve LOC counts for
 	 * 								the files that this builder will create
+	 * @param includePattern a list of Ant-style wildcard patterns, seperated
+	 *                       by : or ;
+	 * @param excludePattern a list of Ant-style wildcard patterns, seperated
+	 *                       by : or ;
 	 */
-	public Builder(RepositoryFileManager repositoryFileManager) {
+	public Builder(RepositoryFileManager repositoryFileManager,
+				   FilePatternMatcher includePattern,
+				   FilePatternMatcher excludePattern) {
 		this.repositoryFileManager = repositoryFileManager;
+		this.includePattern = includePattern;
+		this.excludePattern = excludePattern;
 		directories.put("", new DirectoryRoot());
 	}
 
@@ -81,9 +93,7 @@ public class Builder implements CvsLogBuilder {
 	 * @param moduleName name of the module
 	 */
 	public void buildModule(String moduleName) {
-//		if (ConfigurationOptions.getProjectName() == null) {
-//			ConfigurationOptions.setProjectName(moduleName);
-//		}
+		this.projectName = moduleName;
 	}
 
 	/**
@@ -154,6 +164,10 @@ public class Builder implements CvsLogBuilder {
 		return result;
 	}
 
+	public String getProjectName() {
+		return projectName;
+	}
+
 	/**
 	 * returns the <tt>Author</tt> of the given name or creates it
 	 * if it does not yet exist. 
@@ -190,6 +204,27 @@ public class Builder implements CvsLogBuilder {
 		return repositoryFileManager.getLinesOfCode(filename);
 	}
 
+	
+	/**
+	 * Matches a filename against the include and exclude patterns. If no
+	 * include pattern was specified, all files will be included. If no
+	 * exclude pattern was specified, no files will be excluded.
+	 * @param filename a filename
+	 * @return <tt>true</tt> if the filename matches one of the include
+	 *         patterns and does not match any of the exclude patterns.
+	 *         If it matches an include and an exclude pattern, <tt>false</tt>
+	 *         will be returned.
+	 */
+	public boolean matchesPatterns(String filename) {
+		if (excludePattern != null && excludePattern.matches(filename)) {
+			return false;
+		}
+		if (includePattern != null) {
+			return includePattern.matches(filename);
+		}
+		return true;
+	}
+	
 	/**
 	 * @param path for example "src/net/sf/statcvs/"
 	 * @return the <tt>Directory</tt> corresponding to <tt>statcvs</tt>

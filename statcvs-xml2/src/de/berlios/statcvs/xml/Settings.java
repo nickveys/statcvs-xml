@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Settings.java,v $
-	$Date: 2004-02-17 16:29:15 $ 
+	$Date: 2004-02-17 19:07:22 $ 
 */
 package de.berlios.statcvs.xml;
 
@@ -38,7 +38,7 @@ import net.sf.statcvs.util.FileUtils;
  * can read all parameter values from here.
  * 
  * @author jentzsch
- * @version $Id: Settings.java,v 1.4 2004-02-17 16:29:15 squig Exp $
+ * @version $Id: Settings.java,v 1.5 2004-02-17 19:07:22 squig Exp $
  */
 public class Settings {
 
@@ -53,8 +53,8 @@ public class Settings {
 	private static String notesFile = null;
 	private static String notes = null;
 
-	private static String includePattern = null;
-	private static String excludePattern = null;
+	private static FilePatternMatcher includeMatcher;
+	private static FilePatternMatcher excludeMatcher;
 
 	private static WebRepositoryIntegration webRepository = null;
 
@@ -260,14 +260,14 @@ public class Settings {
 	 * @see net.sf.statcvs.util.FilePatternMatcher
 	 */
 	public static void setIncludePattern(String patternList) {
-		Settings.includePattern = patternList;
+		Settings.includeMatcher = new FilePatternMatcher(patternList);
 	}
 	
 	/**
 	 * @see net.sf.statcvs.util.ConfigurationOptions#setExcludePattern(String)
 	 */
 	public static void setExcludePattern(String patternList) {
-		Settings.excludePattern = patternList;
+		Settings.excludeMatcher = new FilePatternMatcher(patternList);
 	}
 
 	public static void setOutputSuite(String outputSuite) {
@@ -293,14 +293,14 @@ public class Settings {
 	/**
 	 * @return
 	 */
-	public static String getExcludePattern() {
-		return excludePattern;
+	public static FilePatternMatcher getExcludeMatcher() {
+		return excludeMatcher;
 	}
 
 	/**
 	 * @return
 	 */
-	public static String getIncludePattern() {
-		return includePattern;
+	public static FilePatternMatcher getIncludeMatcher() {
+		return includeMatcher;
 	}
 }

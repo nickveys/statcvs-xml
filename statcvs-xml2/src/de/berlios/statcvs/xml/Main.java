@@ -34,7 +34,6 @@ import net.sf.statcvs.input.EmptyRepositoryException;
 import net.sf.statcvs.input.LogSyntaxException;
 import net.sf.statcvs.input.RepositoryFileManager;
 import net.sf.statcvs.model.CvsContent;
-import net.sf.statcvs.output.ConfigurationOptions;
 import net.sf.statcvs.util.CvsLogUtils;
 import net.sf.statcvs.util.LogFormatter;
 import net.sf.statcvs.util.LookaheadReader;
@@ -44,7 +43,7 @@ import net.sf.statcvs.util.LookaheadReader;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.5 2004-02-17 16:11:54 squig Exp $
+ * @version $Id: Main.java,v 1.6 2004-02-17 19:07:22 squig Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -76,15 +75,7 @@ public class Main {
 			} catch (IOException cex) {
 				printProperUsageAndExit();
 			}
-			
-			// FIX: copy settings to statcvs
-			if (Settings.getExcludePattern() != null) {
-				ConfigurationOptions.setExcludePattern(Settings.getExcludePattern());
-			}
-			if (Settings.getIncludePattern() != null) {
-				ConfigurationOptions.setIncludePattern(Settings.getIncludePattern());
-			}
-			
+						
 			run();
 		} catch (IOException e) {
 			printErrorMessageAndExit(e.getMessage());
@@ -263,7 +254,7 @@ public class Main {
 		RepositoryFileManager repFileMan
 			= new RepositoryFileManager
 				(Settings.getCheckedOutDirectory());
-		Builder builder = new Builder(repFileMan);
+		Builder builder = new Builder(repFileMan, Settings.getIncludeMatcher(), Settings.getExcludeMatcher());
 		new CvsLogfileParser(logReader, builder).parse();
 		return builder.createCvsContent();
 	}
