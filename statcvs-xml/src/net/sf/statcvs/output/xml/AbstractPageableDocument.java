@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractPageableDocument.java,v $
-	$Date: 2003-06-17 23:08:49 $ 
+	$Date: 2003-06-18 17:44:08 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -33,10 +33,10 @@ import org.jdom.Element;
  */
 public abstract class AbstractPageableDocument extends StatCvsDocument implements Pageable {
 
+	private String parent;
+	private Element template;
 	private String pContentName;
-
 	private List pContent;
-
 	private int itemsPerPage;
 
 	/**
@@ -74,11 +74,14 @@ public abstract class AbstractPageableDocument extends StatCvsDocument implement
 	 * @see net.sf.statcvs.output.xml.Pageable#getPage(int)
 	 */
 	public Element getPage(int page) {
-		Element element = new Element(this.getRootElement().getName());
+		Element element = (Element)template.clone();
 		Element child = new Element(pContentName);
-		element.addContent(getHeader());
-		element.addContent(child);
-		element.addContent(getFooter());
+//		element.addContent(getHeader());
+		Element parent = element.getChild("commit");
+		System.out.println(parent);
+		System.out.println(element);
+		parent.addContent(child);
+//		element.addContent(getFooter());
 		List elCont = child.getContent();
 		
 		
@@ -97,7 +100,6 @@ public abstract class AbstractPageableDocument extends StatCvsDocument implement
 		// this: elCont.add(pageList); make that element gets null, why?
 		// workaround:
 		for (int i=0; i < pageList.size(); i++) {
-			Element el = new Element("x");
 			elCont.add(((Element)pageList.get(i)).clone());//pageList.get(i));
 		}
 		return element;
@@ -110,12 +112,17 @@ public abstract class AbstractPageableDocument extends StatCvsDocument implement
 		return (int) Math.ceil((double)pContent.size() / (double)itemsPerPage);
 	}
 
-	public abstract Element getHeader();
-	public abstract Element getFooter();
-
 	public void setPageableContent(Element content) {
 		this.pContent = content.getChildren();
 		this.pContentName = content.getName();
+	}
+	
+	public void setTemplateElement(Element el) {
+		template = el;
+	}
+	
+	public void setParentName(String parent) {
+		this.parent = parent;
 	}
 	
 	public String getFilename(int page) {
