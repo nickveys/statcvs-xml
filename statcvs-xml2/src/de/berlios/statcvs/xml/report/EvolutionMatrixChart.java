@@ -196,7 +196,7 @@ public class EvolutionMatrixChart extends AbstractChart {
 			// get version iterator
 			Iterator verIt = versions.iterator();
 			
-			double vspace = plotArea.getWidth() / (content.getSymbolicNames().size() + 1);
+			double vspace = plotArea.getWidth() / versions.size();
 			double x = plotArea.getX();
 			double y = plotArea.getY() + SPACER;
 
