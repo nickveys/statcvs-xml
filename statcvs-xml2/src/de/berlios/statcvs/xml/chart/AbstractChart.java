@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractChart.java,v $
-	$Date: 2004-02-17 16:11:54 $ 
+	$Date: 2004-02-17 16:40:00 $ 
 */
 package de.berlios.statcvs.xml.chart;
 
@@ -64,7 +64,7 @@ public abstract class AbstractChart {
 		this.filename = settings.getString("filename", (defaultFilename == null) ? "chart" + ++chartNumber + ".png" : defaultFilename);
 		this.title = settings.getString("title", defaultTitle);
 		this.width = settings.getInt("width", 640);
-		this.width = settings.getInt("height", 480);
+		this.height = settings.getInt("height", 480);
 	}
 	
 	/** 
