@@ -32,7 +32,7 @@ import java.util.SortedSet;
  * using the methods {@link CvsFile#addInitialRevision},
  * {@link CvsFile#addChangeRevision} and
  * {@link CvsFile#addDeletionRevision}.
- *
+ * <p/>
  * TODO: Replace type code with hierarchy
  * TODO: Rename class to Revision, getAuthor() to getLogin(), isDead() to isDeletion()
  * 
@@ -78,8 +78,9 @@ public class CvsRevision implements Comparable {
 	private final int lines;
 	private final int linesReplaced;
 	private final int linesDelta;
-
-	private SortedSet symbolicNames;
+	private final CvsBranch mainBranch;
+	private final SortedSet symbolicNames;
+	private CvsRevision previousRevision;
 
 	/**
 	 * Creates a new revision of a file with the
@@ -97,9 +98,10 @@ public class CvsRevision implements Comparable {
 	 * @param linesReplaced How many lines were removed and replaced by other lines, without the delta changing?
 	 * @param symbolicNames list of symbolic names for this revision or null if this revision has no symbolic names	 
  	 */
-	CvsRevision(CvsFile file, String revisionNumber, int type,
+	CvsRevision(CvsFile file, CvsBranch mainBranch, String revisionNumber, int type,
 			Author author, Date date, String comment, int lines, int linesDelta, int linesReplaced, SortedSet symbolicNames) {
 		this.file = file;
+        this.mainBranch = mainBranch;
 		this.revisionNumber = revisionNumber;
 		this.type = type;
 		this.author = author;
@@ -120,6 +122,8 @@ public class CvsRevision implements Comparable {
                 ((SymbolicName)it.next()).addRevision(this);
             }
         }
+		
+		mainBranch.addRevision(this);
 	}
 
 	/**
@@ -397,4 +401,9 @@ public class CvsRevision implements Comparable {
 	public String getRevision() {
 		return getRevisionNumber();
 	}
+	
+	public CvsBranch getMainBranch() {
+		return mainBranch;
+	}
+
 }

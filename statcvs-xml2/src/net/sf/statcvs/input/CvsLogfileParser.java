@@ -39,6 +39,8 @@ import net.sf.statcvs.util.LookaheadReader;
  */
 public class CvsLogfileParser {
 
+    public static String VERBOSE_SERVER_OUTPUT = "cvs server: ";
+
 	private static Logger logger
 			= Logger.getLogger(CvsLogfileParser.class.getName());
 
@@ -95,8 +97,9 @@ public class CvsLogfileParser {
 	}
 
 	private void eatNonCheckedInFileLines() throws IOException {
-		while (this.logReader.hasNextLine() &&
-				this.logReader.nextLine().startsWith("? ")) {
+		while (this.logReader.hasNextLine()
+				&& (this.logReader.nextLine().startsWith("? ")
+						|| logReader.getCurrentLine().startsWith(VERBOSE_SERVER_OUTPUT))) {
 			// ignore lines starting with "? "
 		}
 	}

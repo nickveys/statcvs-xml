@@ -24,10 +24,12 @@
 package net.sf.statcvs.input;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.logging.Logger;
-
 import net.sf.statcvs.util.CvsLogUtils;
 import net.sf.statcvs.util.LookaheadReader;
 
@@ -49,7 +51,7 @@ public class CvsFileBlockParser {
 	private CvsLogBuilder builder;
 	private boolean isLogWithoutSymbolicNames = false;
 	private boolean isFirstFile;
-    private Map revBySymNames = new HashMap();
+    private Map revisionBySymbolicName = new HashMap();
 
 	/**
 	 * Default Constructor CvsFileBlockParser.
@@ -93,7 +95,7 @@ public class CvsFileBlockParser {
 		if (this.isFirstFile) {
 			this.builder.buildModule(CvsLogUtils.getModuleName(rcsFile, workingFile));
 		}
-		this.builder.buildFile(workingFile, isBinary, isInAttic, this.revBySymNames);
+		this.builder.buildFile(workingFile, isBinary, isInAttic, this.revisionBySymbolicName);
 		if (!CvsRevisionParser.FILE_DELIMITER.equals(this.logReader.getCurrentLine())) {
 			new CvsRevisionParser(this.logReader, this.builder).parse();
 		}
@@ -128,7 +130,7 @@ public class CvsFileBlockParser {
 		parseSingleLine(line, lineStart); // ignore this line
 	}
 
-	private void parseSymbolicNames() throws IOException {
+	private void parseSymbolicNames() throws IOException, LogSyntaxException {
 		if (this.logReader.getCurrentLine().startsWith("keyword substitution: ")) {
 			return;
 		}
@@ -141,9 +143,13 @@ public class CvsFileBlockParser {
 		}
 		while (line != null && !line.startsWith("keyword substitution: ")) {
 			int firstColon = line.indexOf(':');
-			String tagName = line.substring(1, firstColon);
-			String tagRevision = line.substring(firstColon + 2);
-            this.revBySymNames.put(tagName, tagRevision);
+			String tagName = line.substring(0, firstColon).trim();
+			String tagRevision = line.substring(firstColon + 1).trim();
+			if (CvsLogUtils.isBranch(tagRevision)) {
+				this.revisionBySymbolicName.put(tagName, calculateBranchRevision(tagRevision));
+			} else {
+				this.revisionBySymbolicName.put(tagName, tagRevision);
+			}
 			line = this.logReader.nextLine();
 		}
 	}
@@ -177,4 +183,45 @@ public class CvsFileBlockParser {
 		return CvsRevisionParser.REVISION_DELIMITER.equals(line)
 				|| CvsRevisionParser.FILE_DELIMITER.equals(line);
 	}
+	
+    /**
+     * If the log file is obtained using "cvs rlog" (instaed of cvs "log"), then
+     * the "Working file:" lines are not printed.
+     * <p/>
+     * If this is the case need to ensure that client code (the one using this library) sets
+     * the moduleName (buildModule()) and repository path (setRepository())
+     *
+     * @return
+     */
+    private String parseOptionalWorkingFileLine(String line) throws IOException, LogSyntaxException {
+		// TODO review: when is this acctually called?
+        if (line.startsWith("Working file: ")) {
+            return parseSingleLine(line, "Working file: ");
+        } else {
+            return null;
+        }
+    }
+
+    private static String calculateBranchRevision(String branchRevision) throws LogSyntaxException {
+        // Remove the 0 (zero) from the second-last part of the revision number
+        // e.g. 1.2.0.1 becomes 1.2.1
+        List list = new ArrayList();
+        StringTokenizer st = new StringTokenizer(branchRevision, ".");
+        while (st.hasMoreTokens())
+        {
+            list.add(st.nextToken());
+        }
+
+        if (list.size() < 4)
+            throw new LogSyntaxException("Invalid branch revision:" + branchRevision);
+
+        StringBuffer result = new StringBuffer((String) list.get(0));
+
+        for (int i = 1; i < list.size() - 2; i++) {
+            result.append(".").append(list.get(i));
+        }
+
+        return result.append(".").append(list.get(list.size() - 1)).toString();
+    }
+
 }

@@ -115,4 +115,8 @@ public class Commit implements Comparable {
 		Commit otherCommit = (Commit) other;
 		return getDate().compareTo(otherCommit.getDate());
 	}
+
+    public CvsBranch getMainBranch() {
+        return aRevision.getMainBranch();
+    }
 }

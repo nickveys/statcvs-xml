@@ -19,6 +19,7 @@
 */
 package net.sf.statcvs.input;
 
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -70,4 +71,14 @@ public interface CvsLogBuilder {
 	 * @param data the revision
 	 */
 	public abstract void buildRevision(RevisionData data);
+/*
+    public abstract String getProjectName();
+
+    public abstract String getRepository();
+*/
+    /**
+     * Register a custom revision filter
+     * @param revisionFilter
+     */
+//    public abstract void setRevisionFilter(RevisionFilter revisionFilter);
 }

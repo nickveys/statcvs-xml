@@ -34,8 +34,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Logger;
-
 import net.sf.statcvs.model.Author;
+import net.sf.statcvs.model.CvsBranch;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.Directory;
@@ -48,7 +48,7 @@ import net.sf.statcvs.util.FileUtils;
  * log. The <tt>Builder</tt> is fed by some CVS history data source, for
  * example a CVS log parser. The <tt>CvsContent</tt> can be retrieved
  * using the {@link #createCvsContent} method.</p>
- * 
+ * <p/>
  * <p>The class also takes care of the creation of <tt>Author</tt> and 
  * </tt>Directory</tt> objects and makes sure that there's only one of these
  * for each author name and path. It also provides LOC count services.</p>
@@ -66,6 +66,7 @@ public class Builder implements CvsLogBuilder {
 	private final Map authors = new HashMap();
 	private final Map directories = new HashMap();
     private final Map symbolicNames = new HashMap(); 
+	private final Map branchesByName = new HashMap();
     
 	private final List fileBuilders = new ArrayList();
 	private final Set atticFileNames = new HashSet();
@@ -73,6 +74,14 @@ public class Builder implements CvsLogBuilder {
 	private FileBuilder currentFileBuilder = null;
 	private Date startDate = null;
 	private String projectName = null;
+
+    private String repository;
+    private String parseBranchName;
+
+    /**
+     * Used to filter revisions to only keep the revisions we are interested in
+     */
+    private RevisionFilter revisionFilter = new DefaultRevisionFilter();
 
 	/**
 	 * Creates a new <tt>Builder</tt>
@@ -86,13 +95,25 @@ public class Builder implements CvsLogBuilder {
 	 */
 	public Builder(RepositoryFileManager repositoryFileManager,
 				   FilePatternMatcher includePattern,
-				   FilePatternMatcher excludePattern) {
+				   FilePatternMatcher excludePattern,
+				   String parseBranchName) {
 		this.repositoryFileManager = repositoryFileManager;
 		this.includePattern = includePattern;
 		this.excludePattern = excludePattern;
+		this.parseBranchName = parseBranchName;
 		directories.put("", Directory.createRoot());
 	}
 
+	/**
+	 * Invokes {@link Builder#Builder(RepositoryFileManager, FilePatternMatcher, FilePatternMatcher, String)}.
+	 * Provided for compatibility reasons with test cases. 
+	 */
+	public Builder(RepositoryFileManager repositoryFileManager,
+			   FilePatternMatcher includePattern,
+			   FilePatternMatcher excludePattern) {
+		this(repositoryFileManager, includePattern, excludePattern, null);
+	}
+			   
 	/**
 	 * Starts building the module.
 	 * 
@@ -115,7 +136,7 @@ public class Builder implements CvsLogBuilder {
 		if (currentFileBuilder != null) {
 			fileBuilders.add(currentFileBuilder);
 		}
-		currentFileBuilder = new FileBuilder(this, filename, isBinary, 
+		currentFileBuilder = new FileBuilder(this, filename, isBinary, parseBranchName, 
                                              revBySymnames);
 		if (isInAttic) {
 			atticFileNames.add(filename);
@@ -129,10 +150,17 @@ public class Builder implements CvsLogBuilder {
 	 * @param data the revision
 	 */
 	public void buildRevision(RevisionData data) {
+        // Only keep this revision if it is 'valid' (we are interested in it)
+        if (revisionFilter.isValid(data)) {
+            try {
 		currentFileBuilder.addRevisionData(data);
 		if (startDate == null || startDate.compareTo(data.getDate()) > 0) {
 			startDate = data.getDate();
 		}
+            } catch (NoBranchException e) {
+                logger.warning("Revision " + data.getRevisionNumber() + " has no main branch - ignoring revision.");
+            }
+        }
 	}
 
 	/**
@@ -175,6 +203,7 @@ public class Builder implements CvsLogBuilder {
 		result.setCommits(commits);
 		
 		result.setSymbolicNames(new TreeSet(symbolicNames.values()));
+		result.setBranches(new HashSet(branchesByName.values()));
 
 		return result;
 	}
@@ -230,16 +259,28 @@ public class Builder implements CvsLogBuilder {
     public SymbolicName getSymbolicName(String name)
     {
         SymbolicName sym = (SymbolicName)symbolicNames.get(name);
-        
-        if (sym != null) {
-            return sym;
-        } 
-        else {
+        if (sym == null) {
             sym = new SymbolicName(name);
             symbolicNames.put(name, sym);
-            
+        }            
             return sym;            
         }
+
+    /**
+     * Returns the {@link CvsBranch} with the given name or creates it
+     * if it does not yet exist.
+     * 
+     * @param name the branche's name
+     * @return the corresponding branch object
+     */
+    public CvsBranch getBranch(String name)
+    {
+        CvsBranch branch = (CvsBranch)branchesByName.get(name);
+		if (branch == null) {
+            branch = new CvsBranch(name);
+            branchesByName.put(name, branch);
+        }
+        return branch;
     }
     
 	public int getLOC(String filename) throws NoLineCountException {
@@ -294,4 +335,25 @@ public class Builder implements CvsLogBuilder {
 		directories.put(path, newDirectory);
 		return newDirectory;
 	}
+	
+//    public void setModuleName(String moduleName) {
+//        this.moduleName = moduleName;
+//    }
+//
+//	public String getModuleName() {
+//        return moduleName;
+//    }
+
+    public String getRepository() {
+        return repository;
+    }
+
+    public void setRepository(String repository) {
+        this.repository = repository;
+    }
+
+    public void setRevisionFilter(RevisionFilter revisionFilter) {
+        this.revisionFilter = revisionFilter;
+    }
+
 }

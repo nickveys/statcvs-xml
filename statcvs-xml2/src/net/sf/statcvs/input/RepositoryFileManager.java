@@ -68,7 +68,7 @@ public class RepositoryFileManager {
 			FileReader freader = new FileReader(absoluteName);
 			BufferedReader reader = new BufferedReader(freader);
             int linecount = getLineCount(reader);
-            logger.finer("line count for '" + absoluteName
+            logger.fine("line count for '" + absoluteName
 					+ "': " + linecount);
 			freader.close();
 			return linecount;

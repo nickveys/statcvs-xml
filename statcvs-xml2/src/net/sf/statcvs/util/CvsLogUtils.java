@@ -22,6 +22,9 @@
 */
 package net.sf.statcvs.util;
 
+import java.util.StringTokenizer;
+import net.sf.statcvs.input.LogSyntaxException;
+
 
 /**
  * Utility class containing various methods related to CVS logfile parsing
@@ -30,6 +33,10 @@ package net.sf.statcvs.util;
  * @version $Id$
  */
 public class CvsLogUtils {
+
+	public static String HEAD_BRANCH_NAME = "HEAD";
+	
+	private static final String RCS_FILE_ENDING = ",v";
 
 	/**
 	 * <p>Determines if a file is in the attic by comparing the location of
@@ -87,6 +94,7 @@ public class CvsLogUtils {
 	 * @return the module name
 	 */
 	public static String getModuleName(String rcsFilename, String workingFilename) {
+        // Atlassian code
 		int localLenght = workingFilename.length() + ",v".length();
 		if (CvsLogUtils.isInAttic(rcsFilename, workingFilename)) {
 			localLenght += "/Attic".length();
@@ -133,4 +141,58 @@ public class CvsLogUtils {
 		}
 		throw new IllegalArgumentException("unknown keyword substitution: " + kws);
 	}
+
+
+    public static String getWorkingFileName(String root, String rcsFileName) throws LogSyntaxException {
+        if (!rcsFileName.endsWith(RCS_FILE_ENDING))
+        {
+            throw new LogSyntaxException("The RCS file name must end with ',v'");
+        }
+
+        if (rcsFileName.startsWith(root + "/"))
+        {
+            return rcsFileName.substring((root + "/").length(), rcsFileName.length() - RCS_FILE_ENDING.length());
+        }
+        else
+        {
+            throw new LogSyntaxException("RCS filename '" + rcsFileName + "' does not start with the provided root '" + root + "'");
+        }
+    }
+
+    public static boolean isBranch(String revisionNumber)
+    {
+        // Check if the second last "part" of the revision number is a 0 (zero).
+        // If so, the revisionNumber represents a branch
+        StringTokenizer revisionParts = new StringTokenizer(revisionNumber, ".");
+
+        String lastPart = null;
+        String part = null;
+        while (revisionParts.hasMoreTokens())
+        {
+            lastPart = part;
+            part = revisionParts.nextToken();
+        }
+
+        if (lastPart != null && Integer.parseInt(lastPart) == 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static String calculateBranchNumber(String revisionNumber) throws LogSyntaxException {
+        final int index = revisionNumber.lastIndexOf(".");
+        if (index >  0)
+        {
+            return revisionNumber.substring(0, index);
+        }
+        else
+        {
+            throw new LogSyntaxException("Cannot calculate branch revision from '" + revisionNumber + "'");
+        }
+    }
+
 }

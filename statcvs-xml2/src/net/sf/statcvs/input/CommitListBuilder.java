@@ -117,7 +117,8 @@ public class CommitListBuilder {
 	public static boolean isSameCommit(Commit commit, CvsRevision rev) {
 		return commit.getAuthor().equals(rev.getAuthor())
 				&& commit.getComment().equals(rev.getComment())
-				&& isInTimeFrame(commit, rev.getDate());
+				&& isInTimeFrame(commit, rev.getDate())
+                && rev.getMainBranch().equals(commit.getMainBranch());
 	}
 
 	/**

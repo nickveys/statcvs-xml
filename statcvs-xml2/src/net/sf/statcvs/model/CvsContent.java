@@ -19,11 +19,7 @@
 */
 package net.sf.statcvs.model;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Represents a CVS Repository and provides access to the {@link CvsFile}s,
@@ -46,7 +42,10 @@ public class CvsContent {
 	private Date firstDate = null;
 	private Date lastDate = null;
 	private List commits;
-	private SortedSet symbolicNames = new TreeSet();
+	private SortedSet symbolicNames;
+    /** All CVS Branches (CvsBranch objects) for this repository (that 
+     *  are mentioned in the parsed log). */
+	private Set branches;
 
 	/**
 	 * Adds one file to the repository.
@@ -171,8 +170,7 @@ public class CvsContent {
 	 * Sets the list of symbolic names contained in this CvsContent.
 	 * @param symbolicNames
 	 */
-	public void setSymbolicNames(SortedSet symbolicNames)
-	{
+	public void setSymbolicNames(SortedSet symbolicNames) {
 		this.symbolicNames = symbolicNames;
 	}
 	
@@ -180,8 +178,7 @@ public class CvsContent {
 	 * Returns a list of {@link SymbolicName}s,
 	 * ordered from latest to oldest. 
 	 */
-	public SortedSet getSymbolicNames()
-	{
+	public SortedSet getSymbolicNames() {
 		return symbolicNames;
 	}
 	
@@ -231,4 +228,13 @@ public class CvsContent {
 			lastDate = revisionDate;
 		}
 	}
+
+    public Set getBranches() {
+        return branches;
+    }
+
+    public void setBranches(Set branches) {
+        this.branches = branches;
+    }
+
 }

@@ -19,11 +19,8 @@
 */
 package net.sf.statcvs.model;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
+import net.sf.statcvs.util.CvsLogUtils;
 
 /**
  * Represents one versioned file in the {@link CvsContent Repository},
@@ -39,15 +36,17 @@ import java.util.TreeSet;
  */
 public class CvsFile implements Comparable {
 	private final String filename;
-	private final SortedSet revisions = new TreeSet();
+	private final SortedSet revisions;
 	private final Directory directory;
 	private final Set authors = new HashSet();
+    private final Map revisionsByBranchName = new HashMap();
 
 	/**
 	 * Creates a CvsFile object.
 	 * 
 	 * @param name The full name of the file
 	 * @param directory the directory where the file resides
+     * @param cvsBranches a map of Cvs Branches this file appears on, with the names of the branches as keys
 	 */
 	public CvsFile(String name, Directory directory) {
 		this.filename = name;
@@ -55,6 +54,8 @@ public class CvsFile implements Comparable {
 		if (directory != null) {
 			directory.addFile(this);
 		}
+		revisions = new TreeSet();
+		revisionsByBranchName.put(CvsLogUtils.HEAD_BRANCH_NAME, revisions);
 	}
 
 	/**
@@ -92,7 +93,7 @@ public class CvsFile implements Comparable {
 	}
 
 	/**
-	 * Gets the latest revision of this file.
+	 * Gets the latest revision of this file on HEAD.
 	 * @return the latest revision of this file
 	 */
 	public CvsRevision getLatestRevision() {
@@ -100,7 +101,17 @@ public class CvsFile implements Comparable {
 	}
 
 	/**
-	 * Gets the earliest revision of this file.
+	 * Gets the latest revision of this file on the named branch.
+     * @param branchName the name of the branch
+	 * @return the latest revision of this file on the named branch
+	 */
+    public CvsRevision getLatestRevision(String branchName)
+    {
+		return (CvsRevision)getRevisions(branchName).last();
+    }
+
+	/**
+	 * Gets the earliest revision of this file on HEAD.
 	 * @return the earliest revision of this file
 	 */
 	public CvsRevision getInitialRevision() {
@@ -108,8 +119,17 @@ public class CvsFile implements Comparable {
 	}
 
 	/**
+	 * Gets the earliest revision of this file on the named branch.
+     * @param branchName the name of a branch.
+	 * @return the earliest revision of this file on the named branch
+	 */
+	public CvsRevision getInitialRevision(String branchName) {
+        return (CvsRevision)getRevisions(branchName).first();
+	}
+
+	/**
 	 * Returns the list of {@link CvsRevision}s of this file,
-	 * sorted from earliest to most recent.
+	 * sorted from earliest to most recent (by date) across all branches.
 	 * @return a <tt>SortedSet</tt> of {@link CvsRevision}s
 	 */
 	public SortedSet getRevisions() {
@@ -117,7 +137,21 @@ public class CvsFile implements Comparable {
 	}
 
 	/**
-	 * Returns the current number of lines for this file. Binary files
+	 * Returns the list of {@link CvsRevision}s of this file on the named
+	 * branch, sorted from earliest to most recent (by date) across all
+	 * branches.
+	 * 
+	 * @return a <tt>SortedSet</tt> of {@link CvsRevision}s
+	 */
+	public SortedSet getRevisions(String branchName) {
+        final TreeSet branchRevisions = (TreeSet)revisionsByBranchName.get(branchName);
+        if (branchRevisions == null)
+            throw new IllegalArgumentException("Cannot find branch with name '" + branchName + "'.");
+		return branchRevisions;
+	}
+
+	/**
+	 * Returns the current number of lines for this file on HEAD. Binary files
 	 * and deleted files are assumed to have 0 lines.
 	 * @return the current number of lines for this file
 	 */
@@ -125,6 +159,16 @@ public class CvsFile implements Comparable {
 		return getLatestRevision().getLines();
 	}
 	
+	/**
+	 * Returns the current number of lines for this file on a named branch.
+     * Binary filesand deleted files are assumed to have 0 lines.
+     * @param branchName the name of the branch
+	 * @return the current number of lines for this file on the named branch
+	 */
+	public int getCurrentLinesOfCode(String branchName) {
+		return getLatestRevision(branchName).getLines();
+	}
+
 	/**
 	 * Returns <code>true</code> if the latest revision of this file was
 	 * a deletion.
@@ -134,6 +178,15 @@ public class CvsFile implements Comparable {
 		return getLatestRevision().isDead();
 	}
 	
+	/**
+	 * Returns <code>true</code> if the latest revision of this file on the branch was
+	 * a deletion.
+	 * @return <code>true</code> if this file is deleted
+	 */
+    public boolean isDead(String branchName) {
+        return getLatestRevision(branchName).isDead();
+    }
+
 	/**
 	 * Returns true, if <code>author</code> worked on this file.
 	 * @param author The <code>Author</code> to search for
@@ -152,6 +205,7 @@ public class CvsFile implements Comparable {
 	 * @return this revision's predecessor
 	 */
 	public CvsRevision getPreviousRevision(CvsRevision revision) {
+		SortedSet revisions = getRevisions(revision.getMainBranch().getName());
 		if (!revisions.contains(revision)) {
 			throw new IllegalArgumentException("revision not containted in file");
 		}
@@ -187,9 +241,9 @@ public class CvsFile implements Comparable {
 	 * @param comment the commit message
 	 * @param lines the number of lines of the new file
 	 */
-	public CvsRevision addInitialRevision(String revisionNumber, Author author,
+	public CvsRevision addInitialRevision(CvsBranch mainBranch, String revisionNumber, Author author,
 									Date date, String comment, int lines, SortedSet symbolicNames) {
-		CvsRevision result = new CvsRevision(this, revisionNumber,
+		CvsRevision result = new CvsRevision(this, mainBranch, revisionNumber,
 				CvsRevision.TYPE_CREATION, author, date, comment,
 				lines, lines, 0, symbolicNames);
 		addRevision(result);
@@ -206,10 +260,10 @@ public class CvsFile implements Comparable {
 	 * @param linesDelta the change in the number of lines
 	 * @param replacedLines number of lines that were removed and replaced by others
 	 */
-	public CvsRevision addChangeRevision(String revisionNumber, Author author,
+	public CvsRevision addChangeRevision(CvsBranch mainBranch, String revisionNumber, Author author,
 								  Date date, String comment, int lines,
 								  int linesDelta, int replacedLines, SortedSet symbolicNames) {
-		CvsRevision result = new CvsRevision(this, revisionNumber,
+		CvsRevision result = new CvsRevision(this, mainBranch, revisionNumber,
 				CvsRevision.TYPE_CHANGE, author, date, comment,
 				lines, linesDelta, replacedLines, symbolicNames);
 		addRevision(result);
@@ -224,9 +278,9 @@ public class CvsFile implements Comparable {
 	 * @param comment the commit message
 	 * @param lines the number of lines in the file before it was deleted
 	 */
-	public CvsRevision addDeletionRevision(String revisionNumber, Author author,
+	public CvsRevision addDeletionRevision(CvsBranch mainBranch, String revisionNumber, Author author,
 									Date date, String comment, int lines, SortedSet symbolicNames) {
-		CvsRevision result = new CvsRevision(this, revisionNumber,
+		CvsRevision result = new CvsRevision(this, mainBranch, revisionNumber,
 				CvsRevision.TYPE_DELETION, author, date, comment,
 				0, -lines, 0, symbolicNames);
 		addRevision(result);
@@ -241,8 +295,8 @@ public class CvsFile implements Comparable {
 	 * @param date the begin of the log
 	 * @param lines the number of lines in the file at that time
 	 */
-	public CvsRevision addBeginOfLogRevision(Date date, int lines, SortedSet symbolicNames) {
-		CvsRevision result = new CvsRevision(this, "0.0",
+	public CvsRevision addBeginOfLogRevision(CvsBranch mainBranch, Date date, int lines, SortedSet symbolicNames) {
+		CvsRevision result = new CvsRevision(this, mainBranch, "0.0",
 				CvsRevision.TYPE_BEGIN_OF_LOG, null, date, null,
 				lines, 0, 0, symbolicNames);
 		addRevision(result);
@@ -250,7 +304,15 @@ public class CvsFile implements Comparable {
 	}
 
 	private void addRevision(CvsRevision revision) {
-		revisions.add(revision);
+		CvsBranch branch = revision.getMainBranch();
+		// TODO review
+		TreeSet branchRevisions = (TreeSet)revisionsByBranchName.get(branch.getName());
+			//((branch.getName() != null) ? branch.getName() : CvsLogUtils.HEAD_BRANCH_NAME);
+		if (branchRevisions == null) {
+			branchRevisions = new TreeSet();
+			revisionsByBranchName.put(branch.getName(), branchRevisions);
+		}
+		branchRevisions.add(revision);
 		if (revision.getAuthor() != null) {
 			authors.add(revision.getAuthor());
 		}
