@@ -15,7 +15,7 @@
   \item Plugin
   \item Test
   \item Touchstone 
-  \item Touchstone partner
+  \item Touchstone Partner
   \end{itemize}
 }
 
@@ -74,7 +74,8 @@
   \item Prüft den Source Code anhand von Regeln
   \item Bericht enthält Links auf Fehlerzeile im XRef
   \item Konfiguration über eine Properties Datei
-  \item CVS Version benutzt CheckStyle 3.3 anstatt 2.1 
+  \item Mit Maven 1.0-rc1 ausgelieferte Version benutzt veraltetes
+  CheckStyle 2.1 (CVS Version benutzt bereits 3.3)
   \end{itemize}
   
   \begin{block}{Konfiguration (project.properties)}
@@ -88,13 +89,15 @@ maven.checkstyle.properties = mystyle.properties\end{alltt}
 
   {\bf Jalopy Plugin}
   \begin{itemize}
-  \item Formatiert Source Code ahand von Regeln
+  \item Formatiert Source Code anhand von Regeln
   \item Transformiert unter anderem
     \begin{itemize}
     \item Geschweifte Klammern
-    \item Leerzeichen
+    \item Leerzeichen und -zeilen
+	\item Einrückungen
     \item Zeilenumbrüche
     \end{itemize}
+  \item Kann JavaDoc Kommentare, Kopf- und Fusszeilen generieren
   \end{itemize}
 
   \begin{block}{Konfiguration (project.properties)}
@@ -115,6 +118,7 @@ maven.checkstyle.properties = mystyle.properties\end{alltt}
     \item Leere if-Anweisungen, 
     \item Duplizierte import Anweisungen
     \item Nicht benutzte private Methoden
+	\item Cyclomatic Complexity
     \end{itemize}
   \item Anpassung über vordefinierte Regeldateien
   \end{itemize}
@@ -122,7 +126,7 @@ maven.checkstyle.properties = mystyle.properties\end{alltt}
   \begin{block}{Konfiguration (project.properties)}
     \begin{alltt}maven.pmd.rulesetfiles
   = \${plugin.resources}/rulesets/strings.xml,
-    \${plugin.resources}/rulesets/junit.xml\end{alltt}
+    \${plugin.resources}/rulesets/junit.xml, ...\end{alltt}
   \end{block}
 }
 
@@ -249,8 +253,8 @@ maven.checkstyle.properties = mystyle.properties\end{alltt}
   \begin{itemize}
   \item Erzeugt Metriken aus dem CVS Log
     \begin{itemize}
-    \item Anzahl der Lines of Code pro Autor
-    \item CVS Commit Log (ähnlich dem ChangeLog Plugin)
+    \item Anzahl der Lines of Code pro Entwickler
+    \item Commit Log (ähnlich dem ChangeLog Plugin)
     \item Anzahl der Dateien
     \item Grösse der Dateien
     \item Grösse der Module
@@ -270,7 +274,7 @@ maven.checkstyle.properties = mystyle.properties\end{alltt}
 
   {\bf License Plugin}
   \begin{itemize}
-  \item Zeigt die Lizenz in einer Rahmen an
+  \item Zeigt die Lizenz an
   \end{itemize}
 
   \begin{block}{Konfiguration (project.properties)}
@@ -301,7 +305,7 @@ xsltproc changes.xsl xdocs/changes.xml | fold -s
   {\bf Ant Plugin} [ant]
   \begin{itemize}
   \item Erzeugt eine build.xml Datei für Ant
-  \item Hilfreich für builds, wenn Maven nicht verfübgar ist
+  \item Hilfreich für Builds, wenn Maven nicht verfügbar ist
   \end{itemize}
 
   \vspace{0.5cm}
@@ -309,15 +313,15 @@ xsltproc changes.xsl xdocs/changes.xml | fold -s
   {\bf Eclipse Plugin} [eclipse]
   \begin{itemize}
   \item Generierung von Eclipse Projekt Dateien
-  \item Berücksichtigung aller Dependencies
+  \item Berücksichtigung aller Abhängigkeiten
   \item Anlegen der MAVEN\_HOME Variable in Eclipse notwendig
   \end{itemize}
 
   \vspace{0.5cm}
   
-  {\bf SouceForge Plugin} [sourceforge:deploy-dist]
+  {\bf SourceForge Plugin} [sourceforge:deploy-dist]
   \begin{itemize}
-  \item Uploaded und Released (!) Files auf SourceForge
+  \item Uploaded und Released (!) Dateien auf SourceForge
   \end{itemize}
 
 }  
@@ -328,10 +332,9 @@ xsltproc changes.xsl xdocs/changes.xml | fold -s
 
   {\bf Console Plugin} [console]
   \begin{itemize}
-  \item Konsoleneingabe zum Aufruf von Goals
-  \item Schnelles sukessives Aufrufen von Goals
+  \item Schnelles sukzessives Aufrufen von Goals über eine Konsole
   \item Unzureichende Speicherfreigabe führt nach mehrmaligem Goal
-    Aufruf zu OutOfMemory exception
+    Aufruf zu OutOfMemory Fehlern
   \end{itemize}
 
   \vspace{0.5cm}

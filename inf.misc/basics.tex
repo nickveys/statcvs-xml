@@ -7,9 +7,9 @@
     \frametitle{Apache Maven}
     \begin{itemize}
         \item Build-Werzeug mit Projektverständnis
-        \item in Java entwickelt
-        \item gestartet von Jason van Zyl als Subprojekt von Apache Turbine
-        \item inziwschen Toplevel-Projekt bei der ASF
+        \item In Java entwickelt
+        \item Gestartet von Jason van Zyl als Subprojekt von Apache Turbine
+        \item Inzwischen Toplevel-Projekt bei der ASF
         \item Basiert auf Jelly (XML Scripting Engine) %vorher antbasiert
         \item Plugin-Architektur %java halt
     \end{itemize}
@@ -46,9 +46,9 @@
 	\end{enumerate}
 }
 
-\subsection{Start}
+\subsection{Projekt anlegen}
 \frame{
-    \frametitle{Neues Projekt starten}
+    \frametitle{Neues Projekt anlegen}
     Es gibt 2 Möglichkeiten, mit Maven zu beginnen:
     \begin{itemize}
         \item Manuell
@@ -56,7 +56,7 @@
     \end{itemize}
     \vspace{0.5cm}
     \begin{block}{Projekt anlegen lassen}
-        vanto@marvin > maven genapp
+      vanto@marvin > maven genapp
     \end{block}
     \vspace{0.5cm}
     \uncover<2>{\bf Demonstration}
@@ -95,13 +95,13 @@ statcvs-xml
     \frametitle{Projekt Object Model (POM)}
 
 	Das POM wird in der Datei project.xml im Projektverzeichnis
-	definiert und enthält Projekt-Metadaten.
+	definiert und enthält Projekt-Metadaten:
 
     \begin{itemize}
     \item Projektname, -version, -beschreibung, -lizenz
-    \item Projekt-Homepage, URL des Issue-Trackers und der Mailinglisten
-    \item CVS-Repository (Versionen, Branches)
-    \item Projekt-Team
+    \item URL der Projekt-Homepage, des Issue-Trackers und der Mailinglisten
+    \item CVS-Repository (Release Tags, Branches)
+    \item Projekt-Team Mitglieder
     \item Dependencies (Bibliotheken)
     \item (Re-)Source-Verzeichnisse
     \item Projekt-Reports
@@ -159,7 +159,7 @@ statcvs-xml
 
 \frame[all:1]{
     \frametitle{Dokumentation}
-    Sämtliche Projektdokumentation in {\bf xdoc}
+    Sämtliche Projektdokumentation erfolgt mit {\bf xdocs}
     \begin{itemize}
         \item Erweitertes (X)HTML
         \item Muss well-formed sein
