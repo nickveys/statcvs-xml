@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: DirectorySizesDocument.java,v $ 
-	Created on $Date: 2003-06-18 23:10:53 $ 
+	Created on $Date: 2003-06-19 23:56:28 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -53,7 +53,6 @@ public class DirectorySizesDocument extends StatCvsDocument {
 		super(I18n.tr("Module Sizes"), "dir_sizes");
 
 		cvsContent = content;
-		
 		getRootElement().addContent(getModulesReport());
 	}
 
@@ -71,8 +70,8 @@ public class DirectorySizesDocument extends StatCvsDocument {
 		IntegerMap dirChanges = new IntegerMap();
 		IntegerMap dirLoC = new IntegerMap();
 
-		Element report = new Element("report");
-		report.setAttribute("name", "Module Sizes");
+		Element report = new ReportElement(I18n.tr("Module Sizes"));
+
 		report.addContent(new Element("img")
 			.setAttribute("src", "module_sizes.png"));
 
