@@ -29,6 +29,7 @@ import java.util.NoSuchElementException;
 import java.util.SortedSet;
 import java.util.regex.Pattern;
 
+import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
@@ -46,8 +47,9 @@ import org.jdom.Element;
 
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.WebRepositoryFactory;
-import de.berlios.statcvs.xml.model.*;
+import de.berlios.statcvs.xml.model.ForEachObject;
 import de.berlios.statcvs.xml.model.Grouper;
+import de.berlios.statcvs.xml.model.Module;
 import de.berlios.statcvs.xml.util.ScriptHelper;
 
 /**
@@ -551,4 +553,16 @@ public class ReportSettings extends Hashtable {
 		return null;
 	}
 
+	public String getFullname(Author author)
+	{
+		Object o = get("authors", null);
+		if (o instanceof Map) {
+			Map map = (Map)o;
+			String full = (String)map.get(author.getName());
+
+			return (full == null)?author.getName():full;
+		} else {
+			return author.getName();
+		}
+	}
 }

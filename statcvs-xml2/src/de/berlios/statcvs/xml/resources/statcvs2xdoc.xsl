@@ -142,7 +142,7 @@
   <xsl:template match="row/author">
     <td>
         <xsl:call-template name="func:make-link">
-			<xsl:with-param name="text" select="@name"/>
+			<xsl:with-param name="text" select="@fullname"/>
 			<xsl:with-param name="localurl" select="ds:getAuthorFilename(@name)"/>
         </xsl:call-template>
      </td>

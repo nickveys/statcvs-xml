@@ -203,7 +203,11 @@ public class TableElement extends Element
 		
 		public RowElement addAuthor(Author author) 
 		{
-			addContent(new Element("author").setAttribute("name", author.getName()));
+			Element authEl = new Element("author");
+			authEl.setAttribute("name", author.getName());
+			authEl.setAttribute("fullname", settings.getFullname(author));
+			addContent(authEl);
+											
 			return this;
 		}
 		
