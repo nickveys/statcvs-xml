@@ -29,18 +29,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.Directory;
-
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
-
 import de.berlios.statcvs.xml.model.AuthorGrouper;
+import de.berlios.statcvs.xml.model.BranchGrouper;
 import de.berlios.statcvs.xml.model.DayGrouper;
 import de.berlios.statcvs.xml.model.DirectoryGrouper;
 import de.berlios.statcvs.xml.model.FileGrouper;
@@ -168,6 +166,9 @@ public class DocumentSuite {
 		String value = reportSettings.getString("groupby", null);
 		if ("author".equals(value)) {
 			reportSettings.setGrouper(new AuthorGrouper());
+		}
+		else if ("branch".equals(value)) {
+			reportSettings.setGrouper(new BranchGrouper());
 		}
 		else if ("day".equals(value)) {
 			reportSettings.setGrouper(new DayGrouper());

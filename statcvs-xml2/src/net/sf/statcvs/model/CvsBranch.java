@@ -6,7 +6,7 @@ import net.sf.statcvs.util.CvsLogUtils;
 /**
  * This class represents a branch in CVS repository
  */
-public class CvsBranch {
+public class CvsBranch implements Comparable {
 
     private final String name;
 	private final TreeSet revisions = new TreeSet();
@@ -21,6 +21,11 @@ public class CvsBranch {
     public CvsBranch() {
         this(CvsLogUtils.HEAD_BRANCH_NAME);
     }
+
+	public int compareTo(Object o) {
+		// FIXME comparison by date would make more sense 
+		return getName().compareTo(((CvsBranch)o).getName());
+	}
 
     public String getName() {
         return name;

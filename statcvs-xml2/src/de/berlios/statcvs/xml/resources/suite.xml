@@ -52,6 +52,11 @@
     <report class="ActivityProgressionChart" groupby="module"/>
     <report class="CommitTable" groupby="module" orderby="loc"/>
   </document>
+
+  <document  filename="branch_stats" title="Branch Statistics">
+    <report class="LocChart" groupby="branch"/>
+    <report class="CommitTable" groupby="branch" orderby="loc"/>
+  </document>
     
   <document filename="commitlog" title="Commit Log">
 	<report class="MostCommonCommentsTable" limit="5"/>

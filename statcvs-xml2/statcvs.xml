@@ -8,7 +8,8 @@
     <projectName>StatCVS-XML</projectName>
     <outputDir>xdocs/statcvs-xml</outputDir>
     <renderer>xdoc</renderer>
-    <include>src/de/berlios/statcvs/xml/**/*.java</include>
+	<include>**/*.java</include>
+<!--    <include>src/de/berlios/statcvs/xml/**/*.java</include> -->
 <!--    <include>xdocs/**/statcvs*.png</include> -->
     <modules type="map">
       <setting key="Report">**/report/*</setting>
@@ -17,5 +18,12 @@
     </modules>
     <setting key="commitlog.MostCommonCommentsTable.limit">10</setting>
     <setting key="evolution.EvolutionMatrixChart.showImagemap">true</setting>
+	<suite>statcvs.xml</suite>
   </settings>
+
+  <document  filename="branch_stats" title="Branch Statistics">
+    <report class="LocChart" groupby="branch"/>
+    <report class="CommitTable" groupby="branch" orderby="loc"/>
+  </document>
+
 </statcvs>
