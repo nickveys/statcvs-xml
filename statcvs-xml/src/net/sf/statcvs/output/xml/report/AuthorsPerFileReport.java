@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorsPerFileReport.java,v $
-	$Date: 2003-07-04 21:52:34 $ 
+	$Date: 2003-07-04 22:27:16 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -74,7 +74,7 @@ public class AuthorsPerFileReport extends ReportElement {
 			while (authors.hasNext()) {
 				Author author = (Author) authors.next();
 				if (file.hasAuthor(author)) {
-					filesMap.inc(file);
+					filesMap.addInt(file,1);
 				}
 			}
 		}

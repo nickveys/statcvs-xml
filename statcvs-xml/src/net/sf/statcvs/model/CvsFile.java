@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsFile.java,v $ 
-	Created on $Date: 2003-06-17 16:43:02 $ 
+	Created on $Date: 2003-07-04 22:27:16 $ 
 */
 package net.sf.statcvs.model;
 
@@ -31,9 +31,9 @@ import java.util.List;
  * 
  * @author Manuel Schulze
  * @author Richard Cyganiak
- * @version $Id: CvsFile.java,v 1.1 2003-06-17 16:43:02 vanto Exp $
+ * @version $Id: CvsFile.java,v 1.2 2003-07-04 22:27:16 vanto Exp $
  */
-public class CvsFile {
+public class CvsFile implements Comparable {
 	private String workingname;
 	private boolean isInAttic;
 	private boolean isBinary;
@@ -220,5 +220,15 @@ public class CvsFile {
 			+ "\n"
 			+ "Revisions            : "
 			+ this.revisions;
+	}
+
+	/**
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	public int compareTo(Object o) {
+		CvsFile to = (CvsFile)o;
+		String thisStr = getFilenameWithPath()+getLatestRevision()+getRevisions().size();
+		String toString = to.getFilenameWithPath()+to.getLatestRevision()+to.getRevisions().size();
+		return thisStr.compareTo(toString);
 	}
 }
