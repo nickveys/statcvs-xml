@@ -58,7 +58,7 @@ public abstract class AbstractStackedChart extends AbstractChart {
 
 	public int getPreferredHeigth()
 	{
-		return 30 * dataset.getRowCount() + 150;
+		return 30 * dataset.getColumnCount() + 150;
 	}
 	
 }

@@ -56,13 +56,15 @@ public class ActivityProgressionChart extends AbstractChart {
 		this.settings = settings;
 
 		setChart(createContourPlot());
-		setup(true);
+		if (getChart() != null) {
+			setup(true);
+		}
 	}
 
 	public static Report generate(CvsContent content, ReportSettings settings)
 	{
-		return new Report(new ChartReportElement(
-			new ActivityProgressionChart(content, settings)));
+		ActivityProgressionChart chart = new ActivityProgressionChart(content, settings);
+		return (chart.getChart() != null) ? new Report(new ChartReportElement(chart)) : null;
 	}
 	
 	private JFreeChart createContourPlot() 
@@ -76,6 +78,9 @@ public class ActivityProgressionChart extends AbstractChart {
 		this.groupCount = groupNames.size();
 		
 		ContourDataset data = createDataset(grouper);
+		if (data == null) {
+			return null;
+		}
 		
 		ValueAxis xAxis = new DateAxis(I18n.tr("Date"));
 		
@@ -96,6 +101,8 @@ public class ActivityProgressionChart extends AbstractChart {
 	private ContourDataset createDataset(Grouper grouper)
 	{
 		Hashtable mapByDate = new Hashtable();
+		// define 100% to be correlate at least to 1
+		int max = 1;
 		
 		Date currentDate = null;
 		IntegerMap commitsPerGroup = new IntegerMap();
@@ -107,6 +114,7 @@ public class ActivityProgressionChart extends AbstractChart {
 				currentDate = date;
 			}
 			else if (!date.equals(currentDate)) {
+				max = Math.max(commitsPerGroup.max(), max);
 				mapByDate.put(currentDate, commitsPerGroup);
 				commitsPerGroup = new IntegerMap();
 				currentDate = date;
@@ -115,11 +123,16 @@ public class ActivityProgressionChart extends AbstractChart {
 		}
 
 		if (currentDate != null) {
+			max = Math.max(commitsPerGroup.max(), max);
 			mapByDate.put(currentDate, commitsPerGroup);
 		}
 		
 		int dateCount = mapByDate.size();
 		int numValues = dateCount * groupCount;
+		if (numValues == 0) {
+			return null;
+		}
+		
 		Date[] oDateX = new Date[numValues];
 		Double[] oDoubleY = new Double[numValues];
 		Double[] oDoubleZ = new Double[numValues];
@@ -135,17 +148,17 @@ public class ActivityProgressionChart extends AbstractChart {
 				int index = (x * groupCount) + y;
 				oDateX[index] = date;
 				oDoubleY[index] = new Double(y);
-				double value = ((IntegerMap)mapByDate.get(date)).getPercentOfMaximum(group);
+				double value = (double)((IntegerMap)mapByDate.get(date)).get(group) * 100.0 / max;
 				oDoubleZ[index] = (value != 0) ? new Double(value) : null;
 			}
 		}
-		oDoubleZ[0] = new Double(0.0);				
+				
 		return new DefaultContourDataset(null, oDateX, oDoubleY, oDoubleZ);		
 	}
 
 	public int getPreferredHeigth() 
 	{
-		return 150 + groupCount * 30;
+		return 150 + groupCount * 24;
 	}
 
 }

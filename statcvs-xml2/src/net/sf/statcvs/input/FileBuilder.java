@@ -193,9 +193,10 @@ public class FileBuilder {
 		if (isBinary) {
 			return 0;
 		}
-//		if (finalRevisionIsDead()) {
-//			return approximateFinalLOC();
-//		}
+		else if (lastAdded.isAddOnSubbranch()) {
+			return locDelta;
+		}
+
 		String revision = null;
 		try {
 			revision = builder.getRevision(name);
@@ -208,7 +209,7 @@ public class FileBuilder {
 			
 		try {
 			if ("1.1".equals(revision)) {
-				return (lastAdded.isAddOnSubbranch()) ? locDelta : builder.getLOC(name) + locDelta;
+				return builder.getLOC(name) + locDelta;
 			}
 			else {
 				RevisionData firstAdded = (RevisionData)revisions.get(0);
