@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<document>
+
+<properties>
+ <title>Customizing</title>
+</properties>
+
+<body>
+
+  <section name="Introduction">
+
+    <p>StatCvs-XML features a highly customizable report generator
+    that is configurable through an XML file. This document describes
+    the structure of the XML file.</p>
+
+    <p>If you are not familiar with the StatCvs-XML jargon like
+    domain, view and grouping, please read about the <a
+    href="concepts.html"> concepts</a> first.</p>
+
+  </section>
+
+  <section name="Structure">
+
+    <p>The XML file is divided in document sections that each describe
+    a file that aggregates a set of reports.</p>
+
+  </section>
+
+</body>
+
+</document>
+  

@@ -55,7 +55,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.18 2004-03-01 21:21:12 squig Exp $
+ * @version $Id: Main.java,v 1.19 2004-03-05 02:07:15 squig Exp $
  */
 public class Main {
 
@@ -223,7 +223,7 @@ public class Main {
 			settings.put("projectName", builder.getProjectName());
 		}
 		new CvsLogfileParser(logReader, builder).parse();
-		CvsContent content = builder.createCvsContent(settings.getBoolean("useHistory", false));
+		CvsContent content = builder.createCvsContent();
 
 		File outDir = settings.getOutputPath();
 		if (!outDir.exists() && !outDir.mkdirs()) {

@@ -27,9 +27,9 @@
     <connection>
       scm:cvs:pserver:anonymous@cvs.berlios.de:/cvsroot/statcvs-xml:statcvs-xml2
     </connection>
-    <developerConnection>scm:cvs:ext:${maven.username}@cvs.sf.net:/cvsroot/statcvs-xml:statcvs-xml</developerConnection>
+    <developerConnection>scm:cvs:ext:${maven.username}@cvs.sf.net:/cvsroot/statcvs-xml:statcvs-xml2</developerConnection>
     <url>
-      http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml/
+      http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml2/
     </url>
   </repository>
 

@@ -1,0 +1,222 @@
+<?xml version="1.0"?>
+
+  <document>
+
+	<properties>
+	  <title>Manual</title>
+	</properties>
+
+	<body>
+
+	  <section name="Introduction">
+
+        <p>This is the StatCvs-XML manual. Please see the <a
+        href="http://statcvs-xml.berlios.de/">StatCvs-XML</a> pages
+        for a general introduction to the program.</p>
+
+        <p>This manual is based on the <a
+        href="http://statcvs.sf.net/manual/">StatCvs Manual</a>.</p>
+
+	  </section>
+
+	  <section name="Prerequisites">
+
+		<p>To run StatCvs-XML you need:
+
+          <ul>
+            <li>
+              <b>Java version 1.4</b> or above. Type <tt>java
+              -version</tt> on the command line to see your Java
+              version. See the <a href="http://java.sun.com/">Java</a>
+              pages for a recent Java Runtime Environment (JRE).
+            </li>
+            <li>
+              <b>The CVS client</b> for creating CVS logfiles. Both <a
+              href="http://www.cvshome.org/">CVS</a> (for Unix) and <a
+              href="http://www.cvsnt.org/">CVSNT</a> (for Windows) are
+              supported.
+            </li>
+          </ul>
+		</p>
+
+	  </section>
+
+	  <section name="Quickstart">
+
+		<p>
+          It takes three steps to create reports for a CVS module:
+
+          <ol>
+            <li>Check out a copy of the module from CVS</li>
+            <li>Create a CVS log for the module</li>
+            <li>Run StatCvs-XML</li>
+          </ol>         
+        </p>
+
+        <subsection name="Checking out a module from CVS">
+
+          <p>
+            You can skip this step if you have already checked out a
+            working copy. Typically, the command looks somewhat like
+            this (replace <tt>[cvsroot]</tt> and <tt>[module]</tt> 
+            with the cvs module and root you want to check out):
+          </p>
+
+          <p>
+            <tt>cvs -d[cvsroot] checkout [module]</tt>
+          </p>
+
+        </subsection>
+
+        <subsection name="Creating a CVS log file">
+ 
+          <p>
+            Change into the directory where you have checked out the
+            module, and use the <tt>cvs log</tt> command to create a
+            log file.
+          </p>
+
+          <p>
+            <tt>cvs log &gt; cvs.log</tt>
+          </p>
+
+        </subsection>
+
+        <subsection name="Running StatCvs">
+
+          <p>
+            StatCvs is run using the command:
+          </p>
+
+          <p><tt>java -jar statcvs-xml-full.jar</tt></p>
+
+          <p>
+            This will generate the reports in the html documents in a
+            directory <tt>statcvs-xml-out/</tt>. The directory
+            will be created if it does not exist, yet. Point your
+            browser to <tt>statcvs-xml-out/index.html</tt> to access
+            the table of contents of the generated reports.
+          </p>
+
+        </subsection>
+
+	  </section>
+	  
+	  <section name="Command Line Options">
+
+        <p>
+          StatCvs-XML can be configured through a file named <a
+          href="settings.html"><tt>statcvs.xml</tt></a> that needs to
+          located in the directory where StatCVS-XML is started or
+          through the command line. The command line options overwrite
+          the settings made in <tt>statcvs.xml</tt>. Run StatCvs-XML
+          like this:
+        </p>
+
+        <p>
+          <tt>java -jar statcvs.jar [options] [logfile
+          [working-directory]]</tt>
+        </p>
+
+        <p>
+          See below for a list of the most important command line
+          options. Run StatCvs-XML with the <tt>-help</tt> options to
+          see a list of all options.
+        </p>
+        
+        <p>
+          <dl>
+            <dt><tt>-output-dir directory</tt></dt>
+            <dd>
+              Specify an output directory. The reports will be
+              generated in this directory. The directory will be
+              created if it does not exist.
+            </dd>
+
+           <dt>
+             <tt>-include include-pattern-list</tt><br/>
+             <tt>-exclude exclude-pattern-list</tt>
+           </dt>
+           <dd>
+             <p>
+               Specify filters to exclude files from the analysis. A
+               file will be ignored if it doesn't match any of the
+               patterns in <tt>include-pattern-list</tt>, or if it
+               matches any pattern in
+               <tt>exclude-pattern-list</tt>.
+             </p> 
+
+             <p>
+               The patterns are lists of <a
+               href="http://ant.apache.org/">Apache Ant</a>-style
+               wildcard patterns, seperated by colons or
+               semicolons. The wildcards are:
+             </p>
+
+             <p>
+               <ul>
+                 <li>'?' matches a single character</li>
+                 <li>'*' matches zero or more characters</li>
+                 <li>'**' matches zero or more directories</li>
+               </ul>
+             </p>
+
+             <p>For example, <tt>src/**/*.java</tt> matches all java
+             files in the <tt>src</tt> directory or its
+             subdirectories. Note that <tt>*.java</tt> only matches
+             java files in the root directory, because '*' does not
+             match subdirectories.</p>
+
+             <p>One more example:</p>
+
+             <p><pre>-include **/*.c;**/*.h -exclude legacy/**</pre></p>
+
+             <p>This matches all <tt>.c</tt> and <tt>.h</tt> files
+             anywhere in the directory tree except those in the
+             <tt>legacy</tt> directory and its subdirectories.</p>
+
+             <p>For more information on Ant's wildcard syntax, see the
+             <a
+             href="http://ant.apache.org/manual/dirtasks.html#patternset">Patternset
+             section of the Ant manual</a>.</p>
+
+             <p>If not specified, all files will be included and no
+             files will be excluded.</p>
+           </dd>
+
+           <dt><tt>-title title</tt></dt>
+           <dd>
+             <p>Specifies a display title to be used in the
+             reports. The name of the CVS module will be used as
+             default if no title is specified.</p>
+           </dd>
+
+           <dt><tt>-weburl url</tt></dt>
+           <dd>
+             <p>Specify the URL of a web repository like ViewCvs,
+             WebCvs or Chora. This must be the URL of the page for the
+             module's root directory. StatCvs will create links to
+             ViewCVS for directories, files and revisions.</p>
+           </dd>
+
+           <dt><tt>-renderer renderer</tt></dt>
+           <dd>
+             <p>Specify the document renderer. Useful values include
+             html, xdoc and xml. You can also specifiy a full
+             qualified name of a Java class, that is available in the
+             classpath.</p>
+           </dd>
+
+           <dt><tt>-document-suite &lt;filename&gt;</tt></dt>
+           <dd>
+             <p>Specify the document suite. The default is
+             <tt>resources/suite.xml</tt>.</p>
+           </dd>
+          </dl>
+        </p>
+
+      </section>
+
+	</body>
+  </document>
+  

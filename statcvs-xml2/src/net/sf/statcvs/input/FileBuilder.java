@@ -22,6 +22,7 @@
 */
 package net.sf.statcvs.input;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -114,7 +115,7 @@ public class FileBuilder {
 	 * @param beginOfLogDate the date of the begin of the log
 	 * @return a <tt>CvsFile</tt> representation of the file.
 	 */
-	public CvsFile createFile(Date beginOfLogDate, boolean filesHaveInitialRevision) {
+	public CvsFile createFile(Date beginOfLogDate) {
 		if (isFilteredFile() || !fileExistsInLogPeriod()) {
 			return null;
 		}
@@ -125,13 +126,13 @@ public class FileBuilder {
 		CvsFile file = new CvsFile(name, builder.getDirectory(name));
 
 		if (revisions.isEmpty()) {
-			buildBeginOfLogRevision(file, beginOfLogDate, getFinalLOC(filesHaveInitialRevision), null);
+			buildBeginOfLogRevision(file, beginOfLogDate, getFinalLOC(), null);
 			return file;
 		}
 
 		Iterator it = revisions.iterator();
 		RevisionData currentData = (RevisionData) it.next();
-		int currentLOC = getFinalLOC(filesHaveInitialRevision);
+		int currentLOC = getFinalLOC();
 		RevisionData previousData;
 		int previousLOC;
         SortedSet symbolicNames;
@@ -188,18 +189,32 @@ public class FileBuilder {
 	 *  
 	 * @return the LOC count for the file's most recent revision.
 	 */
-	private int getFinalLOC(boolean filesHaveInitialRevision) {
+	private int getFinalLOC() {
 		if (isBinary) {
 			return 0;
 		}
 //		if (finalRevisionIsDead()) {
 //			return approximateFinalLOC();
 //		}
+		String revision = null;
 		try {
-			if (filesHaveInitialRevision) {
+			revision = builder.getRevision(name);
+		}
+		catch (IOException e) {
+			if (!finalRevisionIsDead()) {
+				logger.warning(e.getMessage());
+			}
+		}
+			
+		try {
+			if ("1.1".equals(revision)) {
 				return (lastAdded.isAddOnSubbranch()) ? locDelta : builder.getLOC(name) + locDelta;
 			}
 			else {
+				RevisionData firstAdded = (RevisionData)revisions.get(0);
+				if (!finalRevisionIsDead() && !firstAdded.getRevisionNumber().equals(revision)) {
+					logger.warning("Revision of local file does not match expected revision");
+				}
 				return builder.getLOC(name);
 			}
 		} catch (NoLineCountException e) {

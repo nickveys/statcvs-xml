@@ -22,6 +22,7 @@
 */
 package net.sf.statcvs.input;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -142,7 +143,7 @@ public class Builder implements CvsLogBuilder {
 	 * @throws EmptyRepositoryException if no adequate files were found in the
 	 * log.
 	 */
-	public CvsContent createCvsContent(boolean filesHaveInitialRevision) throws EmptyRepositoryException {
+	public CvsContent createCvsContent() throws EmptyRepositoryException {
 		if (currentFileBuilder != null) {
 			fileBuilders.add(currentFileBuilder);
 			currentFileBuilder = null;
@@ -155,7 +156,7 @@ public class Builder implements CvsLogBuilder {
 		Iterator it = fileBuilders.iterator();
 		while (it.hasNext()) {
 			FileBuilder fileBuilder = (FileBuilder) it.next();
-			CvsFile file = fileBuilder.createFile(startDate, filesHaveInitialRevision);
+			CvsFile file = fileBuilder.createFile(startDate);
 			if (file == null) {
 				continue;
 			}
@@ -248,6 +249,15 @@ public class Builder implements CvsLogBuilder {
 		return repositoryFileManager.getLinesOfCode(filename);
 	}
 
+	/**
+	 * @see RepositoryFilemanager.getRevision(String)
+	 */
+	public String getRevision(String filename) throws IOException {
+		if (repositoryFileManager == null) {
+			throw new IOException("no RepositoryFileManager");
+		}
+		return repositoryFileManager.getRevision(filename);
+	}
 	
 	/**
 	 * Matches a filename against the include and exclude patterns. If no

@@ -3,19 +3,15 @@
 <document>
 
 <properties>
- <title>Customizing</title>
+ <title>Concepts</title>
 </properties>
 
 <body>
 
   <section name="Introduction">
 
-  <p>
-    StatCvs-XML features a highly customizable report generator. The
-    set of reports can be customized through an XML file. The XML file
-    is divided in document sections that each describe a file that
-    aggregates a set of reports. 
-  </p>
+  <p>The following sections describe concepts used by StatCvs-XML to
+  generate reports.</p>
 
   </section>
 
