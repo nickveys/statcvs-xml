@@ -28,7 +28,7 @@
       settings. Please see the <a
       href="http://statcvs-xml.berlios.de/manual/settings.html">StatCvs-XML
       manual</a> for configuration options. Please see the <a
-      href="/properties.html">properties page</a> for settings that
+      href="properties.html">properties page</a> for settings that
       can be configured through the StatCvs Maven plugin.</p>
  
     </section>
