@@ -40,7 +40,7 @@
        <td><a href="user_{@name}.html"><xsl:value-of select="@name"/></a></td>
        <td>
          <xsl:value-of select="@loc"/>
-         (<xsl:value-of select="@locPercent"/>%)
+         (<xsl:value-of select="@locPercent"/>)
        </td>
      </tr>
   </xsl:template>
@@ -140,11 +140,11 @@
        <td><xsl:value-of select="@name"/></td>
        <td>
          <xsl:value-of select="@changes"/>
-         (<xsl:value-of select="@changesPercent"/>%)
+         (<xsl:value-of select="@changesPercent"/>)
        </td>
        <td>
          <xsl:value-of select="@lines"/> 
-         (<xsl:value-of select="@linesPercent"/>%)
+         (<xsl:value-of select="@linesPercent"/>)
        </td>
        <td><xsl:value-of select="@linesPerChange"/></td>
      </tr>

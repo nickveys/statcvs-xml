@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorsDocument.java,v $ 
-	Created on $Date: 2003-06-20 00:37:24 $ 
+	Created on $Date: 2003-06-20 00:54:41 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -39,32 +39,22 @@ import org.jdom.Element;
 import com.jrefinery.data.BasicTimeSeries;
 
 /**
- * The index document. Contains links to all other documents.
+ * The authors document. Contains links to all author documents.
  * 
  * @author Steffen Pingel
  */
-public class IndexDocument extends StatCvsDocument {
+public class AuthorsDocument extends StatCvsDocument {
 
-	private Author author;
 	private CvsContent content;
 	
 	/**
 	 */
-	public IndexDocument(CvsContent content, Author author) {
+	public IndexDocument(CvsContent content) {
 		super("User statistics for " 
-			  + content.getModuleName(), "index");
+			  + content.getModuleName(), "authors");
 
 		this.content = content;
-		this.author = author;
 
-		getRootElement.addContent(new PeriodElement(aI18n.tr("Summary Period"),
-													content.getFirstDate(),
-													content.getLastDate()));
-		getRootElement.addContent(new PeriodElement(I18n.tr("Generated"),
-													DateUtils.currentDate()));
-		
-		getRootElement().addContent(createReportRefs());
-		getRootElement().addContent(createLOCReport());
 		getRootElement().addContent(createAuthorsReport());
 	}
 
@@ -73,59 +63,51 @@ public class IndexDocument extends StatCvsDocument {
 	 */
 	public Chart[] getCharts() {
 		return new Chart[] {
-			createLOCChart(LOC_IMAGE_FILENAME, 400, 300),
+			createActivityByHourChart(), createActivityByDayChart(),
+			createCodeDistributionChart(),
 		};
 	}
 
-	private Chart createLOCChart(String filename,
-								 int width, int height) {
-		String projectName = content.getModuleName();
-		RevisionIterator it
-			= new RevisionSortIterator(content.getRevisionIterator());
-		LOCSeriesBuilder locCounter 
-			= new LOCSeriesBuilder(I18n.tr("Lines Of Code"), true);
-		while (it.hasNext()) {
-			locCounter.addRevision(it.next());
+	private Chart createActivityByHourChart()
+	{
+		Chart chart = createActivityChart(userRevs, Messages.getString("ACTIVITY_TIME_FOR_AUTHOR_TITLE") + " " 
+							+ author.getName(),	getActivityTimeChartFilename(), 
+							categoryNamesHours);
+		userRevs.reset();
+		return chart;
+	}
+
+	private Chart createActivityByDayChart()
+	{
+		Chart chart = createActivityChart(userRevs, Messages.getString("ACTIVITY_DAY_FOR_AUTHOR_TITLE") + " " 
+							+ author.getName(),	getActivityDayChartFilename(), 
+							categoryNamesDays);
+		userRevs.reset();
+		return chart;
+	}
+
+	private Chart createActivityChart(RevisionIterator revIt, String title, String fileName, 
+		String[] categoryNames) {
+		return new BarChart(revIt, content.getModuleName(),
+				title, fileName, categoryNames.length, categoryNames);
+	}
+
+	private Chart createCodeDistributionChart() {
+		int totalLinesOfCode = 0;
+		while (userRevs.hasNext()) {
+			CvsRevision rev = userRevs.next();
+			totalLinesOfCode += rev.getLineValue();
 		}
-		BasicTimeSeries series = locCounter.getTimeSeries();
-		
-		if (series == null) {
+		userRevs.reset();
+		if (totalLinesOfCode == 0) {
 			return null;
 		}
-		return new LOCChart(series, projectName, I18n.tr("Lines Of Code"),
-							filename, width, height);
-	}
-
-	private Element createReportRefs() {
-		Element reportRoot = new Element("report");
-		reportRoot.setAttribute("name", "Modules");
-
-		Element list = new Element("reports");
-		reportRoot.addContent(list);
-
-		list.addContent(new LinkElement("authors", I18n.tr("Authors")));
-		list.addContent(new LinkElement("commit_log", I18n.tr("Commit Log")));
-		list.addContent(new LinkElement("loc", I18n.tr("Lines Of Code")));
-		list.addContent(new LinkElement("file_sizes", 
-										I18n.tr("File Sizes And Counts")));
-		list.addContent(new LinkElement("dir_sizes", 
-										I18n.tr("Directory Sizes")));
-							 
-		return reportRoot;
-	}
-
-	private Element createLOCReport() {
-		Element reportRoot = new ReportElement(I18n.tr("Lines Of Code"));
-
-		reportRoot.addContent(new ImageElement (LOC_IMAGE_FILENAME));
-		reportRoot.addContent
-			(new ValueElement ("loc", content.getCurrentLOC(),
-							   I18n.tr("Lines Of Code")));
-
-//  		element.setAttribute("date", 
-//  							 DateUtils.formatDateAndTime(content.getLastDate()));
-
-		return reportRoot;
+		Chart chart = new PieChart(content, content.getModuleName(),
+				Messages.getString("PIE_CODEDISTRIBUTION_SUBTITLE") + " " + author.getName(),
+				getCodeDistributionChartFilename(),
+				author, PieChart.FILTERED_BY_USER);
+		userRevs.reset();
+		return chart;
 	}
 
 	private Element createAuthorsReport()

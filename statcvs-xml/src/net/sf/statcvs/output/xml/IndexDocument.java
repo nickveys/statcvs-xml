@@ -18,9 +18,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: IndexDocument.java,v $ 
-	Created on $Date: 2003-06-20 00:37:24 $ 
+	Created on $Date: 2003-06-20 00:54:41 $ 
 */
 package net.sf.statcvs.output.xml;
+
+import java.util.*;
 
 import net.sf.statcvs.I18n;
 import net.sf.statcvs.model.CvsContent;
