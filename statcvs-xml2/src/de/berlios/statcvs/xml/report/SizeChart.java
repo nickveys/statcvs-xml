@@ -10,7 +10,6 @@ import de.berlios.statcvs.xml.chart.AbstractPieChart;
 import de.berlios.statcvs.xml.model.DirectoryGrouper;
 import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.output.ChartReportElement;
-import de.berlios.statcvs.xml.output.Module;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
 

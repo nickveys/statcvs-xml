@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
-import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import de.berlios.statcvs.xml.I18n;

@@ -16,7 +16,6 @@ import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.output.ChartReportElement;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
-import de.berlios.statcvs.xml.report.LocChart.LOCCalculator;
 
 /**
  * 

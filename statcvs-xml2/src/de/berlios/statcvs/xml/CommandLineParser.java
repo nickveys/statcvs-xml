@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommandLineParser.java,v $
-	Created on $Date: 2004-02-22 17:26:26 $ 
+	Created on $Date: 2004-02-25 16:29:14 $ 
 */
 package de.berlios.statcvs.xml;
 
@@ -31,14 +31,13 @@ import net.sf.statcvs.output.CvswebIntegration;
 import net.sf.statcvs.output.ViewCvsIntegration;
 import net.sf.statcvs.output.WebRepositoryIntegration;
 import de.berlios.statcvs.xml.output.XDocRenderer;
-import de.berlios.statcvs.xml.output.XMLRenderer;
 
 /**
  * Takes a command line, like given to the {@link net.sf.statcvs.Main#main} method,
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.4 2004-02-22 17:26:26 squig Exp $
+ * @version $Id: CommandLineParser.java,v 1.5 2004-02-25 16:29:14 squig Exp $
  */
 public class CommandLineParser {
 
@@ -102,16 +101,12 @@ public class CommandLineParser {
 			}
 		} else if (s.equals("document-suite")) {
 			Settings.setDocumentSuite(popNextArg());
-		} else if (s.equals("generate-history")) {
-			Settings.setGenerateHistory(true);
 		} else if (s.equals("use-history")) {
 			Settings.setUseHistory(true);
 		} else if (s.equals("verbose")) {
 			Settings.setVerboseLogging();
 		} else if (s.equals("debug")) {
 			Settings.setDebugLogging();
-		} else if (s.equals("nocredits")) {
-			Settings.setShowCreditInformation(false);
 		} else if (s.equals("notes")) {
 			if (args.isEmpty()) {
 				throw new IOException("Missing argument for -notes");

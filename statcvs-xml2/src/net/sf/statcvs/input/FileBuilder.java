@@ -65,6 +65,8 @@ public class FileBuilder {
 	private List revisions = new ArrayList();
 	private RevisionData lastAdded = null;
     private Map revBySymnames;
+
+	private int locDelta;
 	/**
 	 * Creates a new <tt>FileBuilder</tt>.
 	 * 
@@ -110,7 +112,7 @@ public class FileBuilder {
 	 * @param beginOfLogDate the date of the begin of the log
 	 * @return a <tt>CvsFile</tt> representation of the file.
 	 */
-	public CvsFile createFile(Date beginOfLogDate) {
+	public CvsFile createFile(Date beginOfLogDate, boolean filesHaveInitialRevision) {
 		if (isFilteredFile() || !fileExistsInLogPeriod()) {
 			return null;
 		}
@@ -121,13 +123,13 @@ public class FileBuilder {
 		CvsFile file = new CvsFile(name, builder.getDirectory(name));
 
 		if (revisions.isEmpty()) {
-			buildBeginOfLogRevision(file, beginOfLogDate, getFinalLOC(), null);
+			buildBeginOfLogRevision(file, beginOfLogDate, getFinalLOC(filesHaveInitialRevision), null);
 			return file;
 		}
 
 		Iterator it = revisions.iterator();
 		RevisionData currentData = (RevisionData) it.next();
-		int currentLOC = getFinalLOC();
+		int currentLOC = getFinalLOC(filesHaveInitialRevision);
 		RevisionData previousData;
 		int previousLOC;
         SortedSet symbolicNames;
@@ -184,15 +186,20 @@ public class FileBuilder {
 	 *  
 	 * @return the LOC count for the file's most recent revision.
 	 */
-	private int getFinalLOC() {
+	private int getFinalLOC(boolean filesHaveInitialRevision) {
 		if (isBinary) {
 			return 0;
 		}
-		if (finalRevisionIsDead()) {
-			return approximateFinalLOC();
-		}
+//		if (finalRevisionIsDead()) {
+//			return approximateFinalLOC();
+//		}
 		try {
-			return builder.getLOC(name);
+			if (filesHaveInitialRevision) {
+				return builder.getLOC(name) + locDelta;
+			}
+			else {
+				return builder.getLOC(name);
+			}
 		} catch (NoLineCountException e) {
 			logger.warning(e.getMessage());
 			return approximateFinalLOC();

@@ -1,7 +1,6 @@
 package de.berlios.statcvs.xml.chart;
 
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.DefaultCategoryDataset;

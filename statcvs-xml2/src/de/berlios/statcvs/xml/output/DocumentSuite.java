@@ -3,7 +3,6 @@ package de.berlios.statcvs.xml.output;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -40,8 +39,6 @@ public class DocumentSuite {
 
 	private static Map documentTitleByFilename = new LinkedHashMap();
 
-	public static final String PRIVATE_SETTING_PREFIX = "_"; 
-
 	private static Logger logger = Logger.getLogger(DocumentSuite.class.getName());
 	
 	private CvsContent content;
@@ -74,7 +71,7 @@ public class DocumentSuite {
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element element = (Element)it.next();
 			if ("settings".equals(element.getName())) {
-				readSettings(documentSettings, element);
+				documentSettings.load(element);
 			}
 			else if ("report".equals(element.getName())) {
 				ReportElement report = createReport(document, element, documentSettings);
@@ -152,7 +149,7 @@ public class DocumentSuite {
 		for (Iterator it = suite.getRootElement().getChildren().iterator(); it.hasNext();) {
 			Element element = (Element)it.next();
 			if ("settings".equals(element.getName())) {
-				readSettings(defaultSettings, element);
+				defaultSettings.load(element);
 			}
 			else if ("document".equals(element.getName())) {
 				renderDocument(renderer, element);
@@ -221,41 +218,11 @@ public class DocumentSuite {
 		ReportSettings settings = new ReportSettings(parentSettings);
 		for (Iterator it = root.getAttributes().iterator(); it.hasNext();) {
 			Attribute setting = (Attribute)it.next();
-			if (!setting.getName().startsWith(PRIVATE_SETTING_PREFIX)) {
+			if (!setting.getName().startsWith(ReportSettings.PRIVATE_SETTING_PREFIX)) {
 				settings.put(setting.getName(), setting.getValue());
 			}
 		}
 		return settings;
-	}
-
-	/**
-	 * Reads all setting elements located under root.
-	 */ 	
-	public void readSettings(ReportSettings properties, Element root)
-	{
-		// add childern as key value pairs
-		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
-			Element setting = (Element)it.next();
-			// foreach has a special meaning and should not be overiden here
-			if (!setting.getName().startsWith(PRIVATE_SETTING_PREFIX)) {
-				properties.put(setting.getName(), getValue(setting));
-			}
-		}
-	}
-
-	private Object getValue(Element setting)
-	{
-		if ("map".equals(setting.getAttributeValue("type"))) {
-			Map map = new HashMap();
-			for (Iterator it = setting.getChildren().iterator(); it.hasNext();) {
-				Element child = (Element)it.next();
-				map.put(child.getName(), getValue(child));
-			}
-			return map;
-		}
-		else {
-			return setting.getText();
-		}
 	}
 	
 	public static String getAuthorFilename(String name)

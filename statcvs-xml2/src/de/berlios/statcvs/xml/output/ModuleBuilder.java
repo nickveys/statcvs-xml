@@ -3,16 +3,8 @@ package de.berlios.statcvs.xml.output;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
-import net.sf.statcvs.model.Directory;
-import net.sf.statcvs.util.IntegerMap;
 import de.berlios.statcvs.xml.I18n;
-import de.berlios.statcvs.xml.chart.AbstractPieChart;
-import de.berlios.statcvs.xml.output.ChartReportElement;
-import de.berlios.statcvs.xml.output.Module;
-import de.berlios.statcvs.xml.output.ReportElement;
-import de.berlios.statcvs.xml.output.ReportSettings;
 
 /**
  * DirectorySizesChart

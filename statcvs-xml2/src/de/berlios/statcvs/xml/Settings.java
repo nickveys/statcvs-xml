@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Settings.java,v $
-	$Date: 2004-02-22 17:26:26 $ 
+	$Date: 2004-02-25 16:29:14 $ 
 */
 package de.berlios.statcvs.xml;
 
@@ -39,12 +39,11 @@ import de.berlios.statcvs.xml.output.XMLRenderer;
  * can read all parameter values from here.
  * 
  * @author jentzsch
- * @version $Id: Settings.java,v 1.7 2004-02-22 17:26:26 squig Exp $
+ * @version $Id: Settings.java,v 1.8 2004-02-25 16:29:14 squig Exp $
  */
 public class Settings {
 
 	private static String documentSuite = "resources/suite.xml";
-	private static boolean generateHistory;
 	private static boolean useHistory;
 	private static String logFileName = null;
 	private static String checkedOutDirectory = null;
@@ -244,14 +243,6 @@ public class Settings {
 	}
 
 	/**
-	 * Enabe or disable the credit information in the generated charts
-	 * @param enable Enabe or disable the credit information in the generated charts
-	 */
-	public static void setShowCreditInformation(boolean enable) {
-		showCreditInformation = enable;
-	}
-
-	/**
 	 * Sets a file include pattern list. Only files matching one of the
 	 * patterns will be included in the analysis.
 	 * @param patternList a list of Ant-style wildcard patterns, seperated
@@ -283,14 +274,6 @@ public class Settings {
 	
 	public static void setUseHistory(boolean b) {
 		useHistory = b;
-	}
-
-	public static void setGenerateHistory(boolean b) {
-		generateHistory = b;
-	}
-	
-	public static boolean getGenerateHistory() {
-		return generateHistory;
 	}
 
 	/**

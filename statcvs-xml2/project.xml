@@ -3,7 +3,7 @@
   <pomVersion>3</pomVersion>
   <name>StatCVS-XML</name>
   <id>statcvs-xml</id>
-  <currentVersion>0.9.0</currentVersion>
+  <currentVersion>0.9.1</currentVersion>
   <organization>
     <name>StatCvs-XML Team</name>
     <url>http://statcvs-xml.berlios.de/</url>
@@ -113,7 +113,7 @@
     <report>maven-javadoc-plugin</report>
     <report>maven-jxr-plugin</report>
 <!--    <report>maven-pmd-plugin</report> -->
-<!--	<report>maven-statcvs-xml-plugin</report> -->
+	<report>maven-statcvs-xml-plugin</report>
     <report>maven-statcvs-plugin</report>
 <!--    <report>maven-junit-report-plugin</report> -->
 <!--    <report>maven-linkcheck-plugin</report> -->

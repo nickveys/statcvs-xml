@@ -20,20 +20,11 @@
 package de.berlios.statcvs.xml.report;
 
 import java.awt.BasicStroke;
-import java.util.Date;
 import java.util.Iterator;
 
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
-import net.sf.statcvs.model.CvsRevision;
-import net.sf.statcvs.model.Directory;
-
-import org.jfree.data.time.Millisecond;
-import org.jfree.data.time.TimeSeries;
-
 import de.berlios.statcvs.xml.I18n;
-import de.berlios.statcvs.xml.chart.RevisionVisitor;
-import de.berlios.statcvs.xml.chart.AbstractTimeSeriesChart;
 import de.berlios.statcvs.xml.output.ChartReportElement;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;

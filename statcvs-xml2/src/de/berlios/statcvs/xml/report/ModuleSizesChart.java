@@ -11,7 +11,6 @@ import java.util.List;
 
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
-import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.util.IntegerMap;
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.chart.AbstractPieChart;

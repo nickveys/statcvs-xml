@@ -2,7 +2,6 @@ package de.berlios.statcvs.xml.report;
 
 import java.util.Iterator;
 
-import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.util.IntegerMap;

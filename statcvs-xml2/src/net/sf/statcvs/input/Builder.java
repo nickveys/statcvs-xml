@@ -137,11 +137,12 @@ public class Builder implements CvsLogBuilder {
 	/**
 	 * Returns a CvsContent object of all files.
 	 * 
+	 * @param filesHaveInitialRevision set to true if files in working directory all have 1.1 revision; otherwise files are expected to match the latest revision
 	 * @return CvsContent a CvsContent object
 	 * @throws EmptyRepositoryException if no adequate files were found in the
 	 * log.
 	 */
-	public CvsContent createCvsContent() throws EmptyRepositoryException {
+	public CvsContent createCvsContent(boolean filesHaveInitialRevision) throws EmptyRepositoryException {
 		if (currentFileBuilder != null) {
 			fileBuilders.add(currentFileBuilder);
 			currentFileBuilder = null;
@@ -154,7 +155,7 @@ public class Builder implements CvsLogBuilder {
 		Iterator it = fileBuilders.iterator();
 		while (it.hasNext()) {
 			FileBuilder fileBuilder = (FileBuilder) it.next();
-			CvsFile file = fileBuilder.createFile(startDate);
+			CvsFile file = fileBuilder.createFile(startDate, filesHaveInitialRevision);
 			if (file == null) {
 				continue;
 			}

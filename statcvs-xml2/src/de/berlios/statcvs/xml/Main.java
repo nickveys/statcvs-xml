@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Iterator;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
 
@@ -32,10 +31,7 @@ import net.sf.statcvs.input.EmptyRepositoryException;
 import net.sf.statcvs.input.LogSyntaxException;
 import net.sf.statcvs.input.RepositoryFileManager;
 import net.sf.statcvs.model.CvsContent;
-import net.sf.statcvs.model.SymbolicName;
-import net.sf.statcvs.util.CvsLogUtils;
 import net.sf.statcvs.util.LogFormatter;
-import net.sf.statcvs.util.LookaheadReader;
 import de.berlios.statcvs.xml.output.DocumentRenderer;
 import de.berlios.statcvs.xml.output.DocumentSuite;
 import de.berlios.statcvs.xml.output.XDocRenderer;
@@ -46,7 +42,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.9 2004-02-22 17:26:26 squig Exp $
+ * @version $Id: Main.java,v 1.10 2004-02-25 16:29:14 squig Exp $
  */
 public class Main {
 	private static String projectName;
@@ -116,7 +112,6 @@ public class Main {
 				+ "  -verbose           print extra progress information\n"
 				+ "  -output-suite [class] use the xml renderer\n"
 				+ "  -use-history       use history file for proper loc counts\n"
-				+ "  -generate-history  regenerates history file (use with 'use-history')\n"
 				+ "\n"
 				+ "If statcvs cannot recognize the type of your web repository, please use the\n"
 				+ "following switches:\n"
@@ -157,40 +152,11 @@ public class Main {
 		
 		initLogger();
 
-		boolean useHistory = Settings.getUseHistory();
-		boolean createHistory = Settings.getGenerateHistory();
 		String logfile = Settings.getLogFileName();
 		
-//		String moduleName = getModuleName(logfile);
-
-//		CvsLocHistory hist = CvsLocHistory.getInstance();
-//		if (Settings.getUseHistory()) {
-//			hist.load(moduleName);
-//		}
-//
-//		if (useHistory && createHistory) {
-//			hist.generate();
-//		}
-
-		CvsContent content = readLogFile(logfile);
-        
-        Iterator it = content.getSymbolicNames().iterator();
-        while (it.hasNext()) {
-            SymbolicName sym = (SymbolicName)it.next();
-            logger.info("symname: " + sym.toString());
-            //Iterator rit = sym.getRevisions().iterator();
-            //while (rit.hasNext()) {
-            //    CvsRevision rev = (CvsRevision)rit.next();
-            //    logger.info("  "+rev.getFile() + "," + rev);   
-            //}
-        }
-
-//		if (hist.isChanged()) {
-//			hist.save(moduleName);
-//		}
-//		 
-
+		CvsContent content = readLogFile(logfile, Settings.getUseHistory());
 		generateSuite(content);
+		
 		long endTime = System.currentTimeMillis();
 		long memoryUsedOnEnd = Runtime.getRuntime().totalMemory();
 		logger.info("runtime: " + (((double) endTime - startTime) / 1000) 
@@ -199,44 +165,6 @@ public class Main {
 					+ (((double) memoryUsedOnEnd 
 						- memoryUsedOnStart) / 1024) + " kb");
 	}
-
-	/**
-	 * @param string
-	 * @return
-	 */
-//	private static String getModuleName(String logfile) throws LogSyntaxException, IOException {
-//		LookaheadReader logReader = new LookaheadReader(new FileReader(logfile));
-//		
-//		while (logReader.getCurrentLine().startsWith("? ")) {
-//			logReader.getNextLine();
-//		}
-//		if (!logReader.isAfterEnd() && !"".equals(logReader.getCurrentLine())) {
-//			throw new LogSyntaxException("expected '?' or empty line at line "
-//					+ logReader.getLineNumber() + ", but found '"
-//					+ logReader.getCurrentLine() + "'");
-//		}
-//		while (!logReader.isAfterEnd() && logReader.getCurrentLine().equals("")) {
-//			logReader.getNextLine();
-//		}
-//
-//		String line = logReader.getCurrentLine();
-//		if (!line.startsWith("RCS file: ")) {
-//			throw new LogSyntaxException(
-//				"line " + logReader.getLineNumber() + ": expected '"
-//						+ "RCS file: " + "' but found '" + line + "'");
-//		}
-//		String rcsFile = line.substring("RCS file: ".length());
-//
-//		line = logReader.getNextLine();
-//		if (!line.startsWith("Working file: ")) {
-//			throw new LogSyntaxException(
-//				"line " + logReader.getLineNumber() + ": expected '"
-//						+ "Working file: " + "' but found '" + line + "'");
-//		}
-//		String workingFile = line.substring("Working file: ".length());
-//
-//		return CvsLogUtils.getModuleName(rcsFile, workingFile);
-//	}
 
 	public static void initLogger() throws LogSyntaxException {
 		ConsoleHandler ch = new ConsoleHandler();
@@ -253,7 +181,7 @@ public class Main {
 	 * @throws LogSyntaxException if the logfile contains unexpected syntax
 	 * @throws IOException if the log file can not be read
 	 */
-	public static CvsContent readLogFile(String logfile) 
+	public static CvsContent readLogFile(String logfile, boolean filesHaveInitialRevision) 
 		throws IOException, IOException, LogSyntaxException, EmptyRepositoryException
 	{
 		if (Settings.getLogFileName() == null) {
@@ -265,15 +193,14 @@ public class Main {
 		
 		Reader logReader = new FileReader(logfile);
 		
-		logger.info("Parsing CVS log '"
-				+ Settings.getLogFileName() + "'");
+		logger.info("Parsing CVS log '" + Settings.getLogFileName() + "'");
 		RepositoryFileManager repFileMan
 			= new RepositoryFileManager
 				(Settings.getCheckedOutDirectory());
 		Builder builder = new Builder(repFileMan, Settings.getIncludeMatcher(), Settings.getExcludeMatcher());
 		projectName = builder.getProjectName();
 		new CvsLogfileParser(logReader, builder).parse();
-		return builder.createCvsContent();
+		return builder.createCvsContent(filesHaveInitialRevision);
 	}
 
 	/**
@@ -293,15 +220,6 @@ public class Main {
 			logger.info("Assuming web repository is "+Settings.getWebRepository().getName());
 		}
 		logger.info("Reading output settings");
-		String filename = getSettingsPath() + "output.properties";
-//		try {
-//			OutputSettings.getInstance().read(filename);
-//		}
-//		catch (IOException e) {
-//			logger.warning("Could not read settings: " 
-//						   + e.getMessage());
-//		}
-
 		logger.info("Creating suite using "+Settings.getOutputSuite());
 	
 //		Class c = Class.forName(Settings.getOutputSuite());
@@ -312,15 +230,5 @@ public class Main {
 		DocumentSuite suite = new DocumentSuite(FileHelper.getResource(Settings.getDocumentSuite()), content);
 		suite.generate(renderer, projectName);
 	}
-
-    public static String getSettingsPath()
-    {
-		StringBuffer sb = new StringBuffer();
-		sb.append(System.getProperty("user.home"));
-		sb.append(File.separatorChar);
-		sb.append(".statcvs");
-		sb.append(File.separatorChar);
-		return sb.toString();
-    }
 
 }

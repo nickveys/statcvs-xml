@@ -3,10 +3,7 @@ package de.berlios.statcvs.xml.report;
 import java.util.Iterator;
 import java.util.Map;
 
-import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
-import net.sf.statcvs.model.CvsRevision;
-import net.sf.statcvs.util.IntegerMap;
 
 import org.jdom.Element;
 
@@ -14,7 +11,6 @@ import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.output.DocumentSuite;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
-import de.berlios.statcvs.xml.util.Formatter;
 
 /**
  * 

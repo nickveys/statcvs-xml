@@ -3,7 +3,6 @@ package de.berlios.statcvs.xml.model;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import de.berlios.statcvs.xml.I18n;

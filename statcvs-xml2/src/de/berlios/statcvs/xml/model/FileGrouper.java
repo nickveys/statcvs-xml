@@ -5,7 +5,6 @@ import java.util.Iterator;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.CvsRevision;
-import net.sf.statcvs.model.Directory;
 import de.berlios.statcvs.xml.I18n;
 
 /**

@@ -1,5 +1,6 @@
 package de.berlios.statcvs.xml.output;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -18,10 +19,9 @@ import org.apache.commons.jexl.Expression;
 import org.apache.commons.jexl.ExpressionFactory;
 import org.apache.commons.jexl.JexlContext;
 import org.apache.commons.jexl.JexlHelper;
+import org.jdom.Element;
 
 import de.berlios.statcvs.xml.I18n;
-import de.berlios.statcvs.xml.model.AuthorGrouper;
-import de.berlios.statcvs.xml.model.DirectoryGrouper;
 import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.util.ScriptHelper;
 
@@ -29,6 +29,8 @@ import de.berlios.statcvs.xml.util.ScriptHelper;
  * @author Steffen Pingel
  */
 public class ReportSettings extends Hashtable {
+
+	public static final String PRIVATE_SETTING_PREFIX = "_"; 
 
 	public static class ExpressionPredicate implements Predicate {
 		
@@ -128,17 +130,25 @@ public class ReportSettings extends Hashtable {
 	}
 
 	protected ReportSettings defaults;
+	private Map uberSettings;
+	
+	public ReportSettings(Hashtable uberSettings)
+	{
+		this.uberSettings = uberSettings; 
+	}
 
 	public ReportSettings()
 	{
+		this(new Hashtable());
 	}
-
+	
 	/**
 	 * @param defaults
 	 */
 	public ReportSettings(ReportSettings defaults) 
 	{
 		this.defaults = defaults;
+		this.uberSettings = defaults.uberSettings;
 	}
 
 	public Object get(Object key)
@@ -148,6 +158,11 @@ public class ReportSettings extends Hashtable {
 
 	public Object get(Object key, Object defaultValue)
 	{
+		Object uber = uberSettings.get(key);
+		if (uber != null) {
+			return uber;
+		}
+		
 		Object o = super.get(key);
 		return (o != null) ? o : (defaults != null) ? defaults.get(key, defaultValue) : defaultValue;
 	}
@@ -350,6 +365,36 @@ public class ReportSettings extends Hashtable {
 		return new FilteredIterator(content.getSymbolicNames().iterator(), predicate);
 	}
 
+	/**
+	 * Reads all setting elements located under root.
+	 */ 	
+	public void load(Element root)
+	{
+		// add childern as key value pairs
+		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
+			Element setting = (Element)it.next();
+			// foreach has a special meaning and should not be overiden here
+			if (!setting.getName().startsWith(PRIVATE_SETTING_PREFIX)) {
+				this.put(setting.getName(), getValue(setting));
+			}
+		}
+	}
+
+	private Object getValue(Element setting)
+	{
+		if ("map".equals(setting.getAttributeValue("type"))) {
+			Map map = new HashMap();
+			for (Iterator it = setting.getChildren().iterator(); it.hasNext();) {
+				Element child = (Element)it.next();
+				map.put(child.getName(), getValue(child));
+			}
+			return map;
+		}
+		else {
+			return setting.getText();
+		}
+	}
+	
 	public void setForEach(ForEachObject object)
 	{
 		if (object == null) {

@@ -19,7 +19,6 @@
 */
 package de.berlios.statcvs.xml.report;
 
-import java.util.Comparator;
 import java.util.Iterator;
 
 import net.sf.statcvs.model.Author;
