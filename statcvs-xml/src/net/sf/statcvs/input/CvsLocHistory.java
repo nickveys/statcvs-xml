@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsLocHistory.java,v $ 
-	Created on $Date: 2003-07-06 21:26:39 $ 
+	Created on $Date: 2003-07-06 22:39:44 $ 
 */
 package net.sf.statcvs.input;
 
@@ -91,7 +91,7 @@ public class CvsLocHistory {
 				in.close();
 			}
 		} catch (IOException e) {
-			logger.info("no history file found");
+			logger.info("No history file found");
 			// dont try to load in next file
 			loaded = true;
 			Settings.setGenerateHistory(true);
@@ -115,19 +115,18 @@ public class CvsLocHistory {
 	}
 
 	public void generate(CvsContent content) {
-		System.out.println("Generating history file...");
+		logger.info("Generating history file...");
 		try {
-			File tmpdir = new File(System.getProperty("java.io.tmpdir")+"/statcvs"+ Integer.toHexString(this.hashCode()) +"history");
-			//if (!tmpdir.mkdir()) return;
+			char fs = File.separatorChar;
+			File tmpdir = new File(System.getProperty("java.io.tmpdir")+fs+"statcvs"+ Integer.toHexString(this.hashCode()) +"history");
 			File cvsdir = new File(tmpdir, "CVS");
 			cvsdir.mkdirs();
-
-			FileUtils.copyFile(Settings.getCheckedOutDirectory()+"/CVS/Repository",
-				 cvsdir.getAbsolutePath()+"/Repository");
-			FileUtils.copyFile(Settings.getCheckedOutDirectory()+"/CVS/Entries",
-				 cvsdir.getAbsolutePath()+"/Entries");
-			FileUtils.copyFile(Settings.getCheckedOutDirectory()+"/CVS/Root",
-				 cvsdir.getAbsolutePath()+"/Root");
+			FileUtils.copyFile(Settings.getCheckedOutDirectory()+fs+"CVS"+fs+"Repository",
+				 cvsdir.getAbsolutePath()+fs+"Repository");
+			FileUtils.copyFile(Settings.getCheckedOutDirectory()+fs+"CVS"+fs+"Entries",
+				 cvsdir.getAbsolutePath()+fs+"Entries");
+			FileUtils.copyFile(Settings.getCheckedOutDirectory()+fs+"CVS"+fs+"Root",
+				 cvsdir.getAbsolutePath()+fs+"Root");
 
 			String[] cmd = {"cvs", "-Q", "update","-d", "-r","1.1"};
 			try {
@@ -138,7 +137,7 @@ public class CvsLocHistory {
 			}
 		   
 			RepositoryFileManager repoman = new RepositoryFileManager(tmpdir.getAbsolutePath());
-			System.out.print("Indexing...");
+			logger.info("Indexing...");
 			for (int i=0; i<content.getFiles().size(); i++) {
 				CvsFile file = (CvsFile)content.getFiles().get(i);
 				try {
@@ -148,7 +147,7 @@ public class CvsLocHistory {
 				} catch (RepositoryException e2) {
 				}	
 			}
-			System.out.println(" done");
+			logger.info("Index done");
 			loaded = true;
 			if (!deleteDir(tmpdir)) {
 				logger.info("Could not clean up temp directory.");

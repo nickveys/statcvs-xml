@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: IndexDocument.java,v $ 
-	Created on $Date: 2003-07-06 21:26:39 $ 
+	Created on $Date: 2003-07-06 22:39:44 $ 
 */
 package net.sf.statcvs.output.xml.document;
 
@@ -29,6 +29,7 @@ import net.sf.statcvs.output.xml.CvsCharts;
 import net.sf.statcvs.output.xml.CvsReports;
 import net.sf.statcvs.output.xml.chart.AbstractChart;
 import net.sf.statcvs.output.xml.element.ChartElement;
+import net.sf.statcvs.output.xml.element.ElementContainer;
 import net.sf.statcvs.output.xml.element.LinkElement;
 import net.sf.statcvs.output.xml.element.PeriodElement;
 import net.sf.statcvs.output.xml.element.ReportElement;
@@ -78,13 +79,15 @@ public class IndexDocument extends StatCvsDocument {
 		public GeneralReport() {
 			super(I18n.tr("General"));
 			CvsContent content = IndexDocument.this.content; 
-			addContent(new PeriodElement(I18n.tr("Summary Period"),
+			ElementContainer ec = new ElementContainer("generalinfo");
+			addContent(ec);
+			ec.addContent(new PeriodElement(I18n.tr("Summary Period"),
 								   content.getFirstDate(), content.getLastDate()));
-			addContent(new PeriodElement(I18n.tr("Generated"),
+			ec.addContent(new PeriodElement(I18n.tr("Generated"),
 								   DateUtils.currentDate()));
-			addContent(new ValueElement("devcount", content.getAuthors().size(), I18n.tr("Developers")));
-			addContent(new ValueElement("filecount", content.getFiles().size(), I18n.tr("Files")));
-			addContent(new ValueElement("devcount", new RevisionIteratorSummary(content.getRevisionIterator()).size(), I18n.tr("Revisions")));
+			ec.addContent(new ValueElement("devcount", content.getAuthors().size(), I18n.tr("Developers")));
+			ec.addContent(new ValueElement("filecount", content.getFiles().size(), I18n.tr("Files")));
+			ec.addContent(new ValueElement("devcount", new RevisionIteratorSummary(content.getRevisionIterator()).size(), I18n.tr("Revisions")));
 		}
 	}
 

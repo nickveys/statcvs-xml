@@ -139,6 +139,12 @@
      </table>
   </xsl:template>
 
+  <xsl:template match="container">
+	<p>
+		<xsl:apply-templates select="*"/>
+	</p>
+  </xsl:template>
+  
   <xsl:template match="pager">
      <p>
      <xsl:if test="@current!=1">

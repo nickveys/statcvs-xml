@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLRenderer.java,v $
-	$Date: 2003-07-06 21:26:39 $ 
+	$Date: 2003-07-06 22:39:44 $ 
 */
 package net.sf.statcvs.output;
 
@@ -170,8 +170,12 @@ public class XMLRenderer implements DocumentRenderer {
 		}
 	}
 
+	/**
+	 * Copies the required resources.
+	 */
 	public void postRender()
 	{
+		copyResource("resources/folder.png");
+		copyResource("resources/folder-deleted.png");
 	}
-
 }
