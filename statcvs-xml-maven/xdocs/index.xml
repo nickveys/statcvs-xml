@@ -1,20 +1,78 @@
 <document>
 
   <properties>
-    <title>Maven StatCvs-XML Plugin</title>
+    <title>Maven StatCvs Plug-in</title>
   </properties>
 
   <body>
-    <section name="Maven SCM Plugin">
-      <p>
-       A plugin to generate statistics about CVS usage using <a
-       href="http://statcvs-xml.berlios.de/">StatCvs-XML</a>. The
-       output is highly customizable through an XML file. Please see
-       the <a
-       href="http://statcvs-xml.berlios.de/manual/">StatCvs-XML</a> manual
-       for more information.
-      </p>
+    <section name="Maven StatCvs Plug-in">
+
+      <p>A plugin to generate statistics about CVS usage using <a
+      href="http://statcvs-xml.berlios.de/">StatCvs-XML</a>.</p>
+
+      <p>This page and plugin is maintained by the authors of
+      StatCvs-XML. See the Apache pages for the <a
+      href="http://jira.codehaus.org/secure/BrowseProject.jspa">issue
+      tracker</a> of the <a
+      href="http://maven.apache.org/reference/plugins/statcvs/">official
+      plugin</a>.</p>
+        
     </section>
+
+    <section name="Customization">
+
+      <p>The output of StatCvs-XML, i.e. the generated documents and
+      the format of the reports, is highly customizable. StatCvs-XML
+      looks for a file called <tt>statcvs.xml</tt> in the current
+      directory (the directory Maven was started from) to read project
+      settings. Please see the <a
+      href="http://statcvs-xml.berlios.de/manual/settings.html">StatCvs-XML
+      manual</a> for configuration options. Please see the <a
+      href="/properties.html">properties page</a> for settings that
+      can be configured through the StatCvs Maven plugin.</p>
+ 
+    </section>
+
+    <section name="Install">
+
+      <p>It is easy stay to stay on the cutting edge of the StatCvs-XML
+      development. You need to follow these steps:</p>
+      
+      <p>
+        <ol>
+          <li>Check out StatCvs-XML from cvs</li>
+          <p>
+            <tt>cvs -z3
+-d:pserver:anonymous@cvs.statcvs-xml.berlios.de:/cvsroot/statcvs-xml
+co statcvs-xml2</tt>
+          </p>
+          
+          <li>Update the StatCvs-XML jar in your Maven repository</li>
+          <p>
+            <tt>cd statcvs-xml2</tt>
+            <tt>maven jar:install</tt>
+          </p>
+
+          <li>Check out unofficial StatCvs Maven Plug-In from cvs</li>
+          <p>
+            <tt>cvs -z3
+-d:pserver:anonymous@cvs.statcvs-xml.berlios.de:/cvsroot/statcvs-xml
+co statcvs-xml-maven</tt>
+          </p>
+          
+          <li>Update the StatCvs plugin in your Maven repository</li>
+          <p>
+            <tt>cd statcvs-xml-maven</tt>
+            <tt>maven plugin:install</tt>
+          </p>
+        </ol>
+      </p>
+
+      <p>That's it! Now run <tt>maven statcvs xdoc</tt> on your
+      project and enjoy the latest of the StatCvs-XML development.</p>
+
+    </section>
+
   </body>
 
 </document>

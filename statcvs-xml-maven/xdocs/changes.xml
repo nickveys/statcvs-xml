@@ -9,31 +9,32 @@
   <body>
 	<release version="2.1" date="2004-03-07">
       <action dev="squig" type="add">
-		History feature was rewritten. The plugin now checks out a
-		complete copy of all 1.1 revisions to the target directory.
+		The history feature has been rewritten. The plugin now checks
+		out a complete copy of all 1.1 revisions to the target
+		directory.
       </action>
       <action dev="squig" type="update">
-		Property for include was fixed and property for exclude was
-		added. 
+		Property for include has been fixed and property for exclude
+		has been added.
       </action>
       <action dev="squig" type="update">
 		The documentation has been updated.
       </action>
       <action dev="squig" type="update">
-		Split up generate goal into two, to allow for calling
-		StatCvs-XML without updating the cvs log
+		The generate goal has been split up, to allow for calling
+		StatCvs-XML without download the cvs log.
       </action>
       <action dev="squig" type="fix">
 		The CVS connection string is now parsed from the pom.
       </action>
       <action dev="squig" type="fix">
-		The repository url is checked for an empty value and not
+		The repository url is now checked for an empty value and not
 		passed to StatCvs-XML in that case.
       </action>
     </release>
-	<release version="1.2" date="in CVS">
+	<release version="1.2" date="2003-07-06">
       <action dev="vanto" type="add">
-		First Release.
+		Never released, only exists in cvs.
       </action>
     </release>
   </body>

@@ -2,8 +2,8 @@
 <project>
 <!--  <extend>${basedir}/../project.xml</extend> -->
 <pomVersion>3</pomVersion>
-  <id>maven-statcvs-xml-plugin</id>
-  <name>Maven StatCvs-XML Plug-in</name>
+  <id>maven-statcvs-plugin</id>
+  <name>Maven StatCvs Plug-in</name>
   <currentVersion>2.1</currentVersion>
   <description/>
   <shortDescription>Provides CVS statistics</shortDescription>
@@ -13,7 +13,7 @@
   <siteDirectory>/home/groups/statcvs-xml/htdocs/maven-plugin/</siteDirectory>
   <repository>
     <connection>scm:cvs:pserver:anonymous@cvs.berlios.de:/cvsroot/statcvs-xml:statcvs-xml-maven</connection>
-    <url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/maven-statcvs-xml-plugin</url>
+    <url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml-maven/</url>
   </repository>
   <issueTrackingUrl>
     http://developer.berlios.de/tracker/?group_id=872

@@ -93,7 +93,7 @@
 
         <ant:echo>fetching cvs logs at ${statcvs.repository}...</ant:echo>
 		<ant:cvs
-			command="log" 
+			command="log ${statcvs.log.options}" 
 			output="${statcvs.logfile}"
 			dest="${statcvs.repository}"
 			compression="true"

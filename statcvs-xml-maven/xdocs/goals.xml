@@ -40,14 +40,15 @@
       <goal>
         <name>statcvs:generate</name>
         <description>
-          Same as <code>maven statcvs</code> (see above).
+          Same as the <code>statcvs</code> goal (see above).
         </description>
       </goal>
       <goal>
         <name>statcvs:generate-xdoc</name>
         <description>
-          Only generate statistics from already existant cvs log file
-          (due to a prior invokation of the statcvs goal). 
+          Only generate statistics from already existant cvs log
+          file. Requires a prior invokation of the
+          <code>statcvs</code> goal to download the log.
         </description>
       </goal>
     </goals>

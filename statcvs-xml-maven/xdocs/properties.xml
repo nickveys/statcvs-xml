@@ -19,11 +19,11 @@
 
 <document>
   <properties>
-    <title>Maven StatCvs-XML Plug-in Properties</title>
+    <title>Maven StatCvs Plug-in Properties</title>
     <author>Steffen Pingel</author>
   </properties>
   <body>
-    <section name="Maven StatCvs-XML Plug-in Settings">
+    <section name="Maven StatCvs Plug-in Settings">
       <table>
         <tr>
           <th>Property</th>
@@ -80,7 +80,22 @@
             <code>src/net/**/*.java</code>
           </td>
         </tr>
-      </table>
+        <tr>
+          <td>statcvs.log.options</td>
+          <td>true</td>
+          <td>
+            Default is none. Passed to the cvs log command. Allows the
+            specification of additional parameters like dates:
+            <code>-d 2002-01-01&lt;2002-12-31</code><br/> 
+
+            <b>Using partial logs will yield incorrect lines of code.</b>
+            Please read <a
+            href="http://statcvs.sourceforge.net/manual/#section_limiting-dates">this
+            section</a> of the StatCvs manual on how to avoid that. Do
+            not use the history feature when setting a start date.
+          </td>
+        </tr>
+     </table>
     </section>
   </body>
 </document>
