@@ -62,7 +62,7 @@ public class DocumentSuite {
 		}
 	}
 
-	public StatCvsDocument createDocument(Element root, ReportSettings settings)
+	public StatCvsDocument createDocument(Element root, DocumentRenderer renderer, ReportSettings settings) throws IOException
 	{
 		StatCvsDocument document = new StatCvsDocument(readAttributes(settings, root));
 
@@ -81,6 +81,7 @@ public class DocumentSuite {
 			}
 		}
 		
+		renderer.render(document);
 		return document;
 	}
 
@@ -165,9 +166,8 @@ public class DocumentSuite {
 	{
 		String value = element.getAttributeValue("foreach");
 		if (value == null) {
-			StatCvsDocument document = createDocument(element, defaultSettings);
+			StatCvsDocument document = createDocument(element, renderer, defaultSettings);
 			documentTitleByFilename.put(document.getFilename(), document.getTitle());
-			renderer.render(document);
 		}
 		else if ("author".equals(value)) {
 			for (Iterator i = content.getAuthors().iterator(); i.hasNext();) {
