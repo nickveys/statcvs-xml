@@ -26,6 +26,7 @@ import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.output.ReportSettings;
+import de.berlios.statcvs.xml.output.TableElement.RowElement;
 
 /**
  * @author Steffen Pingel
@@ -40,6 +41,11 @@ public class ModuleGrouper extends Grouper {
 		super("module", I18n.tr("Module"));
 		
 		this.modules = modules;
+	}
+
+	public void addElement(Object group,  RowElement row)
+	{
+		row.addModule((Module)group);
 	}
 
 	public Object getGroup(CvsRevision rev) 

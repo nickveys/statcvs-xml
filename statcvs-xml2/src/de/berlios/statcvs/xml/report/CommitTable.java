@@ -33,6 +33,7 @@ import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
+import de.berlios.statcvs.xml.output.TableElement;
 import de.berlios.statcvs.xml.util.Formatter;
 
 /**
@@ -46,27 +47,15 @@ public class CommitTable {
 	public static Report generate(CvsContent content, ReportSettings settings)
 	{
 		ReportElement root = new ReportElement(settings, I18n.tr("Commits%1"));
-		createReport(root, settings.getRevisionIterator(content), new AuthorGrouper());
-		return new Report(root);
-	}
-	
-	/**
-	 * 
-	 */
-	private static void createReport(ReportElement root, Iterator revs, Grouper grouper) 
-	{
-		// exit and ignore if report contains no data
-		if (!revs.hasNext()) {
-			root.setName("ignore");
-			return;
-		}
-		
+		Grouper grouper = settings.getGrouper(new AuthorGrouper());
+
 		IntegerMap changesMap = new IntegerMap();
 		IntegerMap linesMap = new IntegerMap();
 		IntegerMap linesAddedMap = new IntegerMap();
-		
-		while (revs.hasNext()) {
-			CvsRevision rev = (CvsRevision)revs.next();
+
+		Iterator revIt = settings.getRevisionIterator(content);		
+		while (revIt.hasNext()) {
+			CvsRevision rev = (CvsRevision)revIt.next();
 			Object group = grouper.getGroup(rev);
 			if (group != null) {
 				changesMap.addInt(group, 1);
@@ -75,30 +64,32 @@ public class CommitTable {
 			} 
 		}
 
-		Element table = new Element("table");
-		table.addContent(new Element("tr")
-			.addContent(new Element("th").addContent("Name"))	
-			.addContent(new Element("th").addContent("Commit"))
-			.addContent(new Element("th").addContent("Baz")));
-		Iterator it = linesMap.iteratorSortedByValueReverse();
-		while (it.hasNext()) {
+		TableElement table = new TableElement(settings, new String[] { 
+			grouper.getName(), I18n.tr("Revisions"), I18n.tr("Lines of Code"), 
+			I18n.tr("Added Lines of Code"), I18n.tr("Lines of Code per Change"), });
+			
+		int maxItems = settings.getLimit();
+		Iterator it;
+		String orderby = settings.getString("orderby");
+		if ("loc".equals(orderby)) {
+			it = linesMap.iteratorSortedByValueReverse();
+		}
+		else { 
+			it = changesMap.iteratorSortedByValueReverse();
+		}
+		int count = 0;
+		while (it.hasNext() && count < maxItems) {
 			Object group = it.next();
-			Element row = new Element("row");
-			row.addContent(new Element(grouper.getID()).addContent(grouper.getName(group)));
-			row.addContent(new Element("commits").addContent(changesMap.get(group) + "")
-				.setAttribute("percent", 
-							  Formatter.formatNumber(changesMap.getPercent(group), 2)));
-//			element.setAttribute("loc", linesMap.get(group) + "");
-//			element.setAttribute("locPercent", 
-//								 Formatter.formatNumber(linesMap.getPercent(group), 2));
-//			element.setAttribute("locAdded", linesAddedMap.get(group) + "");
-//			element.setAttribute("locAddedPercent", 
-//								 Formatter.formatNumber(linesAddedMap.getPercent(group), 2));
-//			element.setAttribute("locPerChange", 
-//								 Formatter.formatNumber(linesMap.get(group) / changesMap.get(group), 1));
-			table.addContent(row);
+			table.addRow()
+				.addGroup(grouper, group)
+				.addInteger("revisions", changesMap.get(group), changesMap.getPercent(group))
+				.addInteger("loc", linesMap.get(group), linesMap.getPercent(group))
+				.addInteger("locAdded", linesAddedMap.get(group), linesAddedMap.getPercent(group))
+				.addDouble("locPerRevision", linesMap.get(group) / changesMap.get(group));
+			count++;
 		}
 		root.addContent(table);
+		return new Report(root);
 	}
 
 }

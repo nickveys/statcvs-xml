@@ -26,6 +26,7 @@ import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.output.ReportSettings;
+import de.berlios.statcvs.xml.output.TableElement.RowElement;
 
 /**
  * @author Steffen Pingel
@@ -35,6 +36,11 @@ public class AuthorGrouper extends Grouper {
 	public AuthorGrouper()
 	{
 		super("author", I18n.tr("Author"));
+	}
+
+	public void addElement(Object group,  RowElement row)
+	{
+		row.addAuthor((Author)group);
 	}
 
 	public Object getGroup(CvsRevision rev) 

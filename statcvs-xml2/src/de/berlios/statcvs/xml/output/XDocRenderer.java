@@ -19,6 +19,7 @@
 package de.berlios.statcvs.xml.output;
 
 import java.io.IOException;
+import java.net.URL;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -38,8 +39,11 @@ public class XDocRenderer {
 	public static DocumentRenderer create(CvsContent content, ReportSettings settings) 
 		throws IOException, TransformerException
 	{
-		StreamSource source = new StreamSource
-			(FileHelper.getResource("resources/statcvs2xdoc.xsl").toString());
+		URL url = FileHelper.getResource("resources/statcvs2xdoc.xsl");
+		if (url == null) {
+			throw new IOException("Stylesheet resources/statcvs2xdoc.xsl not found");
+		}
+		StreamSource source = new StreamSource(url.toString());
 		Transformer transformer 
 			= TransformerFactory.newInstance().newTransformer(source);
 		transformer.setParameter("ext", ".html");

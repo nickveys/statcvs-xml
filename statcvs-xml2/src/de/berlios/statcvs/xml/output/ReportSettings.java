@@ -212,7 +212,7 @@ public class ReportSettings extends Hashtable {
 		Iterator it = (o != null) 
 		   ? o.getDirectoryIterator(content) 
 		   : content.getDirectories().iterator(); 
-		return getFilterIterator("directoryFilter", it);
+		return getFilterIterator(it);
 	}
 
 	public Iterator getFileIterator(CvsContent content)
@@ -221,7 +221,7 @@ public class ReportSettings extends Hashtable {
 		Iterator it = (o != null) 
 		   ? o.getFileIterator(content) 
 		   : content.getFiles().iterator(); 
-		return getFilterIterator("fileFilter", it);
+		return getFilterIterator(it);
 	}
 
 	/**
@@ -233,9 +233,9 @@ public class ReportSettings extends Hashtable {
 		return (postfix == null) ? "" : "_" + postfix;
 	}
 
-	public Iterator getFilterIterator(String key, Iterator it)
+	public Iterator getFilterIterator(Iterator it)
 	{
-		String expression = getString(key, null);
+		String expression = getString("inputFilter", null);
 		if (expression != null) {
 			try {
 				return new FilteredIterator(it, new ExpressionPredicate(expression));
@@ -271,7 +271,7 @@ public class ReportSettings extends Hashtable {
 	private String getGroupById() 
 	{
 		Grouper o = getGrouper();
-		return (o != null) ? o.getID() : "";
+		return (o != null) ? o.getID() : null;
 	}
 
 	public Object getForEachObject()
@@ -394,7 +394,7 @@ public class ReportSettings extends Hashtable {
 		Iterator it = (o != null) 
 		   ? o.getRevisionIterator(content) 
 		   : content.getRevisions().iterator(); 
-		return getFilterIterator("revisionFilter", it);
+		return getFilterIterator(it);
 	}
 	
 	/**

@@ -112,8 +112,9 @@ public class TableElement extends Element
 			Element number = new Element("number");
 			number.setAttribute("key", key);
 			number.setAttribute("value", "" + value);
-			number.setAttribute("percentage", "" + Formatter.formatPercent(percentage) );
-			
+			if (settings.getBoolean("showPercent", true)) {
+				number.setAttribute("percentage", Formatter.formatNumber(percentage, 1));
+			}		
 			addContent(number);
 			return this;
 		}
@@ -132,8 +133,10 @@ public class TableElement extends Element
 		{
 			Element number = new Element("number");
 			number.setAttribute("key", key);
-			number.setAttribute("value", "" + Formatter.formatNumber(value, 2));
-			number.setAttribute("percentage", "" + Formatter.formatPercent(percentage) );
+			number.setAttribute("value", Formatter.formatNumber(value, 2));
+			if (settings.getBoolean("showPercent", true)) {			
+				number.setAttribute("percentage", Formatter.formatNumber(percentage, 1));
+			}
 			
 			addContent(number);
 			return this;
@@ -143,7 +146,7 @@ public class TableElement extends Element
 		{
 			Element number = new Element("number");
 			number.setAttribute("key", key);
-			number.setAttribute("value", "" + Formatter.formatNumber(value, 2));
+			number.setAttribute("value", Formatter.formatNumber(value, 2));
 			
 			addContent(number);
 			return this;

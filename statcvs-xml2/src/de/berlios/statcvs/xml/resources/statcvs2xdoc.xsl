@@ -352,10 +352,17 @@
   <xsl:template name="func:make-link">
     <xsl:param name="url"/>
     <xsl:param name="text"/>
+    <xsl:param name="localurl"/>
 	<xsl:choose>
 		<xsl:when test="$url!=''">
               <xsl:element name="a">
                 <xsl:attribute name="href"><xsl:value-of select="$url"/></xsl:attribute>
+                <xsl:value-of select="$text"/>
+              </xsl:element>
+		</xsl:when>
+		<xsl:when test="$localurl!=''">
+              <xsl:element name="a">
+                <xsl:attribute name="href"><xsl:value-of select="$localurl"/><xsl:value-of select="$ext"/></xsl:attribute>
                 <xsl:value-of select="$text"/>
               </xsl:element>
 		</xsl:when>
@@ -383,7 +390,7 @@
     <td>
         <xsl:call-template name="func:make-link">
 			<xsl:with-param name="text" select="@name"/>
-			<xsl:with-param name="url" select="ds:getAuthorFilename(@name)"/>
+			<xsl:with-param name="localurl" select="ds:getAuthorFilename(@name)"/>
         </xsl:call-template>
      </td>
   </xsl:template>
@@ -392,7 +399,7 @@
     <td>
         <xsl:call-template name="func:make-link">
 			<xsl:with-param name="text" select="@name"/>
-			<xsl:with-param name="url" select="ds:getDirectoryFilename(@name)"/>
+			<xsl:with-param name="localurl" select="ds:getDirectoryFilename(@name)"/>
         </xsl:call-template>
      </td>
   </xsl:template>
@@ -410,7 +417,7 @@
     <td>
         <xsl:call-template name="func:make-link">
 			<xsl:with-param name="text" select="@name"/>
-			<xsl:with-param name="url" select="ds:getModuleFilename(@name)"/>
+			<xsl:with-param name="localurl" select="ds:getModuleFilename(@name)"/>
         </xsl:call-template>
      </td>
   </xsl:template>

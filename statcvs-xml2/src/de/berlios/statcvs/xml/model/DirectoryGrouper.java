@@ -27,6 +27,7 @@ import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.output.ReportSettings;
+import de.berlios.statcvs.xml.output.TableElement.RowElement;
 
 /**
  * @author Steffen Pingel
@@ -36,6 +37,11 @@ public class DirectoryGrouper extends Grouper {
 	public DirectoryGrouper()
 	{
 		super("directory", I18n.tr("Directory"));
+	}
+
+	public void addElement(Object group,  RowElement row)
+	{
+		row.addDirectory((Directory)group);
 	}
 
 	/**

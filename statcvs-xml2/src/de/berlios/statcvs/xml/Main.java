@@ -53,7 +53,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.15 2004-02-27 17:30:39 vanto Exp $
+ * @version $Id: Main.java,v 1.16 2004-02-29 00:43:23 squig Exp $
  */
 public class Main {
 	private static String projectName;
@@ -240,6 +240,7 @@ public class Main {
 			renderer = (DocumentRenderer)m.invoke(null, new Object[] { content, settings });
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			throw new IOException(I18n.tr("Could not create renderer: {0}", e.getLocalizedMessage()));
 		}
 		

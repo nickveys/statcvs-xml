@@ -28,15 +28,15 @@
 
   <document  filename="directory%1" title="Directory Statistics%1" foreach="directory">
     <report class="LocChart"/>
-    <report class="AuthorsTable"/>
+    <report class="CommitTable" groupby="author"/>
   </document>
 
   <document  filename="recent_activity" title="Recent Activity">
     <settings>
       <revisionFilter>util.atMostDaysOld(rev.getDate(), 1)</revisionFilter> 
     </settings>
-    <report class="AuthorsTable"/>
-    <report class="FileActivityTable"/>
+    <report class="CommitTable" groupby="author"/>
+    <report class="CommitTable" groupby="file"/>
     <report class="LocChart" filename="recent_loc.png"/>
   </document>
 
@@ -50,20 +50,21 @@
   <document  filename="file_stats" title="File Statistics">
     <report class="FileCountChart"/>    
     <report class="AvgFilesizeChart"/>
-    <report class="SizePerFileTable"/>
+    <report class="CommitTable" groupby="file" orderby="loc"/>
+    <report class="CommitTable" groupby="file" orderby="revisions"/>
     <report class="AuthorCountTable" groupby="file"/>
-    <report class="RevisionsPerFileTable"/>
   </document>
   
   <document  filename="module_stats" title="Module Statistics">
     <report class="SizeChart" groupby="module"/>
     <report class="LocChart" groupby="module"/>
+    <report class="CommitTable" groupby="module" orderby="loc"/>
   </document>
     
   <document filename="index" title="CVS Statistics">
     <report class="DocumentTable"/>
     <report class="LocChart"/>
-    <report class="AuthorsTable"/>
+    <report class="CommitTable" groupby="author"/>
     <report class="DirectoryTree"/>
   </document>
 

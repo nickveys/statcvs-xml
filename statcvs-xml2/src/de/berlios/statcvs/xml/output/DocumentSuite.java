@@ -19,6 +19,7 @@
 package de.berlios.statcvs.xml.output;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
@@ -198,8 +199,18 @@ public class DocumentSuite {
 			try {
 				Class c = Class.forName(className);
 				Method m = c.getMethod("generate", new Class[] { CvsContent.class, ReportSettings.class });
-				Report report = (Report)m.invoke(null, new Object[] { content, reportSettings });
-				return report;
+				try {
+					Report report = (Report)m.invoke(null, new Object[] { content, reportSettings });
+					return report;
+				}
+				catch (InvocationTargetException e) {
+					if (e.getCause() instanceof EmptyReportException) {
+						logger.warning("Empty Report");
+					}
+					else {
+						throw e;
+					}
+				}
 			}
 			catch (Exception e) {
 				logger.warning("Could not generate report: " + e);

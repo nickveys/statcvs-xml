@@ -66,9 +66,9 @@ public class AuthorCountTable {
 		int count = 0;
 		while (fIt.hasNext() && count < maxItems) {
 			Object group = fIt.next();
-			
-			table.addRow().addGroup(grouper, group).addInteger("count", filesMap.get(group));
-			
+			table.addRow()
+				.addGroup(grouper, group)
+				.addInteger("count", filesMap.get(group));		
 			count++;
 		}
 		
