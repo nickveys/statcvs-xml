@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
@@ -68,14 +67,18 @@ public class HTMLRenderer extends XMLRenderer {
 	/**
 	 * Invoked by Main.
 	 */
-	public static DocumentRenderer create(CvsContent content, ReportSettings settings) 
+	public static DocumentRenderer create(CvsContent content, ReportSettings settings) throws IOException 
 	{
 		StreamSource source = new StreamSource
 			(FileHelper.getResource("resources/statcvs2html.xsl").toString());
 		Transformer transformer;
 
-		transformer	= TransformerFactory.newInstance().newTransformer(source);
-			
+		try {
+            transformer	= TransformerFactory.newInstance().newTransformer(source);
+        } catch (Exception e) {
+			throw new IOException();
+		}			
+
 		// set stylesheet parameters
 		transformer.setParameter("ext", ".html");
 		String filename = settings.getString("customCss");
