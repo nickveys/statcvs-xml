@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: HTMLRenderer.java,v $
-	$Date: 2003-07-04 22:31:23 $ 
+	$Date: 2003-07-05 01:09:15 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -61,7 +61,7 @@ public class HTMLRenderer extends XMLRenderer {
 		setOutputter(xout);
 		
 		try {
-			String filename = OutputSettings.getInstance().getCss();
+			String filename = OutputSettings.getCss();
 			FileUtils.copyFile
 				(Main.class.getResourceAsStream(filename),
 				 new File(ConfigurationOptions.getOutputDir() 
