@@ -95,7 +95,7 @@ public class AuthorDetailsReport {
 					File pf = new File(picFile);
 					
 					if (!pf.exists() && !picFile.equals(DEFAULT_PIC)) {
-						logger.warning("author picture "+picFile+" not found. Using dummy instead.");
+						logger.info("Picture "+picFile+" (Author: "+author.getName()+") not found. Using dummy instead.");
 						picFile = DEFAULT_PIC;
 						pf = new File(picFile); 
 					}
