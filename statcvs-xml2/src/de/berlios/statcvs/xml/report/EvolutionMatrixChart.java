@@ -468,7 +468,13 @@ public class EvolutionMatrixChart extends AbstractChart {
 		 */
 		public double getScore(Version ver)
 		{
-			return (double)getRevision(ver).getLines() / ver.getMaxLoc();
+			if (ver.getMaxLoc() != 0) {
+				return (double)getRevision(ver).getLines() / ver.getMaxLoc();	
+			}
+			else {
+				return 0;
+			}
+			
 		}
 		
 		/**
