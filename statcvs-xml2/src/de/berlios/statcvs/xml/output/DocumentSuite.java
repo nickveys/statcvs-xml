@@ -96,6 +96,7 @@ public class DocumentSuite {
 			}
 			catch (Exception e) {
 				logger.warning("Could not generate report: " + e);
+				e.printStackTrace();
 			}
 		}
 		

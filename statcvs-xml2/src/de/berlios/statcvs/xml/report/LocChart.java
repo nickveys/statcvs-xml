@@ -18,29 +18,24 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: LocChart.java,v $
-	$Date: 2004-02-20 16:17:10 $ 
+	$Date: 2004-02-20 16:25:58 $ 
 */
 package de.berlios.statcvs.xml.report;
 
 import java.awt.BasicStroke;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.Iterator;
-import java.util.Map;
 
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
-import net.sf.statcvs.model.SymbolicName;
-import net.sf.statcvs.util.IntegerMap;
 
-import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.chart.RevisionVisitor;
-import de.berlios.statcvs.xml.chart.SymbolicNameAnnotation;
 import de.berlios.statcvs.xml.chart.TimeLineChart;
 import de.berlios.statcvs.xml.output.ChartReportElement;
 import de.berlios.statcvs.xml.output.ReportElement;
@@ -120,7 +115,7 @@ public class LocChart extends TimeLineChart {
 	protected void addTimeSeries(String title, Iterator it)
 	{
 		TimeSeries series = createTimeSeries(title, it, new LOCCalculator());
-		series.add(new Millisecond(content.getFirstDate()), 0);
+		series.add(new Millisecond(new Date(content.getFirstDate().getTime() - 1)), 0);
 		addTimeSeries(series);
 	}
 	
