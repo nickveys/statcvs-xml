@@ -52,6 +52,7 @@ import de.berlios.statcvs.xml.chart.AbstractChart;
 import de.berlios.statcvs.xml.output.ChartReportElement;
 import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportSettings;
+import de.berlios.statcvs.xml.output.TooltipMapElement;
 
 /**
  * EvolutionMatrixChart
@@ -66,6 +67,7 @@ public class EvolutionMatrixChart extends AbstractChart {
     
 	private CvsContent content;
 	private ReportSettings settings;
+	private TooltipMapElement tooltipMap;
 
     /**
      * 
@@ -77,6 +79,7 @@ public class EvolutionMatrixChart extends AbstractChart {
 		this.content = content;
 		this.settings = settings;
 
+		tooltipMap = new TooltipMapElement("evomatrix");
 		setChart(createChart());
 		if (getChart() != null) {
 			setup(true);
@@ -89,7 +92,7 @@ public class EvolutionMatrixChart extends AbstractChart {
 	public static Report generate(CvsContent content, ReportSettings settings)
 	{
 		EvolutionMatrixChart chart = new EvolutionMatrixChart(content, settings);
-		return (chart.getChart() != null) ? new Report(new ChartReportElement(chart)) : null;
+		return (chart.getChart() != null) ? new Report(new ChartReportElement(chart, chart.getTooltipMap())) : null;
 	}
 	
     
@@ -101,6 +104,11 @@ public class EvolutionMatrixChart extends AbstractChart {
 		return new JFreeChart(settings.getProjectName(), null, new EvolutionMatrixPlot(content), false);
     }
 
+	private TooltipMapElement getTooltipMap()
+	{
+		return tooltipMap;
+	}
+	
 	/**
 	 * 
 	 * EvolutionMatrixPlot
@@ -307,10 +315,18 @@ public class EvolutionMatrixChart extends AbstractChart {
 							// file was never tagged
 							
 							// draw grey dot
-							g2.setColor(Color.lightGray);
-							g2.drawLine((int)x, (int)y, (int)x, (int)y);
+							//g2.setColor(Color.lightGray);
+							//g2.drawLine((int)x, (int)y, (int)x, (int)y);
 						}
 						
+						String link = (settings.getWebRepository() == null)
+									?"#"
+									:settings.getWebRepository().getFileHistoryUrl(file);
+						
+						tooltipMap.addRectArea((int)x, (int)y, (int)(x + plotArea.getWidth()), 
+							(int)y + LINE_HEIGHT, file.getFilenameWithPath(),
+							link);
+							
 						// next line
 						y += LINE_HEIGHT + 1;
 					}
@@ -340,6 +356,7 @@ public class EvolutionMatrixChart extends AbstractChart {
         		+ (dirCount * TEXT_HEIGHT);
         }
 	}
+	
 	
     /**
      * @see de.berlios.statcvs.xml.chart.AbstractChart#getPreferredHeigth()
@@ -494,5 +511,4 @@ public class EvolutionMatrixChart extends AbstractChart {
 				&& ((getRevision(v1) != null));
 		}
 	}
-
 }

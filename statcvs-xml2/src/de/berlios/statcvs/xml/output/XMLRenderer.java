@@ -105,6 +105,8 @@ public class XMLRenderer implements DocumentRenderer {
 		File file = new File(outputPath, document.getFilename() + extension);
 		FileWriter writer = new FileWriter(file);
 
+		document.saveResources(outputPath);
+		
 		try {
 			if (transformer != null) {
 				JDOMResult result = new JDOMResult();
@@ -123,8 +125,6 @@ public class XMLRenderer implements DocumentRenderer {
 		finally {
 			writer.close();
 		}	
-
-		document.saveResources(outputPath);
 	}
 
 	/**

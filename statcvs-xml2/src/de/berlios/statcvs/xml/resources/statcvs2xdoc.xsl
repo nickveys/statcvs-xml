@@ -85,7 +85,18 @@
   </xsl:template>
 
   <xsl:template match="img">
-    <p align="center"><img src="{@src}"/></p>
+    <p align="center">
+    <xsl:element name="img">
+      <xsl:attribute name="border">0</xsl:attribute>
+      <xsl:copy-of select="@*"/>
+    </xsl:element>
+    </p>
+  </xsl:template>
+
+  <xsl:template match="map">
+	<map>
+    <xsl:copy-of select="*|@*"/>
+    </map>
   </xsl:template>
 
   <xsl:template match="text">
@@ -216,8 +227,8 @@
       </xsl:call-template>
       <xsl:choose>
          <xsl:when test="@removed"><img src="folder-deleted.png"/></xsl:when>
-         <xsl:when test="((@depth = following::directoryTree/@depth) or (count(following::directoryTree) = 0)) and not(@removed)"><img src="folder.png"/></xsl:when>
-         <xsl:otherwise><img src="folder-open.png"/></xsl:otherwise>
+         <xsl:when test="((@depth &lt; following::directoryTree/@depth)) and not(@removed)"><img src="folder-open.png"/></xsl:when>
+         <xsl:otherwise><img src="folder.png"/></xsl:otherwise>
       </xsl:choose>
       <xsl:call-template name="func:make-link">
  		<xsl:with-param name="text" select="@name"/>
