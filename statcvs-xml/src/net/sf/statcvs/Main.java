@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Main.java,v $ 
-	Created on $Date: 2003-07-06 21:26:39 $ 
+	Created on $Date: 2003-07-06 21:34:18 $ 
 */
 package net.sf.statcvs;
 
@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Method;
 import java.util.logging.ConsoleHandler;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import net.sf.statcvs.input.Builder;
@@ -39,13 +38,14 @@ import net.sf.statcvs.input.RepositoryFileManager;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.output.HTMLRenderer;
 import net.sf.statcvs.output.OutputSettings;
+import net.sf.statcvs.util.LogFormatter;
 
 /**
  * StatCvs Main Class; it starts the application and controls command-line
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.15 2003-07-06 21:26:39 vanto Exp $
+ * @version $Id: Main.java,v 1.16 2003-07-06 21:34:18 vanto Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -174,8 +174,11 @@ public class Main {
 
 	public static void initLogger() throws LogSyntaxException {
 		ConsoleHandler ch = new ConsoleHandler();
+		ch.setFormatter(new LogFormatter());
 		ch.setLevel(Settings.getLoggingLevel());
-		LogManager.getLogManager().getLogger("net.sf.statcvs").addHandler(ch);
+		//LogManager.getLogManager().getLogger("net.sf.statcvs").addHandler(ch);
+		logger.addHandler(ch);
+		logger.setUseParentHandlers(false);
 	}
 
 	/**
