@@ -23,14 +23,12 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.sf.statcvs.model.CvsContent;
-
-import org.jdom.Element;
-
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.output.DocumentSuite;
 import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
+import de.berlios.statcvs.xml.output.TextElement;
 
 /**
  * 
@@ -42,16 +40,14 @@ public class DocumentTable {
 	public static Report generate(CvsContent content, ReportSettings settings)
 	{
 		ReportElement root = new ReportElement(settings, I18n.tr("Reports"));
-		Element list = new Element("reports");
-		root.addContent(list);
+		TextElement text = new TextElement(settings, "reports");
+		TextElement.ListElement list = text.addList();
 		Map documentTitleByFilename = DocumentSuite.getDocuments();
 		for (Iterator it = documentTitleByFilename.keySet().iterator(); it.hasNext();) {
 			String filename = (String)it.next();
-			Element element = new Element("link");
-			element.setAttribute("ref", filename);
-			element.setText((String)documentTitleByFilename.get(filename));
-			list.addContent(element);
+			list.addItem(filename, (String)documentTitleByFilename.get(filename));
 		}
+		root.addContent(text);
 		return new Report(root);
 	}
 	

@@ -32,6 +32,7 @@ import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.output.Report;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
+import de.berlios.statcvs.xml.output.TableElement;
 import de.berlios.statcvs.xml.util.FileHelper;
 
 /**
@@ -48,42 +49,26 @@ public class DirectoryTree {
 	public static Report generate(CvsContent content, ReportSettings settings) 
 	{
 		ReportElement root = new DirectoryTreeElement(settings, I18n.tr("Repository Tree"));
-		createReport(root, settings.getDirectoryIterator(content));
-		return new Report(root);
-	}
-	
-	/**
-	 * 
-	 */
-	private static void createReport(ReportElement root, Iterator it)
-	{
-		Element modules = new Element("modulesTree");
+		Iterator it = settings.getDirectoryIterator(content);
+
+		TableElement table = new TableElement(settings, new String[] {
+			I18n.tr("Directory"), I18n.tr("Files"), I18n.tr("Lines of Code") });
+			
 		int rootDepth = 0;
 		boolean firstProcessed = false;
 		while (it.hasNext()) {
-			Directory dir = (Directory) it.next();
+			Directory dir = (Directory)it.next();
 			if (!firstProcessed) {
 				rootDepth = dir.getDepth();
 				firstProcessed = true;
 			}
-			Element module = new Element("module");
-			if (dir.isRoot()) {
-				module.setAttribute("name", I18n.tr("[root]"));
-			} else {
-				module.setAttribute("name", dir.getName());
-			}
-			module.setAttribute("depth", ""+(dir.getDepth()-rootDepth));
-			module.setAttribute("files", ""+dir.getCurrentFileCount());
-			module.setAttribute("loc", ""+dir.getCurrentLOC());
-			if (dir.isEmpty()) {
-				module.setAttribute("removed", "true");
-			} else {
-				module.setAttribute("ref", dir.getPath());	
-			}
-
-			modules.addContent(module);
+			table.addRow()
+				.addDirectoryTree(dir, dir.getDepth() - rootDepth)
+				.addInteger("files", dir.getCurrentFileCount())
+				.addInteger("loc", dir.getCurrentLOC());
 		}
-		root.addContent(modules);
+		root.addContent(table);
+		return new Report(root);
 	}
 	
 	public static class DirectoryTreeElement extends ReportElement

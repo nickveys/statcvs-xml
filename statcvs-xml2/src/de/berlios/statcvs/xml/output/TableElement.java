@@ -31,6 +31,7 @@ import net.sf.statcvs.output.WebRepositoryIntegration;
 
 import org.jdom.Element;
 
+import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.model.Module;
 import de.berlios.statcvs.xml.util.Formatter;
@@ -220,6 +221,18 @@ public class TableElement extends Element
 			return this;
 		}
 		
+		public RowElement addDirectoryTree(Directory directory, int depth) 
+		{
+			Element element = new Element("treeDirectory");
+			element.setAttribute("depth", "" + depth);
+			element.setAttribute("name", (directory.isRoot()) ? I18n.tr("[root]") : directory.getName());
+			if (directory.isEmpty()) {
+				element.setAttribute("removed", "true");
+			} 
+			addContent(element);
+			return this;
+		}
+
 		public RowElement addCommit(Commit commit)
 		{
 			Element comEl = new Element("commit");
@@ -285,4 +298,5 @@ public class TableElement extends Element
 			return this;
 		}
 	}
+	
 }

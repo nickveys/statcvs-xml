@@ -192,6 +192,22 @@
      </td>
   </xsl:template>
 
+  <xsl:template match="row/directoryTree">
+    <td>
+      <xsl:call-template name="func:spacer">
+      	<xsl:with-param name="num" select="@depth"/>
+      </xsl:call-template>
+      <xsl:choose>
+         <xsl:when test="@removed"><img src="folder-deleted.png"/></xsl:when>
+         <xsl:otherwise><img src="folder.png"/></xsl:otherwise>
+      </xsl:choose>
+      <xsl:call-template name="func:make-link">
+ 		<xsl:with-param name="text" select="@name"/>
+		<xsl:with-param name="localurl" select="ds:getDirectoryFilename(@name)"/>
+      </xsl:call-template>
+     </td>
+  </xsl:template>
+
   <xsl:template match="row/link">
     <td>
         <xsl:call-template name="func:make-link">

@@ -24,6 +24,11 @@ public class TextElement extends Element {
 		setAttribute("key", key);
 	}
 
+	public ListElement addList()
+	{
+		return new ListElement();
+	}
+
 	public TextElement addPeriod(String name, Date from, Date to) 
 	{
 		Element element = new Element("period");
@@ -61,6 +66,28 @@ public class TextElement extends Element {
 		element.setText(description);
 		addContent(element);
 		return this;
+	}
+
+	public class ListElement extends Element
+	{
+		
+		public ListElement()
+		{
+			super("ul");
+		}
+		
+		public ListElement addItem(String filename, String link)
+		{
+			Element element = new Element("link");
+			element.setAttribute("ref", filename);
+			element.setText(link);
+			
+			Element item = new Element("li");
+			item.addContent(element);
+			
+			return this;
+		}
+		
 	}
 
 }
