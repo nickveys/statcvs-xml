@@ -36,16 +36,21 @@ import net.sf.statcvs.model.SymbolicName;
 import net.sf.statcvs.util.CvsLogUtils;
 import net.sf.statcvs.util.LogFormatter;
 import net.sf.statcvs.util.LookaheadReader;
+import de.berlios.statcvs.xml.output.DocumentRenderer;
+import de.berlios.statcvs.xml.output.DocumentSuite;
 import de.berlios.statcvs.xml.output.XDocRenderer;
+import de.berlios.statcvs.xml.util.FileHelper;
 
 /**
  * StatCvs Main Class; it starts the application and controls command-line
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.7 2004-02-18 15:38:11 vanto Exp $
+ * @version $Id: Main.java,v 1.8 2004-02-21 16:26:53 squig Exp $
  */
 public class Main {
+	private static String projectName;
+
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
 
 	public static final String VERSION = "@VERSION@";
@@ -266,6 +271,7 @@ public class Main {
 			= new RepositoryFileManager
 				(Settings.getCheckedOutDirectory());
 		Builder builder = new Builder(repFileMan, Settings.getIncludeMatcher(), Settings.getExcludeMatcher());
+		projectName = builder.getProjectName();
 		new CvsLogfileParser(logReader, builder).parse();
 		return builder.createCvsContent();
 	}
@@ -277,7 +283,7 @@ public class Main {
 	 */
 	public static void generateSuite(CvsContent content) throws Exception {	
 		logger.info("Generating report for " 
-					+ Settings.getProjectName()
+					/* + Settings.getProjectName()*/
 					+ " into " + Settings.getOutputDir());
 
 //		if (Settings.getOutputSuite() == null) {
@@ -302,7 +308,9 @@ public class Main {
 //		Method m = c.getMethod("generate", new Class[] { CvsContent.class });
 //		m.invoke(null, new Object[] { content });
 		
-		XDocRenderer.generate(content, new File(Settings.getOutputDir()));
+		DocumentRenderer renderer = XDocRenderer.create(content, new File(Settings.getOutputDir()));
+		DocumentSuite suite = new DocumentSuite(FileHelper.getResource("resources/suite.xml"), content);
+		suite.generate(renderer, projectName);
 	}
 
     public static String getSettingsPath()

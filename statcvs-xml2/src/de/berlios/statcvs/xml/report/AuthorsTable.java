@@ -48,7 +48,7 @@ public class AuthorsTable {
 		while (revs.hasNext()) {
 			CvsRevision rev = (CvsRevision)revs.next();
 			changesMap.addInt(rev.getAuthor(), 1);
-			linesMap.addInt(rev.getAuthor(), rev.getLineValue()); 
+			linesMap.addInt(rev.getAuthor(), rev.getNewLines()); 
 		}
 		Iterator it = linesMap.iteratorSortedByValueReverse();
 

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XDocRenderer.java,v $
-	$Date: 2004-02-17 16:11:54 $ 
+	$Date: 2004-02-21 16:26:53 $ 
 */
 package de.berlios.statcvs.xml.output;
 
@@ -40,7 +40,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  */
 public class XDocRenderer {
 
-	public static void generate(CvsContent content, File outputPath) 
+	public static DocumentRenderer create(CvsContent content, File outputPath) 
 		throws IOException, TransformerException
 	{
 		StreamSource source = new StreamSource
@@ -49,8 +49,7 @@ public class XDocRenderer {
 			= TransformerFactory.newInstance().newTransformer(source);
 		transformer.setParameter("ext", ".html");
 		
-		DocumentSuite suite = new DocumentSuite(FileHelper.getResource("resources/suite.xml"), content);
-		suite.generate(new XMLRenderer(transformer, outputPath));
+		return new XMLRenderer(transformer, outputPath);
 	}
 
 }

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Settings.java,v $
-	$Date: 2004-02-17 19:07:22 $ 
+	$Date: 2004-02-21 16:26:53 $ 
 */
 package de.berlios.statcvs.xml;
 
@@ -38,7 +38,7 @@ import net.sf.statcvs.util.FileUtils;
  * can read all parameter values from here.
  * 
  * @author jentzsch
- * @version $Id: Settings.java,v 1.5 2004-02-17 19:07:22 squig Exp $
+ * @version $Id: Settings.java,v 1.6 2004-02-21 16:26:53 squig Exp $
  */
 public class Settings {
 
@@ -59,14 +59,6 @@ public class Settings {
 	private static WebRepositoryIntegration webRepository = null;
 
 	private static String outputSuite = null;
-
-	/**
-	 * Method getProjectName.
-	 * @return String name of the project
-	 */
-	public static String getProjectName() {
-		return projectTitle;
-	}
 
 	/**
 	 * Method getCheckedOutDirectory.

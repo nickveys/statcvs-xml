@@ -3,8 +3,9 @@ package de.berlios.statcvs.xml.output;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Properties;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import net.sf.statcvs.model.Author;
@@ -15,7 +16,6 @@ import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jdom.input.JDOMParseException;
 import org.jdom.input.SAXBuilder;
 
 /**
@@ -50,10 +50,10 @@ public class DocumentSuite {
 
 	public StatCvsDocument createDocument(Element root, ReportSettings settings)
 	{
-		ReportSettings documentSettings = new ReportSettings(settings);
-		
+		StatCvsDocument document = new StatCvsDocument(readAttributes(settings, root));
+
 		// generate reports
-		StatCvsDocument document = new StatCvsDocument(readAttributes(documentSettings, root));
+		ReportSettings documentSettings = new ReportSettings(settings);
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element element = (Element)it.next();
 			if ("settings".equals(element.getName())) {
@@ -104,9 +104,13 @@ public class DocumentSuite {
 		return null;
 	}
 
-	public void generate(DocumentRenderer renderer) 
+	public void generate(DocumentRenderer renderer, String projectName) 
 		throws IOException 
 	{
+		if (projectName != null) {
+			defaultSettings.put("projectName", projectName);
+		}
+			
 		// generate documents
 		for (Iterator it = suite.getRootElement().getChildren().iterator(); it.hasNext();) {
 			Element element = (Element)it.next();
@@ -165,7 +169,11 @@ public class DocumentSuite {
 		ReportSettings settings = new ReportSettings(parentSettings);
 		for (Iterator it = root.getAttributes().iterator(); it.hasNext();) {
 			Attribute setting = (Attribute)it.next();
-			settings.put(setting.getName(), setting.getValue());
+			// foreach has already been set by renderDocument()
+			// and should not be overiden here
+			if (!"foreach".equals(setting.getName())) {
+				settings.put(setting.getName(), setting.getValue());
+			}
 		}
 		return settings;
 	}
@@ -178,8 +186,25 @@ public class DocumentSuite {
 		// add childern as key value pairs
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element setting = (Element)it.next();
-			properties.put(setting.getName(), setting.getText());
+			// foreach has a special meaning and should not be overiden here
+			if (!"foreach".equals(setting.getName())) {
+				properties.put(setting.getName(), getValue(setting));
+			}	
 		}
 	}
-	
+
+	private Object getValue(Element setting)
+	{
+		if ("map".equals(setting.getAttributeValue("type"))) {
+			Map map = new HashMap();
+			for (Iterator it = setting.getChildren().iterator(); it.hasNext();) {
+				Element child = (Element)it.next();
+				map.put(child.getName(), getValue(child));
+			}
+			return map;
+		}
+		else {
+			return setting.getText();
+		}
+	}
 }
