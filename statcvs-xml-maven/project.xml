@@ -116,7 +116,7 @@
     </dependency>
     <dependency>
       <id>jdom</id>
-      <version>b9</version>
+      <version>b10</version>
     </dependency>
     <dependency>
       <id>jfreechart</id>
