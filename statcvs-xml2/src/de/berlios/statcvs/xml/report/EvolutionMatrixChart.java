@@ -375,19 +375,19 @@ public class EvolutionMatrixChart extends AbstractChart {
             LegendItemCollection result = new LegendItemCollection();
             Stroke stroke = new BasicStroke(1);
             
-            LegendItem le = new LegendItem(I18n.tr("Added file"), "", null, 
+            LegendItem le = new LegendItem(I18n.tr("Added File"), "", null, 
             							Color.green, Color.black, stroke);
             result.add(le);
             
-			le = new LegendItem(I18n.tr("Modified file"), "", null, 
+			le = new LegendItem(I18n.tr("Modified File"), "", null, 
 										Color.red, Color.black, stroke);
 			result.add(le);
 
-			le = new LegendItem(I18n.tr("Untouched file"), "", null, 
+			le = new LegendItem(I18n.tr("Unmodified File"), "", null, 
 										Color.gray, Color.black, stroke);
 			result.add(le);
 
-			le = new LegendItem(I18n.tr("Removed file"), "", null, 
+			le = new LegendItem(I18n.tr("Removed File"), "", null, 
 										Color.black, Color.black, stroke);
 			result.add(le);
 
