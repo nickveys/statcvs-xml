@@ -167,7 +167,7 @@ public class ActivityProgressionChart extends AbstractChart {
 				
 		int dateCount = mapByDate.size();
 		int numValues = dateCount * groupCount;
-		if (numValues == 0 || max == 0) {
+		if (numValues == 0 || max == 0 || dateCount == 1) {
 			return null;
 		}
 		
