@@ -118,7 +118,7 @@ public class ViewCvsIntegration implements WebRepositoryIntegration {
 			throw new IllegalArgumentException("revisions must be of the same file");
 		}
 		return getFileUrl(oldRevision.getFile(),
-				".diff?r1=" + oldRevision.getRevisionNumber()
+				"?r1=" + oldRevision.getRevisionNumber()
 				+ "&r2=" + newRevision.getRevisionNumber());
 	}
 	

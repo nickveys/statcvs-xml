@@ -24,6 +24,10 @@
 		Bug #1815 (Null Pointer Exception in Software Evolution Chart) has been 
 		fixed.
       </action>
+      <action dev="squig" type="fix">
+		The .diff extension has been removed from ViewCvs URLs that
+		point to revision deltas. Patch submitted by Martijn Dashorst.
+      </action>
 	</release>
 	<release version="0.9.3" date="2004-04-05">
       <action dev="vanto" type="add">
