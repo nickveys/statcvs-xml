@@ -26,7 +26,7 @@
        <body>
 	     <h1><xsl:value-of select="@title"/></h1>
 		 <xsl:if test="@name != 'index'">
-		   <p><a href="index{$ext}">Back to Index Page</a></p>
+		   <a href="index{$ext}">Back to Index Page</a><br/>
 		 </xsl:if>
 	     <xsl:apply-templates select="report"/>
        </body>

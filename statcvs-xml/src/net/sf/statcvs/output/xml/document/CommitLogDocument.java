@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommitLogDocument.java,v $
-	$Date: 2003-07-05 20:12:32 $ 
+	$Date: 2003-07-05 23:42:53 $ 
 */
 package net.sf.statcvs.output.xml.document;
 
@@ -51,9 +51,9 @@ public class CommitLogDocument extends AbstractPageableDocument {
 		setPageableContent(commitLogReport.getChild("commitlog"));
 	}
 	
-	public Page createPageTemplate() {
+	public Page createPageTemplate(String filename) {
 		StatCvsDocument doc
-			= new StatCvsDocument(I18n.tr("Commit Log"), "commit_log");
+			= new StatCvsDocument(I18n.tr("Commit Log"), filename);
 
 		Element report = new ReportElement(I18n.tr("Commit Log"));
 		doc.getRootElement().addContent(report);

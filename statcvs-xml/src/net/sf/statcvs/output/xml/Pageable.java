@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Pageable.java,v $
-	$Date: 2003-07-05 20:12:32 $ 
+	$Date: 2003-07-05 23:42:53 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -40,16 +40,5 @@ public interface Pageable {
 	public StatCvsDocument getPage(int page);
 
 	public int getPageCount();
-
-	public String getFilename(int page);
-
-	/**
-	 * This method creates the whole document, which will be repeatet
-	 * on every page. the returned element will be the parent of the paged
-	 * content.
-	 *  
-	 * @return pages parent element
-	 */
-	public Page createPageTemplate();
 
 }
