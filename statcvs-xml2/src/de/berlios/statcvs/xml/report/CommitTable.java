@@ -85,7 +85,7 @@ public class CommitTable {
 				.addInteger("revisions", changesMap.get(group), changesMap.getPercent(group))
 				.addInteger("loc", linesMap.get(group), linesMap.getPercent(group))
 				.addInteger("locAdded", linesAddedMap.get(group), linesAddedMap.getPercent(group))
-				.addDouble("locPerRevision", linesMap.get(group) / changesMap.get(group));
+				.addDouble("locPerRevision", (double)linesMap.get(group) / changesMap.get(group));
 			count++;
 		}
 		root.addContent(table);

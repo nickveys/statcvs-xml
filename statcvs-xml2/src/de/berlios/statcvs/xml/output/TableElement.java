@@ -227,7 +227,7 @@ public class TableElement extends Element
 		
 		public RowElement addDirectoryTree(Directory directory, int depth) 
 		{
-			Element element = new Element("treeDirectory");
+			Element element = new Element("directoryTree");
 			element.setAttribute("depth", "" + depth);
 			element.setAttribute("name", (directory.isRoot()) ? I18n.tr("[root]") : directory.getName());
 			if (directory.isEmpty()) {

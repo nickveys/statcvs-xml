@@ -26,7 +26,9 @@ public class TextElement extends Element {
 
 	public ListElement addList()
 	{
-		return new ListElement();
+		ListElement element = new ListElement();
+		addContent(element);
+		return element;
 	}
 
 	public TextElement addPeriod(String name, Date from, Date to) 
