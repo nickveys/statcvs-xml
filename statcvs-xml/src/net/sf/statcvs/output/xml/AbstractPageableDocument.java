@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractPageableDocument.java,v $
-	$Date: 2003-06-18 17:44:08 $ 
+	$Date: 2003-06-19 21:58:24 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -33,26 +33,15 @@ import org.jdom.Element;
  */
 public abstract class AbstractPageableDocument extends StatCvsDocument implements Pageable {
 
-	private String parent;
-	private Element template;
 	private String pContentName;
 	private List pContent;
 	private int itemsPerPage;
 
 	/**
-	 * @param element
 	 * @param filename
 	 */
-	public AbstractPageableDocument(Element element, String filename, int itemsPerPage) {
-		super(element, filename);
-		setItemsPerPage(itemsPerPage);
-	}
-
-	/**
-	 * @param filename
-	 */
-	public AbstractPageableDocument(String filename, int itemsPerPage) {
-		super(filename);
+	public AbstractPageableDocument(String title, String filename, int itemsPerPage) {
+		super(title, filename);
 		setItemsPerPage(itemsPerPage);
 	}
 
@@ -74,37 +63,51 @@ public abstract class AbstractPageableDocument extends StatCvsDocument implement
 	 * @see net.sf.statcvs.output.xml.Pageable#getPage(int)
 	 */
 	public Element getPage(int page) {
-		Element element = (Element)template.clone();
-		Element child = new Element(pContentName);
-//		element.addContent(getHeader());
-		Element parent = element.getChild("commit");
-		System.out.println(parent);
-		System.out.println(element);
-		parent.addContent(child);
-//		element.addContent(getFooter());
-		List elCont = child.getContent();
+		// get paging parent	
+		Element pageParent = getPageParent();
+		// fetch enclosing document
+		Element element = pageParent.getDocument().getRootElement();
+		// get parents children
+		List doc = pageParent.getContent();
+		// add pager
+		doc.add(createPagerElement(page));				
+		Element pageRoot = new Element(pContentName);
+		doc.add(pageRoot);
 		
+		List elCont = pageRoot.getContent();
 		
+		// create page
 		List pageList = null;// = new ArrayList();
-
 		if ((pContent != null) && (page < getPageCount())) {
-			element.setAttribute("page", ""+(page+1));
-			element.setAttribute("totalPages", ""+getPageCount());
-			
 			if (pContent.size() < (page*itemsPerPage)+itemsPerPage) {
 				pageList = pContent.subList(page*itemsPerPage, pContent.size());
 			} else {
 				pageList = pContent.subList(page*itemsPerPage, (page*itemsPerPage)+itemsPerPage);	
 			}
 		}
+		
 		// this: elCont.add(pageList); make that element gets null, why?
 		// workaround:
 		for (int i=0; i < pageList.size(); i++) {
 			elCont.add(((Element)pageList.get(i)).clone());//pageList.get(i));
 		}
-		return element;
+		
+		return (Element)element;
 	}
 	
+	private Element createPagerElement(int currPage) {
+		Element pager = new Element("pager");
+		pager.setAttribute("current", ""+(currPage + 1));
+		pager.setAttribute("total", ""+getPageCount());
+		for (int i=0; i < getPageCount(); i++) {
+			Element page = new Element("page");
+			page.setAttribute("filename", getFilename(i));
+			page.setAttribute("nr", ""+(i+1));
+			pager.addContent(page);
+		}
+		return pager;
+	}
+
 	/**
 	 * @see net.sf.statcvs.output.xml.Pageable#getPageCount()
 	 */
@@ -117,16 +120,17 @@ public abstract class AbstractPageableDocument extends StatCvsDocument implement
 		this.pContentName = content.getName();
 	}
 	
-	public void setTemplateElement(Element el) {
-		template = el;
-	}
-	
-	public void setParentName(String parent) {
-		this.parent = parent;
-	}
-	
 	public String getFilename(int page) {
 		return (page == 0)?getFilename():getFilename()+"_"+page;
 	}
+	
+	/**
+	 * This method creates the whole document, which will be repeatet
+	 * on every page. the returned element will be the parent of the paged
+	 * content.
+	 *  
+	 * @return pages parent element
+	 */
+	public abstract Element getPageParent();
 
 }

@@ -30,11 +30,26 @@
        <td><xsl:value-of select="@date"/></td>
        <td><xsl:value-of select="@author"/></td>
        <td>
-		  <p><xsl:value-of select="comment"/>
+		  <b><xsl:value-of select="comment"/></b>
 		  (<xsl:value-of select="@changedfiles"/> Files changed,
 		  <xsl:value-of select="@changedlines"/> Lines changed)
-		  </p>
-		  <xsl:apply-templates select="*"/>
+		  <br/>
+		  <xsl:for-each select="files/file">
+              <xsl:value-of select="@directory"/>
+              <xsl:value-of select="@name"/><xsl:text> </xsl:text>
+              <xsl:if test="@action = 'added'">
+                <font color="green">added</font>
+              </xsl:if>
+              <xsl:if test="@action = 'removed'">
+                <font color="red">removed</font>
+              </xsl:if>
+              <xsl:if test="@action = 'changed'">
+                 (+<xsl:value-of select="@added"/>
+                 -<xsl:value-of select="@removed"/>)
+              </xsl:if>
+
+              <br/>
+		  </xsl:for-each>
        </td>
      </tr>
   </xsl:template>
@@ -50,14 +65,33 @@
      </table>
   </xsl:template>
 
-  <xsl:template match="file">
-    <xsl:value-of select="@directory"/>
-    <xsl:value-of select="@name"/><xsl:text> </xsl:text><xsl:value-of select="@action"/>
-	(+<xsl:value-of select="@added"/>
-	 -<xsl:value-of select="@removed"/>)
-	<br/>
+  <xsl:template match="pager">
+     <p>
+     <xsl:if test="@current!=1">
+         <xsl:element name="a">
+             <!-- dont break the line -->
+             <xsl:attribute name="href"><xsl:value-of select="page[@nr=(../@current)-1]/@filename"/>.html</xsl:attribute>
+             <xsl:text>&lt;&lt;</xsl:text>
+         </xsl:element>
+     </xsl:if>
+	 <xsl:for-each select="page">
+		<xsl:if test="@nr != ../@current">
+		  <a href="{@filename}.html"><xsl:value-of select="@nr"/></a>
+		</xsl:if>
+		<xsl:if test="@nr = ../@current">
+		  <xsl:value-of select="@nr"/>
+		</xsl:if>
+	 </xsl:for-each>
+     <xsl:if test="@current!=@total">
+	     <xsl:element name="a">
+             <!-- dont break the line -->
+		     <xsl:attribute name="href"><xsl:value-of select="page[@nr=(../@current)+1]/@filename"/>.html</xsl:attribute>
+		     <xsl:text>&gt;&gt;</xsl:text>
+	     </xsl:element>
+     </xsl:if>
+     </p>
   </xsl:template>
-
+  
   <xsl:template name="link" match="link">
     <a href="{@ref}.html"><xsl:apply-templates /></a>
   </xsl:template>
