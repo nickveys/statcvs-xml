@@ -65,8 +65,6 @@ public class EvolutionMatrixChart extends AbstractChart {
 	private final int LINE_HEIGHT = 4;
 	private final int TEXT_HEIGHT = 15;
     
-	private CvsContent content;
-	private ReportSettings settings;
 	private TooltipMapElement tooltipMap;
 
     /**
@@ -76,14 +74,11 @@ public class EvolutionMatrixChart extends AbstractChart {
     {
 		super(settings, "evolution.png", I18n.tr("Software Evolution Matrix"));
 
-		this.content = content;
-		this.settings = settings;
-
 		tooltipMap = new TooltipMapElement("evomatrix");
-		setChart(createChart());
-		if (getChart() != null) {
-			setup(true);
-		}
+	
+		setChart(new JFreeChart(settings.getProjectName(), null, 
+				 new EvolutionMatrixPlot(content, settings), false));
+		setup(true);
     }
     
 	/**
@@ -96,14 +91,6 @@ public class EvolutionMatrixChart extends AbstractChart {
 	}
 	
     
-    /**
-     *
-     */
-    private JFreeChart createChart() 
-    {
-		return new JFreeChart(settings.getProjectName(), null, new EvolutionMatrixPlot(content), false);
-    }
-
 	private TooltipMapElement getTooltipMap()
 	{
 		return tooltipMap;
@@ -125,10 +112,10 @@ public class EvolutionMatrixChart extends AbstractChart {
 		/**
 		 * 
 		 */
-		public EvolutionMatrixPlot(CvsContent content) {
+		public EvolutionMatrixPlot(CvsContent content, ReportSettings settings) {
 			this.content = content;
 			
-			Iterator it = content.getSymbolicNames().iterator();
+			Iterator it = settings.getSymbolicNameIterator(content);
 			while (it.hasNext()) {
 				SymbolicName sn = (SymbolicName)it.next();
 				Version version = new Version(sn.getName(), sn.getDate());
@@ -319,9 +306,10 @@ public class EvolutionMatrixChart extends AbstractChart {
 							//g2.drawLine((int)x, (int)y, (int)x, (int)y);
 						}
 						
-						String link = (settings.getWebRepository() == null)
-									?"#"
-									:settings.getWebRepository().getFileHistoryUrl(file);
+						String link 
+							= (getSettings().getWebRepository() == null)
+							? "#"
+							: getSettings().getWebRepository().getFileHistoryUrl(file);
 						
 						tooltipMap.addRectArea((int)x, (int)y, (int)(x + plotArea.getWidth()), 
 							(int)y + LINE_HEIGHT, file.getFilenameWithPath(),
