@@ -27,7 +27,7 @@ import org.jdom.Element;
  * Report
  * 
  * @author Tammo van Lessen
- * @version $Id: Report.java,v 1.2 2004-02-29 00:15:07 vanto Exp $
+ * @version $Id: Report.java,v 1.3 2004-02-29 00:50:07 vanto Exp $
  */
 public class Report {
 
@@ -43,9 +43,6 @@ public class Report {
 	public Report(ReportElement element, Separable report)
 	{
 		int index = element.getContent().indexOf(report);
-		System.out.println(element.getContent().contains(report));
-		System.out.println(index);
-		System.out.println(report.getPageCount());
 		for (int i = 0; i < report.getPageCount(); i++) {
 			Element clone = (Element)element.clone();
 			clone.getContent().set(index, report.getPage(i));	
