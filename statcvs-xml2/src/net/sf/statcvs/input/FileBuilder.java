@@ -31,10 +31,9 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Logger;
-import net.sf.statcvs.model.CvsBranch;
+
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.CvsRevision;
-import net.sf.statcvs.util.CvsLogUtils;
 
 /**
  * <p>Builds a {@link CvsFile} with {@link CvsRevision}s from logging data.
@@ -42,7 +41,7 @@ import net.sf.statcvs.util.CvsLogUtils;
  * included in the report, for translating from CVS logfile data structures
  * to the data structures in the <tt>net.sf.statcvs.model</tt> package, and
  * for calculating the LOC history for the file.</p>
- * <p/>
+ * 
  * <p>A main goal of this class is to delay the creation of the <tt>CvsFile</tt>
  * object until all revisions of the file have been collected from the log.
  * We could simply create <tt>CvsFile</tt> and <tt>CvsRevision</tt>s on the fly
@@ -54,45 +53,39 @@ import net.sf.statcvs.util.CvsLogUtils;
  * problem is solved by first collecting all information about one file in
  * this class, and then, with all information present, deciding if we want
  * to create the model instances or not.</p>
- *
+ * 
  * @author Richard Cyganiak <richard@cyganiak.de>
  * @author Tammo van Lessen
  * @version $Id$
  */
 public class FileBuilder {
-    private static Logger logger = Logger.getLogger(FileBuilder.class.getName());
+	private static Logger logger = Logger.getLogger(FileBuilder.class.getName());
 
 	private Builder builder;
 	private String name;
 	private boolean isBinary;
 	private List revisions = new ArrayList();
 	private RevisionData lastAdded = null;
-    private Map revisionBySymbolicName;
+    private Map revBySymnames;
+
 	private int locDelta;
 	/**
-     * The name of the branch the revisions of which should be parsed from the log
-     */
-    private String parseBranchName;
-
-    /**
-     * Creates a new <tt>FileBuilder</tt>.
-     *
-     * @param builder  a <tt>Builder</tt> that provides factory services for
-     *                 author and directory instances and line counts.
-     * @param branches the branches the file appears on
-     * @param name     the filename
-     * @param isBinary Is this a binary file or not?
-     * @param parseBranchName the name of the branch whos revisions should be parsed from the log
-     */
-    public FileBuilder(Builder builder, String name, boolean isBinary, 
-    		String parseBranchName, Map revisionBySymbolicName) {
-        this.builder = builder;
-        this.name = name;
-        this.isBinary = isBinary;
-        this.parseBranchName = parseBranchName;
-        this.revisionBySymbolicName = revisionBySymbolicName;
-        logger.fine("logging " + name);
-    }
+	 * Creates a new <tt>FileBuilder</tt>.
+	 * 
+	 * @param builder a <tt>Builder</tt> that provides factory services for
+	 * author and directory instances and line counts.
+	 * @param name the filename
+	 * @param isBinary Is this a binary file or not?
+	 */
+	public FileBuilder(Builder builder,	String name, boolean isBinary, 
+						Map revBySymnames) {
+		this.builder = builder;
+		this.name = name;
+		this.isBinary = isBinary;
+        this.revBySymnames = revBySymnames;
+        
+		logger.fine("logging " + name);
+	}
 
 	/**
 	 * Adds a revision to the file. The revisions must be added in the
@@ -102,11 +95,7 @@ public class FileBuilder {
 	 * @param data the revision
 	 */
 	public void addRevisionData(RevisionData data) {
-		// Test if we are only interested in revisions from one branch.
-		// And if so, ensure that the revision is on the branch we are interested in.
-		if (parseBranchName != null 
-				&& !parseBranchName.equals(getMainBranch(data))) {
-			// Otherwise, skip this revision
+		if (!data.isOnTrunk()) {
 			return;
 		}
 		if (isBinary && !data.isCreation()) {
@@ -115,33 +104,7 @@ public class FileBuilder {
 		this.revisions.add(data);
 		lastAdded = data;
 
-		if (data.isOnTrunk()) {
-			locDelta += getLOCChange(data);
-		}
-	}
-	
-	private String getMainBranch(RevisionData data) {
-		if (data.isOnTrunk()) {
-			return CvsLogUtils.HEAD_BRANCH_NAME;
-		}
-		
-		String dataRev = null;
-		try {
-			dataRev = CvsLogUtils.calculateBranchNumber(data.getRevisionNumber());
-		}
-		catch (LogSyntaxException e) {
-			throw new NoBranchException("Invalid branch.");
-		}
-        Iterator it = revisionBySymbolicName.keySet().iterator();
-        while (it.hasNext()) {
-            String name = (String)it.next();
-            String rev = (String)revisionBySymbolicName.get(name);
-            if (dataRev.equals(rev)) {
-				return name;
-            }
-        }
-
-		throw new NoBranchException("No such branch: " + dataRev + ".");
+		locDelta += getLOCChange(data);
 	}
 	
 	/**
@@ -154,13 +117,9 @@ public class FileBuilder {
 	 * @return a <tt>CvsFile</tt> representation of the file.
 	 */
 	public CvsFile createFile(Date beginOfLogDate) {
-		// TODO: review
-		
 		if (isFilteredFile() || !fileExistsInLogPeriod()) {
 			return null;
 		}
-        // If the only thing we know about the file is the AddOnSubbranch
-        // revision then do no create the CVSFile
 		if (revisions.size() == 1 && lastAdded.isAddOnSubbranch()) {
 			return null;
 		}
@@ -168,8 +127,7 @@ public class FileBuilder {
 		CvsFile file = new CvsFile(name, builder.getDirectory(name));
 
 		if (revisions.isEmpty()) {
-			CvsBranch branch = builder.getBranch(CvsLogUtils.HEAD_BRANCH_NAME);
-			buildBeginOfLogRevision(file, beginOfLogDate, getFinalLOC(), null, branch);
+			buildBeginOfLogRevision(file, beginOfLogDate, getFinalLOC(), null);
 			return file;
 		}
 
@@ -178,28 +136,50 @@ public class FileBuilder {
 		int currentLOC = getFinalLOC();
 		RevisionData previousData;
 		int previousLOC;
-
-        while (it.hasNext()) {
+        SortedSet symbolicNames;
+        
+		while (it.hasNext()) {
 			previousData = currentData;
 			previousLOC = currentLOC;
 			currentData = (RevisionData) it.next();
 			currentLOC = previousLOC - getLOCChange(previousData);
 
-            if (getMainBranch(previousData).equals(getMainBranch(currentData))) {
-                // We are processing a revision which is on the same branch as the revision
-                // we will process in the next interation of the loop
-				processRevision(previousData, previousLOC, currentData, file);			
-            } else {
-                processFirstRevisionOnBranch(previousData, previousLOC, file, beginOfLogDate);
-				// FIX: need to find out at what revision currentData's branch acctually starts 
-				currentLOC = getFinalLOC();
-            }
+            // symbolic names for previousData
+            symbolicNames = createSymbolicNamesCollection(previousData);
+
+            if (previousData.isChangeOrRestore()) {
+				if (currentData.isDeletion() || currentData.isAddOnSubbranch()) {
+					buildCreationRevision(file, previousData, previousLOC, symbolicNames);
+				} else {
+					buildChangeRevision(file, previousData, previousLOC, symbolicNames);
+				}
+			} else if (previousData.isDeletion()) {
+				buildDeletionRevision(file, previousData, previousLOC, symbolicNames);
+			} else {
+				logger.warning("illegal state in "
+						+ file.getFilenameWithPath() + ":" + previousData.getRevisionNumber());
+			}
 		}
 
-        // Process the last revision (in log order) for the file that we have parsed from the log
-        processFirstRevisionOnBranch(currentData, currentLOC, file, beginOfLogDate);
+        // symbolic names for currentData
+        symbolicNames = createSymbolicNamesCollection(currentData); 
 
-        return file;
+		int nextLinesOfCode = currentLOC - getLOCChange(currentData);
+		if (currentData.isCreation()) {
+			buildCreationRevision(file, currentData, currentLOC, symbolicNames);
+		} else if (currentData.isDeletion()) {
+			buildDeletionRevision(file, currentData, currentLOC, symbolicNames);
+			buildBeginOfLogRevision(file, beginOfLogDate, nextLinesOfCode, symbolicNames);
+		} else if (currentData.isChangeOrRestore()) {
+			buildChangeRevision(file, currentData, currentLOC, symbolicNames);
+			buildBeginOfLogRevision(file, beginOfLogDate, nextLinesOfCode, symbolicNames);
+		} else if (currentData.isAddOnSubbranch()) {
+			// ignore
+		} else {
+			logger.warning("illegal state in "
+					+ file.getFilenameWithPath() + ":" + currentData.getRevisionNumber());
+		}
+		return file;
 	}
 
 	/**
@@ -239,11 +219,11 @@ public class FileBuilder {
 						logger.warning("Revision of " + name + " does not match expected revision");
 					}
 				}
-			return builder.getLOC(name);
+				return builder.getLOC(name);
 			}
 		} catch (NoLineCountException e) {
 			if (!finalRevisionIsDead()) {
-			logger.warning(e.getMessage());
+				logger.warning(e.getMessage());
 			}
 			return approximateFinalLOC();
 		}
@@ -276,12 +256,9 @@ public class FileBuilder {
 		Iterator it = revisions.iterator();
 		while (it.hasNext()) {
 			RevisionData data = (RevisionData) it.next();
-            // Only loop through the revisions on HEAD
-            if (data.isOnTrunk()) {
-				current += data.getLinesAdded();
-				max = Math.max(current, max);
-				current -= data.getLinesRemoved();
-            }
+			current += data.getLinesAdded();
+			max = Math.max(current, max);
+			current -= data.getLinesRemoved();
 		}
 		return max;
 	}	
@@ -298,29 +275,29 @@ public class FileBuilder {
 		return data.getLinesAdded() - data.getLinesRemoved();
 	}
 
-	private CvsRevision buildCreationRevision(CvsFile file, RevisionData data, int loc, SortedSet symbolicNames, CvsBranch mainBranch) {
-		return file.addInitialRevision(mainBranch, data.getRevisionNumber(),
+	private void buildCreationRevision(CvsFile file, RevisionData data, int loc, SortedSet symbolicNames) {
+		file.addInitialRevision(data.getRevisionNumber(),
 				builder.getAuthor(data.getLoginName()), data.getDate(),
 				data.getComment(), loc, symbolicNames);
 	}
 
-	private CvsRevision buildChangeRevision(CvsFile file, RevisionData data, int loc, SortedSet symbolicNames, CvsBranch mainBranch) {
-		return file.addChangeRevision(mainBranch, data.getRevisionNumber(),
+	private void buildChangeRevision(CvsFile file, RevisionData data, int loc, SortedSet symbolicNames) {
+		file.addChangeRevision(data.getRevisionNumber(),
 				builder.getAuthor(data.getLoginName()), data.getDate(),
 				data.getComment(), loc,
 				data.getLinesAdded() - data.getLinesRemoved(),
 				Math.min(data.getLinesAdded(), data.getLinesRemoved()), symbolicNames);	
 	}
 
-	private CvsRevision buildDeletionRevision(CvsFile file, RevisionData data, int loc, SortedSet symbolicNames, CvsBranch mainBranch) {
-		return file.addDeletionRevision(mainBranch, data.getRevisionNumber(),
+	private void buildDeletionRevision(CvsFile file, RevisionData data, int loc, SortedSet symbolicNames) {
+		file.addDeletionRevision(data.getRevisionNumber(),
 				builder.getAuthor(data.getLoginName()), data.getDate(),
 				data.getComment(), loc, symbolicNames);
 	}
 
-	private CvsRevision buildBeginOfLogRevision(CvsFile file, Date beginOfLogDate, int loc, SortedSet symbolicNames, CvsBranch mainBranch) {
+	private void buildBeginOfLogRevision(CvsFile file, Date beginOfLogDate, int loc, SortedSet symbolicNames) {
 		Date date = new Date(beginOfLogDate.getTime() - 60000);
-		return file.addBeginOfLogRevision(mainBranch, date, loc, symbolicNames);
+		file.addBeginOfLogRevision(date, loc, symbolicNames);
 	}
 
 	/**
@@ -364,13 +341,14 @@ public class FileBuilder {
      * @param revisionData this revision
      * @return the sorted set or null
      */
-    private SortedSet createSymbolicNamesCollection(RevisionData revisionData) {
+    private SortedSet createSymbolicNamesCollection(RevisionData revisionData) 
+    {
         SortedSet symbolicNames = null;
 
-        Iterator symIt = revisionBySymbolicName.keySet().iterator();
+        Iterator symIt = revBySymnames.keySet().iterator();
         while (symIt.hasNext()) {
             String symName = (String)symIt.next();
-            String rev = (String)revisionBySymbolicName.get(symName);
+            String rev = (String)revBySymnames.get(symName);
             if (revisionData.getRevisionNumber().equals(rev)) {
                 if (symbolicNames == null) {
                     symbolicNames = new TreeSet();
@@ -382,65 +360,4 @@ public class FileBuilder {
         
         return symbolicNames;
     }
-    
-	private CvsRevision processRevision(RevisionData previousData, int previousLOC, 
-			RevisionData currentData, CvsFile file) {
-
-        SortedSet symbolicNames = createSymbolicNamesCollection(previousData);
-		CvsBranch branch = builder.getBranch(getMainBranch(previousData));
-        if (previousData.isChangeOrRestore()) {
-            if (currentData.isDeletion() || currentData.isAddOnSubbranch()) {
-                return buildCreationRevision(file, previousData, previousLOC, 
-                		symbolicNames, branch);
-            } else {
-				return buildChangeRevision(file, previousData, previousLOC, 
-                		symbolicNames, branch);
-            }
-        } else if (previousData.isDeletion()) {
-			return buildDeletionRevision(file, previousData, previousLOC, 
-            		symbolicNames, branch);
-        } else {
-            logger.warning("illegal state in "
-                    + file.getFilenameWithPath() + ":" + previousData.getRevisionNumber());
-        }
-		return null;
-	}
-	
-    private void processFirstRevisionOnBranch(RevisionData currentData, int currentLOC, 
-			CvsFile file, Date beginOfLogDate) {
-		
-        SortedSet symbolicNames = createSymbolicNamesCollection(currentData);
-		CvsBranch branch = builder.getBranch(getMainBranch(currentData));
-
-		int nextLinesOfCode = currentLOC - getLOCChange(currentData);
-		if (currentData.isCreation()) {
-			buildCreationRevision(file, currentData, currentLOC, symbolicNames, branch);
-		} else if (currentData.isDeletion()) {
-			buildDeletionRevision(file, currentData, currentLOC, symbolicNames, branch);
-			buildBeginOfLogRevision(file, beginOfLogDate, nextLinesOfCode, symbolicNames, branch);
-		} else if (currentData.isChangeOrRestore()) {
-			buildChangeRevision(file, currentData, currentLOC, symbolicNames, branch);
-			buildBeginOfLogRevision(file, beginOfLogDate, nextLinesOfCode, symbolicNames, branch);
-		} else if (currentData.isAddOnSubbranch()) {
-			// ignore
-		} else {
-			logger.warning("illegal state in "
-					+ file.getFilenameWithPath() + ":" + currentData.getRevisionNumber());
-		}
-    }
-    
-/*
-	private class State {
-		RevisionData data;
-		int loc;
-        SortedSet symbolicNames;
-        CvsRevision revision;
-		
-		public 
-        CvsRevision previousCVSRevision = null;
-		
-	}
-    cvsRevision = buildCreationRevision(file, previousData, previousLOC, 
-    		symbolicNames, (CvsBranch)cvsBranches.get(previousData.getMainBranchData().getName()));
-*/
 }
