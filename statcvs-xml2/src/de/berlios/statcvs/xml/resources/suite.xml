@@ -1,6 +1,6 @@
 <suite>
 
-<!--  <document  filename="author%1" title="Author Statistics%1" foreach="author">
+  <document  filename="author%1" title="Author Statistics%1" foreach="author">
 	<report class="AuthorDetailsReport"/>
 	<report class="AuthorOfTheMonthReport"/>
     <report class="LocByAuthorChart"/>
@@ -32,9 +32,9 @@
     <report class="CommitChart" groupby="day" title="Activity"/>
     <report class="CommitChart" groupby="hour" title=""/>
     <report class="CommitActivityChart" groupby="author"/>
-<! - - Disabled, until reviewed and fixed
+<!-- Disabled, until reviewed and fixed
     <report class="AuthorsActivityChart"/>
-- - >
+-->
   </document>
 
   <document  filename="file_stats" title="File Statistics">
@@ -59,7 +59,7 @@
     
   <document filename="evolution" title="Software Evolution">
     <report class="EvolutionMatrixChart"/>
-  </document> -->
+  </document>
 
   <document filename="index" title="CVS Statistics">
     <report class="GeneralReport"/>
