@@ -86,7 +86,7 @@ public class AuthorDetailsReport {
 					.addValue("locPerRevision", (double)loc / author.getRevisions().size(), 
 								I18n.tr("Lines of Code per Change"));
 
-				if (settings.getBoolean("showImages", false)) {
+				if (settings.getBoolean("showImages", true)) {
 					// add a table with image and details
 					TableElement table = new TableElement(settings, null);
 

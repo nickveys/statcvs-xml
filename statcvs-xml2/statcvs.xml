@@ -9,10 +9,11 @@
     </authors>
     
     <authorPics type="map">
-      <setting key="vanto">squig.png</setting>
+      <setting key="squig">squig.png</setting>
       <setting key="vanto">vanto.png</setting>
     </authorPics>
-
+    
+	<showImages>true</showImages>
     <projectName>StatCVS-XML</projectName>
     <outputDir>xdocs/statcvs-xml</outputDir>
     <renderer>xdoc</renderer>

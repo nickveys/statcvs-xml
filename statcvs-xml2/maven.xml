@@ -8,7 +8,7 @@
 
 	<preGoal name="java:compile">
 	    <ant:filter token="VERSION" value="${pom.currentVersion}"/>
-   	    <ant:filter token="JAR" value="${maven.final.name}.jar"/>
+   	    <ant:filter token="JAR" value="${maven.final.name}-full.jar"/>
 		<copy toDir="target/src" filtering="true" overwrite="true">
 			<fileset dir="${pom.build.sourceDirectory}">
 				<includes name="**/*"/>
