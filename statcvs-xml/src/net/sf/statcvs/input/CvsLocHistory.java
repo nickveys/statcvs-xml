@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsLocHistory.java,v $ 
-	Created on $Date: 2003-07-06 23:38:27 $ 
+	Created on $Date: 2003-07-14 19:39:07 $ 
 */
 package net.sf.statcvs.input;
 
@@ -114,6 +114,7 @@ public class CvsLocHistory {
 
 	public void generate(CvsContent content) {
 		logger.info("Generating history file...");
+		fileLocMap.clear();
 		try {
 			char fs = File.separatorChar;
 			File tmpdir = new File(System.getProperty("java.io.tmpdir")+fs+"statcvs"+ Integer.toHexString(this.hashCode()) +"history");
@@ -148,13 +149,13 @@ public class CvsLocHistory {
 				}	
 			}
 			logger.info("Index done");
-			loaded = true;
 			if (!deleteDir(tmpdir)) {
 				logger.info("Could not clean up temp directory.");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		loaded = true;
 	}
 	
 	public int getLinesOfCode(CvsFile file) {
