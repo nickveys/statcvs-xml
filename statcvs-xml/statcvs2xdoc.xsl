@@ -9,7 +9,8 @@
 -->
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:func="http://statcvs-xml.berlios.de/functions">
+                xmlns:func="http://statcvs-xml.berlios.de/functions"
+                xmlns:i18n="net.sf.statcvs.I18n">
 
   <xsl:template match="document">
     <document>
@@ -31,8 +32,8 @@
   <xsl:template match="authors">
      <table>
         <tr>
-       	  <th>Author</th>
-          <th>Lines of code</th>
+       	  <th><xsl:value-of select="i18n:tr('Author')"/></th>
+          <th><xsl:value-of select="i18n:tr('Lines of Code')"/></th>
       	</tr>
 		<xsl:apply-templates select="*"/>
      </table>
