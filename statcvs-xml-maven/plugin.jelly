@@ -58,7 +58,7 @@
                         <arg line="-output-suite xdoc"/> 
                         <arg line="-verbose"/> 
 			<arg line="-weburl ${pom.repository.url}"/>
-                        <arg line="-title ${pom.name}"/>
+                        <arg line="-title '${pom.name}'"/>
                         <arg line="-use-history"/>
 						<arg line="${statcvs.include}"/>
                         <arg value="${statcvs.logfile}"/>
