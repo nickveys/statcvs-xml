@@ -6,7 +6,9 @@
 
   <document filename="index">
     <report class="LocChart"/>
-    <report class="AuthorsTable"/>
+    <report class="AuthorTable"/>
+    <report class="FileCountChart"/>    
+    <report class="AvgFileSizeChart"/>    
   </document>
 
   <document foreach="author">

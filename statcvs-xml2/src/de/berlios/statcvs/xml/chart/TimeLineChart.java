@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: TimeLineChart.java,v $
-	$Date: 2004-02-20 16:17:10 $ 
+	$Date: 2004-02-21 14:09:36 $ 
 */
 package de.berlios.statcvs.xml.chart;
 
@@ -41,7 +41,6 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
 import de.berlios.statcvs.xml.I18n;
-import de.berlios.statcvs.xml.Settings;
 import de.berlios.statcvs.xml.output.ReportSettings;
 
 /**
@@ -62,25 +61,21 @@ public class TimeLineChart extends AbstractChart {
 	{
 		super(settings, filename, title);
 
-		Paint[] colors = new Paint[1];
-		colors[0] = Color.blue;
-
 		tsc = new TimeSeriesCollection();
-		//collection.addSeries(createTimeSeries(timeline));
-
-		//String range = timeline.getRangeLabel();
-		String domain = I18n.tr("Date");
 
 		setChart(ChartFactory.createTimeSeriesChart(
-			Settings.getProjectName(),
+			settings.getProjectName(),
 			I18n.tr("Date"), rangeLabel,
-			(XYDataset)tsc, 
+			tsc, 
 			true,
 			true,
 			false));
 		
+		//Paint[] colors = new Paint[1];
+		//colors[0] = Color.blue;
 		//getChart().getPlot().setSeriesPaint(colors);
 		
+		// setup axis
 		XYPlot plot = getChart().getXYPlot();
 		ValueAxis axis = plot.getDomainAxis();
 		axis.setVerticalTickLabels(true);
@@ -98,11 +93,17 @@ public class TimeLineChart extends AbstractChart {
 		}
 	}
 
+	protected void addTimeSeries(TimeSeries series, Date firstDate, int firstValue)
+	{
+		series.add(new Millisecond(new Date(firstDate.getTime() - 1)), firstValue);
+		tsc.addSeries(series);
+	}
+	
 	protected void addTimeSeries(TimeSeries series)
 	{
 		tsc.addSeries(series);
 	}
-	
+
 	protected TimeSeries createTimeSeries(String title, Iterator it, RevisionVisitor visitor) 
 	{
 		TimeSeries result = new TimeSeries(title, Millisecond.class);

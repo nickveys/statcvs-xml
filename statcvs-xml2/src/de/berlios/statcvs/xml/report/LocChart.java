@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: LocChart.java,v $
-	$Date: 2004-02-20 16:25:58 $ 
+	$Date: 2004-02-21 14:09:36 $ 
 */
 package de.berlios.statcvs.xml.report;
 
@@ -109,23 +109,19 @@ public class LocChart extends TimeLineChart {
 			chart = new LocChart(content, settings);
 		}
 		
-		return new ChartReportElement(chart.getTitle(), chart);
+		return new ChartReportElement(chart.getSubtitle(), chart);
 	}
 
 	protected void addTimeSeries(String title, Iterator it)
 	{
 		TimeSeries series = createTimeSeries(title, it, new LOCCalculator());
-		series.add(new Millisecond(new Date(content.getFirstDate().getTime() - 1)), 0);
-		addTimeSeries(series);
+		addTimeSeries(series, content.getFirstDate(), 0);
 	}
 	
 	private void setupLocChart(boolean showLegend) 
 	{
 		addSymbolicNames(content);
-		placeTitle();
-		if (!showLegend) {
-			getChart().setLegend(null);			
-		}
+		setup(showLegend);
 	}
 	
 	public static class LOCCalculator implements RevisionVisitor

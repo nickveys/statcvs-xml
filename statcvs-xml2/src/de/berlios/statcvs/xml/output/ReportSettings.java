@@ -38,6 +38,11 @@ public class ReportSettings extends Hashtable {
 		return this.get(key, null);
 	}
 
+	public String getProjectName()
+	{
+		return this.getString("projectName", "");
+	}
+
 	public Iterator getRevisionIterator(CvsContent content)
 	{
 		Object o = get("foreach");

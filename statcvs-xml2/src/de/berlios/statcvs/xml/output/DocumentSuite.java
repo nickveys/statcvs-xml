@@ -11,6 +11,7 @@ import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.Directory;
 
+import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -52,14 +53,14 @@ public class DocumentSuite {
 		ReportSettings documentSettings = new ReportSettings(settings);
 		
 		// generate reports
-		StatCvsDocument document = new StatCvsDocument(documentSettings, root.getAttributeValue("filename"), root.getAttributeValue("title"));
+		StatCvsDocument document = new StatCvsDocument(readAttributes(documentSettings, root));
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element element = (Element)it.next();
 			if ("settings".equals(element.getName())) {
-				readProperties(documentSettings, element);
+				readSettings(documentSettings, element);
 			}
 			else if ("report".equals(element.getName())) {
-				ReportElement report = createReport(document, element);
+				ReportElement report = createReport(document, element, documentSettings);
 				if (report != null) {
 					document.getRootElement().addContent(report);
 				}
@@ -68,19 +69,19 @@ public class DocumentSuite {
 		
 		return document;
 	}
-	
+
 	/**
 	 * @param element
 	 */
-	private ReportElement createReport(StatCvsDocument document, Element root) 
+	private ReportElement createReport(StatCvsDocument document, Element root, ReportSettings documentSettings) 
 	{
-		ReportSettings reportSettings = new ReportSettings(document.getSettings());
-		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
-			Element element = (Element)it.next();
-			if ("settings".equals(element.getName())) {
-				readProperties(reportSettings, element);
-			}
-		}
+		ReportSettings reportSettings = readAttributes(documentSettings, root);
+//		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
+//			Element element = (Element)it.next();
+//			if ("settings".equals(element.getName())) {
+//				readSettings(reportSettings, element);
+//			}
+//		}
 		
 		String className = root.getAttributeValue("class");
 		if (className != null) {
@@ -110,7 +111,7 @@ public class DocumentSuite {
 		for (Iterator it = suite.getRootElement().getChildren().iterator(); it.hasNext();) {
 			Element element = (Element)it.next();
 			if ("settings".equals(element.getName())) {
-				readProperties(defaultSettings, element);
+				readSettings(defaultSettings, element);
 			}
 			else if ("document".equals(element.getName())) {
 				renderDocument(renderer, element);
@@ -155,9 +156,24 @@ public class DocumentSuite {
 	}
 
 	/**
+	 * Creates a new ReportSettings object that inherits from parentSettings. 
+	 * All attributes of root are added as key value pairs to the created ReportSettings 
+	 * object and the object is returned.
+	 */
+	private ReportSettings readAttributes(ReportSettings parentSettings, Element root) 
+	{
+		ReportSettings settings = new ReportSettings(parentSettings);
+		for (Iterator it = root.getAttributes().iterator(); it.hasNext();) {
+			Attribute setting = (Attribute)it.next();
+			settings.put(setting.getName(), setting.getValue());
+		}
+		return settings;
+	}
+
+	/**
 	 * Reads all setting elements located under root.
 	 */ 	
-	public void readProperties(ReportSettings properties, Element root)
+	public void readSettings(ReportSettings properties, Element root)
 	{
 		// add childern as key value pairs
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: StatCvsDocument.java,v $
-	$Date: 2004-02-17 16:11:54 $ 
+	$Date: 2004-02-21 14:09:36 $ 
 */
 package de.berlios.statcvs.xml.output;
 
@@ -40,13 +40,13 @@ public class StatCvsDocument extends Document {
 	private String filename;
 	private ReportSettings settings;
 
-	public StatCvsDocument(ReportSettings settings, String defaultFilename, String defaultTitle)
+	public StatCvsDocument(ReportSettings settings)
 	{
 		this.settings = settings;
-		this.filename = settings.getString("filename", (defaultFilename == null) ? "document_" + ++documentNumber : defaultFilename);
+		this.filename = settings.getString("filename", "document_" + ++documentNumber);
 
 		Element root = new Element("document");
-		root.setAttribute("title", settings.getString("title", (defaultTitle == null) ? "" : defaultTitle));
+		root.setAttribute("title", settings.getString("title", ""));
 		root.setAttribute("name", this.filename);
 		setRootElement(root);
 	}

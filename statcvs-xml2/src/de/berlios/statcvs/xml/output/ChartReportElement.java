@@ -45,6 +45,11 @@ public class ChartReportElement extends ReportElement {
 		addContent(element);
 	}
 
+	public ChartReportElement(AbstractChart chart)
+	{
+		this(chart.getSubtitle(), chart);
+	}
+	
 	public void saveResources(File outputPath) throws IOException
 	{
 		chart.save(outputPath);
