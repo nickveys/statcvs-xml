@@ -2,7 +2,7 @@
 <project>
   <pomVersion>3</pomVersion>
   <name>StatCVS-XML</name>
-  <id>StatCvs-XML</id>
+  <id>statcvs-xml</id>
   <currentVersion>0.9</currentVersion>
   <organization>
     <name>StatCvs-XML Team</name>
