@@ -10,6 +10,19 @@
 		Software Evolution Matrix Chart has been added. It shows up the file 
 		size evolution between tagged versions.
       </action>
+      <action dev="vanto" type="update">
+		The directory tree has been improved.
+      </action>
+      <action dev="vanto" type="fix">
+        B#1726 Exception in binary only directories.
+      </action>
+      <action dev="vanto" type="fix">
+        B#1728 Umlauts in Most Common Commitlog Comments Report.
+      </action>
+      <action dev="vanto" type="fix">
+        Vertical alignment in table cells has been fixed (top instead center).
+      </action>
+      
 	</release>
 	<release version="0.9.2" date="2004-03-16">
       <action dev="vanto" type="update">
