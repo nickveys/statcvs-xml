@@ -60,6 +60,7 @@
 			<arg line="-weburl ${pom.repository.url}"/>
                         <arg line="-title ${pom.name}"/>
                         <arg line="-use-history"/>
+						<arg line="${statcvs.include}"/>
                         <arg value="${statcvs.logfile}"/>
                         <arg value="${basedir}/"/>
                         <classpath>
