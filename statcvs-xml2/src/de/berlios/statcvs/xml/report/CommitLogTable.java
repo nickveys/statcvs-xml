@@ -58,7 +58,7 @@ public class CommitLogTable {
 			row.addAuthor(commit.getAuthor());
 			row.addString("comment", commit.getComment());
 		}
-		
+		report.addContent(table);
 		return new Report(report, table);
 	}
 }

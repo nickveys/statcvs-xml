@@ -3,7 +3,7 @@
 <classpath>
   <classpathentry kind="src" path="src">
   </classpathentry>
-  <classpathentry output="target/test-classes" kind="src" path="tests-src">
+  <classpathentry output="target\test-classes" kind="src" path="tests-src">
   </classpathentry>
   <classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar">
   </classpathentry>
@@ -15,6 +15,6 @@
   </classpathentry>
   <classpathentry kind="var" path="MAVEN_REPO/jcommon/jars/jcommon-0.9.1.jar">
   </classpathentry>
-  <classpathentry kind="output" path="target/classes">
+  <classpathentry kind="output" path="target\classes">
   </classpathentry>
 </classpath>

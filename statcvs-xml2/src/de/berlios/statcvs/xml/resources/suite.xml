@@ -60,6 +60,10 @@
     <report class="LocChart" groupby="module"/>
     <report class="CommitTable" groupby="module" orderby="loc"/>
   </document>
+  
+  <document filename="commitlog" title="Commit Log">
+  	<report class="CommitLogTable" paging="true"/>
+  </document>
     
   <document filename="index" title="CVS Statistics">
     <report class="DocumentTable"/>
