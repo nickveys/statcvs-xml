@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLOutputter.java,v $
-	$Date: 2004-03-30 16:05:26 $ 
+	$Date: 2004-03-30 17:14:39 $ 
 */
 package de.berlios.statcvs.xml.output;
 
@@ -40,7 +40,7 @@ import org.jdom.output.Format;
 public class XMLOutputter extends org.jdom.output.XMLOutputter {
 
 	private boolean disableOutputEscaping;
-
+	
 	public XMLOutputter(Format format)
 	{
 		super(format);
@@ -49,28 +49,31 @@ public class XMLOutputter extends org.jdom.output.XMLOutputter {
 	/**
 	 * @see org.jdom.output.XMLOutputter#printProcessingInstruction(org.jdom.ProcessingInstruction, java.io.Writer)
 	 */
-	protected void printProcessingInstruction(ProcessingInstruction pi, Writer out)
-		throws IOException {
+	protected void printProcessingInstruction(Writer out, ProcessingInstruction pi)
+		throws IOException 
+	{
 		if (pi.getTarget().equals(Result.PI_DISABLE_OUTPUT_ESCAPING)) {
-			disableOutputEscaping = true;
+			// temporarily disable escaping of characters
+			// used to copy &#160; (non-breaking space) characters through
+			disableOutputEscaping = true;		
 			setNewlines(false);
-			return;
 		}
-		if (pi.getTarget().equals(Result.PI_ENABLE_OUTPUT_ESCAPING)) {
+		else if (pi.getTarget().equals(Result.PI_ENABLE_OUTPUT_ESCAPING)) {
 			disableOutputEscaping = false;
 			setNewlines(true);
-			return;
 		}
-
-		super.printProcessingInstruction(out, pi);
+		else {
+			super.printProcessingInstruction(out, pi);
+		}
 	}
 
 
 	/**
 	 * @see org.jdom.output.XMLOutputter#escapeElementEntities(java.lang.String)
 	 */
-	public String escapeElementEntities(String str) {
-		return (disableOutputEscaping)?str:super.escapeElementEntities(str);
+	public String escapeElementEntities(String str) 
+	{
+		return (disableOutputEscaping) ? str : super.escapeElementEntities(str);
 	}
 
 }

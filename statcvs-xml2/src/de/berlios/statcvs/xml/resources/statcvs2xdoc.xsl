@@ -155,6 +155,8 @@
     <xsl:param name="num"/>
 	<xsl:if test="$num &gt; 0">
   	  <xsl:text disable-output-escaping="yes"><![CDATA[&#160;&#160;&#160;&#160;]]></xsl:text>
+<!--	  <xsl:text><![CDATA[&#160;&#160;&#160;&#160;]]></xsl:text> -->
+<!--	  <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> -->
 	  <xsl:call-template name="func:spacer">
 	    <xsl:with-param name="num" select="number($num)-1"/>
 	  </xsl:call-template>

@@ -2,6 +2,7 @@ package de.berlios.statcvs.xml.output;
 
 import java.awt.print.Pageable;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -63,12 +64,12 @@ public class XMLRenderer implements DocumentRenderer {
 
 	public static Format createDefaultFormat()
 	{
-		Format format = Format.getCompactFormat();
+		Format format = Format.getPrettyFormat();
 		format.setEncoding("UTF-8");
 		//format.setTextMode(Format.TextMode.NORMALIZE);
 		//format.setIndent("  ");
 		//format.setNewlines(true);
-		//format.setExpandEmptyElements(false);
+		format.setExpandEmptyElements(false);
 		return format;
 	}
 	
@@ -113,7 +114,7 @@ public class XMLRenderer implements DocumentRenderer {
 	private void renderSingle(StatCvsDocument document) throws IOException 
 	{
 		File file = new File(outputPath, document.getFilename() + extension);
-		FileWriter writer = new FileWriter(file);
+		FileOutputStream outStream = new FileOutputStream(file);
 
 		document.saveResources(outputPath);
 		
@@ -126,14 +127,14 @@ public class XMLRenderer implements DocumentRenderer {
 				catch (TransformerException e) {
 					logger.warning("XSLT transformation failed: " + e);
 				}
-				out.output(result.getDocument(), writer);
+				out.output(result.getDocument(), outStream);
 			}
 			else {
-				out.output(document, writer);
+				out.output(document, outStream);
 			}
 		}
 		finally {
-			writer.close();
+			outStream.close();
 		}	
 	}
 
