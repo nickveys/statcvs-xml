@@ -15,11 +15,12 @@
     the suite file that is used to configure the documents and reports
     to generate. The suite file can be specified with the
     <tt>-suite</tt> command line parameter or the <tt>suite</tt>
-    setting in the <a href="settings.html">settings</a> file.</p>
+    setting in the <a href="settings.html">settings</a> file. If no
+    suite is specified, the default, that includes a set of standard
+    reports, is used.</p>
 
-    <p>If you are not familiar with the StatCvs-XML jargon like
-    domain, view and grouping, please read about the <a
-    href="concepts.html"> concepts</a> first.</p>
+    <p>The StatCvs-XML jargon like domain, view and grouping is
+    explained in the <a href="concepts.html">concepts</a> document.</p>
 
   </section>
 

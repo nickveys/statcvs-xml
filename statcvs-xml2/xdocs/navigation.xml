@@ -13,9 +13,9 @@
 
 	<menu name="General Information">
 	  <item name="Overview" href="/index.html"/>
-	  <item name="Manual" href="/manual/index.html" collapse="true">
-	    <item name="Concepts" href="/manual/concepts.html"/>
+	  <item name="Documentation" href="/manual/index.html" collapse="true">
 	    <item name="Settings" href="/manual/settings.html"/>
+	    <item name="Concepts" href="/manual/concepts.html"/>
 	    <item name="Document Suite" href="/manual/suite.html"/>
       </item>
 	  <item name="License" href="/license.html"/>

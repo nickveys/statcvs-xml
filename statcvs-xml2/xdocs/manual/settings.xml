@@ -16,10 +16,6 @@
     <tt><b>statcvs.xml</b></tt> and is read from the directory
     StatCvs-XML was started from.</p>
 
-    <p>If you are not familiar with the StatCvs-XML jargon like
-    domain, view and grouping, please read about the <a
-    href="concepts.html"> concepts</a> first.</p>
-
   </section>
 
   <section name="Structure">

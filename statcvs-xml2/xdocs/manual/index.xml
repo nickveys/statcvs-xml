@@ -82,7 +82,7 @@
 
         </subsection>
 
-        <subsection name="Running StatCvs">
+        <subsection name="Running StatCvs-XML">
 
           <p>
             StatCvs is run using the command:
@@ -217,6 +217,27 @@
         </p>
 
       </section>
+
+	<section name="History">
+	  <p>When directories are deleted from cvs and the working copy is
+		updated using the prune flag, these directories are not
+		included in the cvs log anymore. If StatCvs-XML is run on such
+		a log, the total lines of code are still correct but the lines
+		of code progression in the charts may not be.</p>
+	  
+	  <subsection name="Analysing the complete history">
+		<p>If you would like to analyse the complete project history,
+		  you need to specify that the first revision of each file
+		  should be checked out:</p>
+
+		<p><tt>cvs -d[cvsroot] -r1.1 checkout [module]</tt></p>
+
+		<p>Then change to the created directory and create the cvs log
+		  as usual:</p>
+
+		<p><tt>cvs log &gt; cvs.log</tt></p>
+	  </subsection>
+	</section>
 
 	</body>
   </document>
