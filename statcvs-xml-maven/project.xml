@@ -22,6 +22,7 @@
 <!--  <extend>${basedir}/../project.xml</extend> -->
 <pomVersion>3</pomVersion>
   <id>maven-statcvs-plugin</id>
+  <groupId>statcvs</groupId>
   <name>Maven StatCvs Plugin</name>
   <currentVersion>2.5</currentVersion>
   <description/>
