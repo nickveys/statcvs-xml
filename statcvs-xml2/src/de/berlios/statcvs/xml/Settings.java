@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Settings.java,v $
-	$Date: 2004-02-17 16:11:54 $ 
+	$Date: 2004-02-17 16:29:15 $ 
 */
 package de.berlios.statcvs.xml;
 
@@ -38,7 +38,7 @@ import net.sf.statcvs.util.FileUtils;
  * can read all parameter values from here.
  * 
  * @author jentzsch
- * @version $Id: Settings.java,v 1.3 2004-02-17 16:11:54 squig Exp $
+ * @version $Id: Settings.java,v 1.4 2004-02-17 16:29:15 squig Exp $
  */
 public class Settings {
 
@@ -162,10 +162,7 @@ public class Settings {
 			outputDir += FileUtils.getDefaultDirSeparator();
 		}
 		File outDir = new File(outputDir);
-		if (!outDir.exists()) {
-			outDir.mkdirs();
-		}
-		if (outDir.length() > 0 && (!outDir.exists() || !outDir.isDirectory())) {
+		if (!outDir.exists() && !outDir.mkdirs()) {
 			throw new IOException("Can't create output directory: " + outputDir);
 		}
 
