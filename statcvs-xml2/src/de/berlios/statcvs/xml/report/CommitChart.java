@@ -36,7 +36,7 @@ public class CommitChart extends AbstractBarChart {
 		}
 		
 		Iterator it2 = (settings.getBoolean("showAllGroups", true)) 
-			? grouper.getGroups(content)
+			? grouper.getGroups(content, settings)
 			: commitsByGroup.iteratorSortedByValueReverse();
 		while (it2.hasNext()) {
 			Object group = it2.next();

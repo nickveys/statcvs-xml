@@ -6,6 +6,7 @@ import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import de.berlios.statcvs.xml.I18n;
+import de.berlios.statcvs.xml.output.ReportSettings;
 
 /**
  * @author Steffen Pingel
@@ -25,7 +26,7 @@ public class AuthorGrouper extends Grouper {
 	/**
 	 *  @see de.berlios.statcvs.xml.model.Grouper#getGroups()
 	 */
-	public Iterator getGroups(CvsContent content) 
+	public Iterator getGroups(CvsContent content, ReportSettings settings) 
 	{
 		return content.getAuthors().iterator();
 	}

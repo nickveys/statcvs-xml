@@ -1,5 +1,6 @@
 package de.berlios.statcvs.xml.output;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -14,6 +15,7 @@ import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.model.SymbolicName;
+import net.sf.statcvs.output.WebRepositoryIntegration;
 
 import org.apache.commons.jexl.Expression;
 import org.apache.commons.jexl.ExpressionFactory;
@@ -312,6 +314,11 @@ public class ReportSettings extends Hashtable {
 		return modules;
 	}
 
+	public File getOutputPath()
+	{
+		return new File(this.getString("outputDir", "statcvs-xml-out"));
+	}
+
 	public String getProjectName()
 	{
 		return this.getString("projectName", "");
@@ -334,6 +341,16 @@ public class ReportSettings extends Hashtable {
 	public String getString(Object key, String defaultValue)
 	{
 		return (String)this.get(key, defaultValue);
+	}
+
+	/**
+	 * @param string
+	 * @param string2
+	 * @return
+	 */
+	public String getString(Object key)
+	{
+		return getString(key, null);
 	}
 
 	/**
@@ -363,6 +380,11 @@ public class ReportSettings extends Hashtable {
 			}
 		};
 		return new FilteredIterator(content.getSymbolicNames().iterator(), predicate);
+	}
+
+	public WebRepositoryIntegration getWebRepository()
+	{
+		return (WebRepositoryIntegration)this.get("_webRepository");
 	}
 
 	/**

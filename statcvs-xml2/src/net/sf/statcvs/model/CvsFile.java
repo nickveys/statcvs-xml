@@ -58,6 +58,15 @@ public class CvsFile implements Comparable {
 	}
 
 	/**
+	 * Returns a list of authors that have commited at least one revision of the file.
+	 * @return a list of authors
+	 */
+	public Set getAuthors()
+	{
+		return authors;
+	}
+
+	/**
 	 * Returns the full filename.
 	 * @return the full filename
 	 */

@@ -10,6 +10,7 @@ import java.util.TimeZone;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import de.berlios.statcvs.xml.I18n;
+import de.berlios.statcvs.xml.output.ReportSettings;
 
 /**
  * @author Steffen Pingel
@@ -42,7 +43,7 @@ public class DayGrouper extends Grouper {
 	/**
 	 *  @see de.berlios.statcvs.xml.model.Grouper#getGroups(net.sf.statcvs.model.CvsContent)
 	 */
-	public Iterator getGroups(CvsContent content) 
+	public Iterator getGroups(CvsContent content, ReportSettings settings) 
 	{
 		return days.iterator();
 	}

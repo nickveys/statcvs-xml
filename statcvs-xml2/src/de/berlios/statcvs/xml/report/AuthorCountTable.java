@@ -21,18 +21,18 @@ package de.berlios.statcvs.xml.report;
 
 import java.util.Iterator;
 
-import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
-import net.sf.statcvs.output.WebRepositoryIntegration;
 import net.sf.statcvs.util.IntegerMap;
 
 import org.jdom.Element;
 
 import de.berlios.statcvs.xml.I18n;
-import de.berlios.statcvs.xml.Settings;
+import de.berlios.statcvs.xml.model.FileGrouper;
+import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
+import de.berlios.statcvs.xml.output.TableElement;
 
 /**
  * AuthorsPerFileReport
@@ -47,48 +47,38 @@ public class AuthorCountTable {
 	 */
 	public static ReportElement generate(CvsContent content, ReportSettings settings) 
 	{
-		ReportElement root = new ReportElement(I18n.tr("Authors Per File"));
-		createReport(root, content, settings.getFileIterator(content), settings.getLimit());
-		return root;
-	}
-
-	private static void createReport(ReportElement root, CvsContent content, Iterator it, int maxItems) 
-	{
-		IntegerMap filesMap = new IntegerMap();
+		ReportElement root = new ReportElement(I18n.tr("Authors%1"));
+		Grouper grouper = settings.getGrouper(new FileGrouper());
 		
+		IntegerMap filesMap = new IntegerMap();
+		Iterator it = settings.getFileIterator(content);
 		while (it.hasNext()) {
 			CvsFile file = (CvsFile)it.next();
 			if (file.isDead()) {
 				continue;
 			}
-
-			Iterator authors = content.getAuthors().iterator();
-			while (authors.hasNext()) {
-				Author author = (Author)authors.next();
-				if (file.hasAuthor(author)) {
-					filesMap.addInt(file, 1);
-				}
-			}
+			Object group = grouper.getGroup(file);
+			filesMap.addInt(group, file.getAuthors().size());
 		}
 		
-		Element filesEl = new Element("files");		
-		WebRepositoryIntegration webRepository = Settings.getWebRepository();
+		Element table = new TableElement(new String[] { grouper.getName(), I18n.tr("Authors") });		
+		
 		Iterator fIt = filesMap.iteratorSortedByValueReverse();
+		int maxItems = settings.getLimit();
 		int count = 0;
 		while (fIt.hasNext() && count < maxItems) {
-			CvsFile file = (CvsFile)fIt.next();
+			Object group = fIt.next();
 			
-			Element fileEl = new Element("file");
-			fileEl.setAttribute("name", file.getFilenameWithPath());
+			Element row = new Element("row");
+			row.addContent(grouper.createElement(group, settings));
+			row.addContent(new Element("td").addContent(filesMap.get(group) + ""));
+			table.addContent(row);
 			
-			if (webRepository != null) {
-				fileEl.setAttribute("url", webRepository.getFileViewUrl(file));				
-			}
-			fileEl.setAttribute("authors", ""+filesMap.get(file));
-			filesEl.addContent(fileEl); 
 			count++;
 		}
-		root.addContent(new Element("authorsPerFile").addContent(filesEl));
+		
+		root.addContent(table);
+		return root;
 	}
 
 }

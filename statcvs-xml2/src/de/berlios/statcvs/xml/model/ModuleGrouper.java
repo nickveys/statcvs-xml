@@ -7,6 +7,7 @@ import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.output.Module;
+import de.berlios.statcvs.xml.output.ReportSettings;
 
 /**
  * @author Steffen Pingel
@@ -55,7 +56,7 @@ public class ModuleGrouper extends Grouper {
 	/**
 	 *  @see de.berlios.statcvs.xml.model.Grouper#getGroups(net.sf.statcvs.model.CvsContent)
 	 */
-	public Iterator getGroups(CvsContent content) 
+	public Iterator getGroups(CvsContent content, ReportSettings settings) 
 	{
 		return modules.iterator();
 	}

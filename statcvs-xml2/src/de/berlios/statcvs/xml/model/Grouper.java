@@ -7,6 +7,11 @@ import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
 
+import org.jdom.Element;
+
+import de.berlios.statcvs.xml.I18n;
+import de.berlios.statcvs.xml.output.ReportSettings;
+
 /**
  * @author Steffen Pingel
  */
@@ -25,19 +30,24 @@ public abstract class Grouper {
 		this.name = name;
 	}
 
-	public Object getGroup(Directory directory) 
+	public Element createElement(Object group, ReportSettings settings)
 	{
 		return null;
 	}
 
+	public Object getGroup(Directory directory) 
+	{
+		throw new IllegalStateException(I18n.tr("Grouping directories not possible"));
+	}
+
 	public Object getGroup(CvsFile file) 
 	{
-		return null;
+		throw new IllegalStateException(I18n.tr("Grouping files not possible"));
 	}
 	
 	public Object getGroup(CvsRevision rev) 
 	{
-		return null;
+		throw new IllegalStateException(I18n.tr("Grouping revisions not possible"));
 	}
 
 	public String getID() 
@@ -55,7 +65,7 @@ public abstract class Grouper {
 		return null;
 	}
 	
-	public abstract Iterator getGroups(CvsContent content);
+	public abstract Iterator getGroups(CvsContent content, ReportSettings settings);
 	
 	public abstract String getName(Object group);
 

@@ -1,5 +1,7 @@
 package de.berlios.statcvs.xml.report;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
 import net.sf.statcvs.model.CvsContent;
@@ -10,6 +12,7 @@ import org.jdom.Element;
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
+import de.berlios.statcvs.xml.util.FileHelper;
 
 /**
  * ModulesTreeReport
@@ -24,7 +27,7 @@ public class DirectoryTree {
 	 */
 	public static ReportElement generate(CvsContent content, ReportSettings settings) 
 	{
-		ReportElement root = new ReportElement(I18n.tr("Repository Tree"));
+		ReportElement root = new DirectoryTreeElement(I18n.tr("Repository Tree"));
 		createReport(root, settings.getDirectoryIterator(content));
 		return root;
 	}
@@ -62,4 +65,24 @@ public class DirectoryTree {
 		}
 		root.addContent(modules);
 	}
+	
+	public static class DirectoryTreeElement extends ReportElement
+	{
+	
+		public DirectoryTreeElement(String name)
+		{
+			super(name);
+		}
+		
+		/**
+		 *  @see de.berlios.statcvs.xml.output.ReportElement#saveResources(java.io.File)
+		 */
+		public void saveResources(File outputPath) throws IOException 
+		{
+			FileHelper.copyResource("resources/folder.png", outputPath);
+			FileHelper.copyResource("resources/folder-deleted.png", outputPath);
+		}
+
+	}
+	
 }

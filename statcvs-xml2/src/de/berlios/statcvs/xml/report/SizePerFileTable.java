@@ -10,7 +10,6 @@ import net.sf.statcvs.util.IntegerMap;
 import org.jdom.Element;
 
 import de.berlios.statcvs.xml.I18n;
-import de.berlios.statcvs.xml.Settings;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
 
@@ -27,14 +26,9 @@ public class SizePerFileTable {
 	public static ReportElement generate(CvsContent content, ReportSettings settings) 
 	{
 		ReportElement root = new ReportElement(I18n.tr("Size Per File"));
-		createReport(root, content, settings.getFileIterator(content), settings.getLimit());
-		return root;
-	}
 
-	private static void createReport(ReportElement root, CvsContent content, Iterator it, int maxItems)
-	{
 		IntegerMap filesMap = new IntegerMap();
-				
+		Iterator it = settings.getFileIterator(content);
 		while (it.hasNext()) {
 			CvsFile file = (CvsFile)it.next();
 			if (file.isDead()) {
@@ -46,7 +40,8 @@ public class SizePerFileTable {
 
 		Element filesEl = new Element("files");	
 		Iterator filesIt = filesMap.iteratorSortedByValueReverse();
-		WebRepositoryIntegration webRepository = Settings.getWebRepository();
+		WebRepositoryIntegration webRepository = settings.getWebRepository();
+		int maxItems = settings.getLimit();
 		int count = 0;
 		while (filesIt.hasNext() && count < maxItems) {
 			CvsFile file = (CvsFile)filesIt.next();
@@ -64,6 +59,7 @@ public class SizePerFileTable {
 		}
 
 		root.addContent(new Element("largestFiles").addContent(filesEl));
+		return root;
 	}
 }
 

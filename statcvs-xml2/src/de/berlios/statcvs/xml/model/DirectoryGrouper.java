@@ -7,6 +7,7 @@ import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
 import de.berlios.statcvs.xml.I18n;
+import de.berlios.statcvs.xml.output.ReportSettings;
 
 /**
  * @author Steffen Pingel
@@ -42,9 +43,9 @@ public class DirectoryGrouper extends Grouper {
 	/**
 	 *  @see de.berlios.statcvs.xml.model.Grouper#getGroups(net.sf.statcvs.model.CvsContent)
 	 */
-	public Iterator getGroups(CvsContent content) 
+	public Iterator getGroups(CvsContent content, ReportSettings settings) 
 	{
-		return content.getDirectories().iterator();
+		return settings.getDirectoryIterator(content);
 	}
 
 	/**

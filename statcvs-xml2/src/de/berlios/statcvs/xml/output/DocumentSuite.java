@@ -59,7 +59,6 @@ public class DocumentSuite {
 		catch (JDOMException e) {
 			throw new IOException(e.getMessage());
 		}
-
 	}
 
 	public StatCvsDocument createDocument(Element root, ReportSettings settings)
@@ -138,12 +137,10 @@ public class DocumentSuite {
 		return null;
 	}
 
-	public void generate(DocumentRenderer renderer, String projectName) 
+	public void generate(DocumentRenderer renderer, ReportSettings defaultSettings) 
 		throws IOException 
 	{
-		if (projectName != null) {
-			defaultSettings.put("projectName", projectName);
-		}
+		this.defaultSettings = defaultSettings;
 			
 		// generate documents
 		for (Iterator it = suite.getRootElement().getChildren().iterator(); it.hasNext();) {

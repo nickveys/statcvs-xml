@@ -22,6 +22,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.Hashtable;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
 
@@ -31,10 +34,18 @@ import net.sf.statcvs.input.EmptyRepositoryException;
 import net.sf.statcvs.input.LogSyntaxException;
 import net.sf.statcvs.input.RepositoryFileManager;
 import net.sf.statcvs.model.CvsContent;
+import net.sf.statcvs.util.FilePatternMatcher;
 import net.sf.statcvs.util.LogFormatter;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+
 import de.berlios.statcvs.xml.output.DocumentRenderer;
 import de.berlios.statcvs.xml.output.DocumentSuite;
-import de.berlios.statcvs.xml.output.XDocRenderer;
+import de.berlios.statcvs.xml.output.HTMLRenderer;
+import de.berlios.statcvs.xml.output.ReportSettings;
 import de.berlios.statcvs.xml.util.FileHelper;
 
 /**
@@ -42,7 +53,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.10 2004-02-25 16:29:14 squig Exp $
+ * @version $Id: Main.java,v 1.11 2004-02-26 16:12:53 squig Exp $
  */
 public class Main {
 	private static String projectName;
@@ -71,13 +82,12 @@ public class Main {
 		}
 
 		try {
-			try {
-				new CommandLineParser(args).parse();
-			} catch (IOException cex) {
-				printProperUsageAndExit();
-			}
-						
-			run();
+			ReportSettings settings = readSettings(args);
+			initLogger();
+			generateSuite(settings);
+		} catch (InvalidCommandLineException e) {
+			System.err.println(e.getMessage());
+			printProperUsageAndExit();
 		} catch (IOException e) {
 			printErrorMessageAndExit(e.getMessage());
 		} catch (LogSyntaxException lex) {
@@ -145,31 +155,34 @@ public class Main {
 		System.exit(1);
 	}
 
-	public static void run() throws Exception
+	public static ReportSettings readSettings(String[] args) throws IOException, InvalidCommandLineException 
 	{
-		long memoryUsedOnStart = Runtime.getRuntime().totalMemory();
-		long startTime = System.currentTimeMillis();
+		Hashtable cmdlSettings = new Hashtable();
+		CommandLineParser parser = new CommandLineParser(args);
+		parser.parse(cmdlSettings);
 		
-		initLogger();
-
-		String logfile = Settings.getLogFileName();
-		
-		CvsContent content = readLogFile(logfile, Settings.getUseHistory());
-		generateSuite(content);
-		
-		long endTime = System.currentTimeMillis();
-		long memoryUsedOnEnd = Runtime.getRuntime().totalMemory();
-		logger.info("runtime: " + (((double) endTime - startTime) / 1000) 
-					+ " seconds");
-		logger.info("memory usage: "
-					+ (((double) memoryUsedOnEnd 
-						- memoryUsedOnStart) / 1024) + " kb");
-	}
+		ReportSettings settings = new ReportSettings(cmdlSettings);
+		File file = new File("statcvs.xml");
+		if (file.exists()) {
+			try {
+				SAXBuilder builder = new SAXBuilder();
+				Document suite = builder.build(file);
+				Element element = suite.getRootElement().getChild("settings");
+				if (element != null) {
+					settings.load(element);
+				}
+			}
+			catch (JDOMException e) {
+				throw new IOException(e.getMessage());
+			}
+		}
+		return settings;
+	}				
 
 	public static void initLogger() throws LogSyntaxException {
 		ConsoleHandler ch = new ConsoleHandler();
 		ch.setFormatter(new LogFormatter());
-		ch.setLevel(Settings.getLoggingLevel());
+		//ch.setLevel(Settings.getLoggingLevel());
 		//LogManager.getLogManager().getLogger("net.sf.statcvs").addHandler(ch);
 		logger.addHandler(ch);
 		logger.setUseParentHandlers(false);
@@ -181,54 +194,60 @@ public class Main {
 	 * @throws LogSyntaxException if the logfile contains unexpected syntax
 	 * @throws IOException if the log file can not be read
 	 */
-	public static CvsContent readLogFile(String logfile, boolean filesHaveInitialRevision) 
-		throws IOException, IOException, LogSyntaxException, EmptyRepositoryException
+	public static void generateSuite(ReportSettings settings) 
+		throws IOException, LogSyntaxException, EmptyRepositoryException
 	{
-		if (Settings.getLogFileName() == null) {
-			throw new IOException("Missing logfile name");
-		}
-		if (Settings.getCheckedOutDirectory() == null) {
-			throw new IOException("Missing checked out directory");
-		}
+		FilePatternMatcher includeMatcher = null;
+		if (settings.getString("include") != null) {
+			includeMatcher = new FilePatternMatcher(settings.getString("include"));
+		} 
+		FilePatternMatcher excludeMatcher = null;
+		if (settings.getString("exclude") != null) {
+			includeMatcher = new FilePatternMatcher(settings.getString("include"));
+		} 
 		
-		Reader logReader = new FileReader(logfile);
-		
-		logger.info("Parsing CVS log '" + Settings.getLogFileName() + "'");
+		String logFilename = settings.getString("logFile", "cvs.log");
+		Reader logReader = new FileReader(logFilename);
+
+		logger.info("Parsing CVS log '" + logFilename + "'");
 		RepositoryFileManager repFileMan
-			= new RepositoryFileManager
-				(Settings.getCheckedOutDirectory());
-		Builder builder = new Builder(repFileMan, Settings.getIncludeMatcher(), Settings.getExcludeMatcher());
+			= new RepositoryFileManager(settings.getString("localRepository", "."));
+		Builder builder = new Builder(repFileMan, includeMatcher, excludeMatcher);
 		projectName = builder.getProjectName();
 		new CvsLogfileParser(logReader, builder).parse();
-		return builder.createCvsContent(filesHaveInitialRevision);
-	}
+		CvsContent content = builder.createCvsContent(settings.getBoolean("useHistory", false));
 
-	/**
-	 * Generates HTML report. {@link net.sf.statcvs.output.ConfigurationOptions}
-	 * must be initialized before calling this method.
-	 * @throws Exception if somethings goes wrong
-	 */
-	public static void generateSuite(CvsContent content) throws Exception {	
-		logger.info("Generating report for " 
-					/* + Settings.getProjectName()*/
-					+ " into " + Settings.getOutputDir());
+		File outDir = settings.getOutputPath();
+		if (!outDir.exists() && !outDir.mkdirs()) {
+			throw new IOException(I18n.tr("Could not create output directory: {0}", outDir.getAbsolutePath()));
+		}
+
+
+		logger.info("Generating report for " + settings.getProjectName()
+					+ " into " + outDir.getAbsolutePath());
 
 //		if (Settings.getOutputSuite() == null) {
 //			Settings.setOutputSuite(HTMLRenderer.class.getName());
 //		}
-		if (Settings.getWebRepository() != null) {
-			logger.info("Assuming web repository is "+Settings.getWebRepository().getName());
+		if (settings.getWebRepository() != null) {
+			logger.info("Assuming web repository is " + settings.getWebRepository().getName());
 		}
-		logger.info("Reading output settings");
-		logger.info("Creating suite using "+Settings.getOutputSuite());
-	
-//		Class c = Class.forName(Settings.getOutputSuite());
-//		Method m = c.getMethod("generate", new Class[] { CvsContent.class });
-//		m.invoke(null, new Object[] { content });
 		
-		DocumentRenderer renderer = XDocRenderer.create(content, new File(Settings.getOutputDir()));
-		DocumentSuite suite = new DocumentSuite(FileHelper.getResource(Settings.getDocumentSuite()), content);
-		suite.generate(renderer, projectName);
+		String rendererClassname = settings.getString("renderer", HTMLRenderer.class.getName());
+		logger.info("Creating suite using " + rendererClassname);
+		DocumentRenderer renderer;
+		try {
+			Class c = Class.forName(rendererClassname);
+			Method m = c.getMethod("create", new Class[] { CvsContent.class, ReportSettings.class });
+			renderer = (DocumentRenderer)m.invoke(null, new Object[] { content, settings });
+		}
+		catch (Exception e) {
+			throw new IOException(I18n.tr("Could not create renderer: {0}", e.getLocalizedMessage()));
+		}
+		
+		URL suiteURL= FileHelper.getResource(settings.getString("suite", "resources/suite.xml"));
+		DocumentSuite suite = new DocumentSuite(suiteURL, content);
+		suite.generate(renderer, settings);
 	}
 
 }

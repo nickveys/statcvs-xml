@@ -173,7 +173,7 @@ public class Builder implements CvsLogBuilder {
 		List commits = new CommitListBuilder(revisions).createCommitList();
 		result.setCommits(commits);
 		
-		result.setSymbolicNames(new TreeSet(symbolicNames.entrySet()));
+		result.setSymbolicNames(new TreeSet(symbolicNames.values()));
 
 		return result;
 	}

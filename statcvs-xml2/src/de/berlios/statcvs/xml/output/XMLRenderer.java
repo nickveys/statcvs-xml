@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLRenderer.java,v $
-	$Date: 2004-02-17 16:40:00 $ 
+	$Date: 2004-02-26 16:12:53 $ 
 */
 package de.berlios.statcvs.xml.output;
 
@@ -26,20 +26,15 @@ import java.awt.print.Pageable;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Logger;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 
 import net.sf.statcvs.model.CvsContent;
-import net.sf.statcvs.util.FileUtils;
 
 import org.jdom.transform.JDOMResult;
 import org.jdom.transform.JDOMSource;
-
-import de.berlios.statcvs.xml.Settings;
-import de.berlios.statcvs.xml.util.FileHelper;
 
 /**
  * Writes xml files to disk.
@@ -86,26 +81,6 @@ public class XMLRenderer implements DocumentRenderer {
 		//DocumentSuite.generate(content, new XMLRenderer(outputPath));
 	}
 
-	public boolean copyResource(String filename)
-	{
-		InputStream in = FileHelper.getResourceAsStream(filename);
-		if (in != null) {
-			try {
-				String target = Settings.getOutputDir()
-					+ FileUtils.getFilenameWithoutPath(filename);
-				FileUtils.copyFile(in, new File(target));
-				return true;
-			} 
-			catch (IOException e) {
-				logger.warning(e.getMessage());
-			}
-		}
-		else {
-			logger.warning("Resource not found: " + filename);
-		}
-		return false;
-	}
-
 	public void setOutputter(XMLOutputter outputter) {
 		out = outputter;
 		out.setTextNormalize(true);
@@ -119,6 +94,11 @@ public class XMLRenderer implements DocumentRenderer {
 	
 	public String getExtension() {
 		return this.extension;
+	}
+	
+	public File getOutputPath()
+	{
+		return this.outputPath;
 	}
 	
 	public void render(StatCvsDocument document) throws IOException
@@ -173,7 +153,6 @@ public class XMLRenderer implements DocumentRenderer {
 	 */
 	public void postRender()
 	{
-		copyResource("resources/folder.png");
-		copyResource("resources/folder-deleted.png");
 	}
+	
 }
