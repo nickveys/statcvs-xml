@@ -230,6 +230,7 @@ public class TableElement extends Element
 			Element element = new Element("directoryTree");
 			element.setAttribute("depth", "" + depth);
 			element.setAttribute("name", (directory.isRoot()) ? I18n.tr("[root]") : directory.getName());
+			element.setAttribute("path", directory.getPath());
 			if (directory.isEmpty()) {
 				element.setAttribute("removed", "true");
 			} 

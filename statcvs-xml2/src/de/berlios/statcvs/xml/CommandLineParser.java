@@ -28,7 +28,7 @@ import java.util.List;
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.9 2004-02-27 15:53:39 squig Exp $
+ * @version $Id: CommandLineParser.java,v 1.10 2004-02-29 14:11:58 squig Exp $
  */
 public class CommandLineParser {
 
@@ -122,7 +122,7 @@ public class CommandLineParser {
 			if (args.isEmpty()) {
 				throw new InvalidCommandLineException("Missing argument for -title");
 			}
-			settings.put("title", popNextArg());
+			settings.put("projectName", popNextArg());
 		} else {
 			throw new InvalidCommandLineException("Unrecognized option -" + s);
 		}

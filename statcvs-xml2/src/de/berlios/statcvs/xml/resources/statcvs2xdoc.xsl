@@ -203,7 +203,7 @@
       </xsl:choose>
       <xsl:call-template name="func:make-link">
  		<xsl:with-param name="text" select="@name"/>
-		<xsl:with-param name="localurl" select="ds:getDirectoryFilename(@name)"/>
+		<xsl:with-param name="localurl" select="ds:getDirectoryFilename(@path)"/>
       </xsl:call-template>
      </td>
   </xsl:template>

@@ -231,8 +231,8 @@ public class ReportSettings extends Hashtable {
 	 */
 	public String getFilenameId() 
 	{
-		String postfix = getForeachId();
-		return (postfix == null) ? "" : "_" + postfix;
+		String postfix = (getForeachId() == null) ?  "" : "_" + getForeachId();
+		return postfix + ((getGroupById() == null) ? "" : "_by_" + getGroupById()); 
 	}
 
 	public Iterator getFilterIterator(Iterator it)

@@ -2,7 +2,7 @@
 
   <document  filename="author%1" title="Author Statistics%1" foreach="author">
     <report class="LocByAuthorChart"/>
-    <report class="ModuleSizesChart"/>
+    <report class="SizeChart" groupby="module"/>
     <report class="CommitChart" groupby="day" title="Activity"/>
     <report class="CommitChart" groupby="hour" title=""/>
   </document>
