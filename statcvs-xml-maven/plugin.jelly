@@ -1,91 +1,185 @@
 <?xml version="1.0"?>
+
+<!-- ==================================================================
+       Generate CVS statistics on the current CVS project
+        
+       Note: Needs JDK 1.4+        
+     ================================================================== -->
 <project 
-    xmlns:j="jelly:core"
-    xmlns:maven="jelly:maven"
-    xmlns:doc="doc"
-    xmlns:m="maven">
+  xmlns:j="jelly:core"
+  xmlns:util="jelly:util"
+  xmlns:maven="jelly:maven"
+  xmlns:ant="jelly:ant"
+  xmlns:doc="doc"
+  xmlns:log="jelly:log">
 
-    <!--==================================================================
-            Generate CVS statistics on the current CVS project
-            
-             Note: Needs JDK 1.4+
-          ================================================================== -->
+  <goal name="statcvs-xml:init" prereqs="statcvs-xml:validate">
+    <ant:available property="jdk14" classname="java.lang.CharSequence"/>
+    <j:if test="${jdk14 != 'true'}">
+      <ant:fail>The StatCvs plugin requires JDK 1.4+</ant:fail>
+    </j:if>
+  </goal>
 
-    <goal name="maven-statcvs-xml-plugin:register">
-        <available property="jdk14" classname="java.lang.CharSequence"/>
-
-        <j:if test="${jdk14 == 'true'}">
-            <doc:registerReport 
-                name="StatCVS-XML Report" 
-                pluginName="maven-statcvs-xml-plugin"
-                link="statcvs-xml/index"
-                description="Show some statistics about the CVS repository"/>
+  <!--==================================================================-->
+  <!-- Goal to validate SCM properties                                  -->
+  <!--==================================================================-->
+  <goal name="statcvs-xml:validate">
+    <j:set var="value" value="${maven.scm.ignore.pom.connection}"/>
+    <j:if test="${!value}">
+      <j:set var="value" value="${pom.repository.connection}"/>
+      <j:if test="${!empty(value)}">
+        <!-- Use pom.repository.connection if present -->
+        <j:set var="delim" value=":"/>
+        <j:if test="${value.length() gt 3}">
+          <j:set var="delim" value="${value.substring(3, 4)}"/>
         </j:if>
-    </goal>
-
-    <goal name="maven-statcvs-xml-plugin:deregister">
-        <j:if test="${jdk14 == 'true'}">
-            <doc:deregisterReport name="StatCVS-XML Report"/>
+        <util:tokenize var="tokens" delim="${delim}">${pom.repository.connection}</util:tokenize>
+        <j:if test="${tokens[0] != 'scm'}">
+          <ant:fail>Invalid repository connection format</ant:fail>
         </j:if>
-    </goal>
+        <j:set var="maven.scm.method" value="${tokens[1]}"/>
+        <j:set var="scmMethod" value="${maven.scm.method}"/>
+        <log:info>Using SCM method: ${scmMethod}</log:info>
+        <j:if test="${scmMethod == 'cvs'}">
+          <j:set var="maven.scm.cvs.root" value=":${tokens[2]}:${tokens[3]}:${tokens[4]}"/>
+          <j:set var="maven.scm.cvs.module" value="${tokens[5]}"/>
+          <log:info>Using CVSROOT: ${maven.scm.cvs.root}</log:info>
+          <log:info>Using module: ${maven.scm.cvs.module}</log:info>
+        </j:if>
+      </j:if>
+    </j:if>
 
-    <goal name="maven-statcvs-xml-plugin:report">
-        <attainGoal name="statcvs-xml"/>
-    </goal>
+    <j:choose>
+      <j:when test="${scmMethod == 'cvs'}">
+        <j:set var="cvsModule" value="${maven.scm.cvs.module}"/>
+        <j:if test="${empty(cvsModule)}">
+          <ant:fail>You must specify maven.scm.cvs.module</ant:fail>
+        </j:if>
+      </j:when>
+      <j:otherwise>
+        <ant:fail>Unknown SCM method: '${maven.scm.method}'</ant:fail>
+      </j:otherwise>
+    </j:choose>
+  </goal>
+  
+  <goal name="statcvs-xml" prereqs="statcvs-xml:generate"
+      description="Generate CVS statistics for the current CVS project"/>
 
-    <goal name="statcvs-xml"
-        description="Generate CVS statistics for the current CVS project">
+  <goal name="statcvs-xml:generate" prereqs="statcvs-xml:init"
+      description="Generate CVS statistics for the current CVS project">
 
-        <available property="jdk14" classname="java.lang.CharSequence"/>
+    <j:choose>
+      <j:when test="${maven.mode.online}">
+        <ant:mkdir dir="${maven.build.dir}"/>
+        <ant:property name="statcvs.logfile" 
+            value="${maven.build.dir}/statcvs.log"/>
+        <ant:property name="statcvs.repository" value="${basedir}"/>
 
-        <j:choose>
-            <j:when test="${jdk14 == 'true'}">
-            <j:choose>
-                <j:when test="${maven.mode.online}">
-                    <echo>fetch cvs log...</echo>
-                    <property name="statcvs.logfile" value="${maven.build.dir}/statcvs.log"/>
-                    <cvs command="-q log" output="${statcvs.logfile}"/>
+        <j:if test="${statcvs.history}">
+          <ant:property name="statcvs.repository" 
+              value="${maven.build.dir}/statcvs-xml"/>
 
-                    <echo>run statcvs-xml...</echo>
-                    <property name="maven.docs.dest" value="${pom.getPluginContext('maven-xdoc-plugin').getVariable('maven.docs.dest')}"/>
-                    <property name="maven.gen.docs" value="${pom.getPluginContext('maven-xdoc-plugin').getVariable('maven.gen.docs')}"/>
+		  <util:available file="${statcvs.repository}">
+            <j:set var="repositoryPresent" value="true"/>
+          </util:available>
 
-                    <mkdir dir="${maven.docs.dest}/statcvs-xml"/>
-                    <mkdir dir="${maven.gen.docs}/statcvs-xml"/>
-
-                    <java classname="net.sf.statcvs.Main" fork="true">
-                        <arg line="-output-dir ${maven.gen.docs}/statcvs-xml"/> 
-                        <arg line="-output-suite xdoc"/> 
-                        <arg line="-verbose"/> 
-			<arg line="-weburl ${pom.repository.url}"/>
-                        <arg line="-title '${pom.name}'"/>
-                        <arg line="-use-history"/>
-						<arg line="${statcvs.include}"/>
-                        <arg value="${statcvs.logfile}"/>
-                        <arg value="${basedir}/"/>
-                        <classpath>
-                            <pathelement location="${plugin.getDependencyPath('statcvs-xml')}"/>
-                            <pathelement location="${plugin.getDependencyPath('jfreechart')}"/>
-                            <pathelement location="${plugin.getDependencyPath('jcommon')}"/>
-                            <pathelement location="${plugin.getDependencyPath('jdom')}"/>
-                            <pathelement location="${plugin.getDependencyPath('xml-apis')}"/>
-                        </classpath>
-                    </java>
-                    <!-- Copy images  -->
-                    <copy todir="${maven.docs.dest}/statcvs-xml" overwrite="yes" filtering="no">
-                        <fileset dir="${maven.gen.docs}/statcvs-xml">
-                            <include name="**/*.png"/>
-                        </fileset>
-                    </copy>
-                    </j:when>
-                    <j:otherwise>
-                        <echo>StatCvs-XML can obtain statistics in the online-mode only.</echo>
-                    </j:otherwise>
-                </j:choose>
+	      <j:choose>
+            <j:when test="${repositoryPresent}">
+              <ant:echo>checking out...</ant:echo>
+			  <ant:cvs
+                  command="checkout -r1.1 ${maven.scm.cvs.module}" 
+                  dest="${statcvs.repository}"
+				  compression="true"
+                  quiet="${maven.scm.cvs.quiet}"
+				  cvsRsh="${maven.scm.cvs.rsh}"
+				  cvsRoot="${maven.scm.cvs.root}"
+				  failonerror="true"/>
             </j:when>
             <j:otherwise>
-                <echo>Sorry, it needs JDK 1.4+ ...</echo>
+              <ant:echo>updating...</ant:echo>
+			  <ant:cvs
+                  command="update -r1.1" 
+                  dest="${statcvs.repository}"
+				  compression="true"
+                  quiet="${maven.scm.cvs.quiet}"
+				  cvsRsh="${maven.scm.cvs.rsh}"
+				  cvsRoot="${maven.scm.cvs.root}"
+				  failonerror="true"/>
             </j:otherwise>
-        </j:choose>
-    </goal>
+          </j:choose>
+        </j:if>
+
+        <ant:echo>fetching cvs logs...</ant:echo>
+		<ant:cvs
+			command="log" 
+			output="${statcvs.logfile}"
+			compression="true"
+			quiet="${maven.scm.cvs.quiet}"
+			cvsRsh="${maven.scm.cvs.rsh}"
+			cvsRoot="${maven.scm.cvs.root}"
+			failonerror="true"/>
+
+        <property name="maven.docs.dest" 
+            value="${pom.getPluginContext('maven-xdoc-plugin').getVariable('maven.docs.dest')}"/>
+        <property name="maven.gen.docs" 
+            value="${pom.getPluginContext('maven-xdoc-plugin').getVariable('maven.gen.docs')}"/>
+        <ant:mkdir dir="${maven.docs.dest}/statcvs-xml"/>
+        <ant:mkdir dir="${maven.gen.docs}/statcvs-xml"/>
+
+        <ant:java classname="de.berlios.statcvs.xml.Main" fork="true">
+          <ant:arg line="-output-dir ${maven.gen.docs}/statcvs-xml"/>
+          <ant:arg line="-title '${pom.name}'"/>
+          <ant:arg line="-output-suite xdoc"/> 
+          <ant:arg line="-verbose"/> 
+          <ant:arg line="-weburl ${pom.repository.url}"/>
+          <j:if test="${statcvs.history} != ''">
+            <ant:arg line="-use-history"/>
+          </j:if>
+          <j:if test="${statcvs.include} != ''">
+            <ant:arg line="-include '${statcvs.include}'"/>
+          </j:if>
+          <j:if test="${statcvs.exclude} != ''">
+            <ant:arg line="-exclude '${statcvs.exclude}'"/>
+          </j:if>
+          <ant:arg value="${statcvs.logfile}"/>
+          <ant:arg value="${statcvs.repository}"/>
+          <ant:classpath>
+            <ant:pathelement location="${plugin.getDependencyPath('statcvs-xml:statcvs-xml')}"/>
+            <ant:pathelement location="${plugin.getDependencyPath('jfreechart:jfreechart')}"/>
+            <ant:pathelement location="${plugin.getDependencyPath('jcommon:jcommon')}"/>
+            <ant:pathelement location="${plugin.getDependencyPath('jdom:jdom')}"/>
+            <ant:pathelement location="${plugin.getDependencyPath('commons-logging:commons-logging')}"/>
+            <ant:pathelement location="${plugin.getDependencyPath('commons-jexl:commons-jexl'	)}"/>
+          </ant:classpath>
+        </ant:java>
+
+        <!-- Copy images  -->
+        <copy todir="${maven.docs.dest}/statcvs-xml" overwrite="yes" 
+            filtering="no">
+          <fileset dir="${maven.gen.docs}/statcvs-xml">
+            <include name="**/*.png"/>
+          </fileset>
+        </copy>
+
+      </j:when>
+      <j:otherwise>
+        <ant:echo>StatCvs can obtain statistics in the online-mode only.</ant:echo>
+      </j:otherwise>
+    </j:choose>
+  </goal>
+
+  <goal name="maven-statcvs-xml-plugin:register" prereqs="statcvs-xml:init">
+    <doc:registerReport 
+        name="StatCvs Report" 
+        pluginName="statcvs-xml"
+        link="statcvs-xml/index"
+        description="Show some statistics about the CVS repository"/>
+  </goal>
+
+  <goal name="maven-statcvs-xml-plugin:deregister" prereqs="statcvs-xml:init">
+    <doc:deregisterReport name="StatCvs Report"/>
+  </goal>
+
+  <goal name="statcvs-xml:report" prereqs="statcvs-xml"/>
+
 </project>

@@ -12,7 +12,7 @@
   <siteAddress>shell.berlios.de</siteAddress>
   <siteDirectory>/home/groups/statcvs-xml/htdocs/maven-plugin/</siteDirectory>
   <repository>
-    <connection>scm:cvs:pserver:anonymous@cvs.berlios.de:/cvsroot/statcvs-xml:statcvs-xml/maven-statcvs-xml-plugin</connection>
+    <connection>scm:cvs:pserver:anonymous@cvs.berlios.de:/cvsroot/statcvs-xml:statcvs-xml-maven</connection>
     <url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/maven-statcvs-xml-plugin</url>
   </repository>
   <issueTrackingUrl>
@@ -67,31 +67,27 @@
   <dependencies>
     <dependency>
       <id>statcvs-xml</id>
-      <version>0.9.0</version>
-      <properties>
-        <classloader>root.maven</classloader>
-      </properties>
-    </dependency>
-    <dependency>
-      <id>jfreechart</id>
-      <version>0.9.8</version>
-      <properties>
-        <classloader>root.maven</classloader>
-      </properties>
-    </dependency>
-    <dependency>
-      <id>jcommon</id>
-      <version>0.8.2</version>
-      <properties>
-        <classloader>root.maven</classloader>
-      </properties>
+      <version>0.9.1</version>
     </dependency>
     <dependency>
       <id>jdom</id>
       <version>b9</version>
-      <properties>
-        <classloader>root.maven</classloader>
-      </properties>
+    </dependency>
+    <dependency>
+      <id>jfreechart</id>
+      <version>0.9.16</version>
+    </dependency>
+    <dependency>
+      <id>jcommon</id>
+      <version>0.9.1</version>
+    </dependency>
+    <dependency>
+      <id>commons-jexl</id>
+      <version>1.0-beta-1</version>
+    </dependency>
+    <dependency>
+      <id>commons-logging</id>
+      <version>1.0.3</version>
     </dependency>
   </dependencies>
 
