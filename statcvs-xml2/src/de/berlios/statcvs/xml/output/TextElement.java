@@ -86,6 +86,7 @@ public class TextElement extends Element {
 			
 			Element item = new Element("li");
 			item.addContent(element);
+			addContent(item);
 			
 			return this;
 		}

@@ -98,6 +98,10 @@
 		</includes>
       	<targetPath>net/sf/statcvs</targetPath>
       </resource>
+      <resource>
+        <directory>${basedir}/src/de/berlios/statcvs/xml/resources</directory>
+      	<targetPath>de/berlios/statcvs/xml/resources</targetPath>
+      </resource>
     </resources>
   </build>
   

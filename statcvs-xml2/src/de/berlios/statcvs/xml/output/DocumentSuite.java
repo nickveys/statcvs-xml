@@ -96,7 +96,7 @@ public class DocumentSuite {
 		ReportSettings documentSettings = new ReportSettings(settings);
 		
 		List reports = new ArrayList();
-		int maxPages = 0;
+		int maxPages = 1;
 		
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element element = (Element)it.next();
@@ -164,12 +164,6 @@ public class DocumentSuite {
 	private Report createReport(Element root, ReportSettings documentSettings) 
 	{
 		ReportSettings reportSettings = readAttributes(documentSettings, root);
-//		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
-//			Element element = (Element)it.next();
-//			if ("settings".equals(element.getName())) {
-//				readSettings(reportSettings, element);
-//			}
-//		}
 		
 		String value = reportSettings.getString("groupby", null);
 		if ("author".equals(value)) {
@@ -201,8 +195,8 @@ public class DocumentSuite {
 				Class c = Class.forName(className);
 				Method m = c.getMethod("generate", new Class[] { CvsContent.class, ReportSettings.class });
 				try {
-					Report report = (Report)m.invoke(null, new Object[] { content, reportSettings });
-					return report;
+					Object report = m.invoke(null, new Object[] { content, reportSettings });
+					return (report instanceof Report) ? (Report)report : null;
 				}
 				catch (InvocationTargetException e) {
 					if (e.getCause() instanceof EmptyReportException) {
