@@ -15,11 +15,15 @@
 	  <item name="Overview" href="/index.html"/>
 	</menu>
 	
+	<menu name="Maven">
+	  <item name="Maven Plugin" href="/maven-plugin/"/>
+	</menu>
+
 	<menu name="Development">
 	  <item name="Project Reports" href="/maven-reports.html"/>
 	  <item name="StatCvs" href="/statcvs-xml/index.html"/>
 	</menu>
-	
+
   </body>
   
 </project>

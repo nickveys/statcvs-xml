@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ModulesTreeReport.java,v $
-	$Date: 2003-07-04 15:17:27 $ 
+	$Date: 2003-07-05 00:46:40 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -69,16 +69,21 @@ public class ModulesTreeReport extends ReportElement {
 	 */
 	private void createReport(Iterator directoryIt) {
 		Element modules = new Element("modulesTree");
-		
+		int rootDepth = 0;
+		boolean firstProcessed = false;
 		while (directoryIt.hasNext()) {
 			Directory dir = (Directory) directoryIt.next();
+			if (!firstProcessed) {
+				rootDepth = dir.getDepth();
+				firstProcessed = true;
+			}
 			Element module = new Element("module");
 			if (dir.isRoot()) {
 				module.setAttribute("name", I18n.tr("[root]"));
 			} else {
 				module.setAttribute("name", dir.getName());
 			}
-			module.setAttribute("depth", ""+dir.getDepth());
+			module.setAttribute("depth", ""+(dir.getDepth()-rootDepth));
 			module.setAttribute("files", ""+dir.getCurrentFileCount());
 			module.setAttribute("loc", ""+dir.getCurrentLOC());
 			if (dir.isEmpty()) {
