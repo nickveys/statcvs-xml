@@ -18,7 +18,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: LocPerAuthorChart.java,v $
-	$Date: 2003-07-04 15:17:27 $
+	$Date: 2003-07-05 13:57:03 $
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -89,12 +89,6 @@ public class LocPerAuthorChart extends TimeLineChart {
 		}
 		
 		setRangeLabel(I18n.tr("Lines"));
-		
-		getChart().setLegend(null);
-		
-		
 		placeTitle();
-
 	}
-
 }

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: HTMLOutputter.java,v $
-	$Date: 2003-07-01 23:32:09 $ 
+	$Date: 2003-07-05 13:57:03 $ 
 */
 package net.sf.statcvs.output.xml.util;
 
@@ -29,6 +29,7 @@ import java.util.List;
 import org.jdom.DocType;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.Namespace;
 
 /**
  * HTMLOutputtter
@@ -64,12 +65,16 @@ public class HTMLOutputter extends XMLOutputter {
 					throws IOException {
 		
 		if (!isEmptyHtmlElement(element.getQualifiedName())) {
-			// dont print namespaces
-			while (namespaces.size() > 0) {
-				namespaces.pop();
-			}
+			element.setNamespace(Namespace.NO_NAMESPACE);
 			super.printElement(element, out, level, namespaces); 
 		} else {
+			out.write("<");
+			out.write(element.getQualifiedName());
+			List attributes = element.getAttributes();
+			if (attributes != null) {
+				printAttributes(attributes, element, out, namespaces);
+			}
+			out.write(">");
 
 			/*List content = element.getContent();
 			int start = skipLeadingWhite(content, 0);
@@ -108,26 +113,6 @@ public class HTMLOutputter extends XMLOutputter {
 				out.write(element.getQualifiedName());
 				out.write(">");
 			}*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-			out.write("<");
-			out.write(element.getQualifiedName());
-			List attributes = element.getAttributes();
-			if (attributes != null) {
-				printAttributes(attributes, element, out, namespaces);
-			}
-			out.write(">");
 		}
 		
 		
