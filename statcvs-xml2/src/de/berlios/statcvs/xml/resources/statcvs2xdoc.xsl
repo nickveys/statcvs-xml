@@ -89,20 +89,21 @@
   </xsl:template>
 
   <xsl:template match="text">
-    <xsl:value-of select="."/><br/>
+    <div><xsl:value-of select="."/></div><!-- <br/> -->
   </xsl:template>
 
   <xsl:template match="period">
-    <xsl:value-of select="@name"/>: <xsl:value-of select="@from"/>
+	<div><xsl:value-of select="@name"/>: <xsl:value-of select="@from"/>
 	<xsl:if test="@to"><xsl:text> </xsl:text>
       <xsl:value-of select="i18n:tr('to')"/><xsl:text> </xsl:text><xsl:value-of select="@to"/>
     </xsl:if>
-    <br/>
+    </div>
+    <!-- <br/> -->
   </xsl:template>
   
   <xsl:template match="value">
-    <xsl:apply-templates/>: <xsl:value-of select="@value"/>
-    <br/>    
+    <div><xsl:apply-templates/>: <xsl:value-of select="@value"/></div>
+    <!-- <br/> -->
   </xsl:template>
 
   <!-- copy any other elements through -->
@@ -163,17 +164,18 @@
   </xsl:template>
 
   <xsl:template match="row/commit">
-       <td>
+       <td><div>      		
 		  <b><xsl:value-of select="comment"/></b>
 		  (<xsl:value-of select="@changedfiles"/><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('Files changed')"/>,
-		  <xsl:value-of select="@changedlines"/><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('Lines changed')"/>)
-		  <br/>
+		  <xsl:value-of select="@changedlines"/><xsl:text> </xsl:text><xsl:value-of select="i18n:tr('Lines changed')"/>)</div>
+		  <!-- <br/> -->
 		  <xsl:for-each select="files/file">
               <!--<xsl:element name="a">
                    <xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute>
                    <xsl:value-of select="@directory"/>
                    <xsl:value-of select="@name"/><xsl:text> </xsl:text><xsl:value-of select="@revision"/>
               </xsl:element> -->
+              <div>
               <xsl:call-template name="func:make-link">
 				<xsl:with-param name="text">
 				   <xsl:value-of select="@directory"/>
@@ -192,7 +194,8 @@
                  (+<xsl:value-of select="@added"/>
                  -<xsl:value-of select="@removed"/>)
               </xsl:if>
-              <br/>
+              </div>
+              <!-- <br/> -->
 		  </xsl:for-each>
        </td>
   </xsl:template>
