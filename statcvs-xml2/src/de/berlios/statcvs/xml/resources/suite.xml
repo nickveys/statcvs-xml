@@ -12,7 +12,11 @@
     <tags>test1</tags>
   </settings>
 
-  <document  filename="test" title="Test">
+  <document  filename="test1" title="Test1">
+    <report class="CommitTable" groupby="author"/>
+  </document>
+  
+  <document  filename="test2" title="Test2">
     <report class="LocByObjectChart" forall="author" filename="loc_authors.png"/>
     <report class="LocByObjectChart" forall="directory" filename="loc_directories.png"/>
   </document>

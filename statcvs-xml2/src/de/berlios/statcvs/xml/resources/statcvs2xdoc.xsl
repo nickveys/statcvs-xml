@@ -373,4 +373,28 @@
 	  </xsl:call-template>
 	</xsl:if>    
   </xsl:template>  
+
+  <xsl:template match="row">
+     <tr><xsl:apply-templates /></tr>
+  </xsl:template>  
+  
+  <xsl:template match="row/*">
+    <td>
+    <xsl:choose>
+  		<xsl:when test="@url!=''">
+              <xsl:element name="a">
+                <xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute>
+                <xsl:value-of select="."/>
+              </xsl:element>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="."/> 
+			<xsl:if test="@percent!=''">
+     			(<xsl:value-of select="@percent"/>%)
+     		</xsl:if>
+		</xsl:otherwise>
+	</xsl:choose>
+     </td>
+  </xsl:template>
+
 </xsl:stylesheet>

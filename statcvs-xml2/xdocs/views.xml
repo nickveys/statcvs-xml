@@ -3,43 +3,93 @@
 <document>
 
 <properties>
- <title>About</title>
+ <title>Customizing</title>
 </properties>
 
 <body>
-  <section name="Views">
+
+  <section name="Introduction">
 
   <p>
-    StatCVS-XML provides different views on the cvs log data:
+    StatCvs-XML features a highly customizable report generator. The
+    set of reports can be customized through an XML file. The XML file
+    is divided in document sections that each describe a file that
+    aggregates a set of reports. 
+  </p>
+
+  </section>
+
+  <section name="Domain">
+
+  <p>
+    Each report works on a specific set of data called the domain. The
+    following domains are available in StatCvs-XML:
 
     <ul>
-      <li>Global</li>
-      <li>Author</li>
-      <li>Directory</li>
-      <li>Module</li>
+      <li>Files</li>
+      <li>Directories</li>
+      <li>Revisions</li>
     </ul>
 
-    Each of these views provides a number of access methods to the
-    data. 
+    That means a report can either work an a list of files,
+    directories or revisions, i.e. the LocChart works on revisions,
+    adding up all line deltas.
+  </p>
+
+  </section>
+
+  <section name="View">
+
+  <p>
+    The default domain is the global data object that contains all
+    files, directories and revisions. Sometimes it is desirable to
+    select a subset of that data though. This could be done with a
+    filter matching only the relevant item of course. That would be a
+    rather tedious solution though in case it was desired to generate
+    a specific set of records for each author for
+    instance.
+  </p>
+
+  <p>
+    StatCvs-XML has a concept called view for that purpose. A view can
+    be specified in a document tag by setting the attribute
+    <tt>foreach</tt> to one of the following values:
+
+    <tt>
+    <ul>
+      <li>author</li>
+      <li>directory</li>
+      <li>file</li>
+      <li>module</li>
+      <li>symbolic name (cvs tag)</li>
+    </ul>
+    </tt>
+  </p>
+
+  <p>
+    If no <tt>foreach</tt> attribute is set, the document will be
+    generated using the global domain. 
+  </p>
+
+  <p>
+    Not every view can provide every domain. You need to make sure
+    that the domain of all reports in the document is matched. 
 
     <table>
-    <th>
-      <td>View</td>
-      <td>Access</td>
-    </th>
+    <tr>
+      <th>View</th>
+      <th>Supported Domains</th>
+    </tr>
     <tr>
       <td>Global</td>
       <td>
-        <ul>
-          <li>All</li>
-        </ul>
+        All
       </td>
     </tr>
     <tr>
       <td>Author</td>
       <td>
         <ul>
-          <li>Directories</li>
           <li>Revisions</li>
         </ul>
       </td>
@@ -55,10 +105,10 @@
       </td>
     </tr>
     <tr>
-      <td>Author</td>
+      <td>Module</td>
       <td>
         <ul>
-          <li>Directories</li>
+          <li>Files</li>
           <li>Revisions</li>
         </ul>
       </td>
@@ -67,9 +117,71 @@
   </p>
 
   <p>
+    <img src="images/views-simple.png"/>
   </p>
 
   </section>  
+
+  <section name="Grouping">
+
+  <p>
+    Most reports compare data that is grouped by some criteria. For
+    instance the AuthorsLocChart groups all revisions by author and
+    draws a time line per author. Most StatCvs-XML reports can be
+    customized to group by other than the default criteria by
+    setting <tt>groupby</tt> to one of the following values:
+
+    <ul>
+      <li>author</li>
+      <li>file</li>
+      <li>directory</li>
+      <li>module</li>
+      <li>symbolicName</li>
+    </ul>
+  </p>
+
+  <p>
+    Which values apply depends on the domain of the report:
+  
+    <table>
+    <tr>
+      <th>Domain</th>
+      <th>groupby</th>
+    </tr>
+    <tr>
+      <td>Directories</td>
+      <td>
+        None
+      </td>
+    </tr>
+    <tr>
+      <td>File</td>
+      <td>
+        <tt>
+        <ul>
+          <li>directory</li>
+          <li>module</li>
+        </ul>
+        </tt>
+      </td>
+    </tr>
+    <tr>
+      <td>Revisions</td>
+      <td>
+        All
+      </td>
+    </tr>
+    </table>
+  </p>
+
+  <p>
+    Revisions are the atomic unit of the data model. Therefore reports
+    that work on revisions, as most reports do, offer the most
+    flexible grouping abilities.
+  </p>
+
+  </section>
+
 </body>
 
 </document>

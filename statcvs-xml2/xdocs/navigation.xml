@@ -13,6 +13,7 @@
 
 	<menu name="General Information">
 	  <item name="Overview" href="/index.html"/>
+	  <item name="Customizing" href="/views.html"/>
 	</menu>
 	
 	<menu name="Maven">
