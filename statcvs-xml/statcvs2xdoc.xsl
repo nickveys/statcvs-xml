@@ -239,6 +239,32 @@
 	 <li><xsl:call-template name="link"/></li>
   </xsl:template>
 
+  <xsl:template match="modulesTree">
+  	<table>
+  	  <tr>
+  		<th><xsl:value-of select="i18n:tr('Module')"/></th>
+  		<th><xsl:value-of select="i18n:tr('Files')"/></th>
+  		<th><xsl:value-of select="i18n:tr('Lines of code')"/></th>
+  	  </tr>
+	  <xsl:for-each select="module">
+		<tr>
+		  <td>
+		  <xsl:call-template name="func:spacer">
+		    <xsl:with-param name="num" select="@depth"/>
+		  </xsl:call-template>
+		  <img src="folder.png"/>
+		  <xsl:call-template name="func:make-link">
+		    <xsl:with-param name="url" select="@url"/>
+		    <xsl:with-param name="text" select="@name"/>
+		  </xsl:call-template>
+		  </td>
+		  <td><xsl:value-of select="@files"/></td>
+  		  <td><xsl:value-of select="@loc"/></td>
+		</tr>
+	  </xsl:for-each>
+  	</table>
+  </xsl:template>
+  
   <xsl:template match="value">
     <p><xsl:apply-templates/>: <xsl:value-of select="@value"/>
     </p>    
@@ -267,5 +293,14 @@
 		</xsl:otherwise>
 	</xsl:choose>
   </xsl:template>
-  
+
+  <xsl:template name="func:spacer">
+    <xsl:param name="num"/>
+	<xsl:if test="$num &gt; 0">
+	  <img src="" width="7" height="5"/>
+	  <xsl:call-template name="func:spacer">
+	    <xsl:with-param name="num" select="number($num)-1"/>
+	  </xsl:call-template>
+	</xsl:if>    
+  </xsl:template>  
 </xsl:stylesheet>

@@ -18,21 +18,24 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: IndexDocument.java,v $ 
-	Created on $Date: 2003-06-20 10:37:31 $ 
+	Created on $Date: 2003-06-26 20:19:07 $ 
 */
 package net.sf.statcvs.output.xml;
 
-import java.util.*;
+import java.util.Iterator;
 
 import net.sf.statcvs.I18n;
+import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.RevisionIterator;
-import net.sf.statcvs.model.*;
+import net.sf.statcvs.model.RevisionSortIterator;
 import net.sf.statcvs.output.LOCSeriesBuilder;
-import net.sf.statcvs.renderer.*;
+import net.sf.statcvs.output.xml.report.ModulesTreeReport;
+import net.sf.statcvs.renderer.Chart;
 import net.sf.statcvs.renderer.LOCChart;
-import net.sf.statcvs.reports.*;
-import net.sf.statcvs.util.*;
+import net.sf.statcvs.reports.AbstractLocTableReport;
+import net.sf.statcvs.util.DateUtils;
+import net.sf.statcvs.util.Formatter;
 
 import org.jdom.Element;
 
@@ -60,6 +63,7 @@ public class IndexDocument extends StatCvsDocument {
 		getRootElement().addContent(createReportRefs());
 		getRootElement().addContent(createLOCReport());
 		getRootElement().addContent(createAuthorsReport());
+		getRootElement().addContent(new ModulesTreeReport(content));
 	}
 
 	/**
@@ -67,7 +71,7 @@ public class IndexDocument extends StatCvsDocument {
 	 */
 	public Chart[] getCharts() {
 		return new Chart[] {
-			createLOCChart(LOC_IMAGE_FILENAME, 400, 300),
+			createLOCChart(LOC_IMAGE_FILENAME, 640, 480),
 		};
 	}
 
