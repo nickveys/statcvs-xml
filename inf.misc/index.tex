@@ -35,10 +35,18 @@
 
 %\logo{\pgfuseimage{unilogo}}
 
+\definecolor{structure}{rgb}{0.282, 0.243, 0.443}
+
 \beamertemplateshadingbackground{red!10}{structure!10}
 %\beamertemplatetransparentcovereddynamic
 \beamertemplatetransparentcovered
 %\beamertemplateballitem
+
+\definecolor{korange}{rgb}{0.964, 0.631, 0.109}
+  \useitemizeitemtemplate{\small\raise0.5pt\hbox{\color{korange}\textbullet}}
+  \usesubitemizeitemtemplate{\footnotesize\raise0.5pt\hbox{\color{structure}\textbullet}}
+
+
 \beamertemplatesolidbuttons
 \beamertemplateroundedblocks
 \beamertemplatelargetitlepage
