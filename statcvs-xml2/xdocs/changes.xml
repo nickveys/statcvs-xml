@@ -14,6 +14,12 @@
       </ul>
     </section>
 -->
+	<release version="0.9.4" date="CVS">
+      <action dev="vanto" type="fix">
+		Bug #1815 (Null Pointer Exception in Software Evolution Chart) has been 
+		fixed.
+      </action>
+	</release>
 	<release version="0.9.3" date="2004-04-05">
       <action dev="vanto" type="add">
 		Software Evolution Matrix Chart has been added. It compares the file 

@@ -533,7 +533,7 @@ public class EvolutionMatrixChart extends AbstractChart {
 			CvsRevision curr = getRevision(thisV);
 			double change = curr.getReplacedLines();	
 			int revCount = 0;
-			while (target != curr) {
+			while ((target != curr) && (curr != null)) {
 				curr = curr.getPreviousRevision();
 				if (curr != null && (curr.getLines() != 0)) {
 					change += curr.getReplacedLines() / curr.getLines();
