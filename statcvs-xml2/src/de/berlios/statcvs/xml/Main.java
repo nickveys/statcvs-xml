@@ -55,7 +55,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * 
  * @author Steffen Pingel
  * @author Tammo van Lessen
- * @version $Id: Main.java,v 1.27 2004-03-07 22:31:22 squig Exp $
+ * @version $Id: Main.java,v 1.28 2004-03-27 20:49:36 vanto Exp $
  */
 public class Main {
 
@@ -72,7 +72,7 @@ public class Main {
 		// no graphical output, needed for JFreeChart
 		System.setProperty("java.awt.headless", "true");
 		
-		System.out.println(I18n.tr("StatCvs-XML - CVS statistics generation"));
+		System.out.println(I18n.tr("StatCvs-XML {0} - CVS statistics generation", VERSION));
 		System.out.println();
 		
 		if (args.length == 1) {
