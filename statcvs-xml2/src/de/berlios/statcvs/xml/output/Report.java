@@ -1,8 +1,20 @@
 /*
- * statcvs-xml2
- * TODO
- * Created on 28.02.2004
+ *  StatCvs-XML - XML output for StatCvs.
  *
+ *  Copyright by Steffen Pingel, Tammo van Lessen.
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public License
+ *  version 2 as published by the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 package de.berlios.statcvs.xml.output;
 
@@ -15,7 +27,7 @@ import org.jdom.Element;
  * Report
  * 
  * @author Tammo van Lessen
- * @version $Id: Report.java,v 1.1 2004-02-28 21:45:47 vanto Exp $
+ * @version $Id: Report.java,v 1.2 2004-02-29 00:15:07 vanto Exp $
  */
 public class Report {
 
@@ -28,38 +40,16 @@ public class Report {
 		}
 	}
 	
-	public Report(ReportSettings settings, ReportElement element, Element pParent, final String pageable)
+	public Report(ReportElement element, Separable report)
 	{
-		if (element == null) {
-			return;
-		}
-		
-		if (!settings.isPaging()) {
-			elements.add(element);
-			return;
-		}
-		
-		Element pClone = (Element)pParent.clone();
-		List children = pClone.getChildren(pageable);
-		
-		
-		ReportElement currPage = (ReportElement)element.clone();
-		pParent.removeChildren(pageable);
-		System.out.println(children.size());
-		for (int i = 0; i < children.size(); i++) {
-			currPage.getChildren().add(children.get(i));
-			
-			// new page
-			if (i % settings.getLimit() == 0) {
-				elements.add(currPage);
-				currPage = (ReportElement)element.clone();
-				currPage.removeChildren(pageable);				
-			}
-		}
-		
-		// add last page if not empty
-		if (currPage.getChildren(pageable).size() > 0) {
-			elements.add(currPage);	
+		int index = element.getContent().indexOf(report);
+		System.out.println(element.getContent().contains(report));
+		System.out.println(index);
+		System.out.println(report.getPageCount());
+		for (int i = 0; i < report.getPageCount(); i++) {
+			Element clone = (Element)element.clone();
+			clone.getContent().set(index, report.getPage(i));	
+			elements.add(clone);
 		}
 	}
 

@@ -26,7 +26,8 @@ public class StatCvsDocument extends Document {
 		this.settings = settings;
 		this.filename = StringHelper.escapeFilename(
 			settings.getString("filename", "document_" + ++documentNumber)
-			.replaceAll("%1", settings.getFilenameId()));
+			.replaceAll("%1", settings.getFilenameId())
+			+ ((settings.getPageNr() == 0)?"":"_"+settings.getPageNr()));
 		this.title = settings.getString("title", "").replaceAll("%1", settings.getSubtitlePostfix());
 		
 		Element root = new Element("document");

@@ -1,3 +1,21 @@
+/*
+ *  StatCvs-XML - XML output for StatCvs.
+ *
+ *  Copyright by Steffen Pingel, Tammo van Lessen.
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public License
+ *  version 2 as published by the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package de.berlios.statcvs.xml.output;
 
 import java.io.IOException;
@@ -100,15 +118,18 @@ public class DocumentSuite {
 		StatCvsDocument firstPage = null;
 		
 		for (int i = 0; i < maxPages; i++) {
-			StatCvsDocument document = new StatCvsDocument(readAttributes(settings, root));
+			ReportSettings localSettings = readAttributes(settings, root);
+			localSettings.setPageNr(i);
+			StatCvsDocument document = new StatCvsDocument(localSettings);
+			document.getRootElement().addContent(createPagerElement(i, maxPages));
 			for (int r = 0; r < reports.size(); r++) {
 				ReportElement re = ((Report)reports.get(r)).getPage(i);
-				
 				if (re != null) {
 					document.getRootElement().addContent(re);
 				}
 			}
 			logger.info(i+":"+document.getTitle());
+			
 			renderer.render(document);
 			
 			if (i == 0) {
@@ -118,6 +139,19 @@ public class DocumentSuite {
 		}
 	
 		return firstPage;
+	}
+
+	private Element createPagerElement(int currPage, int total) {
+		Element pager = new Element("pager");
+		pager.setAttribute("current", ""+(currPage + 1));
+		pager.setAttribute("total", ""+total);
+		for (int i=0; i < total; i++) {
+			Element page = new Element("page");
+			//page.setAttribute("filename", getFilename(i));
+			page.setAttribute("nr", ""+(i+1));
+			pager.addContent(page);
+		}
+		return pager;
 	}
 
 	/**
