@@ -6,7 +6,7 @@ STATCVS_ARGS = -viewcvs http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/st
 
 LIBS = $(shell find lib/ -name "*.jar")
 CP = .:src:$(shell echo $(LIBS) | sed -e 's/ /:/g'):$(JAVA_HOME)/jre/lib/rt.jar
-JDEPENDS = src/net/sf/statcvs/Main.java $(shell find src -name "*Output.java") \
+JDEPENDS = src/net/sf/statcvs/Main.java $(shell find src -name "*Renderer.java") \
            src/net/sf/statcvs/util/ConsoleOutErrHandler.java
 
 ifeq ($(shell test -r Makefile.local && echo "true"),true)
@@ -49,9 +49,9 @@ cvs.log:
 	cvs log > cvs.log
 
 html : 
-	mkdir -p xdocs/statcvs
+	mkdir -p out-html
 	$(JAVA_HOME)/bin/java -classpath $(CP) net.sf.statcvs.Main \
-	  $(CVS_LOG) $(CVS_PATH) $(STATCVS_ARGS) -output-dir out
+	  $(CVS_LOG) $(CVS_PATH) $(STATCVS_ARGS) -output-dir out-html -output-suite html
 
 xdoc : 
 	mkdir -p xdocs/statcvs

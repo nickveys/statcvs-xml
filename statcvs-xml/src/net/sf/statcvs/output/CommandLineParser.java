@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommandLineParser.java,v $
-	Created on $Date: 2003-06-28 11:12:27 $ 
+	Created on $Date: 2003-07-02 16:19:30 $ 
 */
 package net.sf.statcvs.output;
 
@@ -30,7 +30,7 @@ import java.util.List;
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.2 2003-06-28 11:12:27 vanto Exp $
+ * @version $Id: CommandLineParser.java,v 1.3 2003-07-02 16:19:30 squig Exp $
  */
 public class CommandLineParser {
 
@@ -91,7 +91,11 @@ public class CommandLineParser {
 			}
 			else {
 				String arg = popNextArg();
-				if (arg.equals("xdoc")) {
+				if (arg.equals("html")) {
+					ConfigurationOptions.setOutputSuite
+						("net.sf.statcvs.output.xml.HTMLRenderer");
+				}
+				else if (arg.equals("xdoc")) {
 					ConfigurationOptions.setOutputSuite
 						("net.sf.statcvs.output.xml.XDocRenderer");
 				}
