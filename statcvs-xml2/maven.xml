@@ -2,7 +2,6 @@
   xmlns:j="jelly:core"
   xmlns:u="jelly:util"
   xmlns:ant="jelly:ant"
-  xmlns:m="maven"
   xmlns:maven="jelly:maven"
   default="java:jar">
 
