@@ -27,34 +27,34 @@ import java.util.Date;
 import net.sf.statcvs.util.CvsLogUtils;
 
 /**
- * Container for all information contained in one CVS revision
+ * Container for all information contained in one CVS revisionNumber
  * 
  * @author Richard Cyganiak <richard@cyganiak.de>
  * @version $Id$
  */
 public class RevisionData {
-	private String revision;
+	private String revisionNumber;
 	private Date date;
-	private String authorName;
+	private String loginName;
 	private boolean stateExp = false;
 	private boolean stateDead = false;
-	private boolean lineCount = false;
+	private boolean hasNoLines = true;
 	private int linesAdded;
 	private int linesRemoved;
 	private String comment;
 
 	/**
-	 * @return Returns the authorName.
+	 * @return Returns the loginName.
 	 */
-	public String getAuthorName() {
-		return authorName;
+	public String getLoginName() {
+		return loginName;
 	}
 
 	/**
-	 * @param authorName The authorName to set.
+	 * @param loginName The loginName to set.
 	 */
-	public void setAuthorName(String authorName) {
-		this.authorName = authorName;
+	public void setLoginName(String authorName) {
+		this.loginName = authorName;
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class RevisionData {
 	 * @return
 	 */
 	public boolean hasNoLines() {
-		return !lineCount;
+		return hasNoLines;
 	}
 
 	/**
@@ -98,21 +98,21 @@ public class RevisionData {
 	public void setLines(int added, int removed) {
 		this.linesAdded = added;
 		this.linesRemoved = removed;
-		lineCount = true;
+		hasNoLines = false;
 	}
 
 	/**
-	 * @return Returns the revision.
+	 * @return Returns the revisionNumber.
 	 */
-	public String getRevision() {
-		return revision;
+	public String getRevisionNumber() {
+		return revisionNumber;
 	}
 
 	/**
-	 * @param revision The revision to set.
+	 * @param revisionNumber The revisionNumber to set.
 	 */
-	public void setRevision(String revision) {
-		this.revision = revision;
+	public void setRevisionNumber(String revision) {
+		this.revisionNumber = revision;
 	}
 
 	public void setStateDead() {
@@ -138,82 +138,82 @@ public class RevisionData {
 	}
 
 	/**
-	 * Returns <tt>true</tt> if this revision marks the adding of a new file
-	 * on a subbranch. CVS creates a dead 1.1 revision on the trunk even if
+	 * Returns <tt>true</tt> if this revisionNumber marks the adding of a new file
+	 * on a subbranch. CVS creates a dead 1.1 revisionNumber on the trunk even if
 	 * the file never gets merged into the trunk. If we evaluate the trunk,
 	 * and the file doesn't have any other revisions on the trunk, then we
-	 * ignore this revision.
+	 * ignore this revisionNumber.
 	 *  
 	 * @return <tt>true</tt> if this is the adding of a new file on a subbranch
 	 */
 	public boolean isAddOnSubbranch() {
-		return stateDead && revision.equals("1.1");
+		return stateDead && revisionNumber.equals("1.1");
 	}
 	
 	/**
-	 * Returns <tt>true</tt> if this revision is the removal of a file.
-	 * Any dead revision means that the file was removed. The only exception
-	 * is a dead 1.1 revision, which is an add on a subbranch.
+	 * Returns <tt>true</tt> if this revisionNumber is the removal of a file.
+	 * Any dead revisionNumber means that the file was removed. The only exception
+	 * is a dead 1.1 revisionNumber, which is an add on a subbranch.
 	 * 
-	 * @return <tt>true</tt> if this revision deletes the file.
+	 * @return <tt>true</tt> if this revisionNumber deletes the file.
 	 * @see #isAddOnSubbranch
 	 */
 	public boolean isDeletion() {
-		return stateDead && !revision.equals("1.1");
+		return stateDead && !revisionNumber.equals("1.1");
 	}
 	
 	/**
-	 * Returns <tt>true</tt> if this revision is a normal change, or if it
+	 * Returns <tt>true</tt> if this revisionNumber is a normal change, or if it
 	 * restores a removed file. The distinction between these two cases
-	 * can be made by looking at the previous (in time, not log order) revision.
-	 * If it was a deletion, then this revision is a restore.
+	 * can be made by looking at the previous (in time, not log order) revisionNumber.
+	 * If it was a deletion, then this revisionNumber is a restore.
 	 * 
 	 * @return <tt>true</tt> if this is a normal change or a restore.
 	 */
 	public boolean isChangeOrRestore() {
-		return stateExp && lineCount;
+		return stateExp && !hasNoLines;
 	}
 	
 	/**
-	 * Returns <tt>true</tt> if this revision is the creation of a new file.
+	 * Returns <tt>true</tt> if this revisionNumber is the creation of a new file.
 	 * 
 	 * @return <tt>true</tt> if this is the creation of a new file.
 	 */
 	public boolean isCreation() {
-		return stateExp && !lineCount;
+		return stateExp && hasNoLines;
 	}
 
 	/**
-	 * Returns <tt>true</tt> if this revision is on the main branch.
+	 * Returns <tt>true</tt> if this revisionNumber is on the main branch.
 	 * 
-	 * @return <tt>true</tt> if this revision is on the main branch.
+	 * @return <tt>true</tt> if this revisionNumber is on the main branch.
 	 */
 	public boolean isOnTrunk() {
-		return CvsLogUtils.isOnMainBranch(revision);
+		return CvsLogUtils.isOnMainBranch(revisionNumber);
 	}
 	
 	/**
-	 * Returns <tt>true</tt> if this is an Exp ("exposed"?) revision.
-	 * This is CVS speak for any "live" revision, that is, if this is
-	 * the current revision, then a file exists in the working copy.
+	 * Returns <tt>true</tt> if this is an Exp ("exposed"?) revisionNumber.
+	 * This is CVS speak for any "live" revisionNumber, that is, if this is
+	 * the current revisionNumber, then a file exists in the working copy.
 	 * 
-	 * @return <tt>true</tt> if this is an Exp revision
+	 * @return <tt>true</tt> if this is an Exp revisionNumber
 	 */
 	public boolean isStateExp() {
 		return stateExp;
 	}
 	
 	/**
-	 * Returns <tt>true</tt> if this is a dead revision. If this is the
-	 * current revision, then the file does not exist in the working copy.
+	 * Returns <tt>true</tt> if this is a dead revisionNumber. If this is the
+	 * current revisionNumber, then the file does not exist in the working copy.
 	 * 
-	 * @return <tt>true</tt> if this is a dead revision
+	 * @return <tt>true</tt> if this is a dead revisionNumber
 	 */
 	public boolean isStateDead() {
 		return stateDead;
 	}
 
 	public String toString() {
-		return "RevisionData " + revision;
+		return "RevisionData " + revisionNumber;
 	}
 }
