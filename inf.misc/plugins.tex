@@ -1,7 +1,119 @@
-\section{Plugins}
+\section{Core Plugins}
+
+\subsection{Übersicht}
 \frame{
-  \frametitle{Source Code}
+  \frametitle{Übersicht}
+
+  Die Core Plugins werden mit Maven ausgeliefert. Einige kennen wir bereits:
+  
+  \begin{itemize}
+  \item clean
+  \item jar
+  \item java
+  \end{itemize}
+
 }
+
+\subsection{ChangeLog}
+\frame{
+  \frametitle{ChangeLog Plugin}
+}
+
+\subsection{License}
+\frame{
+  \frametitle{License Plugin}
+}
+
+\section{Optional Plugins}
+
+\subsection{Übersicht}
+\frame{
+  \frametitle{Übersicht}
+
+  Die Optionalen Plugins werden bei Bedarf automatisch
+  installiert. Auch hier haben wir einige bereits gesehen:
+
+  \begin{itemize}
+  \item genapp
+  \item linkcheck
+  \item release
+  \item site
+  \item xdoc
+  \end{itemize}
+
+  Auf der Maven Seite sind Ende Januar 2004 77 Plugins gelistet.
+}
+
+\subsection{Changes}
+\frame{
+  \frametitle{Changes Plugin}
+
+  Versions Historie
+
+  changes.xml
+}
+
+\subsection{Source Code Dokumentation}
+\frame{
+  \frametitle{Source Code Dokumentation}
+  
+  JavaDoc
+  XRef
+  JUnit
+}
+
+\subsection{Source Code Metriken}
+\frame{
+  \frametitle{Source Code Metriken}
+  
+   CheckStyle Plugin
+   PMD Plugin
+}
+
+\subsection{Testüberdeckung}
+\frame{
+  \frametitle{Testüberdeckung}
+  
+   Clover
+   JCoverage
+   gcover
+}
+
+\subsection{CVS Statistiken}
+\frame{
+  \frametitle{CVS Statistiken}
+
+  Developer Activity Plugin
+  File Activity Plugin
+}
+
+\frame{
+  \frametitle{StatCvs Plugin}
+}
+
+\subsection{Weitere}
+\frame[all:1]{
+  \frametitle{Noch Mehr Nütliche Plugins}
+
+  \begin{itemize}
+  \item ant
+  \item console: Konsoleneingabe zum Aufruf von Goals
+    \begin{itemize}
+    \item (+) schnelles sukessives Aufrufen von Goals
+    \item (-) unzureichende Speicherfreigabe führt zu OutOfMemory
+      exception
+    \end{itemize}
+  \item eclipse: Generierung von Eclipse Projekt Dateien
+    \begin{itemize}
+    \item Berücksichtigung aller Dependencies
+    \item Anlegen der MAVEN\_HOME Variable in Eclipse notwendig
+    \end{itemize}
+  \item plugin
+  \item release
+  \item uberjar
+  \end{itemize}
+}
+
 
 %%% Local Variables: 
 %%% TeX-master: "index"
