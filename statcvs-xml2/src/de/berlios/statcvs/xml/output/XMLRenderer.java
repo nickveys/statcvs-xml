@@ -18,19 +18,19 @@
  */
 package de.berlios.statcvs.xml.output;
 
-import java.awt.print.Pageable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamResult;
 
 import net.sf.statcvs.model.CvsContent;
 
 import org.jdom.output.Format;
-import org.jdom.transform.JDOMResult;
 import org.jdom.transform.JDOMSource;
 
 /**
@@ -110,25 +110,7 @@ public class XMLRenderer implements DocumentRenderer {
 	public void render(StatCvsDocument document) throws IOException
 	{
 		logger.info("Rendering " + document.getFilename());
-		if (document instanceof Pageable) {
-			renderPages((Pageable)document);
-		} else {
-			renderSingle(document);
-		}
-		
-	}
-	
-	private void renderPages(Pageable document) throws IOException
-	{
-//		document.setItemsPerPage
-//			(OutputSettings.getInstance().get("itemsPerPage", 10));
-//		for (int i = 0; i < document.getPageCount(); i++) {
-//			renderSingle(document.getPage(i));					
-//		}
-	}
 
-	private void renderSingle(StatCvsDocument document) throws IOException 
-	{
 		File file = new File(outputPath, document.getFilename() + extension);
 		FileOutputStream outStream = new FileOutputStream(file);
 
@@ -136,14 +118,13 @@ public class XMLRenderer implements DocumentRenderer {
 		
 		try {
 			if (transformer != null) {
-				JDOMResult result = new JDOMResult();
+				Result result = new StreamResult(outStream);
 				try {
 					transformer.transform(new JDOMSource(document), result);
 				}
 				catch (TransformerException e) {
 					logger.warning("XSLT transformation failed: " + e);
 				}
-				out.output(result.getDocument(), outStream);
 			}
 			else {
 				out.output(document, outStream);
