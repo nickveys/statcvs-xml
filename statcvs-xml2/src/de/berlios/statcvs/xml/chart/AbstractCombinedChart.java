@@ -33,7 +33,7 @@ import de.berlios.statcvs.xml.output.ReportSettings;
  * AbstractScatterChart
  * 
  * @author Tammo van Lessen
- * @version $Id: AbstractCombinedChart.java,v 1.1 2004-02-29 18:43:34 vanto Exp $
+ * @version $Id: AbstractCombinedChart.java,v 1.2 2004-03-05 21:56:01 squig Exp $
  */
 public class AbstractCombinedChart extends AbstractChart {
 
@@ -50,8 +50,8 @@ public class AbstractCombinedChart extends AbstractChart {
         
 		ValueAxis domainAxis = new DateAxis(I18n.tr("Date"));
 		domainAxis.setVerticalTickLabels(true);
+
 		combinedPlot = new CombinedDomainXYPlot(domainAxis);
-		
 		combinedPlot.setGap(10);
 		combinedPlot.setOrientation(PlotOrientation.VERTICAL);
 		

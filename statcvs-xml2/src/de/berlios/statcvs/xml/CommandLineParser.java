@@ -29,7 +29,7 @@ import java.util.logging.Level;
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.11 2004-03-01 21:21:12 squig Exp $
+ * @version $Id: CommandLineParser.java,v 1.12 2004-03-05 21:56:01 squig Exp $
  */
 public class CommandLineParser {
 
@@ -80,8 +80,8 @@ public class CommandLineParser {
 			settings.put("outputDir", popNextArg());
 		} else if (s.equals("renderer")) {
 			settings.put("renderer", popNextArg());
-		} else if (s.equals("document-suite")) {
-			settings.put("documentSuite", popNextArg());
+		} else if (s.equals("suite")) {
+			settings.put("suite", popNextArg());
 		} else if (s.equals("use-history")) {
 			settings.put("useHistory", "true");
 		} else if (s.equals("verbose")) {

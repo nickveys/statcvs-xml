@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorsActivityChart.java,v $
-	$Date: 2004-02-28 21:46:04 $ 
+	$Date: 2004-03-05 21:56:01 $ 
 */
 package de.berlios.statcvs.xml.report;
 
@@ -68,7 +68,7 @@ public class AuthorsActivityChart extends AbstractStackedChart {
 		plot.getRenderer().setSeriesPaint(REMOVING, Color.red);
 		plot.getRenderer().setSeriesPaint(CHANGING, Color.yellow);
 		plot.getRenderer().setSeriesPaint(ADDING, Color.green);
-		//plot.getDomainAxis().setVerticalCategoryLabels(true);
+		plot.getRangeAxis().setUpperBound(100);
 		
 		Collection auts = content.getAuthors();
 		Iterator it = auts.iterator();
@@ -99,7 +99,7 @@ public class AuthorsActivityChart extends AbstractStackedChart {
 			while (commitRevIt.hasNext()) {
 				CvsRevision revision = (CvsRevision) commitRevIt.next();
 				linesAdded += revision.getNewLines();
-				linesRemoved += revision.getReplacedLines();
+				linesRemoved += revision.getNewLines() - revision.getReplacedLines();
 			}
 			if (linesAdded == linesRemoved) {
 				categories[CHANGING][author] += linesAdded;

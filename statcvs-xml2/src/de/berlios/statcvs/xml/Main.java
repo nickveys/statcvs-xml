@@ -56,7 +56,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * 
  * @author Steffen Pingel
  * @author Tammo van Lessen
- * @version $Id: Main.java,v 1.21 2004-03-05 18:10:29 squig Exp $
+ * @version $Id: Main.java,v 1.22 2004-03-05 21:56:01 squig Exp $
  */
 public class Main {
 
@@ -88,12 +88,14 @@ public class Main {
 		try {
 			ReportSettings settings = readSettings(args);
 			generateSuite(settings);
-			System.out.println(I18n.tr("Done"));
+			System.out.println(I18n.tr("Done generating reports in {0}", settings.getOutputPath()));
 		} catch (InvalidCommandLineException e) {
 			System.err.println(e.getMessage());
 			printProperUsageAndExit();
 		} catch (IOException e) {
 			printErrorMessageAndExit(e.getMessage());
+		} catch (EmptyRepositoryException e) {
+			printErrorMessageAndExit(I18n.tr("Cowardly refusing to generate reports for an empty log"));
 		} catch (LogSyntaxException lex) {
 			printLogErrorMessageAndExit(lex.getMessage());
 		} catch (OutOfMemoryError oome) {
@@ -220,6 +222,10 @@ public class Main {
 		} 
 		
 		String logFilename = settings.getString("logFile", "cvs.log");
+		if (!new File(logFilename).exists()) {
+			throw new IOException(I18n.tr("CVS log file '{0}' not found, please run 'cvs log > {0}'", logFilename));
+		}
+		
 		Reader logReader = new FileReader(logFilename);
 
 		logger.info("Parsing CVS log '" + logFilename + "'");
