@@ -1,0 +1,15 @@
+<suite>
+  <settings>
+    <width>640</width>
+    <height>480</height>
+  </settings>
+
+  <document filename="index.html">
+    <report class="AuthorsReport"/>
+  </document>
+
+  <document for_each="author">
+    <report1 class="LOCReport"/>
+    <chart class="LOCChart"/>
+  </document>
+</suite>

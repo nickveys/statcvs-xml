@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
 public class I18n {
 
 
-	private static final String BUNDLE_NAME = "net.sf.statcvs.resources.statcvs";
+	private static final String BUNDLE_NAME = "de.berlios.statcvs.xml.resources.statcvs-xml";
 	private static final ResourceBundle RESOURCE_BUNDLE =
 			ResourceBundle.getBundle(BUNDLE_NAME);
 

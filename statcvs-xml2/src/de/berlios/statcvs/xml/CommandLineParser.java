@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommandLineParser.java,v $
-	Created on $Date: 2004-02-13 22:10:20 $ 
+	Created on $Date: 2004-02-15 14:21:26 $ 
 */
 package de.berlios.statcvs.xml;
 
@@ -30,13 +30,15 @@ import net.sf.statcvs.output.ChoraIntegration;
 import net.sf.statcvs.output.CvswebIntegration;
 import net.sf.statcvs.output.ViewCvsIntegration;
 import net.sf.statcvs.output.WebRepositoryIntegration;
+import de.berlios.statcvs.xml.output.XDocRenderer;
+import de.berlios.statcvs.xml.output.XMLRenderer;
 
 /**
  * Takes a command line, like given to the {@link net.sf.statcvs.Main#main} method,
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.1 2004-02-13 22:10:20 squig Exp $
+ * @version $Id: CommandLineParser.java,v 1.2 2004-02-15 14:21:26 squig Exp $
  */
 public class CommandLineParser {
 
@@ -86,24 +88,23 @@ public class CommandLineParser {
 			}
 			Settings.setOutputDir(popNextArg());
 		} else if (s.equals("output-suite")) {
-//			if (args.isEmpty()) {
-//				Settings.setOutputSuite
-//					(XMLRenderer.class.getName());
-//			}
-//			else {
-//				String arg = popNextArg();
+			if (args.isEmpty()) {
+				Settings.setOutputSuite(XMLRenderer.class.getName());
+			}
+			else {
+				String arg = popNextArg();
 //				if (arg.equals("html")) {
 //					Settings.setOutputSuite
 //						(HTMLRenderer.class.getName());
 //				}
-//				else if (arg.equals("xdoc")) {
-//					Settings.setOutputSuite
-//						(XDocRenderer.class.getName());
-//				}
-//				else {
-//					Settings.setOutputSuite(arg);
-//				}
-//			}
+//				else 
+				if (arg.equals("xdoc")) {
+					Settings.setOutputSuite(XDocRenderer.class.getName());
+				}
+				else {
+					Settings.setOutputSuite(arg);
+				}
+			}
 		} else if (s.equals("generate-history")) {
 			Settings.setGenerateHistory(true);
 		} else if (s.equals("use-history")) {

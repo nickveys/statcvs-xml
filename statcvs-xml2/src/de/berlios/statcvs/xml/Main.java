@@ -26,6 +26,8 @@ import java.lang.reflect.Method;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
 
+import de.berlios.statcvs.xml.output.XDocRenderer;
+
 import net.sf.statcvs.input.Builder;
 import net.sf.statcvs.input.CvsLogfileParser;
 import net.sf.statcvs.input.EmptyRepositoryException;
@@ -41,7 +43,7 @@ import net.sf.statcvs.util.LookaheadReader;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.1 2004-02-13 22:10:20 squig Exp $
+ * @version $Id: Main.java,v 1.2 2004-02-15 14:21:26 squig Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -68,11 +70,14 @@ public class Main {
 		}
 
 		try {
-			new CommandLineParser(args).parse();
+			try {
+				new CommandLineParser(args).parse();
+			} catch (IOException cex) {
+				printProperUsageAndExit();
+			}
 			run();
-		} catch (IOException cex) {
-			System.err.println(cex.getMessage());
-			printProperUsageAndExit();
+		} catch (IOException e) {
+			printErrorMessageAndExit(e.getMessage());
 		} catch (LogSyntaxException lex) {
 			printLogErrorMessageAndExit(lex.getMessage());
 		} catch (OutOfMemoryError oome) {
@@ -280,9 +285,11 @@ public class Main {
 
 		logger.info("Creating suite using "+Settings.getOutputSuite());
 	
-		Class c = Class.forName(Settings.getOutputSuite());
-		Method m = c.getMethod("generate", new Class[] { CvsContent.class });
-		m.invoke(null, new Object[] { content });
+//		Class c = Class.forName(Settings.getOutputSuite());
+//		Method m = c.getMethod("generate", new Class[] { CvsContent.class });
+//		m.invoke(null, new Object[] { content });
+		
+		XDocRenderer.generate(content);
 	}
 
     public static String getSettingsPath()
