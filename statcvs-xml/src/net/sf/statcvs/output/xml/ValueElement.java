@@ -18,10 +18,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ValueElement.java,v $
-	$Date: 2003-06-20 00:37:24 $ 
+	$Date: 2003-06-20 10:17:07 $ 
 */
-package net.sf.statcvs.output.xml;
+package	net.sf.statcvs.output.xml;
 
+import net.sf.statcvs.util.*;
 import org.jdom.Element;
 
 /**
@@ -37,7 +38,12 @@ public class ValueElement extends Element {
 	 * @param description a description
 	 */
 	public ValueElement(String key, long value, String description) {
-		this(key, value + "", description);
+		super("value");
+		
+		setAttribute("key", name);
+		setAttribute("value", value + "");
+
+		setText(description);
 	}
 
 	/**
@@ -47,11 +53,13 @@ public class ValueElement extends Element {
 	 * @param value the value
 	 * @param description a description
 	 */
-	public ValueElement(String key, String value, String description) {
+	public ValueElement(String key, double value, double percentValue,
+						String description) {
 		super("value");
 		
 		setAttribute("key", name);
-		setAttribute("value", value);
+		setAttribute("value", Formatter.formatNumber(value));
+		setAttribute("percentValue", Formatter.formatPercent(percentValue));
 
 		setText(description);
 	}

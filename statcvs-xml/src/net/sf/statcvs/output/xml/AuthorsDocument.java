@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorsDocument.java,v $ 
-	Created on $Date: 2003-06-20 10:17:07 $ 
+	Created on $Date: 2003-06-20 10:21:03 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -44,6 +44,13 @@ import com.jrefinery.data.BasicTimeSeries;
  * @author Steffen Pingel
  */
 public class AuthorsDocument extends StatCvsDocument {
+
+	private String[] categoryNamesHours = new String[] { "0", "1", "2", "3", "4", "5", "6", "7", 
+		"8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", 
+		"20", "21",	"22", "23" };
+
+	private String[] categoryNamesDays = new String[] { "Sunday", "Monday", "Tuesday", "Wednesday", 
+		"Thursday", "Friday", "Saturday" };
 
 	private CvsContent content;
 	private RevisionIterator revIt;
@@ -73,8 +80,7 @@ public class AuthorsDocument extends StatCvsDocument {
 	{
 		Chart chart = createActivityChart
 			(revIt, Messages.getString("ACTIVITY_TIME_TITLE"),	
-			 "activity_time.png", getActivityTimeChartFilename(), 
-			 categoryNamesHours);
+			 "activity_time.png", categoryNamesHours);
 		revIt.reset();
 		return chart;
 	}
@@ -94,7 +100,7 @@ public class AuthorsDocument extends StatCvsDocument {
 				title, fileName, categoryNames.length, categoryNames);
 	}
 
-	private boolean createLOCPerAuthorChart() {
+	private Chart createLOCPerAuthorChart() {
 		Iterator authorsIt = content.getAuthors().iterator();
 		Map authorSeriesMap = new HashMap();
 		while (authorsIt.hasNext()) {
@@ -123,12 +129,11 @@ public class AuthorsDocument extends StatCvsDocument {
 			} 
 		}
 		if (seriesList.isEmpty()) {
-			return false;
+			return null;
 		}	 
 		String projectName = content.getModuleName();
 		String subtitle = Messages.getString("TIME_LOCPERAUTHOR_SUBTITLE");
-		new LOCChart(seriesList, projectName, subtitle, "loc_per_author.png", 640, 480);
-		return true;
+		return new LOCChart(seriesList, projectName, subtitle, "loc_per_author.png", 640, 480);
 	}
 
 
@@ -158,14 +163,14 @@ public class AuthorsDocument extends StatCvsDocument {
 				Author author = (Author) it.next();
 				Element element = new Element("author");
 				element.setAttribute("name", author.getName());
-				element.setAttribute("changes", changesMap.get(key));
+				element.setAttribute("changes", getChangesMap().get(author) + "");
 				element.setAttribute("loc", getLinesMap().get(author) + "");
 				double percent = (double)getLinesMap().get(author) 
 					/ getLinesMap().sum();
 				element.setAttribute("locPercent", 
 									 Formatter.formatNumber(percent, 1));
 				element.setAttribute("locPerChange", 
-									 Formatter.formatNumber(getLinesMap().get(author) / changesMap.get(key), 1));
+									 Formatter.formatNumber(getLinesMap().get(author) / getChangesMap().get(author), 1));
 				authors.addContent(element);
 			}
 

@@ -6,7 +6,8 @@ STATCVS_ARGS = -viewcvs http://janeway/cvsweb/studium/ -verbose
 
 LIBS = $(shell find lib/ -name "*.jar")
 CP = .:src:$(shell echo $(LIBS) | sed -e 's/ /:/g'):$(JAVA_HOME)/jre/lib/rt.jar
-JDEPENDS = src/net/sf/statcvs/Main.java $(shell find src -name "*Output.java")
+JDEPENDS = src/net/sf/statcvs/Main.java $(shell find src -name "*Output.java") \
+           src/net/sf/statcvs/util/ConsoleOutErrHandler.java
 
 ifeq ($(shell test -r Makefile.local && echo "true"),true)
   include Makefile.local

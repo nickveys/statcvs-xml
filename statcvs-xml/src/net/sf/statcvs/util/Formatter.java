@@ -19,7 +19,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Formatter.java,v $
-	$Date: 2003-06-20 00:54:41 $
+	$Date: 2003-06-20 10:17:07 $
 */
 package net.sf.statcvs.util;
 
@@ -83,19 +83,13 @@ public class Formatter
     }
 
 	/**
-	 * Assumes that values is between 0 and 1.
+	 * Assumes that values is between 0 and 100.
 	 */
     public static String formatPercent(double number)
 	{
 	    NumberFormat n = NumberFormat.getPercentInstance();
-
-		return n.format(number * 100);
-	}
-
-    public static String formatPercent(long number)
-	{
-	    NumberFormat n = NumberFormat.getPercentInstance();
-
+		n.setMinimumFractionDigits(1);
+		n.setMaximumFractionDigits(1);
 		return n.format(number);
 	}
 
