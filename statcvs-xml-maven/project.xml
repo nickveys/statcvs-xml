@@ -23,7 +23,7 @@
 <pomVersion>3</pomVersion>
   <id>maven-statcvs-plugin</id>
   <name>Maven StatCvs Plug-in</name>
-  <currentVersion>2.3</currentVersion>
+  <currentVersion>2.4</currentVersion>
   <description/>
   <shortDescription>Provides CVS statistics</shortDescription>
   <logo>/images/statcvslogo.png</logo>
@@ -60,6 +60,11 @@
       <id>2.3</id>
       <name>2.3</name>
       <tag>maven-statcvs-plugin-2_3</tag>
+    </version>
+    <version>
+      <id>2.4</id>
+      <name>2.4</name>
+      <tag>maven-statcvs-plugin-2_4</tag>
     </version>
   </versions> 
 
@@ -111,27 +116,33 @@
 
   <dependencies>
     <dependency>
-      <id>statcvs-xml</id>
+      <groupId>statcvs</groupId>
+      <artifactId>statcvs-xml</artifactId>
       <version>0.9.3</version>
     </dependency>
     <dependency>
-      <id>jdom</id>
+      <groupId>jdom</groupId>
+      <artifactId>jdom</artifactId>
       <version>b10</version>
     </dependency>
     <dependency>
-      <id>jfreechart</id>
+      <groupId>jfreechart</groupId>
+      <artifactId>jfreechart</artifactId>
       <version>0.9.16</version>
     </dependency>
     <dependency>
-      <id>jcommon</id>
+      <groupId>jcommon</groupId>
+      <artifactId>jcommon</artifactId>
       <version>0.9.1</version>
     </dependency>
     <dependency>
-      <id>commons-jexl</id>
+      <groupId>commons-jexl</groupId>
+      <artifactId>commons-jexl</artifactId>
       <version>1.0-beta-1</version>
     </dependency>
     <dependency>
-      <id>commons-logging</id>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
       <version>1.0.3</version>
     </dependency>
   </dependencies>

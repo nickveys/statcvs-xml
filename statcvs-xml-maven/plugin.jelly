@@ -244,7 +244,7 @@
 	  <ant:arg value="${statcvs.logfile}"/>
 	  <ant:arg value="${statcvs.repository}"/>
 	  <ant:classpath>
-		<ant:pathelement location="${plugin.getDependencyPath('statcvs-xml:statcvs-xml')}"/>
+		<ant:pathelement location="${plugin.getDependencyPath('statcvs:statcvs-xml')}"/>
 		<ant:pathelement location="${plugin.getDependencyPath('jfreechart:jfreechart')}"/>
 		<ant:pathelement location="${plugin.getDependencyPath('jcommon:jcommon')}"/>
 		<ant:pathelement location="${plugin.getDependencyPath('jdom:jdom')}"/>
