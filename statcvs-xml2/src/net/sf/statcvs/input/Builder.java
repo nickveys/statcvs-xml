@@ -25,9 +25,11 @@ package net.sf.statcvs.input;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.logging.Logger;
 
@@ -35,8 +37,6 @@ import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.Directory;
-import net.sf.statcvs.model.DirectoryImpl;
-import net.sf.statcvs.model.DirectoryRoot;
 import net.sf.statcvs.model.SymbolicName;
 import net.sf.statcvs.util.FilePatternMatcher;
 import net.sf.statcvs.util.FileUtils;
@@ -53,7 +53,6 @@ import net.sf.statcvs.util.FileUtils;
  * 
  * @author Richard Cyganiak <richard@cyganiak.de>
  * @author Tammo van Lessen
- * @version $Id$
  */
 public class Builder implements CvsLogBuilder {
 	private static Logger logger = Logger.getLogger(Builder.class.getName());
@@ -67,7 +66,8 @@ public class Builder implements CvsLogBuilder {
     private final Map symbolicNames = new HashMap(); 
     
 	private final List fileBuilders = new ArrayList();
-	
+	private final Set atticFileNames = new HashSet();
+
 	private FileBuilder currentFileBuilder = null;
 	private Date startDate = null;
 	private String projectName = null;
@@ -88,7 +88,7 @@ public class Builder implements CvsLogBuilder {
 		this.repositoryFileManager = repositoryFileManager;
 		this.includePattern = includePattern;
 		this.excludePattern = excludePattern;
-		directories.put("", new DirectoryRoot());
+		directories.put("", Directory.createRoot());
 	}
 
 	/**
@@ -114,7 +114,10 @@ public class Builder implements CvsLogBuilder {
 			fileBuilders.add(currentFileBuilder);
 		}
 		currentFileBuilder = new FileBuilder(this, filename, isBinary, 
-                                             isInAttic, revBySymnames);
+                                             revBySymnames);
+		if (isInAttic) {
+			atticFileNames.add(filename);
+		}
 	}
 
 	/**
@@ -173,6 +176,14 @@ public class Builder implements CvsLogBuilder {
 
 	public String getProjectName() {
 		return projectName;
+	}
+
+	/**
+	 * Returns the <tt>Set</tt> of filenames that are "in the attic".
+	 * @return a <tt>Set</tt> of <tt>String</tt>s
+	 */
+	public Set getAtticFileNames() {
+		return atticFileNames;
 	}
 
 	/**
@@ -265,7 +276,7 @@ public class Builder implements CvsLogBuilder {
 		Directory parent =
 				getDirectoryForPath(FileUtils.getParentDirectoryPath(path));
 		Directory newDirectory =
-				new DirectoryImpl(parent, FileUtils.getDirectoryName(path));
+				parent.createSubdirectory(FileUtils.getDirectoryName(path));
 		directories.put(path, newDirectory);
 		return newDirectory;
 	}

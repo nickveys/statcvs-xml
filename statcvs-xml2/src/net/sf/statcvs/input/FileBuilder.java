@@ -16,9 +16,6 @@
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-    
-	$RCSfile$
-	$Date$
 */
 package net.sf.statcvs.input;
 
@@ -65,7 +62,6 @@ public class FileBuilder {
 	private Builder builder;
 	private String name;
 	private boolean isBinary;
-	private boolean isInAttic;
 	private List revisions = new ArrayList();
 	private RevisionData lastAdded = null;
     private Map revBySymnames;
@@ -76,14 +72,12 @@ public class FileBuilder {
 	 * author and directory instances and line counts.
 	 * @param name the filename
 	 * @param isBinary Is this a binary file or not?
-	 * @param isInAttic Is this file in the attic?
 	 */
-	public FileBuilder(Builder builder, String name, boolean isBinary, 
-                        boolean isInAttic, Map revBySymnames) {
+	public FileBuilder(Builder builder,	String name, boolean isBinary, 
+						Map revBySymnames) {
 		this.builder = builder;
 		this.name = name;
 		this.isBinary = isBinary;
-		this.isInAttic = isInAttic;
         this.revBySymnames = revBySymnames;
         
 		logger.fine("logging " + name);
@@ -121,7 +115,7 @@ public class FileBuilder {
 			return null;
 		}
 
-		CvsFile file = new CvsFile(name, builder.getDirectory(name), isBinary, isInAttic);
+		CvsFile file = new CvsFile(name, builder.getDirectory(name));
 
 		if (revisions.isEmpty()) {
 			buildBeginOfLogRevision(file, beginOfLogDate, getFinalLOC(), null);
@@ -252,27 +246,52 @@ public class FileBuilder {
 	}
 
 	private void buildCreationRevision(CvsFile file, RevisionData data, int loc, SortedSet symbolicNames) {
-		new CvsRevision(file, data.getRevision(),
-				CvsRevision.TYPE_CREATION, builder.getAuthor(data.getAuthorName()),
-				data.getDate(), data.getComment(), data.getLinesAdded(), data.getLinesRemoved(), loc, symbolicNames);
+		if (isBinary) {
+			new CvsRevision(file, data.getRevision(),
+					CvsRevision.TYPE_CREATION, builder.getAuthor(data.getAuthorName()),
+					data.getDate(), data.getComment(), 0, 0, 0, symbolicNames);			
+		} else {
+			new CvsRevision(file, data.getRevision(),
+					CvsRevision.TYPE_CREATION, builder.getAuthor(data.getAuthorName()),
+					data.getDate(), data.getComment(), loc, loc, 0, symbolicNames);
+		}
 	}
 
 	private void buildChangeRevision(CvsFile file, RevisionData data, int loc, SortedSet symbolicNames) {
-		new CvsRevision(file, data.getRevision(),
-				CvsRevision.TYPE_CHANGE, builder.getAuthor(data.getAuthorName()),
-				data.getDate(), data.getComment(), data.getLinesAdded(), data.getLinesRemoved(), loc, symbolicNames);
+		if (isBinary) {
+			new CvsRevision(file, data.getRevision(),
+					CvsRevision.TYPE_CHANGE, builder.getAuthor(data.getAuthorName()),
+					data.getDate(), data.getComment(), 0, 0, 0, symbolicNames);			
+		} else {
+			new CvsRevision(file, data.getRevision(),
+					CvsRevision.TYPE_CHANGE, builder.getAuthor(data.getAuthorName()),
+					data.getDate(), data.getComment(), 
+					loc, data.getLinesAdded() - data.getLinesRemoved(),
+					Math.min(data.getLinesAdded(), data.getLinesRemoved()), symbolicNames);	
+		}
 	}
 
 	private void buildDeletionRevision(CvsFile file, RevisionData data, int loc, SortedSet symbolicNames) {
-		new CvsRevision(file, data.getRevision(),
-				CvsRevision.TYPE_DELETION, builder.getAuthor(data.getAuthorName()),
-				data.getDate(), data.getComment(), data.getLinesAdded(), data.getLinesRemoved(), loc, symbolicNames);
+		if (isBinary) {
+			new CvsRevision(file, data.getRevision(),
+					CvsRevision.TYPE_DELETION, builder.getAuthor(data.getAuthorName()),
+					data.getDate(), data.getComment(), 0, 0, 0, symbolicNames);
+		} else {
+			new CvsRevision(file, data.getRevision(),
+					CvsRevision.TYPE_DELETION, builder.getAuthor(data.getAuthorName()),
+					data.getDate(), data.getComment(), 0, -loc, 0, symbolicNames);
+		}
 	}
 
 	private void buildBeginOfLogRevision(CvsFile file, Date beginOfLogDate, int loc, SortedSet symbolicNames) {
 		Date date = new Date(beginOfLogDate.getTime() - 60000);
-		new CvsRevision(file, "0.0",
-				CvsRevision.TYPE_BEGIN_OF_LOG, null, date, null, 0, 0, loc, symbolicNames);
+		if (isBinary) {
+			new CvsRevision(file, "0.0",
+					CvsRevision.TYPE_BEGIN_OF_LOG, null, date, null, 0, 0, 0, symbolicNames);
+		} else {
+			new CvsRevision(file, "0.0",
+					CvsRevision.TYPE_BEGIN_OF_LOG, null, date, null, loc, 0, 0, symbolicNames);			
+		}
 	}
 
 	/**

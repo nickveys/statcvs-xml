@@ -22,6 +22,8 @@
 */
 package net.sf.statcvs.output;
 
+import java.util.Set;
+
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
@@ -83,4 +85,11 @@ public interface WebRepositoryIntegration {
 	 * @return a URL to a diff
 	 */
 	String getDiffUrl(CvsRevision oldRevision, CvsRevision newRevision);
+	
+	/**
+	 * Sets the files that are "in the attic", in the CVS sense. See
+	 * <a href="http://www.cvshome.org/docs/manual/current/cvs_2.html#SEC15">CVS manual</a>.
+	 * @param atticFileNames names of all files (<tt>String</tt>) in the attic
+	 */
+	public void setAtticFileNames(Set atticFileNames);
 }

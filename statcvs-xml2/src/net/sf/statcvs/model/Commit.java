@@ -16,9 +16,6 @@
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-    
-	$RCSfile$ 
-	Created on $Date$ 
 */
 package net.sf.statcvs.model;
 
@@ -28,11 +25,13 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * Encapsulates a commit, which may consist of several {@link CvsRevision}
- * objects (several files committed at once by the same author with the same
- * message).
+ * Represents a commit, which may consist of several {@link CvsRevision}
+ * objects. A commit means that several files were committed at once by the
+ * same author with the same message.
  * 
- * @author Richard Cyganiak
+ * TODO: Rename getAuthor() to getLogin(), getAffectedFiles() to getAffectedFileNames() (or change to return CvsFiles?)
+ * 
+ * @author Richard Cyganiak <richard@cyganiak.de>
  * @version $Id$
  */
 public class Commit implements Comparable {
@@ -41,7 +40,8 @@ public class Commit implements Comparable {
 	
 	/**
 	 * Creates a new instance which consists of the given revision.
-	 * @param revision the single revision out of which the commit will be created
+	 * @param revision the single revision out of which the commit will
+	 * 				   be created
 	 */
 	public Commit(CvsRevision revision) {
 		revisions.add(revision);
@@ -49,8 +49,9 @@ public class Commit implements Comparable {
 	}
 
 	/**
-	 * Adds a revision to the commit. The revision must be part of the commit.
-	 * 
+	 * Adds a revision to the commit. The revision must be part of the
+	 * commit, that is, it must have the same date, author and message
+	 * as all other revisions in the commit.
 	 * @param revision the <code>CvsRevision</code> to add.
 	 */
 	public void addRevision(CvsRevision revision) {
@@ -58,17 +59,16 @@ public class Commit implements Comparable {
 	}
 
 	/**
-	 * Returns a Set of {@link CvsRevision} objects, which make up this commit.
-	 * May be used to access the individual files which were changed by the commit.
+	 * Returns the {@link CvsRevision} objects that make up this commit.
 	 * 
-	 * @return a set of changes
+	 * @return a set of <tt>CvsRevision</tt> instances
 	 */
 	public Set getRevisions() {
 		return revisions;
 	}
 
 	/**
-	 * Returns the author of the commit
+	 * Returns the author of the commit.
 	 * @return the author
 	 */
 	public Author getAuthor() {
@@ -76,8 +76,7 @@ public class Commit implements Comparable {
 	}
 
 	/**
-	 * Returns the comment of the commit
-	 * 
+	 * Returns the comment of the commit.
 	 * @return the comment
 	 */
 	public String getComment() {
@@ -87,7 +86,6 @@ public class Commit implements Comparable {
 	/**
 	 * Returns the date when the commit took place. The implementation
 	 * simply returns the timestamp of the first change of the commit.
-	 * 
 	 * @return a date within the timeframe of the commit
 	 */
 	public Date getDate() {
@@ -97,7 +95,6 @@ public class Commit implements Comparable {
 	/**
 	 * Returns a <code>String</code> <code>Set</code> containing all filenames
 	 * which were affected by this <code>Commit</code>.
-	 * 
 	 * @return a <code>Set</code> of <code>String</code>s
 	 */
 	public Set getAffectedFiles() {
@@ -111,15 +108,7 @@ public class Commit implements Comparable {
 	}
 	
 	/**
-	 * Returns the number of individual changes which make up this commit.
-	 * 
-	 * @return the number of changes
-	 */
-	public int getChangeCount() {
-		return revisions.size();
-	}
-
-	/* (non-Javadoc)
+	 * Compares this commit to another revision, based on their date. 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(Object other) {

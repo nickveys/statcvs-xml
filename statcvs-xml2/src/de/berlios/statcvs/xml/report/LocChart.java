@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: LocChart.java,v $
-	$Date: 2004-02-18 18:33:28 $ 
+	$Date: 2004-02-20 15:02:34 $ 
 */
 package de.berlios.statcvs.xml.report;
 
@@ -98,10 +98,8 @@ public class LocChart extends TimeLineChart {
 		while (allRevs.hasNext()) {
 			CvsRevision rev = (CvsRevision)allRevs.next();
 			TimeLine timeline = (TimeLine) authorTimeLineMap.get(rev.getAuthor());
-			if (!rev.getFile().isBinary()) {
-				authorsLoc.addInt(rev.getAuthor(), rev.getLinesOfCodeChange());
-				timeline.addTimePoint(rev.getDate(), authorsLoc.get(rev.getAuthor()));
-			}
+			authorsLoc.addInt(rev.getAuthor(), rev.getLinesOfCodeChange());
+			timeline.addTimePoint(rev.getDate(), authorsLoc.get(rev.getAuthor()));
 		}
 		
 		// create chart
@@ -151,10 +149,7 @@ public class LocChart extends TimeLineChart {
 		TimeLine locTL = new TimeLine(null);
 		while (it.hasNext()) {
 			CvsRevision rev = (CvsRevision) it.next();
-			if (!rev.getFile().isBinary()) {
-				loc += rev.getLinesOfCodeChange();	
-				//loc = rev.getEffectiveLinesOfCode();
-			}
+			loc += rev.getLinesOfCodeChange();	
 			locTL.addTimePoint(rev.getDate(), loc);
 		}
 		return locTL;
