@@ -18,17 +18,18 @@
  */
  -->
 
-<project name="Maven StatCvs-XML Plug-in">
-  <title>Maven StatCvs-XML Plug-in</title>
+<project name="Maven StatCvs-XML Plugin">
+  <title>Maven StatCvs-XML Plugin</title>
   <body>
     <links>
       <item href="http://statcvs-xml.berlios.de/" name="StatCvs-XML"/>
       <item href="http://maven.apache.org/" name="Maven"/>
     </links>
-    <menu name="Overview">
+    <menu name="General Information">
+      <item href="/index.html" name="Overview"/>
       <item href="/goals.html" name="Goals"/>
       <item href="/properties.html" name="Properties"/>
-      <item name="Download" href="http://developer.berlios.de/project/showfiles.php?group_id=872"/>
+      <item href="http://developer.berlios.de/project/showfiles.php?group_id=872" name="Download"/>
     </menu>
   </body>
 </project>
