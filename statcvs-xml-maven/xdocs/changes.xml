@@ -28,6 +28,12 @@
   </properties>
 
   <body>
+	<release version="2.3" date="2004-03-29">
+      <action dev="vanto" type="update">
+		The dependency on StatCvs-XML has been updated to version
+		0.9.3.
+      </action>
+    </release>
 	<release version="2.2" date="2004-03-16">
       <action dev="vanto" type="fix">
 	    Bug #1660 has been fixed, statcvs-xml uses now the same JVM
