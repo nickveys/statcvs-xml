@@ -27,6 +27,7 @@
     <report class="CommitTable"/>
     <report class="CommitChart" groupby="day" title="Activity"/>
     <report class="CommitChart" groupby="hour" title=""/>
+    <report class="CommitActivityChart" groupby="author"/>
     <report class="AuthorsActivityChart"/>
   </document>
 
