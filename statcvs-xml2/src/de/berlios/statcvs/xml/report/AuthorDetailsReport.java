@@ -129,12 +129,12 @@ public class AuthorDetailsReport {
 			
 			File file = new File(source);
 			
+			pictureSource = source;
 			if (!file.exists() && !source.equals(DEFAULT_PIC)) {
 				logger.info(I18n.tr("Picture file {0} not found, using dummy instead.", source));
 				pictureSource = DEFAULT_PIC;
 			}
-
-			pictureSource = source;
+			
 			pictureFilename = FileUtils.getFilenameWithoutPath(pictureSource);
 		}
 		
