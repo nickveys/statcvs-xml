@@ -34,6 +34,7 @@ import net.sf.statcvs.input.EmptyRepositoryException;
 import net.sf.statcvs.input.LogSyntaxException;
 import net.sf.statcvs.input.RepositoryFileManager;
 import net.sf.statcvs.model.CvsContent;
+import net.sf.statcvs.output.ConfigurationOptions;
 import net.sf.statcvs.util.CvsLogUtils;
 import net.sf.statcvs.util.LogFormatter;
 import net.sf.statcvs.util.LookaheadReader;
@@ -43,7 +44,7 @@ import net.sf.statcvs.util.LookaheadReader;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.2 2004-02-15 14:21:26 squig Exp $
+ * @version $Id: Main.java,v 1.3 2004-02-15 18:56:13 squig Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
@@ -75,6 +76,16 @@ public class Main {
 			} catch (IOException cex) {
 				printProperUsageAndExit();
 			}
+			
+			// FIX: copy settings to statcvs
+			if (Settings.getExcludePattern() != null) {
+				ConfigurationOptions.setExcludePattern(Settings.getExcludePattern());
+			}
+			if (Settings.getIncludePattern() != null) {
+				ConfigurationOptions.setIncludePattern(Settings.getIncludePattern());
+			}
+			ConfigurationOptions.setOutputDir(Settings.getOutputDir());
+			
 			run();
 		} catch (IOException e) {
 			printErrorMessageAndExit(e.getMessage());
@@ -172,6 +183,7 @@ public class Main {
 //			hist.save(moduleName);
 //		}
 //		 
+
 		generateSuite(content);
 		long endTime = System.currentTimeMillis();
 		long memoryUsedOnEnd = Runtime.getRuntime().totalMemory();

@@ -18,9 +18,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ReportElement.java,v $
-	$Date: 2004-02-15 14:21:26 $ 
+	$Date: 2004-02-15 18:56:13 $ 
 */
 package de.berlios.statcvs.xml.output;
+
+import java.io.IOException;
 
 import org.jdom.Element;
 
@@ -43,4 +45,9 @@ public class ReportElement extends Element {
 	public void setReportName(String name) {
 		setAttribute("name", name);
 	}
+	
+	public void saveResources() throws IOException
+	{
+	}
+	
 }

@@ -4,12 +4,11 @@
     <height>480</height>
   </settings>
 
-  <document filename="index.html">
+  <document filename="index">
     <report class="AuthorsReport"/>
   </document>
 
-  <document for_each="author">
-    <report1 class="LOCReport"/>
-    <chart class="LOCChart"/>
+  <document foreach="author">
+    <report class="LocChart"/>
   </document>
 </suite>

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ConfigurationOptions.java,v $
-	$Date: 2004-02-13 17:45:46 $ 
+	$Date: 2004-02-15 18:56:13 $ 
 */
 package net.sf.statcvs.output;
 
@@ -33,7 +33,7 @@ import net.sf.statcvs.util.FileUtils;
  * can read all parameter values from here.
  * 
  * @author jentzsch
- * @version $Id: ConfigurationOptions.java,v 1.1.1.1 2004-02-13 17:45:46 squig Exp $
+ * @version $Id: ConfigurationOptions.java,v 1.2 2004-02-15 18:56:13 squig Exp $
  */
 public class ConfigurationOptions {
 
@@ -76,7 +76,7 @@ public class ConfigurationOptions {
 	 * @return String output Directory
 	 */
 	public static String getOutputDir() {
-		return outputDir = "";
+		return outputDir;
 	}
 	
 	/**

@@ -108,7 +108,8 @@
     <report>maven-javadoc-plugin</report>
     <report>maven-jxr-plugin</report>
     <report>maven-pmd-plugin</report> -->
-	<report>maven-statcvs-xml-plugin</report>
+<!--	<report>maven-statcvs-xml-plugin</report> -->
+    <report>maven-statcvs-plugin</report>
 <!--    <report>maven-junit-report-plugin</report> -->
 <!--    <report>maven-linkcheck-plugin</report> -->
 <!--    <report>maven-tasklist-plugin</report> -->

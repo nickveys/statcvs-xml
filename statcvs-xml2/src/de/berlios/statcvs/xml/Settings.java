@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Settings.java,v $
-	$Date: 2004-02-13 22:10:20 $ 
+	$Date: 2004-02-15 18:56:13 $ 
 */
 package de.berlios.statcvs.xml;
 
@@ -38,7 +38,7 @@ import net.sf.statcvs.util.FileUtils;
  * can read all parameter values from here.
  * 
  * @author jentzsch
- * @version $Id: Settings.java,v 1.1 2004-02-13 22:10:20 squig Exp $
+ * @version $Id: Settings.java,v 1.2 2004-02-15 18:56:13 squig Exp $
  */
 public class Settings {
 
@@ -53,8 +53,8 @@ public class Settings {
 	private static String notesFile = null;
 	private static String notes = null;
 
-	private static FilePatternMatcher includePattern = null;
-	private static FilePatternMatcher excludePattern = null;
+	private static String includePattern = null;
+	private static String excludePattern = null;
 
 	private static WebRepositoryIntegration webRepository = null;
 
@@ -158,17 +158,6 @@ public class Settings {
 	 * @throws IOException if the output directory cannot be created
 	 */
 	public static void setOutputDir(String outputDir) throws IOException {
-		if (!outputDir.endsWith(FileUtils.getDirSeparator())) {
-			outputDir += FileUtils.getDefaultDirSeparator();
-		}
-		File outDir = new File(outputDir);
-		if (!outDir.exists()) {
-			outDir.mkdir();
-		}
-		if (outDir.length() > 0 && (!outDir.exists() || !outDir.isDirectory())) {
-			throw new IOException(
-					"Can't create output directory: " + outputDir);
-		}
 		Settings.outputDir = outputDir;
 	}
 
@@ -263,38 +252,14 @@ public class Settings {
 	 * @see net.sf.statcvs.util.FilePatternMatcher
 	 */
 	public static void setIncludePattern(String patternList) {
-		includePattern = new FilePatternMatcher(patternList);
+		Settings.includePattern = patternList;
 	}
 	
 	/**
-	 * Sets a file exclude pattern list. Files matching any of the
-	 * patterns will be excluded from the analysis.
-	 * @param patternList a list of Ant-style wildcard patterns, seperated
-	 *                    by : or ;
-	 * @see net.sf.statcvs.util.FilePatternMatcher
+	 * @see net.sf.statcvs.util.ConfigurationOptions#setExcludePattern(String)
 	 */
 	public static void setExcludePattern(String patternList) {
-		excludePattern = new FilePatternMatcher(patternList);
-	}
-	
-	/**
-	 * Matches a filename against the include and exclude patterns. If no
-	 * include pattern was specified, all files will be included. If no
-	 * exclude pattern was specified, no files will be excluded.
-	 * @param filename a filename
-	 * @return <tt>true</tt> if the filename matches one of the include
-	 *         patterns and does not match any of the exclude patterns.
-	 *         If it matches an include and an exclude pattern, <tt>false</tt>
-	 *         will be returned.
-	 */
-	public static boolean matchesPatterns(String filename) {
-		if (excludePattern != null && excludePattern.matches(filename)) {
-			return false;
-		}
-		if (includePattern != null) {
-			return includePattern.matches(filename);
-		}
-		return true;
+		Settings.excludePattern = patternList;
 	}
 
 	public static void setOutputSuite(String outputSuite) {
@@ -315,5 +280,19 @@ public class Settings {
 	
 	public static boolean getGenerateHistory() {
 		return generateHistory;
+	}
+
+	/**
+	 * @return
+	 */
+	public static String getExcludePattern() {
+		return excludePattern;
+	}
+
+	/**
+	 * @return
+	 */
+	public static String getIncludePattern() {
+		return includePattern;
 	}
 }

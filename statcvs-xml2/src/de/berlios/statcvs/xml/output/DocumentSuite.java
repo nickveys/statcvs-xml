@@ -7,11 +7,14 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
+import net.sf.statcvs.model.Directory;
 
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.input.JDOMParseException;
 import org.jdom.input.SAXBuilder;
 
 /**
@@ -25,7 +28,7 @@ public class DocumentSuite {
 	
 	private CvsContent content;
 	private Document suite;
-	private Properties defaultSettings = new Properties();
+	private ReportSettings defaultSettings = new ReportSettings();
 
 	/**
 	 * 
@@ -43,14 +46,14 @@ public class DocumentSuite {
 		}
 
 	}
-	
-	public StatCvsDocument createDocument(Element root)
+
+	public StatCvsDocument createDocument(Element root, ReportSettings settings)
 	{
-		Properties documentSettings = new Properties(defaultSettings);
+		ReportSettings documentSettings = new ReportSettings(settings);
 		readProperties(documentSettings, root);
 		
 		// generate reports
-		StatCvsDocument document = new StatCvsDocument(documentSettings);
+		StatCvsDocument document = new StatCvsDocument(documentSettings, root.getAttributeValue("filename"), root.getAttributeValue("title"));
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element element = (Element)it.next();
 			if ("report".equals(element.getName())) {
@@ -101,8 +104,7 @@ public class DocumentSuite {
 		for (Iterator it = suite.getRootElement().getChildren().iterator(); it.hasNext();) {
 			Element element = (Element)it.next();
 			if ("document".equals(element.getName())) {
-				StatCvsDocument document = createDocument(element);
-				renderer.render(document);
+				renderDocument(renderer, element);
 			}
 		}
 
@@ -110,9 +112,43 @@ public class DocumentSuite {
 	}
 
 	/**
+	 * @param renderer
+	 * @param element
+	 */
+	private void renderDocument(DocumentRenderer renderer, Element element) throws IOException
+	{
+		String value = element.getAttributeValue("foreach");
+		if (value == null) {
+			StatCvsDocument document = createDocument(element, defaultSettings);
+			renderer.render(document);
+		}
+		else if ("author".equals(value)) {
+			for (Iterator i = content.getAuthors().iterator(); i.hasNext();) {
+				Author author = (Author)i.next();
+				ReportSettings settings = new ReportSettings(defaultSettings);
+				settings.put("foreach", author);
+				renderer.render(createDocument(element, settings));
+			}
+		}
+		else if ("directory".equals(value)) {
+			for (Iterator i = content.getDirectories().iterator(); i.hasNext();) {
+				Directory dir = (Directory)i.next();
+				if (!dir.isEmpty()) {
+					ReportSettings settings = new ReportSettings(defaultSettings);
+					settings.put("foreach", dir);
+					renderer.render(createDocument(element, settings));
+				}
+			}
+		}
+		else {
+			throw new IOException("Invalid foreach value");	
+		}
+	}
+
+	/**
 	 * Reads all setting elements located under root.
 	 */ 	
-	public void readProperties(Properties properties, Element root)
+	public void readProperties(ReportSettings properties, Element root)
 	{
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element element = (Element)it.next();

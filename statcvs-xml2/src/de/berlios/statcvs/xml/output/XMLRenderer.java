@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLRenderer.java,v $
-	$Date: 2004-02-15 14:21:26 $ 
+	$Date: 2004-02-15 18:56:13 $ 
 */
 package de.berlios.statcvs.xml.output;
 
@@ -160,20 +160,7 @@ public class XMLRenderer implements DocumentRenderer {
 			writer.close();
 		}	
 
-		// create Charts
-//		AbstractChart[] charts = document.getCharts();
-//		if (charts != null) { 
-//			for (int i = 0; i < charts.length; i++) {
-//				if (charts[i] != null)
-//					if ((charts[i].getPreferedHeight() != 0)
-//						&& (charts[i].getPreferedWidth() != 0)) {
-//						charts[i].save(charts[i].getPreferedWidth()
-//								 ,charts[i].getPreferedHeight());
-//					} else {
-//						charts[i].save();
-//					}
-//			}
-//		}
+		document.saveResources();
 	}
 
 	/**

@@ -18,16 +18,16 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: StatCvsDocument.java,v $
-	$Date: 2004-02-15 14:21:26 $ 
+	$Date: 2004-02-15 18:56:13 $ 
 */
 package de.berlios.statcvs.xml.output;
 
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.Properties;
 
 import org.jdom.Document;
 import org.jdom.Element;
-
-import de.berlios.statcvs.xml.I18n;
 
 /**
  * Represents a document.
@@ -38,15 +38,15 @@ public class StatCvsDocument extends Document {
 
 	private static int documentNumber = 0;
 	private String filename;
-	private Properties settings;
+	private ReportSettings settings;
 
-	public StatCvsDocument(Properties settings)
+	public StatCvsDocument(ReportSettings settings, String defaultFilename, String defaultTitle)
 	{
 		this.settings = settings;
-		this.filename = settings.getProperty("filename", "document_" + ++documentNumber);
+		this.filename = settings.getString("filename", (defaultFilename == null) ? "document_" + ++documentNumber : defaultFilename);
 
 		Element root = new Element("document");
-		root.setAttribute("title", settings.getProperty("title", I18n.tr("No title")));
+		root.setAttribute("title", settings.getString("title", (defaultTitle == null) ? "" : defaultTitle));
 		root.setAttribute("name", this.filename);
 		setRootElement(root);
 	}
@@ -54,8 +54,14 @@ public class StatCvsDocument extends Document {
 	/**
 	 * 
 	 */
-	public void saveResources()
+	public void saveResources() throws IOException
 	{
+		for (Iterator it = getRootElement().getChildren().iterator(); it.hasNext();) {
+			Object o = it.next();
+			if (o instanceof ReportElement) {
+				((ReportElement)o).saveResources();
+			}
+		}
 	}
 
 	public String getFilename()
@@ -63,7 +69,7 @@ public class StatCvsDocument extends Document {
 		return filename;
 	}
 
-	public Properties getSettings()
+	public ReportSettings getSettings()
 	{
 		return settings;
 	}
