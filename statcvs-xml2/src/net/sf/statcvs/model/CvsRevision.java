@@ -23,6 +23,7 @@
 package net.sf.statcvs.model;
 
 import java.util.Date;
+import java.util.SortedSet;
 
 /**
  * Object which contains information about one revision of a file.
@@ -82,7 +83,8 @@ public class CvsRevision implements Comparable {
 	private int linesAdded;
 	private int linesRemoved;
 	private int linesOfCode;
-
+	private SortedSet symbolicNames;
+	
 	/**
 	 * Creates a new revision of a file with the
 	 * specified revision number.
@@ -307,6 +309,15 @@ public class CvsRevision implements Comparable {
 	 */
 	public CvsRevision getPreviousRevision() {
 		return file.getPreviousRevision(this);
+	}
+
+	/**
+	 * Returns a list of {@link SymbolicName}s of this revision,
+	 * ordered from latest to oldest.
+	 */
+	public SortedSet getSymbolicNames()
+	{
+		return symbolicNames;		
 	}
 	
 	/**

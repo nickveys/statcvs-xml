@@ -48,6 +48,7 @@ public class CvsContent {
 	private Date firstDate = null;
 	private Date lastDate = null;
 	private List commits;
+	private SortedSet symbolicNames = new TreeSet();
 
 	/**
 	 * Inserts the information about one file into
@@ -198,7 +199,16 @@ public class CvsContent {
 	public Set getAuthors() {
 		return authors;
 	}
-
+	
+	/**
+	 * Returns a list of {@link SymbolicName}s,
+	 * ordered from latest to oldest. 
+	 */
+	public SortedSet getSymbolicNames()
+	{
+		return symbolicNames;
+	}
+	
 	private void initRoot() {
 		if (files.isEmpty()) {
 			return;
