@@ -1,94 +1,78 @@
 <?xml version="1.0"?>
-
 <project 
-  xmlns:j="jelly:core"
-  xmlns:maven="jelly:maven"
-  xmlns:doc="doc"
-  xmlns:m="maven">
-  
-  <!-- ==================================================================
-         Generate CVS statistics on the current CVS project
-         
-         Note: Needs JDK 1.4+
-         
-       ================================================================== -->
+    xmlns:j="jelly:core"
+    xmlns:maven="jelly:maven"
+    xmlns:doc="doc"
+    xmlns:m="maven">
 
-  <goal name="maven-statcvs-xml-plugin:register">
-    <available property="jdk14" classname="java.lang.CharSequence"/>
+    <!--==================================================================
+            Generate CVS statistics on the current CVS project
+            
+             Note: Needs JDK 1.4+
+          ================================================================== -->
 
-    <j:if test="${jdk14 == 'true'}">
-      <doc:registerReport 
-        name="StatCVS-XML Report" 
-        pluginName="maven-statcvs-xml-plugin"
-        link="statcvs-xml/index"
-        description="Show some statistics about the CVS repository"/>
-    </j:if>
-  </goal>
-  
-  <goal name="maven-statcvs-xml-plugin:deregister">
-    <j:if test="${jdk14 == 'true'}">
-      <doc:deregisterReport name="StatCVS-XML Report"/>
-    </j:if>
-  </goal>
-  
-  <goal name="maven-statcvs-xml-plugin:report">
-    <attainGoal name="statcvs-xml"/>
-  </goal>
-  
-  <goal name="statcvs-xml"
-    description="Generate CVS statistics for the current CVS project">
+    <goal name="maven-statcvs-xml-plugin:register">
+        <available property="jdk14" classname="java.lang.CharSequence"/>
 
-    <available property="jdk14" classname="java.lang.CharSequence"/>
+        <j:if test="${jdk14 == 'true'}">
+            <doc:registerReport 
+                name="StatCVS-XML Report" 
+                pluginName="maven-statcvs-xml-plugin"
+                link="statcvs-xml/index"
+                description="Show some statistics about the CVS repository"/>
+        </j:if>
+    </goal>
 
-    <j:choose>
-      <j:when test="${jdk14 == 'true'}">
-	    <j:when test="${maven.mode.online}">
-	        <property name="statcvs.logfile" value="${maven.build.dir}/statcvs.log"/>
-	
-	        <cvs command="-q log" output="${statcvs.logfile}"/>
-	
-		    <property name="maven.docs.dest" value="${pom.getPluginContext('maven-xdoc-plugin').getVariable('maven.docs.dest')}"/>
-	  
-	    	<taskdef name="statcvs-xml" classname="net.sf.statcvs.ant.StatCvsTask">
-		      <classpath>
-	    	    <pathelement location="${plugin.getDependencyPath('statcvs-xml')}"/>
-	        	<pathelement location="${plugin.getDependencyPath('jfreechart')}"/>
-		        <pathelement location="${plugin.getDependencyPath('jcommon')}"/>
-	    	  </classpath>
-		    </taskdef>
-	
-	
-	<!--        <java jar="${plugin.getDependencyPath('statcvs')}" fork="true">
-	          <arg value="${pom.name}"/>
-	          <arg value="${statcvs.logfile}"/>
-	          <arg value="${maven.statcvs.basedir}"/>
-	          <arg value="${maven.docs.dest}/statcvs"/>
-	          <classpath>
-	            <pathelement location="${plugin.getDependencyPath('statcvs')}"/>
-	            <pathelement location="${plugin.getDependencyPath('jfreechart')}"/>
-	          </classpath>
-	        </java> -->
-		
-			<statcvs-xml 
-				title="${pom.name}"
-				cvsLogFile="${statcvs.logfile}"
-				projectDirectory="${basedir}"
-				outputDirectory="${maven.docs.dest}/statcvs-xml"
-				webRepositoryUrl="${pom.repository.url}"
-				webRepositoryType="${maven.statcvs.web.repositorytype}"
-				outputSuite="net.sf.statcvs.output.xml.XDocRenderer"
-			/>
-		</j:when>
-		<j:otherwise>
-        	<echo>statcvs-xml is available in the online mode only.</echo>
-		</j:otherwise>
-      </j:when>
+    <goal name="maven-statcvs-xml-plugin:deregister">
+        <j:if test="${jdk14 == 'true'}">
+            <doc:deregisterReport name="StatCVS-XML Report"/>
+        </j:if>
+    </goal>
 
-      <j:otherwise>
-        <echo>Sorry, it needs JDK 1.4+ ...</echo>
-      </j:otherwise>
-    </j:choose>
+    <goal name="maven-statcvs-xml-plugin:report">
+        <attainGoal name="statcvs-xml"/>
+    </goal>
 
-  </goal>
+    <goal name="statcvs-xml"
+        description="Generate CVS statistics for the current CVS project">
 
+        <available property="jdk14" classname="java.lang.CharSequence"/>
+
+        <j:choose>
+            <j:when test="${jdk14 == 'true'}">
+            <j:choose>
+                <j:when test="${maven.mode.online}">
+                    <echo>fetch cvs log...</echo>
+                    <property name="statcvs.logfile" value="${maven.build.dir}/statcvs.log"/>
+                    <cvs command="-q log" output="${statcvs.logfile}"/>
+
+                    <echo>run statcvs-xml...</echo>
+                    <property name="maven.docs.dest" value="${pom.getPluginContext('maven-xdoc-plugin').getVariable('maven.docs.dest')}"/>
+                    <java classname="net.sf.statcvs.Main" fork="true">
+                        <arg line="-output-dir ${maven.docs.dest}"/> 
+                        <arg line="-output-suite net.sf.statcvs.output.xml.XDocRenderer"/> 
+                        <arg line="-verbose"/> 
+                        <arg line="-weburl http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml/"/>
+                        <arg line="-title ${pom.name}"/>
+                        <arg value="${statcvs.logfile}"/>
+                        <arg value="${basedir}/"/>
+                        <classpath>
+                            <pathelement location="${plugin.getDependencyPath('statcvs-xml')}"/>
+                            <pathelement location="${plugin.getDependencyPath('jfreechart')}"/>
+                            <pathelement location="${plugin.getDependencyPath('jcommon')}"/>
+                            <pathelement location="${plugin.getDependencyPath('jdom')}"/>
+                            <pathelement location="${plugin.getDependencyPath('xml-apis')}"/>
+                        </classpath>
+                    </java>
+                    </j:when>
+                    <j:otherwise>
+                        <echo>StatCvs-XML can obtain statistics in the online-mode only.</echo>
+                    </j:otherwise>
+                </j:choose>
+            </j:when>
+            <j:otherwise>
+                <echo>Sorry, it needs JDK 1.4+ ...</echo>
+            </j:otherwise>
+        </j:choose>
+    </goal>
 </project>
