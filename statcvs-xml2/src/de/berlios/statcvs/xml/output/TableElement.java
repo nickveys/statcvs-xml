@@ -19,10 +19,13 @@
 package de.berlios.statcvs.xml.output;
 
 
+import java.util.Iterator;
 import java.util.List;
 
 import net.sf.statcvs.model.Author;
+import net.sf.statcvs.model.Commit;
 import net.sf.statcvs.model.CvsFile;
+import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.output.WebRepositoryIntegration;
 
@@ -213,6 +216,66 @@ public class TableElement extends Element
 		public RowElement addGroup(Grouper grouper, Object group)
 		{
 			grouper.addElement(group, this);
+			return this;
+		}
+		
+		public RowElement addCommit(Commit commit)
+		{
+			Element comEl = new Element("commit");
+			comEl.setAttribute("changedfiles", ""+commit.getAffectedFiles().size());						
+
+			Iterator it = commit.getRevisions().iterator();
+			int locSum = 0;
+			while (it.hasNext()) {
+				CvsRevision each = (CvsRevision) it.next();
+				locSum += each.getNewLines();
+			}
+			comEl.setAttribute("changedlines", ""+locSum);
+
+			comEl.addContent(new Element("comment").setText(commit.getComment()));
+
+			Element files = new Element("files");
+			comEl.addContent(files);
+			
+			Iterator revIt = commit.getRevisions().iterator();
+			while (revIt.hasNext()) {
+				CvsRevision rev = (CvsRevision)revIt.next();
+
+				Element file = new Element("file");
+				files.addContent(file);
+				file.setAttribute("name", rev.getFile().getFilename());
+				file.setAttribute("directory", rev.getFile().getDirectory().getPath());
+				file.setAttribute("revision", rev.getRevisionNumber());
+
+				// links to webrepo				
+				WebRepositoryIntegration webRepository = settings.getWebRepository();
+				if (webRepository != null) {
+					CvsRevision previous = rev.getPreviousRevision();
+					String url; 
+					if (previous == null) {
+						url = webRepository.getFileViewUrl(rev);
+					} else {
+						url = webRepository.getDiffUrl(previous, rev);
+					}
+					file.setAttribute("url", url);
+				}
+
+				if (rev.isInitialRevision()) {
+					file.setAttribute("action", "added");
+					if (rev.getFile().getCurrentLinesOfCode() != 0) {
+						file.setAttribute("lines", ""+rev.getLines());
+					}
+				} else if (rev.isDead()) {
+					file.setAttribute("action", "deleted");
+				} else {
+					file.setAttribute("action", "changed");
+					file.setAttribute("added", ""+rev.getLinesAdded());
+					file.setAttribute("removed", ""+rev.getLinesRemoved());
+				}
+				
+			}
+			
+			addContent(comEl);
 			return this;
 		}
 	}
