@@ -14,8 +14,9 @@
       </ul>
     </section>
 
-
-	<release version="0.9.3" date="in CVS">
+	<release version="0.9.4" date="in CVS">
+	</release>
+	<release version="0.9.3" date="2004-04-03">
       <action dev="vanto" type="add">
 		Software Evolution Matrix Chart has been added. It compares the file 
 		size evolution between tagged versions.

@@ -262,6 +262,12 @@
          <td>revisions</td>
          <td>Draws a pie chart, comparing the lines of code</td>
       </tr>
+      <tr>
+         <td>EvolutionMatrixChart</td>
+         <td>symbolic names</td>
+         <td>Draws a software evolution matrix, comparing the file 
+		size evolution between tagged versions.</td>
+      </tr>
     </table>
 
   </subsection>
