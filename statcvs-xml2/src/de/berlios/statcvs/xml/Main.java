@@ -53,7 +53,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.13 2004-02-26 16:45:48 squig Exp $
+ * @version $Id: Main.java,v 1.14 2004-02-27 14:07:20 squig Exp $
  */
 public class Main {
 	private static String projectName;
@@ -162,6 +162,7 @@ public class Main {
 		File file = new File("statcvs.xml");
 		if (file.exists()) {
 			try {
+				logger.info(I18n.tr("Reading settings from {0}", file.getName()));
 				SAXBuilder builder = new SAXBuilder();
 				Document suite = builder.build(file);
 				Element element = suite.getRootElement().getChild("settings");

@@ -1,0 +1,17 @@
+<statcvs>
+  <settings>
+    <webRepository>
+      http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml/
+    </webRepository>
+    <outputDir>xdocs/statcvs-xml</outputDir>
+    <renderer>xdoc</renderer>
+    <include>src/de/berlios/statcvs/xml/**/*.java</include>
+    <width>640</width>
+    <height>480</height>
+    <modules type="map">
+      <Report>**/report/*</Report>
+      <Output>**/output/*</Output>
+    </modules>
+    <tags>test1</tags>
+  </settings>
+</statcvs>
