@@ -20,6 +20,13 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import de.berlios.statcvs.xml.model.AuthorGrouper;
+import de.berlios.statcvs.xml.model.DayGrouper;
+import de.berlios.statcvs.xml.model.DirectoryGrouper;
+import de.berlios.statcvs.xml.model.FileGrouper;
+import de.berlios.statcvs.xml.model.HourGrouper;
+import de.berlios.statcvs.xml.model.ModuleGrouper;
+
 /**
  * Reads the document suite configuration from an XML file and create the reports.
  * 
@@ -92,6 +99,26 @@ public class DocumentSuite {
 //				readSettings(reportSettings, element);
 //			}
 //		}
+		
+		String value = reportSettings.getString("groupby", null);
+		if ("author".equals(value)) {
+			reportSettings.setGrouper(new AuthorGrouper());
+		}
+		else if ("day".equals(value)) {
+			reportSettings.setGrouper(new DayGrouper());
+		}
+		else if ("directory".equals(value)) {
+			reportSettings.setGrouper(new DirectoryGrouper());
+		}
+		else if ("file".equals(value)) {
+			reportSettings.setGrouper(new FileGrouper());
+		}
+		else if ("hour".equals(value)) {
+			reportSettings.setGrouper(new HourGrouper());
+		}
+		else if ("module".equals(value)) {
+			reportSettings.setGrouper(new ModuleGrouper(reportSettings.getModules(content)));
+		}
 		
 		String className = root.getAttributeValue("class");
 		if (className != null) {

@@ -14,13 +14,19 @@
 
   <document  filename="test1" title="Test1">
     <report class="CommitTable" groupby="author"/>
+    <report class="LocChart" groupby="author" filename="loc_authors.png"/>
+    <report class="LocChart" groupby="directory" filename="loc_directory.png"/>
+    <report class="LocChart" groupby="module" filename="loc_module.png"/>
+    <report class="SizeChart" groupby="author" filename="size_authors.png"/>
+    <report class="SizeChart" groupby="directory" filename="size_directory.png"/>
+    <report class="SizeChart" groupby="file" filename="size_file.png"/>
+    <report class="CommitChart" groupby="module" filename="commit_module.png"/>
+    <report class="CommitChart" groupby="author" filename="commit_author.png"/>
+    <report class="CommitChart" groupby="day" filename="commit_day.png"/>
+    <report class="CommitChart" groupby="hour" filename="commit_hour.png"/>
+    <report class="SizeChart" groupby="hour" filename="size_hour.png"/>
   </document>
-  
-  <document  filename="test2" title="Test2">
-    <report class="LocByObjectChart" forall="author" filename="loc_authors.png"/>
-    <report class="LocByObjectChart" forall="directory" filename="loc_directories.png"/>
-  </document>
-
+<!--  
   <document  filename="author%1" title="Author Statistics%1" foreach="author">
     <report class="LocByAuthorChart"/>
     <report class="ModuleSizesChart"/>
@@ -68,5 +74,5 @@
     <report class="AuthorsTable"/>
     <report class="DirectoryTree"/>
   </document>
-
+-->
 </suite>

@@ -20,6 +20,9 @@ import org.apache.commons.jexl.JexlContext;
 import org.apache.commons.jexl.JexlHelper;
 
 import de.berlios.statcvs.xml.I18n;
+import de.berlios.statcvs.xml.model.AuthorGrouper;
+import de.berlios.statcvs.xml.model.DirectoryGrouper;
+import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.util.ScriptHelper;
 
 /**
@@ -150,6 +153,16 @@ public class ReportSettings extends Hashtable {
 	}
 
 	/**
+	 * @param string
+	 * @param b
+	 * @return
+	 */
+	public boolean getBoolean(Object key, boolean defaultValue) 
+	{
+		return Boolean.valueOf(getString(key, defaultValue + "")).booleanValue();
+	}
+
+	/**
 	 * @param content
 	 */
 	public Iterator getDirectoryIterator(CvsContent content) 
@@ -198,9 +211,26 @@ public class ReportSettings extends Hashtable {
 		return (ForEachObject)get("_foreach");
 	}
 
-	public ForAll getForAll(CvsContent content)
+	public Grouper getGrouper(Grouper defaultValue)
 	{
-		return (ForAll)ForAll.create(content, this, getString("forall", null));
+		return (Grouper)get("_groupby", defaultValue);
+	}
+
+	/**
+	 * @param grouper
+	 */
+	public Grouper getGrouper()
+	{
+		return getGrouper(null);
+	}
+
+	/**
+	 * 
+	 */
+	private String getGroupById() 
+	{
+		Grouper o = getGrouper();
+		return (o != null) ? o.getID() : "";
 	}
 
 	public Object getForEachObject()
@@ -215,12 +245,7 @@ public class ReportSettings extends Hashtable {
 	public String getForeachId() 
 	{
 		ForEachObject o = getForEach();
-		return (o != null) ? o.getID() : "";
-	}
-
-	public Iterator getForEachIterator(CvsContent content)
-	{
-		return getForAll(content).getObjects();
+		return (o != null) ? o.getID() : null;
 	}
 
 	/**
@@ -301,8 +326,8 @@ public class ReportSettings extends Hashtable {
 	 */
 	public String getSubtitlePostfix() 
 	{
-		String postfix = getForeachId();
-		return (postfix == null) ? "" : I18n.tr(" for {0}", postfix);
+		String postfix = (getForeachId() == null)?  "" : I18n.tr(" for {0}", getForeachId());
+		return postfix + ((getGroupById() == null) ? "" : I18n.tr(" (per {0})", getGroupById()));
 	}
 
 	public Iterator getSymbolicNameIterator(CvsContent content)
@@ -333,6 +358,14 @@ public class ReportSettings extends Hashtable {
 		else {
 			this.put("_foreach", object);
 		}
+	}
+
+	/**
+	 * @param grouper
+	 */
+	public void setGrouper(Grouper grouper) 
+	{
+		this.put("_groupby", grouper);		
 	}
 
 }

@@ -19,12 +19,12 @@
 */
 package de.berlios.statcvs.xml.chart;
 
-import java.awt.Color;
-import java.awt.Paint;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 
-import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.SymbolicName;
 
@@ -32,12 +32,12 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.XYStepRenderer;
-import org.jfree.data.XYDataset;
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
 import de.berlios.statcvs.xml.I18n;
+import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.output.ReportSettings;
 
 /**
@@ -101,24 +101,74 @@ public class AbstractTimeSeriesChart extends AbstractChart {
 
 	protected TimeSeries createTimeSeries(String title, Iterator it, RevisionVisitor visitor) 
 	{
-		TimeSeries result = new TimeSeries(title, Millisecond.class);
-		int value = 0;
-		Date currentDate = null;
+		DateTimeSeries result = new DateTimeSeries(title);
+
 		while (it.hasNext()) {
 			CvsRevision rev = (CvsRevision)it.next();
-			value = visitor.visit(rev);
-			if (currentDate == null) {
-				currentDate = rev.getDate();
-			}
-			else if (!rev.getDate().equals(currentDate)) {
-				result.add(new Millisecond(currentDate), value);
-				currentDate = rev.getDate();
-			}
+			result.add(rev.getDate(), visitor.visit(rev));
 		}
-		if (currentDate != null) {
-			result.add(new Millisecond(currentDate), value);
-		}
+		result.addLast();
+
 		return result;
+	}
+
+	protected List createTimeSerieses(Grouper grouper, Iterator it, RevisionVisitorFactory factory) 
+	{
+		Hashtable timeSeriesByGroup = new Hashtable();
+		Hashtable visitorByGroup = new Hashtable();
+
+		while (it.hasNext()) {
+			CvsRevision rev = (CvsRevision)it.next();
+			Object group = grouper.getGroup(rev);
+			DateTimeSeries series = (DateTimeSeries)timeSeriesByGroup.get(group);
+			RevisionVisitor visitor = (RevisionVisitor)visitorByGroup.get(group);
+			if (series == null) {
+				series = new DateTimeSeries(grouper.getName(group));
+				timeSeriesByGroup.put(group, series);
+				visitor = factory.create(group);
+				visitorByGroup.put(group, visitor);
+			}
+			 
+			series.add(rev.getDate(), visitor.visit(rev));
+		}
+		
+		List list = new ArrayList(timeSeriesByGroup.values());
+		for (Iterator it2 = list.iterator(); it2.hasNext();) {
+			((DateTimeSeries)it2.next()).addLast();
+		}
+		
+		return list;
+	}
+
+	public static class DateTimeSeries extends TimeSeries {
+
+		private int currentValue;
+		private Date currentDate = null;
+				
+		public DateTimeSeries(String name)
+		{
+			super(name, Millisecond.class);
+		}
+		
+		public void add(Date date, int value)
+		{
+			if (currentDate == null) {
+				currentDate = date;
+			}
+			else if (!date.equals(currentDate)) {
+				super.add(new Millisecond(currentDate), currentValue);
+				currentDate = date;
+			}
+			currentValue = value;
+		}
+		
+		public void addLast()
+		{
+			if (currentDate != null) {
+				super.add(new Millisecond(currentDate), currentValue);
+			}
+		}
+		
 	}
 
 }

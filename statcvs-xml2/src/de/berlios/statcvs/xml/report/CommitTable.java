@@ -65,7 +65,7 @@ public class CommitTable {
 		while (it.hasNext()) {
 			Object group = it.next();
 			Element row = new Element("row");
-			row.addContent(new Element(grouper.getID()).addContent(grouper.getValue(group)));
+			row.addContent(new Element(grouper.getID()).addContent(grouper.getName(group)));
 			row.addContent(new Element("commits").addContent(changesMap.get(group) + "")
 				.setAttribute("percent", 
 							  Formatter.formatNumber(changesMap.getPercent(group), 2)));

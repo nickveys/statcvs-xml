@@ -1,20 +1,18 @@
 package de.berlios.statcvs.xml.report;
 
-import java.awt.BasicStroke;
-import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
-import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
-import net.sf.statcvs.model.Directory;
 
-import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 
 import de.berlios.statcvs.xml.I18n;
-import de.berlios.statcvs.xml.chart.RevisionVisitor;
 import de.berlios.statcvs.xml.chart.AbstractTimeSeriesChart;
+import de.berlios.statcvs.xml.chart.RevisionVisitor;
+import de.berlios.statcvs.xml.chart.RevisionVisitorFactory;
+import de.berlios.statcvs.xml.model.Grouper;
 import de.berlios.statcvs.xml.output.ChartReportElement;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
@@ -28,7 +26,7 @@ public class LocChart extends AbstractTimeSeriesChart {
     
     private CvsContent content;
 	
-	public LocChart(CvsContent content, ReportSettings settings, String title)
+	protected LocChart(CvsContent content, ReportSettings settings, String title)
 	{
 		super(settings, "loc%1.png", title, I18n.tr("Lines"));
 
@@ -38,10 +36,21 @@ public class LocChart extends AbstractTimeSeriesChart {
 	public LocChart(CvsContent content, ReportSettings settings) 
 	{
 		this(content, settings, I18n.tr("Lines Of Code%1"));
-        	
-		addTimeSeries("LOC", settings.getRevisionIterator(content));
-		addSymbolicNames(settings.getSymbolicNameIterator(content));
-		setup(false);
+        
+        Grouper grouper = settings.getGrouper();
+        if (grouper != null) {
+        	List serieses = createTimeSerieses(grouper, settings.getRevisionIterator(content), new RevisionVisitorFactory(LOCCalculator.class.getName()));
+        	for (Iterator it = serieses.iterator(); it.hasNext();) {
+				addTimeSeries((TimeSeries)it.next(), content.getFirstDate(), 0);
+        	}
+			addSymbolicNames(settings.getSymbolicNameIterator(content));
+			setup(true);
+        }
+        else {
+			addTimeSeries("LOC", settings.getRevisionIterator(content));
+			addSymbolicNames(settings.getSymbolicNameIterator(content));
+			setup(false);
+        }
 	}
 
 	public static ReportElement generate(CvsContent content, ReportSettings settings)
