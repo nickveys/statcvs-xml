@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsLocHistory.java,v $ 
-	Created on $Date: 2003-07-06 10:30:20 $ 
+	Created on $Date: 2003-07-06 12:30:23 $ 
 */
 package net.sf.statcvs.input;
 
@@ -35,10 +35,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import net.sf.statcvs.ConfigurationOptions;
 import net.sf.statcvs.Main;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
-import net.sf.statcvs.output.ConfigurationOptions;
 import net.sf.statcvs.util.FileUtils;
 
 /**
@@ -178,7 +178,11 @@ public class CvsLocHistory {
 		return lineCount;
 	}
 	
-	public boolean deleteDir(File dir) {
+	public boolean isEmpty() {
+		return (!loaded || fileLocMap.isEmpty()); 
+	}
+	
+	private boolean deleteDir(File dir) {
 		if (dir.isDirectory()) {
 			String[] children = dir.list();
 			for (int i=0; i<children.length; i++) {

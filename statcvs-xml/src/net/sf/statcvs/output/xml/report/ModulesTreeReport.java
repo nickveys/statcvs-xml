@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ModulesTreeReport.java,v $
-	$Date: 2003-07-05 00:46:40 $ 
+	$Date: 2003-07-06 12:30:23 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -27,11 +27,11 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
+import net.sf.statcvs.ConfigurationOptions;
 import net.sf.statcvs.I18n;
 import net.sf.statcvs.Main;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.Directory;
-import net.sf.statcvs.output.ConfigurationOptions;
 import net.sf.statcvs.output.xml.document.ModuleDocument;
 import net.sf.statcvs.util.FileUtils;
 

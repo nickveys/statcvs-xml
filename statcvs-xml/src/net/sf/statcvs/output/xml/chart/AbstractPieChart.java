@@ -18,11 +18,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractPieChart.java,v $
-	$Date: 2003-07-05 09:55:19 $ 
+	$Date: 2003-07-06 12:30:23 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
-import net.sf.statcvs.output.ConfigurationOptions;
+import net.sf.statcvs.ConfigurationOptions;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;

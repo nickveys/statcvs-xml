@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: LocChart.java,v $
-	$Date: 2003-07-05 17:50:39 $ 
+	$Date: 2003-07-06 12:30:23 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -42,7 +42,6 @@ import net.sf.statcvs.model.RevisionIterator;
 import net.sf.statcvs.model.RevisionSortIterator;
 import net.sf.statcvs.output.xml.document.AuthorDocument;
 import net.sf.statcvs.output.xml.document.ModuleDocument;
-import net.sf.statcvs.reportmodel.TimeLine;
 import net.sf.statcvs.util.IntegerMap;
 
 import org.jfree.chart.annotations.XYLineAnnotation;

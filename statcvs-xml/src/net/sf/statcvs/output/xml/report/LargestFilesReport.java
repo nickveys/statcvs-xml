@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: LargestFilesReport.java,v $
-	$Date: 2003-07-05 20:12:32 $ 
+	$Date: 2003-07-06 12:30:23 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -26,13 +26,13 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import net.sf.statcvs.ConfigurationOptions;
 import net.sf.statcvs.I18n;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.FilesLocComparator;
-import net.sf.statcvs.output.ConfigurationOptions;
-import net.sf.statcvs.output.WebRepositoryIntegration;
-import net.sf.statcvs.output.xml.OutputSettings;
+import net.sf.statcvs.output.OutputSettings;
+import net.sf.statcvs.output.util.WebRepositoryIntegration;
 
 import org.jdom.Element;
 

@@ -18,7 +18,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Builder.java,v $
-	$Date: 2003-07-06 01:33:18 $
+	$Date: 2003-07-06 12:30:23 $
 */
 package net.sf.statcvs.input;
 
@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import net.sf.statcvs.ConfigurationOptions;
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
@@ -38,7 +39,6 @@ import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.model.DirectoryImpl;
 import net.sf.statcvs.model.DirectoryRoot;
-import net.sf.statcvs.output.ConfigurationOptions;
 import net.sf.statcvs.util.CvsLogUtils;
 import net.sf.statcvs.util.FileUtils;
 
@@ -54,7 +54,7 @@ import net.sf.statcvs.util.FileUtils;
  * for each author name and path.</p>
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: Builder.java,v 1.3 2003-07-06 01:33:18 vanto Exp $
+ * @version $Id: Builder.java,v 1.4 2003-07-06 12:30:23 vanto Exp $
  */
 public class Builder {
 
@@ -178,13 +178,15 @@ public class Builder {
 			CvsRevision rev = (CvsRevision) it.next();
 			rev.getAuthor().addRevision(rev);
 			//process symbolic names
-			String symname = (String)currentSymbolicNames.get(rev.getRevision());
-			if (symname != null) {
-				rev.addSymbolicName(symname);
+			if (currentSymbolicNames != null) {
+				String symname = (String)currentSymbolicNames.get(rev.getRevision());
+				if (symname != null) {
+					rev.addSymbolicName(symname);
+				}
 			}
 		} 
 
-		if (ConfigurationOptions.getUseHistory()) {
+		if (ConfigurationOptions.getUseHistory() && !CvsLocHistory.getInstance().isEmpty()) {
 			calculateRealLinesOfCode(file);
 		} else {
 			calculateLinesOfCode(file);

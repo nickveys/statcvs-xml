@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AllTests.java,v $ 
-	Created on $Date: 2003-06-17 16:43:03 $ 
+	Created on $Date: 2003-07-06 12:30:23 $ 
 */
 package net.sf.statcvs;
 
@@ -33,7 +33,7 @@ import junit.textui.TestRunner;
  * JUnit Test suite containing all tests for StatCvs.
  * 
  * @author Manuel Schulze
- * @version $Id: AllTests.java,v 1.1 2003-06-17 16:43:03 vanto Exp $
+ * @version $Id: AllTests.java,v 1.2 2003-07-06 12:30:23 vanto Exp $
  */
 public class AllTests {
 
@@ -48,8 +48,8 @@ public class AllTests {
 		suite.addTest(net.sf.statcvs.input.AllTests.suite());
 		suite.addTest(net.sf.statcvs.model.AllTests.suite());		
 		suite.addTest(net.sf.statcvs.util.AllTests.suite());		
-		suite.addTest(net.sf.statcvs.renderer.AllTests.suite());		
-		suite.addTest(net.sf.statcvs.reportmodel.AllTests.suite());		
+		suite.addTest(net.sf.statcvs.output.xml.report.AllTests.suite());		
+		suite.addTest(net.sf.statcvs.output.xml.chart.AllTests.suite());		
 		suite.addTest(net.sf.statcvs.output.AllTests.suite());		
 		//$JUnit-END$
 		return suite;

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: FileUtils.java,v $ 
-	Created on $Date: 2003-06-17 16:43:02 $ 
+	Created on $Date: 2003-07-06 12:30:23 $ 
 */
 package net.sf.statcvs.util;
 
@@ -30,13 +30,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
-import net.sf.statcvs.output.ConfigurationOptions;
+import net.sf.statcvs.ConfigurationOptions;
 
 /**
  * Some helpful file functions
  * TODO: Remove redundancy and dependency on ConfigurationOptions, write tests
  * @author Lukasz Pekacki
- * @version $Id: FileUtils.java,v 1.1 2003-06-17 16:43:02 vanto Exp $
+ * @version $Id: FileUtils.java,v 1.2 2003-07-06 12:30:23 vanto Exp $
  */
 public class FileUtils {
     /**

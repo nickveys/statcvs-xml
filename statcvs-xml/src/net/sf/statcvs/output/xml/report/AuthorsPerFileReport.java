@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorsPerFileReport.java,v $
-	$Date: 2003-07-04 22:27:16 $ 
+	$Date: 2003-07-06 12:30:23 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -27,14 +27,14 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import net.sf.statcvs.ConfigurationOptions;
 import net.sf.statcvs.I18n;
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.FilesRevisionCountComparator;
-import net.sf.statcvs.output.ConfigurationOptions;
-import net.sf.statcvs.output.WebRepositoryIntegration;
-import net.sf.statcvs.output.xml.OutputSettings;
+import net.sf.statcvs.output.OutputSettings;
+import net.sf.statcvs.output.util.WebRepositoryIntegration;
 import net.sf.statcvs.util.IntegerMap;
 
 import org.jdom.Element;

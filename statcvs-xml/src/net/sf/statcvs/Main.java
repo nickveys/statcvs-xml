@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: Main.java,v $ 
-	Created on $Date: 2003-07-06 01:33:18 $ 
+	Created on $Date: 2003-07-06 12:30:23 $ 
 */
 package net.sf.statcvs;
 
@@ -36,30 +36,27 @@ import net.sf.statcvs.input.CvsLogfileParser;
 import net.sf.statcvs.input.LogSyntaxException;
 import net.sf.statcvs.input.RepositoryFileManager;
 import net.sf.statcvs.model.CvsContent;
-import net.sf.statcvs.output.CommandLineParser;
-import net.sf.statcvs.output.ConfigurationException;
-import net.sf.statcvs.output.ConfigurationOptions;
-import net.sf.statcvs.output.xml.HTMLRenderer;
-import net.sf.statcvs.output.xml.OutputSettings;
+import net.sf.statcvs.output.HTMLRenderer;
+import net.sf.statcvs.output.OutputSettings;
 
 /**
  * StatCvs Main Class; it starts the application and controls command-line
  * related stuff
  * @author Lukasz Pekacki
  * @author Richard Cyganiak
- * @version $Id: Main.java,v 1.13 2003-07-06 01:33:18 vanto Exp $
+ * @version $Id: Main.java,v 1.14 2003-07-06 12:30:23 vanto Exp $
  */
 public class Main {
 	private static Logger logger = Logger.getLogger("net.sf.statcvs");
 	private static LogManager lm = LogManager.getLogManager();
 
+	public static final String VERSION = "@VERSION@";
 	/**
 	 * Main method of StatCvs
 	 * @param args command line options
 	 */
 	public static void main(String[] args) {
-		System.out.println(Messages.getString("PROJECT_NAME")
-				+ Messages.NL);
+		System.out.println(I18n.tr("StatCvs-XML - CVS statistics generation")+"\n");
 		System.setProperty("java.awt.headless", "true");
 		
 		if (args.length == 0) {
@@ -96,7 +93,7 @@ public class Main {
 		System.out.println(
 		//max. 80 chars
 		//         12345678901234567890123456789012345678901234567890123456789012345678901234567890
-				  "Usage: java -jar statcvs-xml.jar [options] <logfile> <directory>\n"
+				  "Usage: java -jar @JAR@ [options] <logfile> <directory>\n"
 				+ "\n"
 				+ "Required parameters:\n"
 				+ "  <logfile>          path to the cvs logfile of the module\n"
@@ -125,7 +122,7 @@ public class Main {
 	}
 
 	private static void printVersionAndExit() {
-		System.out.println("Version " + Messages.getString("CVS_VERSION_TAG"));
+		System.out.println("Version " + VERSION);
 		System.exit(1);
 	}
 

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CommitLogReport.java,v $
-	$Date: 2003-06-28 11:12:27 $ 
+	$Date: 2003-07-06 12:30:23 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.statcvs.ConfigurationOptions;
 import net.sf.statcvs.I18n;
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.Commit;
@@ -38,9 +39,7 @@ import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
 import net.sf.statcvs.model.RevisionIterator;
 import net.sf.statcvs.model.RevisionSortIterator;
-import net.sf.statcvs.output.ConfigurationOptions;
-import net.sf.statcvs.output.WebRepositoryIntegration;
-import net.sf.statcvs.renderer.FileCollectionFormatter;
+import net.sf.statcvs.output.util.WebRepositoryIntegration;
 import net.sf.statcvs.util.DateUtils;
 
 import org.jdom.Element;

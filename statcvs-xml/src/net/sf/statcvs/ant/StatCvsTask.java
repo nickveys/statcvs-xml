@@ -18,14 +18,14 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: StatCvsTask.java,v $
-	$Date: 2003-07-04 21:33:31 $ 
+	$Date: 2003-07-06 12:30:23 $ 
 */
 package net.sf.statcvs.ant;
 
+import net.sf.statcvs.ConfigurationException;
+import net.sf.statcvs.ConfigurationOptions;
 import net.sf.statcvs.Main;
-import net.sf.statcvs.output.ConfigurationException;
-import net.sf.statcvs.output.ConfigurationOptions;
-import net.sf.statcvs.output.WebRepositoryFactory;
+import net.sf.statcvs.output.util.WebRepositoryFactory;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;

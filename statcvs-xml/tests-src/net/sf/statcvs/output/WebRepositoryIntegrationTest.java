@@ -18,7 +18,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: WebRepositoryIntegrationTest.java,v $
-	$Date: 2003-06-17 16:43:03 $
+	$Date: 2003-07-06 12:30:23 $
 */
 package net.sf.statcvs.output;
 
@@ -30,12 +30,16 @@ import net.sf.statcvs.input.Builder;
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
+import net.sf.statcvs.output.util.ChoraIntegration;
+import net.sf.statcvs.output.util.CvswebIntegration;
+import net.sf.statcvs.output.util.ViewCvsIntegration;
+import net.sf.statcvs.output.util.WebRepositoryIntegration;
 
 /**
  * Test cases for {ViewCvsIntegration}
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: WebRepositoryIntegrationTest.java,v 1.1 2003-06-17 16:43:03 vanto Exp $
+ * @version $Id: WebRepositoryIntegrationTest.java,v 1.2 2003-07-06 12:30:23 vanto Exp $
  */
 public class WebRepositoryIntegrationTest extends TestCase {
 

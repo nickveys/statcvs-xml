@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: TimeLineChart.java,v $
-	$Date: 2003-07-05 09:55:19 $ 
+	$Date: 2003-07-06 12:30:23 $ 
 */
 package net.sf.statcvs.output.xml.chart;
 
@@ -26,10 +26,8 @@ import java.awt.Color;
 import java.awt.Paint;
 import java.util.Iterator;
 
+import net.sf.statcvs.ConfigurationOptions;
 import net.sf.statcvs.I18n;
-import net.sf.statcvs.output.ConfigurationOptions;
-import net.sf.statcvs.reportmodel.TimeLine;
-import net.sf.statcvs.reportmodel.TimePoint;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.axis.HorizontalDateAxis;
