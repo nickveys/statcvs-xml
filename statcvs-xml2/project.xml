@@ -34,7 +34,26 @@
   </repository>
 
   <versions>
+    <version>
+      <id>091</id>
+      <name>0.9.1</name>
+      <tag>statcvs-xml-0_9_1</tag>
+    </version>
+    <version>
+      <id>092</id>
+      <name>0.9.2</name>
+      <tag>statcvs-xml-0_9_2</tag>
+    </version>
   </versions>
+
+  <mailingLists>
+      <mailingList>
+        <name>StatCVS XML development list</name>
+        <subscribe>https://lists.berlios.de/mailman/listinfo/statcvs-xml-devel</subscribe>
+        <unsubscribe>https://lists.berlios.de/mailman/listinfo/statcvs-xml-devel</unsubscribe>
+        <archive>https://lists.berlios.de/pipermail/statcvs-xml-devel/</archive>
+      </mailingList>
+  </mailingLists>
 
   <developers>
     <developer>
