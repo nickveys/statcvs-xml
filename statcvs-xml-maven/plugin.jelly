@@ -209,8 +209,8 @@
 	  value="${pom.getPluginContext('maven-xdoc-plugin').getVariable('maven.docs.dest')}"/>
 	<property name="maven.gen.docs" 
 	  value="${pom.getPluginContext('maven-xdoc-plugin').getVariable('maven.gen.docs')}"/>
-	<ant:mkdir dir="${maven.docs.dest}/statcvs"/>
-	<ant:mkdir dir="${maven.gen.docs}/statcvs"/>
+	<ant:mkdir dir="${maven.docs.dest}/${statcvs.outputdir}"/>
+	<ant:mkdir dir="${maven.gen.docs}/${statcvs.outputdir}"/>
 	
 	<!-- run statcvs-xml -->
 	<ant:property environment="env"/>
@@ -228,9 +228,9 @@
 	  ${maven_opts}"/> -->
 		<ant:jvmarg line="${maven_opts}"/>
 	  </j:if>
-	  <ant:arg line="-output-dir '${maven.gen.docs}/statcvs'"/>
+	  <ant:arg line="-output-dir '${maven.gen.docs}/${statcvs.outputdir}'"/>
 	  <ant:arg line="-title '${statcvs.title}'"/>
-	  <ant:arg line="-renderer xdoc"/> 
+	  <ant:arg line="-renderer ${statcvs.renderer}"/> 
 	  <j:if test="${statcvs.verbose}">
 		<ant:arg line="-verbose"/> 
 	  </j:if>
@@ -262,10 +262,11 @@
 	</ant:java>
 	
 	<!-- copy images  -->
-	<copy todir="${maven.docs.dest}/statcvs" overwrite="yes" 
+	<copy todir="${maven.docs.dest}/${statcvs.outputdir}" overwrite="yes" 
 	  filtering="no">
-	  <fileset dir="${maven.gen.docs}/statcvs">
+	  <fileset dir="${maven.gen.docs}/${statcvs.outputdir}">
 		<include name="**/*.png"/>
+		<include name="**/*.html"/>
 	  </fileset>
 	</copy>
   </goal>

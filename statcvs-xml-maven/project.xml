@@ -72,6 +72,11 @@
       <name>2.5</name>
       <tag>maven-statcvs-plugin-2_5</tag>
     </version>
+    <version>
+      <id>2.6</id>
+      <name>2.6</name>
+      <tag>maven-statcvs-plugin-2_6</tag>
+    </version>
   </versions> 
 
   <developers>
