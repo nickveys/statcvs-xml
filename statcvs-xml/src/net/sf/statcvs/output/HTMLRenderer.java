@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: HTMLRenderer.java,v $
-	$Date: 2003-07-06 12:30:23 $ 
+	$Date: 2003-07-06 13:58:07 $ 
 */
 package net.sf.statcvs.output;
 
@@ -53,7 +53,7 @@ public class HTMLRenderer extends XMLRenderer {
 
 	public HTMLRenderer(Transformer transformer) 
 	{
-		this.transformer = transformer;
+		super(transformer);
 
 		setExtension(".html");
 
@@ -63,31 +63,23 @@ public class HTMLRenderer extends XMLRenderer {
 		xout.setOmitEncoding(true);
 		setOutputter(xout);
 
-		try {
-			FileUtils.copyFile
-				(Main.class.getResourceAsStream("web-files/statcvs.css"),
-				 new File(ConfigurationOptions.getOutputDir() 
-						  + "statcvs.css"));
-		} 
-		catch (IOException e) {
-			logger.warning(e.getMessage());
-		}
-		
-		try {
-			String filename = OutputSettings.getCustomCss();
-			if (filename != null) {
-				FileUtils.copyFile
-					(Main.class.getResourceAsStream(filename),
-					 new File(ConfigurationOptions.getOutputDir() 
-							  + FileUtils.getFilenameWithoutPath(filename)));
-			}
-		} 
-		catch (IOException e) {
-			logger.warning(e.getMessage());
-		}
-
 		if (transformer != null) {
 			logger.info("Using transformer "+transformer.getClass().getName());
+		}
+	}
+
+	/**
+	 * Copies the required resources.
+	 */
+	public void postRender()
+	{
+		copyResource("resources/folder.png");
+		copyResource("resources/folder-deleted.png");
+
+		copyResource("resources/statcvs.css");
+		String filename = OutputSettings.getCustomCss();
+		if (filename != null) {
+			copyResource(filename);
 		}
 	}
 
@@ -98,7 +90,7 @@ public class HTMLRenderer extends XMLRenderer {
 		throws IOException 
 	{
 		StreamSource source = new StreamSource
-			(Main.class.getClassLoader().getResource("statcvs2html.xsl").toString());
+			(FileUtils.getResource("resources/statcvs2html.xsl").toString());
 		Transformer transformer;
  		try {
 			transformer 

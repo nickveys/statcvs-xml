@@ -18,11 +18,12 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: FileUtils.java,v $ 
-	Created on $Date: 2003-07-06 12:30:23 $ 
+	Created on $Date: 2003-07-06 13:58:07 $ 
 */
 package net.sf.statcvs.util;
 
-import java.io.File;
+import java.io.*;
+import java.net.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -30,13 +31,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
-import net.sf.statcvs.ConfigurationOptions;
+import net.sf.statcvs.*;
 
 /**
  * Some helpful file functions
  * TODO: Remove redundancy and dependency on ConfigurationOptions, write tests
  * @author Lukasz Pekacki
- * @version $Id: FileUtils.java,v 1.2 2003-07-06 12:30:23 vanto Exp $
+ * @version $Id: FileUtils.java,v 1.3 2003-07-06 13:58:07 squig Exp $
  */
 public class FileUtils {
     /**
@@ -186,4 +187,42 @@ public class FileUtils {
 		}
 		return pathWithoutLastSlash.substring(0, lastSlash + 1);
 	}
+
+	/**
+	 * Returns a url to a resource. The classpath is searched first,
+	 * then the file system is searched.
+	 */
+	public static URL getResource(String filename)
+	{
+		URL url = ClassLoader.getSystemResource(filename);
+		if (url == null) {
+			url = Main.class.getResource(filename);
+			if (url == null) {
+				try {
+					url = new File(filename).toURL();
+				}
+				catch (MalformedURLException e) {
+					return null;
+				}
+			}
+		}
+		return url;
+	}
+
+	/**
+	 * 
+	 */
+	public static InputStream getResourceAsStream(String filename)
+	{
+		try {
+			URL url = getResource(filename);
+			if (url != null) {
+				return url.openStream();
+			}
+		}
+		catch (IOException e) {
+		}
+		return null;
+	}
+
 }

@@ -18,17 +18,18 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLRenderer.java,v $
-	$Date: 2003-07-06 12:30:23 $ 
+	$Date: 2003-07-06 13:58:07 $ 
 */
 package net.sf.statcvs.output;
 
-import java.io.FileWriter;
+import java.io.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 
+import net.sf.statcvs.*;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.output.xml.DocumentRenderer;
 import net.sf.statcvs.output.xml.DocumentSuite;
@@ -51,7 +52,7 @@ public class XMLRenderer implements DocumentRenderer {
 		= Logger.getLogger("net.sf.statcvs.output.XMLRenderer");
 
 	private XMLOutputter out;
-	Transformer transformer;
+	private Transformer transformer;
 	private String extension;
 	
 	public XMLRenderer(Transformer transformer) {
@@ -74,6 +75,26 @@ public class XMLRenderer implements DocumentRenderer {
 	public static void generate(CvsContent content) throws IOException
 	{
 		DocumentSuite.generate(content, new XMLRenderer());
+	}
+
+	public boolean copyResource(String filename)
+	{
+		InputStream in = FileUtils.getResourceAsStream(filename);
+		if (in != null) {
+			try {
+				String target = ConfigurationOptions.getOutputDir()
+					+ FileUtils.getFilenameWithoutPath(filename);
+				FileUtils.copyFile(in, new File(target));
+				return true;
+			} 
+			catch (IOException e) {
+				logger.warning(e.getMessage());
+			}
+		}
+		else {
+			logger.warning("Resource not found: " + filename);
+		}
+		return false;
 	}
 
 	public void setOutputter(XMLOutputter outputter) {
@@ -144,6 +165,10 @@ public class XMLRenderer implements DocumentRenderer {
 					charts[i].save();				
 			}
 		}
+	}
+
+	public void postRender()
+	{
 	}
 
 }

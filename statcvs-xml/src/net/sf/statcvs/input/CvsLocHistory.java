@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsLocHistory.java,v $ 
-	Created on $Date: 2003-07-06 12:30:23 $ 
+	Created on $Date: 2003-07-06 13:58:07 $ 
 */
 package net.sf.statcvs.input;
 
@@ -124,7 +124,7 @@ public class CvsLocHistory {
 			String[] cmd = {"cvs", "-Q", "update","-d", "-r","1.1"};
 			try {
 				Runtime rt = Runtime.getRuntime();
-				final Process p = rt.exec(cmd, null, tmpdir);
+				Process p = rt.exec(cmd, null, tmpdir);
 		 		p.waitFor();
 			} catch (Exception e) {
 			}

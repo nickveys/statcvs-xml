@@ -8,8 +8,7 @@ LIBS = $(shell find lib/ -name "*.jar")
 CP = .:src:$(shell echo $(LIBS) | sed -e 's/ /:/g'):$(JAVA_HOME)/jre/lib/rt.jar
 JDEPENDS = src/net/sf/statcvs/Main.java $(shell find src -name "*Renderer.java") \
            src/net/sf/statcvs/util/ConsoleOutErrHandler.java
-SRC_DIST = net/sf/statcvs/*.properties net/sf/statcvs/web-files/*png \
-           net/sf/statcvs/web-files/*css
+SRC_DIST = net/sf/statcvs/*.properties net/sf/statcvs/resources/*
 
 ifeq ($(shell test -r Makefile.local && echo "true"),true)
   include Makefile.local
@@ -39,7 +38,6 @@ jar:
 	mkdir tmp
 	make JAVAC_OPTS="$(JAVAC_OPTS) -d tmp" all 
 	cp README tmp/
-	cp *.xsl tmp/
 	(cd src/; tar -cf - $(SRC_DIST)) | tar -C tmp/ -xf -
 	for i in $(LIBS); do \
 	  unzip -d tmp/ $$i; \

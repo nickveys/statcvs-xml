@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: DocumentRenderer.java,v $
-	$Date: 2003-07-04 15:17:27 $ 
+	$Date: 2003-07-06 13:58:07 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -37,5 +37,10 @@ public interface DocumentRenderer {
 	 * Invoked when a document has been created.
 	 */
 	void render(StatCvsDocument document) throws IOException;
-	
+
+	/**
+	 * Invoked when all documents have been rendered.
+	 */
+	void postRender();
+
 }

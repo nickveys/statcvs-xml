@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ModulesTreeReport.java,v $
-	$Date: 2003-07-06 12:30:23 $ 
+	$Date: 2003-07-06 13:58:07 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -94,17 +94,5 @@ public class ModulesTreeReport extends ReportElement {
 			modules.addContent(module);
 		}
 		addContent(modules);
-		// copy dir icon
-		try {
-			FileUtils.copyFile(
-					Main.class.getResourceAsStream("web-files/" + "folder.png"),
-					new File(ConfigurationOptions.getOutputDir() + "folder.png"));
-			FileUtils.copyFile(
-					Main.class.getResourceAsStream("web-files/" + "folder-deleted.png"),
-					new File(ConfigurationOptions.getOutputDir() + "folder-deleted.png"));
-
-		} catch (IOException e) {
-			logger.warning(e.getMessage());
-		}
 	}
 }

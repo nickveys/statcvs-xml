@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: I18n.java,v $ 
-	Created on $Date: 2003-06-18 21:22:43 $ 
+	Created on $Date: 2003-07-06 13:58:07 $ 
 */
 package net.sf.statcvs;
 
@@ -34,7 +34,7 @@ import java.text.*;
 public class I18n {
 
 
-	private static final String BUNDLE_NAME = "net.sf.statcvs.statcvs";
+	private static final String BUNDLE_NAME = "net.sf.statcvs.resources.statcvs";
 	private static final ResourceBundle RESOURCE_BUNDLE =
 			ResourceBundle.getBundle(BUNDLE_NAME);
 
