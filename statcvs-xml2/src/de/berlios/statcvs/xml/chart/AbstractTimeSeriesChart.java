@@ -16,9 +16,6 @@
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-    
-	$RCSfile: TimeLineChart.java,v $
-	$Date: 2004-02-21 14:09:36 $ 
 */
 package de.berlios.statcvs.xml.chart;
 
@@ -48,7 +45,7 @@ import de.berlios.statcvs.xml.output.ReportSettings;
  * 
  * @author Tammo van Lessen
  */
-public class TimeLineChart extends AbstractChart {
+public class AbstractTimeSeriesChart extends AbstractChart {
 
 	private TimeSeriesCollection tsc;
 	
@@ -56,7 +53,7 @@ public class TimeLineChart extends AbstractChart {
 	 * @param filename
 	 * @param title
 	 */
-	public TimeLineChart(ReportSettings settings, String filename, String title, 
+	public AbstractTimeSeriesChart(ReportSettings settings, String filename, String title, 
 						String rangeLabel) 
 	{
 		super(settings, filename, title);
@@ -82,13 +79,11 @@ public class TimeLineChart extends AbstractChart {
 		plot.setRenderer(new XYStepRenderer());
 	}
 
-	protected void addSymbolicNames(CvsContent content) 
+	protected void addSymbolicNames(Iterator it) 
 	{
 		XYPlot xyplot = getChart().getXYPlot();
-        
-		Iterator symIt = content.getSymbolicNames().iterator();
-		while (symIt.hasNext()) {
-			SymbolicName sn = (SymbolicName)symIt.next();
+		while (it.hasNext()) {
+			SymbolicName sn = (SymbolicName)it.next();
 			xyplot.addAnnotation(new SymbolicNameAnnotation(sn));
 		}
 	}

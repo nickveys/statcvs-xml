@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AbstractChart.java,v $
-	$Date: 2004-02-21 19:34:14 $ 
+	$Date: 2004-02-21 20:32:05 $ 
 */
 package de.berlios.statcvs.xml.chart;
 
@@ -31,6 +31,9 @@ import java.util.logging.Logger;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.Spacer;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.ui.HorizontalAlignment;
 import org.jfree.ui.RectangleEdge;
@@ -168,6 +171,24 @@ public abstract class AbstractChart {
 	 */
 	public void setSubtitle(String subtitle, String subst) {
 		setSubtitle(subtitle.replaceAll("%1", subst));
+	}
+
+	/**
+	 * @deprecated
+	 */
+	public void setCategoryAxisLabel(String text) {
+		CategoryPlot plot = getChart().getCategoryPlot();
+		CategoryAxis axis = (CategoryAxis) plot.getDomainAxis();
+		axis.setLabel(text);
+	}
+
+	/**
+ 	* @deprecated
+ 	*/
+	public void setValueAxisLabel(String text) {
+		CategoryPlot plot = getChart().getCategoryPlot();
+		ValueAxis axis = plot.getRangeAxis();
+		axis.setLabel(text);
 	}
 
 }

@@ -6,6 +6,7 @@
       <Report>**/report/*</Report>
       <Output>**/output/*</Output>
     </modules>
+    <tags>test1</tags>
   </settings>
 
   <document filename="index">
@@ -18,6 +19,7 @@
     <report class="ActivityByDayChart"/>    
     <report class="ActivityByHourChart"/>
     <report class="ModuleSizesChart"/>
+    <report class="AuthorsActivityChart"/>
   </document>
 
   <document  filename="user%1" foreach="author">

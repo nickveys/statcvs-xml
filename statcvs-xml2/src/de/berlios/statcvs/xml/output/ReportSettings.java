@@ -5,11 +5,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.SortedSet;
+import java.util.regex.Pattern;
 
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.Directory;
+import net.sf.statcvs.model.SymbolicName;
 import de.berlios.statcvs.xml.I18n;
 
 /**
@@ -74,6 +77,26 @@ public class ReportSettings extends Hashtable {
 		return content.getRevisions().iterator();
 	}
 
+	public Iterator getSymbolicNameIterator(CvsContent content)
+	{
+		String regexp = getString("tags", null);
+
+		if (regexp == null) {
+			return content.getSymbolicNames().iterator();
+		}
+		
+		final Pattern pattern = Pattern.compile(regexp);
+		Predicate predicate = new Predicate()
+		{
+			public boolean matches(Object o)
+			{
+				SymbolicName tag = (SymbolicName)o;
+				return pattern.matcher(tag.getName()).matches();
+			}
+		};
+		return new FilteredIterator(content.getSymbolicNames().iterator(), predicate);
+	}
+	
 	/**
 	 * @param string
 	 * @param string2
@@ -147,6 +170,74 @@ public class ReportSettings extends Hashtable {
 	{
 		String postfix = getForeachId();
 		return (postfix == null) ? "" : I18n.tr(" for {0}", postfix);
+	}
+
+	public static interface Predicate
+	{
+
+		boolean matches(Object o);
+		 
+	}
+
+	public static class FilteredIterator implements Iterator
+	{
+		private Iterator it;
+		private Predicate predicate;
+		private Object lookAhead;
+
+		public FilteredIterator(Iterator it, Predicate predicate)
+		{
+			this.it = it;
+			this.predicate = predicate;
+		}
+
+		/**
+		 *  @see java.util.Iterator#remove()
+		 */
+		public void remove() 
+		{
+			throw new UnsupportedOperationException();
+		}
+
+		/**
+		 *  @see java.util.Iterator#hasNext()
+		 */
+		public boolean hasNext() 
+		{		
+			if (lookAhead != null) {
+				return true;
+			}
+			
+			while (it.hasNext()) {
+				lookAhead = it.next();
+				if (predicate.matches(lookAhead)) {
+					return true;
+				}
+			}
+			lookAhead = null;
+			return false;
+		}
+
+		/**
+		 *  @see java.util.Iterator#next()
+		 */
+		public Object next() 
+		{
+			if (lookAhead != null) {
+				Object current = lookAhead;
+				lookAhead = null;
+				return current;
+			}
+			
+			while (it.hasNext()) {
+				Object o = it.next();
+				if (predicate.matches(o)) {
+					return o;
+				}
+			}
+			throw new NoSuchElementException();
+		}
+		
 	}
 
 }

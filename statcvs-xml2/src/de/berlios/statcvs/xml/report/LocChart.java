@@ -33,7 +33,7 @@ import org.jfree.data.time.TimeSeries;
 
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.chart.RevisionVisitor;
-import de.berlios.statcvs.xml.chart.TimeLineChart;
+import de.berlios.statcvs.xml.chart.AbstractTimeSeriesChart;
 import de.berlios.statcvs.xml.output.ChartReportElement;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
@@ -43,7 +43,7 @@ import de.berlios.statcvs.xml.output.ReportSettings;
  * 
  * @author Tammo van Lessen
  */
-public class LocChart extends TimeLineChart {
+public class LocChart extends AbstractTimeSeriesChart {
     
     private CvsContent content;
 	
@@ -54,12 +54,14 @@ public class LocChart extends TimeLineChart {
 	    this.content = content;
         	
 		addTimeSeries("LOC", settings.getRevisionIterator(content));
-		setupLocChart(false);
+		addSymbolicNames(settings.getSymbolicNameIterator(content));
+		setup(false);
 	}
 
 	public LocChart(CvsContent content, ReportSettings settings, Author highlightAuthor)
 	{
 		super(settings, "loc%1.png", I18n.tr("Lines Of Code (per Author)"), I18n.tr("Lines"));
+        
         this.content = content;
         
 		// add a time line for each author
@@ -75,13 +77,14 @@ public class LocChart extends TimeLineChart {
 			++i;
 		}
 
-		setupLocChart(true);		
+		addSymbolicNames(settings.getSymbolicNameIterator(content));
+		setup(true);
 	}
 
 	public static ReportElement generate(CvsContent content, ReportSettings settings)
 	{
 		LocChart chart;		
-		Object o = settings.get("foreach");
+		Object o = settings.get("_foreachObject");
 		if (o instanceof Author) {
 			chart = new LocChart(content, settings, (Author)o);		
 		}
@@ -96,12 +99,6 @@ public class LocChart extends TimeLineChart {
 	{
 		TimeSeries series = createTimeSeries(title, it, new LOCCalculator());
 		addTimeSeries(series, content.getFirstDate(), 0);
-	}
-	
-	private void setupLocChart(boolean showLegend) 
-	{
-		addSymbolicNames(content);
-		setup(showLegend);
 	}
 	
 	public static class LOCCalculator implements RevisionVisitor

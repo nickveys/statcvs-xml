@@ -4,7 +4,7 @@ import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsRevision;
 import de.berlios.statcvs.xml.I18n;
 import de.berlios.statcvs.xml.chart.RevisionVisitor;
-import de.berlios.statcvs.xml.chart.TimeLineChart;
+import de.berlios.statcvs.xml.chart.AbstractTimeSeriesChart;
 import de.berlios.statcvs.xml.output.ChartReportElement;
 import de.berlios.statcvs.xml.output.ReportElement;
 import de.berlios.statcvs.xml.output.ReportSettings;
@@ -15,7 +15,7 @@ import de.berlios.statcvs.xml.output.ReportSettings;
  * @author Steffen Pingel
  * @author Tammo van Lessen
  */
-public class FileCountChart extends TimeLineChart {
+public class FileCountChart extends AbstractTimeSeriesChart {
 
 	public FileCountChart(CvsContent content, ReportSettings settings)
 	{
