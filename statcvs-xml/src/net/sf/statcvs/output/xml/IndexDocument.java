@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: IndexDocument.java,v $ 
-	Created on $Date: 2003-06-20 00:54:41 $ 
+	Created on $Date: 2003-06-20 10:37:31 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -56,13 +56,7 @@ public class IndexDocument extends StatCvsDocument {
 
 		this.content = content;
 
-		getRootElement().addContent
-			(new PeriodElement(I18n.tr("Summary Period"),
-							   content.getFirstDate(), content.getLastDate()));
-		getRootElement().addContent
-			(new PeriodElement(I18n.tr("Generated"),
-							   DateUtils.currentDate()));
-		
+		getRootElement().addContent(createGeneralReport());
 		getRootElement().addContent(createReportRefs());
 		getRootElement().addContent(createLOCReport());
 		getRootElement().addContent(createAuthorsReport());
@@ -94,6 +88,18 @@ public class IndexDocument extends StatCvsDocument {
 		}
 		return new LOCChart(series, projectName, I18n.tr("Lines Of Code"),
 							filename, width, height);
+	}
+
+	private Element createGeneralReport()
+	{
+		Element reportRoot = new ReportElement("General");
+		reportRoot.addContent
+			(new PeriodElement(I18n.tr("Summary Period"),
+							   content.getFirstDate(), content.getLastDate()));
+		reportRoot.addContent
+			(new PeriodElement(I18n.tr("Generated"),
+							   DateUtils.currentDate()));
+		return reportRoot;
 	}
 
 	private Element createReportRefs() {

@@ -2,7 +2,7 @@ JAVA_HOME =
 
 CVS_LOG = cvs.log
 CVS_PATH = .
-STATCVS_ARGS = -viewcvs http://janeway/cvsweb/studium/ -verbose
+STATCVS_ARGS = -viewcvs http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml/
 
 LIBS = $(shell find lib/ -name "*.jar")
 CP = .:src:$(shell echo $(LIBS) | sed -e 's/ /:/g'):$(JAVA_HOME)/jre/lib/rt.jar
@@ -64,6 +64,7 @@ xml :
 	  $(CVS_LOG) $(CVS_PATH) $(STATCVS_ARGS) -output-dir out-xml -output-suite 
 
 deploy :
+	cvs log > cvs.log
 	make all
 	make xdoc
 	maven site:deploy

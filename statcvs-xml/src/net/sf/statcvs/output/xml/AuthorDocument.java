@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorDocument.java,v $ 
-	Created on $Date: 2003-06-20 10:17:07 $ 
+	Created on $Date: 2003-06-20 10:37:31 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -64,27 +64,9 @@ public class AuthorDocument extends StatCvsDocument {
 
 		this.content = content;
 		this.author = author;
-
 		this.userRevs = author.getRevisionIterator();
 
-		RevisionIteratorSummary summary;
-		summary = new RevisionIteratorSummary(content.getRevisionIterator());
-		long totalChangeCount = summary.size();
-		long totalLineCount = summary.getLineValue();
-
-		summary = new RevisionIteratorSummary(userRevs);
-		long userChangeCount = summary.size();
-		long userLineCount = summary.getLineValue();
-
-		double percent = (double)userChangeCount * 100 / totalChangeCount;
-		getRootElement().addContent
-			(new ValueElement("totalChanges", userChangeCount, percent,
-							  I18n.tr("Total changes")));
-		percent = (double)userLineCount * 100 / totalLineCount;
-		getRootElement().addContent
-			(new ValueElement("loc", userLineCount, percent, 
-							  I18n.tr("Lines of code")));
-
+		getRootElement().addContent(createGeneralReport());
 		getRootElement().addContent(createModuleReport());
 		getRootElement().addContent(createActivityReport());
 		getRootElement().addContent(createCommitLog());
@@ -140,6 +122,32 @@ public class AuthorDocument extends StatCvsDocument {
 				author, PieChart.FILTERED_BY_USER);
 		userRevs.reset();
 		return chart;
+	}
+
+	private Element createGeneralReport()
+	{
+		Element reportRoot = new ReportElement("General");
+
+		RevisionIteratorSummary summary;
+		summary = new RevisionIteratorSummary(content.getRevisionIterator());
+		long totalChangeCount = summary.size();
+		long totalLineCount = summary.getLineValue();
+
+		summary = new RevisionIteratorSummary(userRevs);
+		long userChangeCount = summary.size();
+		long userLineCount = summary.getLineValue();
+
+		double percent = (double)userChangeCount * 100 / totalChangeCount;
+		reportRoot.addContent
+			(new ValueElement("totalChanges", userChangeCount, percent,
+							  I18n.tr("Total changes")));
+		percent = (double)userLineCount * 100 / totalLineCount;
+		reportRoot.addContent
+			(new ValueElement("loc", userLineCount, percent, 
+							  I18n.tr("Lines of code")));
+
+
+		return reportRoot;
 	}
 
 	private Element createModuleReport() {
