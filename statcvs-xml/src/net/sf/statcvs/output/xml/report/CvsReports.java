@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: CvsReports.java,v $
-	$Date: 2003-06-27 01:05:34 $ 
+	$Date: 2003-06-27 17:24:04 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
@@ -64,16 +64,6 @@ public class CvsReports {
 		return new LargestFilesReport(content);
 	}
 
-	public ReportElement getFileCountReport()
-	{
-		return new FileCountReport(content);
-	}
-
-	public ReportElement getAvgFileSizeReport()
-	{
-		return new AverageFileSizeReport();
-	}
-	
 	public ReportElement getAuthorsReport() {
 		if (authorsReport == null) {
 			authorsReport = new AuthorsReport(content);
