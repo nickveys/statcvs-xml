@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: XMLSuite.java,v $
-	$Date: 2003-06-20 00:37:24 $ 
+	$Date: 2003-06-20 10:21:03 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -43,6 +43,7 @@ public class XMLSuite {
 	
 	public static void generate(CvsContent content, DocumentRenderer renderer) 
 		throws IOException {
+		renderer.render(new AuthorsDocument(content));
 		renderer.render(new CommitLogDocument(content));
 		renderer.render(new DirectorySizesDocument(content));
 		renderer.render(new IndexDocument(content));

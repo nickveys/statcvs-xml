@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorsDocument.java,v $ 
-	Created on $Date: 2003-06-20 10:21:03 $ 
+	Created on $Date: 2003-06-20 10:22:57 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -62,6 +62,7 @@ public class AuthorsDocument extends StatCvsDocument {
 			  + content.getModuleName(), "authors");
 
 		this.content = content;
+		this.revIt = content.getRevisionIterator();
 
 		getRootElement().addContent(createAuthorsReport());
 	}
