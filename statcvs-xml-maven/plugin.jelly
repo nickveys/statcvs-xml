@@ -26,7 +26,6 @@
 <project 
   xmlns:j="jelly:core"
   xmlns:util="jelly:util"
-  xmlns:maven="jelly:maven"
   xmlns:ant="jelly:ant"
   xmlns:doc="doc"
   xmlns:log="jelly:log">
