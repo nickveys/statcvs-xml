@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: IndexDocument.java,v $ 
-	Created on $Date: 2003-06-26 20:19:07 $ 
+	Created on $Date: 2003-06-26 23:04:55 $ 
 */
 package net.sf.statcvs.output.xml;
 
@@ -30,7 +30,7 @@ import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.RevisionIterator;
 import net.sf.statcvs.model.RevisionSortIterator;
 import net.sf.statcvs.output.LOCSeriesBuilder;
-import net.sf.statcvs.output.xml.report.ModulesTreeReport;
+import net.sf.statcvs.output.xml.report.CvsReports;
 import net.sf.statcvs.renderer.Chart;
 import net.sf.statcvs.renderer.LOCChart;
 import net.sf.statcvs.reports.AbstractLocTableReport;
@@ -58,12 +58,12 @@ public class IndexDocument extends StatCvsDocument {
 			  + content.getModuleName(), "index");
 
 		this.content = content;
-
+		CvsReports reports = new CvsReports(content);
 		getRootElement().addContent(createGeneralReport());
 		getRootElement().addContent(createReportRefs());
 		getRootElement().addContent(createLOCReport());
 		getRootElement().addContent(createAuthorsReport());
-		getRootElement().addContent(new ModulesTreeReport(content));
+		getRootElement().addContent(reports.getModulesTreeReport());
 	}
 
 	/**

@@ -18,11 +18,21 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorsReport.java,v $
-	$Date: 2003-06-24 17:40:11 $ 
+	$Date: 2003-06-26 23:04:55 $ 
 */
 package net.sf.statcvs.output.xml.report;
 
+import java.util.Iterator;
+
 import net.sf.statcvs.I18n;
+import net.sf.statcvs.model.Author;
+import net.sf.statcvs.model.CvsContent;
+import net.sf.statcvs.model.CvsRevision;
+import net.sf.statcvs.model.RevisionIterator;
+import net.sf.statcvs.util.Formatter;
+import net.sf.statcvs.util.IntegerMap;
+
+import org.jdom.Element;
 
 /**
  * 
@@ -31,14 +41,49 @@ import net.sf.statcvs.I18n;
  */
 public class AuthorsReport extends ReportElement {
 
+	private IntegerMap changesMap = new IntegerMap();
+	private IntegerMap linesMap = new IntegerMap();
+	private CvsContent content;
+	
 	/**
 	 * 
 	 */
-	public AuthorsReport() 
+	public AuthorsReport(CvsContent content) 
 	{
 		super(I18n.tr("Authors"));
+		this.content = content;
+		createReport();
+	}
 
+	/**
+	 * 
+	 */
+	private void createReport() {
+		Element authors = new Element("authors");
+		RevisionIterator revs = content.getRevisionIterator();
+		while (revs.hasNext()) {
+			CvsRevision rev = revs.next();
+			changesMap.addInt(rev.getAuthor(), 1);
+			linesMap.addInt(rev.getAuthor(), rev.getLineValue()); 
+		}
+		Iterator it = linesMap.iteratorSortedByValueReverse();
 
+		while (it.hasNext()) {
+			Author author = (Author) it.next();
+			Element element = new Element("author");
+			element.setAttribute("name", author.getName());
+			element.setAttribute("changes", changesMap.get(author) + "");
+			element.setAttribute("loc", linesMap.get(author) + "");
+			element.setAttribute("locPercent", 
+								 Formatter.formatNumber(linesMap.getPercent(author), 2));
+			element.setAttribute("changesPercent", 
+								 Formatter.formatNumber(changesMap.getPercent(author), 2));
+
+			element.setAttribute("locPerChange", 
+								 Formatter.formatNumber(linesMap.get(author) / changesMap.get(author), 1));
+			authors.addContent(element);
+		}
+		addContent(authors);
 	}
 
 }

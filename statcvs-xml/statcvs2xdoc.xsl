@@ -33,9 +33,27 @@
      <table>
         <tr>
        	  <th><xsl:value-of select="i18n:tr('Author')"/></th>
+          <th><xsl:value-of select="i18n:tr('Changes')"/></th>
           <th><xsl:value-of select="i18n:tr('Lines of Code')"/></th>
+          <th><xsl:value-of select="i18n:tr('Lines per Change')"/></th>
       	</tr>
-		<xsl:apply-templates select="*"/>
+		<xsl:for-each select="author">
+	  	  <tr>
+       		<td><a href="user_{@name}.html"><xsl:value-of select="@name"/></a></td>
+       		<td>
+          		<xsl:value-of select="@changes"/>
+         		(<xsl:value-of select="@changesPercent"/>%)
+       		</td>
+       		<td>
+          		<xsl:value-of select="@loc"/>
+         		(<xsl:value-of select="@locPercent"/>%)
+       		</td>
+       		<td>
+          		<xsl:value-of select="@locPerChange"/>
+       		</td>
+
+     	  </tr>
+		</xsl:for-each>
      </table>
   </xsl:template>
 
@@ -193,11 +211,11 @@
        <td><xsl:value-of select="@name"/></td>
        <td>
          <xsl:value-of select="@changes"/>
-         (<xsl:value-of select="@changesPercent"/>)
+         (<xsl:value-of select="@changesPercent"/>%)
        </td>
        <td>
          <xsl:value-of select="@lines"/> 
-         (<xsl:value-of select="@linesPercent"/>)
+         (<xsl:value-of select="@linesPercent"/>%)
        </td>
        <td><xsl:value-of select="@linesPerChange"/></td>
      </tr>
