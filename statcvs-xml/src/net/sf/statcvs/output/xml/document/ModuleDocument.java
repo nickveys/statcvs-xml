@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: ModuleDocument.java,v $ 
-	Created on $Date: 2003-07-24 01:14:22 $ 
+	Created on $Date: 2003-09-01 15:53:06 $ 
 */
 package net.sf.statcvs.output.xml.document;
 
@@ -71,15 +71,17 @@ public class ModuleDocument extends StatCvsDocument {
 		public GeneralReport() {
 			super(I18n.tr("General statistics for {0}",directory.getPath()));
 			CvsContent content = ModuleDocument.this.content;
-			addContent(new PeriodElement(I18n.tr("Summary Period"),
+			ElementContainer ec = new ElementContainer("generalinfo");
+			addContent(ec);
+			ec.addContent(new PeriodElement(I18n.tr("Summary Period"),
 								   content.getFirstDate(), content.getLastDate()));
-			addContent(new PeriodElement(I18n.tr("Generated"),
+			ec.addContent(new PeriodElement(I18n.tr("Generated"),
 								   DateUtils.currentDate()));
 			
 			if (Settings.getWebRepository() != null) {
 				WebRepositoryIntegration rep = Settings.getWebRepository();
 				String text = I18n.tr("Browse with {0}", rep.getName());
-				addContent(new LinkElement(rep.getDirectoryUrl(directory), text));
+				ec.addContent(new LinkElement(rep.getDirectoryUrl(directory), text));
 			}
 		}
 	}

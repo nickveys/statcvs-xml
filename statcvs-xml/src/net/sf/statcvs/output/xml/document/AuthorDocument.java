@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     
 	$RCSfile: AuthorDocument.java,v $ 
-	Created on $Date: 2003-07-06 12:30:23 $ 
+	Created on $Date: 2003-09-01 15:53:06 $ 
 */
 package net.sf.statcvs.output.xml.document;
 
@@ -30,6 +30,7 @@ import net.sf.statcvs.model.RevisionIteratorSummary;
 import net.sf.statcvs.output.xml.CvsCharts;
 import net.sf.statcvs.output.xml.chart.AbstractChart;
 import net.sf.statcvs.output.xml.element.ChartElement;
+import net.sf.statcvs.output.xml.element.ElementContainer;
 import net.sf.statcvs.output.xml.element.ReportElement;
 import net.sf.statcvs.output.xml.element.ValueElement;
 import net.sf.statcvs.output.xml.report.CommitLogReport;
@@ -92,13 +93,14 @@ public class AuthorDocument extends StatCvsDocument {
 			long userLineCount = summary.getLineValue();
 
 			double percent = (double)userChangeCount * 100 / totalChangeCount;
-			
-			addContent
+			ElementContainer ec = new ElementContainer("generalinfo");
+			addContent(ec);
+			ec.addContent
 				(new ValueElement("totalChanges", userChangeCount, percent,
 					  I18n.tr("Total changes")));
 			percent = (double)userLineCount * 100 / totalLineCount;
 			
-			addContent
+			ec.addContent
 				(new ValueElement("loc", userLineCount, percent, 
 					  I18n.tr("Lines of code")));
 		}
