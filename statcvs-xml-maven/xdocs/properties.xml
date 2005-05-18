@@ -96,6 +96,40 @@
             not use the history feature when setting a start date.
           </td>
         </tr>
+        <tr>
+          <td>statcvs.parsePOM</td>
+          <td>true</td>
+          <td>
+			Default is true. 
+          </td>
+        </tr>
+        <tr>
+          <td>statcvs.authorPictures</td>
+          <td>true</td>
+          <td>
+			Default is false. 
+          </td>
+        </tr>
+        <tr>
+          <td>statcvs.renderer</td>
+          <td>true</td>
+          <td>
+          </td>
+        </tr>
+        <tr>
+          <td>statcvs.outputdir</td>
+          <td>true</td>
+          <td>
+			Default is statcvs. 
+          </td>
+        </tr>
+        <tr>
+          <td>statcvs.repository</td>
+          <td>true</td>
+          <td>
+			Default is ${basedir}. 
+          </td>
+        </tr>
      </table>
     </section>
   </body>

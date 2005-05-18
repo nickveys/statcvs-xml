@@ -19,12 +19,11 @@
  -->
 
 <project>
-<!--  <extend>${basedir}/../project.xml</extend> -->
-<pomVersion>3</pomVersion>
+  <pomVersion>3</pomVersion>
   <id>maven-statcvs-plugin</id>
   <groupId>statcvs</groupId>
   <name>Maven StatCvs Plugin</name>
-  <currentVersion>2.6</currentVersion>
+  <currentVersion>2.7-SNAPSHOT</currentVersion>
   <description/>
   <shortDescription>Provides CVS statistics</shortDescription>
   <logo>/images/statcvslogo.png</logo>
@@ -79,6 +78,15 @@
     </version>
   </versions> 
 
+  <mailingLists>
+      <mailingList>
+        <name>StatCVS-XML development list</name>
+        <subscribe>https://lists.berlios.de/mailman/listinfo/statcvs-xml-devel</subscribe>
+        <unsubscribe>https://lists.berlios.de/mailman/listinfo/statcvs-xml-devel</unsubscribe>
+        <archive>https://lists.berlios.de/pipermail/statcvs-xml-devel/</archive>
+      </mailingList>
+  </mailingLists>
+
   <developers>
     <developer>
       <name>dIon Gillard</name>
@@ -113,8 +121,10 @@
       <name>Tammo van Lessen</name>
       <id>vanto</id>
       <roles>
-      <role>Developer</role>
+		<role>Developer</role>
       </roles>
+      <url>http://taval.de</url>
+      <timezone>+2</timezone>
     </developer>
     <developer>
       <name>Steffen Pingel</name>
@@ -122,6 +132,8 @@
       <roles>
         <role>Developer</role>
       </roles>
+      <url>http://steffenpingel.de</url>
+      <timezone>+2</timezone>
     </developer>
   </developers>
 
@@ -129,7 +141,7 @@
     <dependency>
       <groupId>statcvs</groupId>
       <artifactId>statcvs-xml</artifactId>
-      <version>0.9.5</version>
+      <version>0.9.6-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>jdom</groupId>

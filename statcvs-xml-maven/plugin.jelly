@@ -248,7 +248,7 @@
 	  <j:if test="${statcvs.parsePOM}">
 		<ant:arg line="-maven"/> 
 	  </j:if>
-	  <j:if test="!${statcvs.authorPictures}">
+	  <j:if test="!${authorPictures}">
 		<ant:arg line="-no-images"/> 
 	  </j:if>
 	  <ant:classpath>

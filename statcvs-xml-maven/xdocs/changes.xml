@@ -28,10 +28,23 @@
   </properties>
 
   <body>
+	<release version="2.7" date="2005-05-??">
+      <action dev="squig" type="update">
+		The properties documentation has been updated.
+      </action>
+      <action dev="squig" type="update">
+		The dependency on StatCvs-XML has been updated to version
+		0.9.6.
+      </action>
+    </release>
 	<release version="2.6" date="2005-02-21">
       <action dev="squig" type="add">
 		Two new properties have been added to include author pictures
 		and to lookup authors' fullnames in the maven POM.
+      </action>
+      <action dev="squig" type="update">
+		The dependency on StatCvs-XML has been updated to version
+		0.9.5.
       </action>
     </release>
 	<release version="2.5" date="2004-08-06">
