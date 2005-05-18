@@ -58,6 +58,15 @@ public class CvsFile implements Comparable {
 	}
 
 	/**
+	 * Returns a list of authors that have commited at least one revision of the file.
+	 * @return a list of authors
+	 */
+	public Set getAuthors()
+	{
+		return authors;
+	}
+
+	/**
 	 * Returns the full filename.
 	 * @return the full filename
 	 */
@@ -179,10 +188,10 @@ public class CvsFile implements Comparable {
 	 * @param lines the number of lines of the new file
 	 */
 	public CvsRevision addInitialRevision(String revisionNumber, Author author,
-									Date date, String comment, int lines) {
+									Date date, String comment, int lines, SortedSet symbolicNames) {
 		CvsRevision result = new CvsRevision(this, revisionNumber,
 				CvsRevision.TYPE_CREATION, author, date, comment,
-				lines, lines, 0);
+				lines, lines, 0, symbolicNames);
 		addRevision(result);
 		return result;
 	}
@@ -199,10 +208,10 @@ public class CvsFile implements Comparable {
 	 */
 	public CvsRevision addChangeRevision(String revisionNumber, Author author,
 								  Date date, String comment, int lines,
-								  int linesDelta, int replacedLines) {
+								  int linesDelta, int replacedLines, SortedSet symbolicNames) {
 		CvsRevision result = new CvsRevision(this, revisionNumber,
 				CvsRevision.TYPE_CHANGE, author, date, comment,
-				lines, linesDelta, replacedLines);
+				lines, linesDelta, replacedLines, symbolicNames);
 		addRevision(result);
 		return result;
 	}
@@ -216,10 +225,10 @@ public class CvsFile implements Comparable {
 	 * @param lines the number of lines in the file before it was deleted
 	 */
 	public CvsRevision addDeletionRevision(String revisionNumber, Author author,
-									Date date, String comment, int lines) {
+									Date date, String comment, int lines, SortedSet symbolicNames) {
 		CvsRevision result = new CvsRevision(this, revisionNumber,
 				CvsRevision.TYPE_DELETION, author, date, comment,
-				0, -lines, 0);
+				0, -lines, 0, symbolicNames);
 		addRevision(result);
 		return result;
 	}
@@ -232,10 +241,10 @@ public class CvsFile implements Comparable {
 	 * @param date the begin of the log
 	 * @param lines the number of lines in the file at that time
 	 */
-	public CvsRevision addBeginOfLogRevision(Date date, int lines) {
+	public CvsRevision addBeginOfLogRevision(Date date, int lines, SortedSet symbolicNames) {
 		CvsRevision result = new CvsRevision(this, "0.0",
 				CvsRevision.TYPE_BEGIN_OF_LOG, null, date, null,
-				lines, 0, 0);
+				lines, 0, 0, symbolicNames);
 		addRevision(result);
 		return result;
 	}

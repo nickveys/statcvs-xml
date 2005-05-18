@@ -38,11 +38,18 @@ import net.sf.statcvs.model.Directory;
 public class CvswebIntegration implements WebRepositoryIntegration {
 	private String baseURL;
 	private Set atticFileNames = new HashSet();
-
+	private String postfix;
+	
 	/**
 	 * @param baseURL base URL of the cvsweb installation
 	 */
 	public CvswebIntegration(String baseURL) {
+		int i = baseURL.indexOf("?");
+		if (i != -1) {
+			this.postfix = baseURL.substring(i + 1);
+			baseURL = baseURL.substring(0, i);		  
+		}
+
 		if (baseURL.endsWith("/")) {
 			this.baseURL = baseURL.substring(0, baseURL.length() - 1);
 		} else {
@@ -64,31 +71,43 @@ public class CvswebIntegration implements WebRepositoryIntegration {
 		return baseURL + "/" + directory.getPath();
 	}
 
+	private String getFileUrl(CvsFile file, String parameter) {
+		String filename;
+		if (isInAttic(file)) {
+			String path = file.getDirectory().getPath();
+			filename = "/" + path + "Attic/" + file.getFilename();
+
+		} else {
+			filename = "/" + file.getFilenameWithPath();
+		}
+		
+		String append = parameter;
+		if (this.postfix != null) {
+			append += (append.length() > 0) ? "&" + this.postfix : "?" + this.postfix;
+		}
+		return this.baseURL + filename + append;
+	}
+
 	/**
 	 * @see net.sf.statcvs.output.WebRepositoryIntegration#getFileHistoryUrl
 	 */
 	public String getFileHistoryUrl(CvsFile file) {
-		if (isInAttic(file)) {
-			String path = file.getDirectory().getPath();
-			String filename = file.getFilename();
-			return baseURL + "/" + path + "Attic/" + filename;
-		}
-		return this.baseURL + "/" + file.getFilenameWithPath();
+		return getFileUrl(file, "");
 	}
 
 	/**
 	 * @see net.sf.statcvs.output.WebRepositoryIntegration#getFileViewUrl(CvsFile)
 	 */
 	public String getFileViewUrl(CvsFile file) {
-		return getFileHistoryUrl(file) + "?rev=HEAD&content-type=text/vnd.viewcvs-markup";
+		return getFileUrl(file, "?rev=HEAD&content-type=text/vnd.viewcvs-markup");
 	}
 
 	/**
 	 * @see net.sf.statcvs.output.WebRepositoryIntegration#getFileViewUrl(CvsFile)
 	 */
 	public String getFileViewUrl(CvsRevision revision) {
-		return getFileHistoryUrl(revision.getFile()) + "?rev="
-				+ revision.getRevisionNumber() + "&content-type=text/vnd.viewcvs-markup";
+		return getFileUrl(revision.getFile(), "?rev="
+				+ revision.getRevisionNumber() + "&content-type=text/vnd.viewcvs-markup");
 	}
 
 	/**
@@ -98,10 +117,10 @@ public class CvswebIntegration implements WebRepositoryIntegration {
 		if (!oldRevision.getFile().equals(newRevision.getFile())) {
 			throw new IllegalArgumentException("revisions must be of the same file");
 		}
-		return getFileHistoryUrl(oldRevision.getFile())
-				+ ".diff?r1=" + oldRevision.getRevisionNumber()
+		return getFileUrl(oldRevision.getFile(),
+				".diff?r1=" + oldRevision.getRevisionNumber()
 				+ "&r2=" + newRevision.getRevisionNumber()
-				+ "&f=h";
+				+ "&f=h");
 	}
 	
 	/**

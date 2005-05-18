@@ -22,10 +22,10 @@
 */
 package net.sf.statcvs.input;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -46,9 +46,9 @@ import net.sf.statcvs.model.CvsRevision;
 public class CommitListBuilder {
 	private static final int MAX_TIME_BETWEEN_CHANGES_MILLISECONDS = 300000;
 
-	private SortedSet revisions;
+	private Iterator revisions;
 	private Map currentCommits = new HashMap();
-	private List commits = new ArrayList();
+	private List commits;
 
 	/**
 	 * Creates a new instance using the given set of {@link CvsRevision}s.
@@ -57,6 +57,11 @@ public class CommitListBuilder {
 	 * @param revisions a set of {@link CvsRevision}s
 	 */
 	public CommitListBuilder(SortedSet revisions) {
+		this(revisions.iterator());
+	}
+	
+	public CommitListBuilder(Iterator revisions)
+	{
 		this.revisions = revisions;
 	}
 	
@@ -67,9 +72,13 @@ public class CommitListBuilder {
 	 * @return a new list of {@link Commit} objects
 	 */
 	public List createCommitList() {
-		Iterator it = revisions.iterator();
-		while (it.hasNext()) {
-			processRevision((CvsRevision) it.next());
+		if (commits != null) {
+			return commits;
+		}
+		
+		commits = new LinkedList();
+		while (revisions.hasNext()) {
+			processRevision((CvsRevision)revisions.next());
 		}
 		return commits;
 	}

@@ -22,6 +22,7 @@
 */
 package net.sf.statcvs.input;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,12 +32,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import net.sf.statcvs.model.Author;
 import net.sf.statcvs.model.CvsContent;
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.Directory;
+import net.sf.statcvs.model.SymbolicName;
 import net.sf.statcvs.util.FilePatternMatcher;
 import net.sf.statcvs.util.FileUtils;
 
@@ -62,6 +65,8 @@ public class Builder implements CvsLogBuilder {
 
 	private final Map authors = new HashMap();
 	private final Map directories = new HashMap();
+    private final Map symbolicNames = new HashMap(); 
+    
 	private final List fileBuilders = new ArrayList();
 	private final Set atticFileNames = new HashSet();
 
@@ -103,12 +108,15 @@ public class Builder implements CvsLogBuilder {
 	 * @param filename the file's name with path, for example "path/file.txt"
 	 * @param isBinary <tt>true</tt> if it's a binary file
 	 * @param isInAttic <tt>true</tt> if the file is dead on the main branch
+     * @param revBySymnames maps revision (string) by symbolic name (string)
 	 */
-	public void buildFile(String filename, boolean isBinary, boolean isInAttic) {
+	public void buildFile(String filename, boolean isBinary, 
+                           boolean isInAttic, Map revBySymnames) {
 		if (currentFileBuilder != null) {
 			fileBuilders.add(currentFileBuilder);
 		}
-		currentFileBuilder = new FileBuilder(this, filename, isBinary);
+		currentFileBuilder = new FileBuilder(this, filename, isBinary, 
+                                             revBySymnames);
 		if (isInAttic) {
 			atticFileNames.add(filename);
 		}
@@ -130,6 +138,7 @@ public class Builder implements CvsLogBuilder {
 	/**
 	 * Returns a CvsContent object of all files.
 	 * 
+	 * @param filesHaveInitialRevision set to true if files in working directory all have 1.1 revision; otherwise files are expected to match the latest revision
 	 * @return CvsContent a CvsContent object
 	 * @throws EmptyRepositoryException if no adequate files were found in the
 	 * log.
@@ -164,6 +173,8 @@ public class Builder implements CvsLogBuilder {
 		SortedSet revisions = result.getRevisions();
 		List commits = new CommitListBuilder(revisions).createCommitList();
 		result.setCommits(commits);
+
+		result.setSymbolicNames(new TreeSet(symbolicNames.values()));
 
 		return result;
 	}
@@ -209,6 +220,28 @@ public class Builder implements CvsLogBuilder {
 		return getDirectoryForPath(filename.substring(0, lastSlash + 1));
 	}
 	
+    /**
+     * Returns the {@link SymbolicName} with the given name or creates it
+     * if it does not yet exist.
+     * 
+     * @param name the symbolic name's name
+     * @return the corresponding symbolic name object
+     */
+    public SymbolicName getSymbolicName(String name)
+    {
+        SymbolicName sym = (SymbolicName)symbolicNames.get(name);
+        
+        if (sym != null) {
+            return sym;
+        } 
+        else {
+            sym = new SymbolicName(name);
+            symbolicNames.put(name, sym);
+            
+            return sym;            
+        }
+    }
+    
 	public int getLOC(String filename) throws NoLineCountException {
 		if (repositoryFileManager == null) {
 			throw new NoLineCountException("no RepositoryFileManager");
@@ -216,6 +249,15 @@ public class Builder implements CvsLogBuilder {
 		return repositoryFileManager.getLinesOfCode(filename);
 	}
 
+	/**
+	 * @see RepositoryFilemanager.getRevision(String)
+	 */
+	public String getRevision(String filename) throws IOException {
+		if (repositoryFileManager == null) {
+			throw new IOException("no RepositoryFileManager");
+		}
+		return repositoryFileManager.getRevision(filename);
+	}
 	
 	/**
 	 * Matches a filename against the include and exclude patterns. If no

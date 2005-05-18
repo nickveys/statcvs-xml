@@ -16,10 +16,15 @@
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+    
+	$RCSfile$ 
+	Created on $Date$ 
 */
 package net.sf.statcvs.model;
 
 import java.util.Date;
+import java.util.Iterator;
+import java.util.SortedSet;
 
 /**
  * One revision of a {@link CvsFile}. That can be an initial revision
@@ -74,6 +79,8 @@ public class CvsRevision implements Comparable {
 	private final int linesReplaced;
 	private final int linesDelta;
 
+	private SortedSet symbolicNames;
+
 	/**
 	 * Creates a new revision of a file with the
 	 * specified revision number. Should not be called directly. Instead,
@@ -88,9 +95,10 @@ public class CvsRevision implements Comparable {
 	 * @param lines number of lines; 0 for deletions
 	 * @param linesDelta by how much did the number of lines change, compared to the previous revision?
 	 * @param linesReplaced How many lines were removed and replaced by other lines, without the delta changing?
+	 * @param symbolicNames list of symbolic names for this revision or null if this revision has no symbolic names	 
  	 */
 	CvsRevision(CvsFile file, String revisionNumber, int type,
-			Author author, Date date, String comment, int lines, int linesDelta, int linesReplaced) {
+			Author author, Date date, String comment, int lines, int linesDelta, int linesReplaced, SortedSet symbolicNames) {
 		this.file = file;
 		this.revisionNumber = revisionNumber;
 		this.type = type;
@@ -100,9 +108,18 @@ public class CvsRevision implements Comparable {
 		this.lines = lines;
 		this.linesDelta = linesDelta;
 		this.linesReplaced = linesReplaced;
+		this.symbolicNames = symbolicNames;
+
 		if (author != null) {
 			author.addRevision(this);
 		}
+        
+        if (symbolicNames != null) {
+            Iterator it = symbolicNames.iterator();
+            while (it.hasNext()) {
+                ((SymbolicName)it.next()).addRevision(this);
+            }
+        }
 	}
 
 	/**
@@ -253,6 +270,18 @@ public class CvsRevision implements Comparable {
 	 */
 	public CvsRevision getPreviousRevision() {
 		return file.getPreviousRevision(this);
+	}
+	
+	/**
+	 * Returns a list of {@link SymbolicName}s of this revision or null if
+	 * the revision has no symbolic names. The list is ordered from 
+	 * latest to oldest.
+	 *
+	 * @return list of symbolic names 
+	 */
+	public SortedSet getSymbolicNames()
+	{
+		return symbolicNames;		
 	}
 	
 	/**

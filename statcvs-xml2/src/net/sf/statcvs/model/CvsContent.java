@@ -34,6 +34,7 @@ import java.util.TreeSet;
  * TODO: Change getCommits to SortedSet
  * 
  * @author Manuel Schulze
+ * @author Tammo van Lessen
  * @author Richard Cyganiak <richard@cyganiak.de>
  * @version $Id$
  */
@@ -45,6 +46,7 @@ public class CvsContent {
 	private Date firstDate = null;
 	private Date lastDate = null;
 	private List commits;
+	private SortedSet symbolicNames = new TreeSet();
 
 	/**
 	 * Adds one file to the repository.
@@ -60,6 +62,7 @@ public class CvsContent {
 				authors.add(revision.getAuthor());
 			}
 			adjustStartAndEndDate(revision.getDate());
+            
 		}
 		if (root == null) {
 			initRoot();
@@ -164,6 +167,24 @@ public class CvsContent {
 		return root;
 	}
 
+	/**
+	 * Sets the list of symbolic names contained in this CvsContent.
+	 * @param symbolicNames
+	 */
+	public void setSymbolicNames(SortedSet symbolicNames)
+	{
+		this.symbolicNames = symbolicNames;
+	}
+	
+	/**
+	 * Returns a list of {@link SymbolicName}s,
+	 * ordered from latest to oldest. 
+	 */
+	public SortedSet getSymbolicNames()
+	{
+		return symbolicNames;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

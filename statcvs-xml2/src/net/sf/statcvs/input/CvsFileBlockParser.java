@@ -24,6 +24,8 @@
 package net.sf.statcvs.input;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import net.sf.statcvs.util.CvsLogUtils;
@@ -38,6 +40,7 @@ import net.sf.statcvs.util.LookaheadReader;
  * 
  * @author Anja Jentzsch
  * @author Richard Cyganiak
+ * @author Tammo van Lessen
  * @version $Id$
  */
 public class CvsFileBlockParser {
@@ -46,6 +49,7 @@ public class CvsFileBlockParser {
 	private CvsLogBuilder builder;
 	private boolean isLogWithoutSymbolicNames = false;
 	private boolean isFirstFile;
+    private Map revBySymNames = new HashMap();
 
 	/**
 	 * Default Constructor CvsFileBlockParser.
@@ -89,7 +93,7 @@ public class CvsFileBlockParser {
 		if (this.isFirstFile) {
 			this.builder.buildModule(CvsLogUtils.getModuleName(rcsFile, workingFile));
 		}
-		this.builder.buildFile(workingFile, isBinary, isInAttic);
+		this.builder.buildFile(workingFile, isBinary, isInAttic, this.revBySymNames);
 		if (!CvsRevisionParser.FILE_DELIMITER.equals(this.logReader.getCurrentLine())) {
 			new CvsRevisionParser(this.logReader, this.builder).parse();
 		}
@@ -129,15 +133,18 @@ public class CvsFileBlockParser {
 			return;
 		}
 		String line;
-		while (true) {
+		if (this.logReader.getCurrentLine().equals("symbolic names:")) {
 			line = this.logReader.nextLine();
-			if (line.startsWith("keyword substitution: ")) {
-				return;
+		} else {
+			this.isLogWithoutSymbolicNames = true;
+			line = this.logReader.getCurrentLine();
 			}
-			//TODO: Do something with tagName and tagRevision
-//			int firstColon = line.indexOf(':');
-//			String tagName = line.substring(1, firstColon);
-//			String tagRevision = line.substring(firstColon + 2);			
+		while (line != null && !line.startsWith("keyword substitution: ")) {
+			int firstColon = line.indexOf(':');
+			String tagName = line.substring(1, firstColon);
+			String tagRevision = line.substring(firstColon + 2);
+            this.revBySymNames.put(tagName, tagRevision);
+			line = this.logReader.nextLine();
 		}
 	}
 
