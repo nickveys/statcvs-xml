@@ -225,6 +225,7 @@ public class FileBuilder {
 			if (!finalRevisionIsDead()) {
 				logger.warning(e.getMessage());
 			}
+
 			return approximateFinalLOC();
 		}
 	}
@@ -307,8 +308,7 @@ public class FileBuilder {
 	 * @return <tt>true</tt> if this file should not be processed
 	 */
 	private boolean isFilteredFile() {
-		return name.startsWith("CVSROOT")
-				|| !builder.matchesPatterns(name);
+		return !this.builder.matchesPatterns(this.name);
 	}
 
 	/**
