@@ -1,0 +1,17 @@
+Updating the StatCVS Branch
+===========================
+
+1. Checkout StatCVS:
+
+ cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/statcvs co -P -kk statcvs
+2. Run import-statcvs from the created directory:
+
+ cd statcvs
+ ~/projects/statcvs-xml/statcvs-xml2/import-statcvs.sh
+
+3. Look at http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml2/src/net/sf/statcvs/input/
+   to determine the previous import point and merge the differences into your
+   statcvs-xml working copy:
+
+ cd ~/projects/statcvs-xml/statcvs-xml2
+ cvs up -j<previous tag> -j<current tag>
