@@ -636,7 +636,16 @@ public class ReportSettings extends Hashtable {
 			return defaultPic;
 		}
     }
-    
+
+    /**
+     * @param author
+     * @param string
+     * @return
+     */
+    public String getPictureExtension(String defaultExtension) {
+		return getString("pictureExtension", defaultExtension);
+    }
+
     public void setId(String id)
     {
     	put("id", (defaults != null && defaults.getId() != null) 

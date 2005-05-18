@@ -50,6 +50,7 @@ public class AuthorDetailsReport {
 		Logger.getLogger("de.berlios.statcvs.xml.report.AuthorDetailsReport");
 	//private static final String DEFAULT_PIC = "resources" + File.separator + "dummy.png";
 	private static final String DEFAULT_PIC = "resources/dummy.png";
+	private static final String DEFAULT_EXT = "png";
 	
 	public static Report generate(CvsContent content, ReportSettings settings) 
 	{
@@ -97,7 +98,7 @@ public class AuthorDetailsReport {
 					// add a table with image and details
 					TableElement table = new TableElement(settings, null);
 
-					calculatePictureFilename(settings.getAuthorPic(author, DEFAULT_PIC));
+					calculatePictureFilename(settings, author);
 					table.addRow().addImage("authorPicture", pictureFilename)
 					  			  .addContent(text);
 					
@@ -114,29 +115,36 @@ public class AuthorDetailsReport {
 			
 		}
 		
-		private void calculatePictureFilename(String source)
+		private void calculatePictureFilename(ReportSettings settings, Author author)
 		{
+			String source = settings.getAuthorPic(author, DEFAULT_PIC);
+			
 			try {
 				pictureURL = new URL(source);
-				pictureFilename = StringHelper.lastToken(pictureURL.getPath(), "/");
-				if (pictureFilename.length() == 0) {
-					throw new MalformedURLException();
-				}
+				pictureFilename = calculatePictureFilename(source, settings, author);
 				return;
 			} 
-			catch (MalformedURLException e) {
-				// no url, try interpretation as a filename 
-			}
+			catch (MalformedURLException e) { /* try interpretation as a filename */ }
 			
 			File file = new File(source);
-			
-			pictureSource = source;
-			if (!file.exists() && !source.equals(DEFAULT_PIC)) {
+			if (file.exists() || source.equals(DEFAULT_PIC)) {
+				pictureSource = source;
+				pictureFilename = calculatePictureFilename(pictureSource, settings, author);
+			}
+			else {
 				logger.info(I18n.tr("Picture file {0} not found, using dummy instead.", source));
 				pictureSource = DEFAULT_PIC;
+				pictureFilename = FileUtils.getFilenameWithoutPath(pictureSource);
 			}
-			
-			pictureFilename = FileUtils.getFilenameWithoutPath(pictureSource);
+		}
+		
+		private String calculatePictureFilename(String filename, ReportSettings settings, Author author) 
+		{
+			String extension = StringHelper.lastToken(filename, "."); 
+			if (extension.length() == 0 || extension.indexOf("?") != -1) {
+				extension = settings.getPictureExtension(DEFAULT_EXT);
+			}
+			return "image-" + author.getName() + "." + extension;
 		}
 		
 		/**

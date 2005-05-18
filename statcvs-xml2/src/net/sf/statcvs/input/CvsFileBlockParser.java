@@ -144,6 +144,7 @@ public class CvsFileBlockParser {
 			String tagName = line.substring(1, firstColon);
 			String tagRevision = line.substring(firstColon + 2);
             this.revBySymNames.put(tagName, tagRevision);
+            line = this.logReader.nextLine();
 		}
 	}
 

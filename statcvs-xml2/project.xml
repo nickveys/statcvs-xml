@@ -4,7 +4,7 @@
   <name>StatCVS-XML</name>
   <id>statcvs-xml</id>
   <groupId>statcvs</groupId>
-  <currentVersion>0.9.5</currentVersion>
+  <currentVersion>0.9.6-SNAPSHOT</currentVersion>
   <organization>
     <name>StatCvs-XML Team</name>
     <url>http://statcvs-xml.berlios.de/</url>
@@ -67,7 +67,7 @@
 
   <mailingLists>
       <mailingList>
-        <name>StatCVS XML development list</name>
+        <name>StatCVS-XML development list</name>
         <subscribe>https://lists.berlios.de/mailman/listinfo/statcvs-xml-devel</subscribe>
         <unsubscribe>https://lists.berlios.de/mailman/listinfo/statcvs-xml-devel</unsubscribe>
         <archive>https://lists.berlios.de/pipermail/statcvs-xml-devel/</archive>

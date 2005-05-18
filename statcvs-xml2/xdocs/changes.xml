@@ -14,6 +14,17 @@
       </ul>
     </section>
 -->
+	<release version="0.9.6" date="2005-05-??">
+      <action dev="squig" type="fix">
+		A pictureExtension setting has been added in order to
+		correctly support picture URLs. Fixes #4002.
+      </action>
+      <action dev="squig" type="update">
+		The distributed jar file is now created by the Maven javaapp
+		plugin, which yields a much better performance than the
+		previously used uberjar.
+      </action>
+	</release>
 	<release version="0.9.5" date="2005-03-09">
       <action dev="vanto" type="fix">
 		Convert line breaks in commit comments to html line breaks.
@@ -36,12 +47,12 @@
 		Upgrade to JFreeChart 0.9.20.
       </action>
       <action dev="vanto" type="update">
-		Bug #2011 Patch from Felipe Hoffa (fix for parsing new cvs log date format)
-		has been applied. Thanks.
+		Bug #2011 Patch from Felipe Hoffa (fix for parsing new cvs log
+		date format) has been applied. Thanks.
       </action>
       <action dev="vanto" type="fix">
-		Bug #1973 (NullPointerException in Author Of The Month Report) has been 
-		fixed.
+		Bug #1973 (NullPointerException in Author Of The Month Report)
+		has been fixed.
       </action>
 	  <action dev="vanto" type="add">
 		PHPRenderer has been added.
