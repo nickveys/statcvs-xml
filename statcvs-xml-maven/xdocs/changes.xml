@@ -28,7 +28,15 @@
   </properties>
 
   <body>
-	<release version="2.7" date="2005-05-??">
+	<release version="2.7" date="2005-05-19">
+      <action dev="squig" type="add">
+		A goal statcvs:generate-html has been added to create html
+		output. This goal is now also called by the statcvs goal
+		instead of statcvs:genererate-xdoc. The statcvs:report goal
+		can now be used to generate xdoc output. See <a
+		href="http://statcvs-xml.berlios.de/maven-plugin/goals.html">goals
+		documentation</a> for details.
+      </action>
       <action dev="squig" type="update">
 		The properties documentation has been updated.
       </action>

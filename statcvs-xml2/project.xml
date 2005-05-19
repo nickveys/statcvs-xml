@@ -4,7 +4,7 @@
   <name>StatCVS-XML</name>
   <id>statcvs-xml</id>
   <groupId>statcvs</groupId>
-  <currentVersion>0.9.6-SNAPSHOT</currentVersion>
+  <currentVersion>0.9.6</currentVersion>
   <organization>
     <name>StatCvs-XML Team</name>
     <url>http://statcvs-xml.berlios.de/</url>
@@ -62,6 +62,11 @@
       <id>095</id>
       <name>0.9.5</name>
       <tag>statcvs-xml-0_9_5</tag>
+    </version>
+    <version>
+      <id>096</id>
+      <name>0.9.6</name>
+      <tag>statcvs-xml-0_9_6</tag>
     </version>
   </versions>
 

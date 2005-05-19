@@ -14,7 +14,7 @@
       </ul>
     </section>
 -->
-	<release version="0.9.6" date="2005-05-??">
+	<release version="0.9.6" date="2005-05-19">
       <action dev="squig" type="add">
 		A report has been added that compares versions (i.e. tagged
 		revisions).
