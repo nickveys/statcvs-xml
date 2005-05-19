@@ -43,11 +43,10 @@ public class SymbolicNameTable {
 			return null;
 		}
 		
-		ReportElement root = new ReportElement(settings, I18n.tr("Commits%1"));
+		ReportElement root = new ReportElement(settings, I18n.tr("Versions%1"));
 
 		IntegerMap changesMap = new IntegerMap();
 		IntegerMap linesMap = new IntegerMap();
-		IntegerMap linesAddedMap = new IntegerMap();
 
 		Iterator revIt = settings.getRevisionIterator(content);		
 		while (revIt.hasNext()) {
@@ -57,15 +56,13 @@ public class SymbolicNameTable {
 				for (Iterator it = symbolicNames.iterator(); it.hasNext();) {
 					Object group = it.next();
 					changesMap.addInt(group, 1);
-					linesMap.addInt(group, rev.getLinesDelta());
-					linesAddedMap.addInt(group, rev.getNewLines());
+					linesMap.addInt(group, rev.getLines());
 				}
 			}
 		}
 
 		TableElement table = new TableElement(settings, new String[] { 
-			I18n.tr("Tag"), I18n.tr("Revisions"), I18n.tr("Lines of Code"), 
-			I18n.tr("Added Lines of Code"), I18n.tr("Lines of Code per Change"), });
+			I18n.tr("Tag"), I18n.tr("Files"), I18n.tr("Lines of Code") });
 			
 		int maxItems = settings.getLimit();
 		Iterator it = settings.getSymbolicNameIterator(content);
@@ -75,9 +72,7 @@ public class SymbolicNameTable {
 			table.addRow()
 				.addSymbolicName(group)
 				.addInteger("revisions", changesMap.get(group))
-				.addInteger("loc", linesMap.get(group))
-				.addInteger("locAdded", linesAddedMap.get(group))
-				.addDouble("locPerRevision", (double)linesMap.get(group) / changesMap.get(group));
+				.addInteger("loc", linesMap.get(group));
 			count++;
 		}
 		root.addContent(table);
