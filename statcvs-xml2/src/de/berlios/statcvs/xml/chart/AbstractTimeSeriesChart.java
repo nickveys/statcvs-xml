@@ -94,7 +94,9 @@ public class AbstractTimeSeriesChart extends AbstractChart {
 		XYPlot xyplot = getChart().getXYPlot();
 		while (it.hasNext()) {
 			SymbolicName sn = (SymbolicName)it.next();
-			xyplot.addAnnotation(new SymbolicNameAnnotation(sn));
+			if (sn.getDate() != null) {
+				xyplot.addAnnotation(new SymbolicNameAnnotation(sn));
+			}
 		}
 	}
 
