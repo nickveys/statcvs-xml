@@ -15,6 +15,18 @@
     </section>
 -->
 	<release version="0.9.6" date="2005-05-??">
+      <action dev="squig" type="add">
+		A report has been added that compares versions (i.e. tagged
+		revisions).
+      </action>
+      <action dev="squig" type="fix">
+		A NullPointerException has been fixed that occured when a
+		document contained no report.
+      </action>
+      <action dev="squig" type="fix">
+		A NullPointerException has been fixed that occured when the
+		date of a tag could not be determined. Fixes #3699.
+      </action>
       <action dev="squig" type="fix">
 		A pictureExtension setting has been added in order to
 		correctly support picture URLs. Fixes #4002.

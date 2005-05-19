@@ -52,6 +52,10 @@
     <report class="ActivityProgressionChart" groupby="module"/>
     <report class="CommitTable" groupby="module" orderby="loc"/>
   </document>
+
+  <document  filename="version_stats" title="Version Statistics">
+    <report class="SymbolicNameTable"/>
+  </document>
     
   <document filename="commitlog" title="Commit Log">
 	<report class="MostCommonCommentsTable" limit="5"/>

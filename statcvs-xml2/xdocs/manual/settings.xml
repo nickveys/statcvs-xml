@@ -71,7 +71,15 @@
          <td></td>
          <td></td>
          <td>Specifies a mapping between login names and real
-         names.See below for a <a href="#Authors">detailed 
+         names. See below for a <a href="#Authors">detailed 
+         description.</a></td> 
+      </tr>
+      <tr>
+         <td>authorPics</td>
+         <td></td>
+         <td></td>
+         <td>Specifies a mapping between login names and picture
+         filenames. See below for a <a href="#Author_Pictures">detailed 
          description.</a></td> 
       </tr>
       <tr>
@@ -106,6 +114,13 @@
          <td>Specifies the filename of the cvs log file.</td>
       </tr>
       <tr>
+         <td>maven</td>
+         <td>-maven</td>
+         <td></td>
+         <td>Specifies the path of a Maven project.xml that is used
+         to map author ids to names.</td>
+      </tr>
+      <tr>
          <td>modules</td>
          <td></td>
          <td></td>
@@ -120,6 +135,13 @@
          <td>Specifies the target directory for the report files.</td>
       </tr>
       <tr>
+         <td>pictureExtension</td>
+         <td></td>
+         <td>png</td>
+         <td>Specifies the extension for author images that are
+         downloaded from a URL that contains a '?' character.</td>
+      </tr>
+      <tr>
          <td>renderer</td>
          <td>-renderer</td>
          <td>html</td>
@@ -127,6 +149,12 @@
          <tt>xdoc</tt> or <tt>xml</tt>. It is also possible to specify
          the full qualified name of a Java class, that is available
          from the classpath.</td>
+      </tr>
+      <tr>
+         <td>showImages</td>
+         <td>-no-images</td>
+         <td></td>
+         <td>If true, an image is displayed on each author page.</td>
       </tr>
       <tr>
          <td>suite</td>
@@ -174,6 +202,25 @@
   <vanto>Tammo van Lessen</vanto>
 </authors>
 ]]></source>
+    </subsection>
+
+    <subsection name="Author Pictures">
+
+      <p>The authorPics map can be used to display an image for each
+      author:</p>
+
+<source><![CDATA[
+<authors type="map">
+  <squig>http://steffenpingel.de/squig.png</squig>
+  <vanto>vanto.png</vanto>
+  <foo>http://steffenpingel.de/image.php?id=foo</foo>
+</authors>
+]]></source>
+
+	  <p>The value may either be a local filename or a URL. In case
+	  the value contains a '?' character the pictureExtension setting
+	  is used as the image filename extension.</p>
+
     </subsection>
 
     <subsection name="Modules">

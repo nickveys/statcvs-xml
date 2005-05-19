@@ -320,6 +320,12 @@
          <td>Prints a list of the commit comments, sorted by
          frequency.</td> 
       </tr>
+      <tr>
+         <td>SymbolicNameTable</td>
+         <td>revsisions</td>
+         <td>Prints statistics about the commits like the total lines
+         of code, lines of code per commit and so on per tag.</td> 
+      </tr>
     </table>
 
   </subsection>

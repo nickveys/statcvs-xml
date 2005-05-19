@@ -28,6 +28,7 @@ import net.sf.statcvs.model.Commit;
 import net.sf.statcvs.model.CvsFile;
 import net.sf.statcvs.model.CvsRevision;
 import net.sf.statcvs.model.Directory;
+import net.sf.statcvs.model.SymbolicName;
 import net.sf.statcvs.output.WebRepositoryIntegration;
 
 import org.jdom.CDATA;
@@ -354,6 +355,11 @@ public class TableElement extends Element
 			addContent(number);
 			return this;
         }
+
+		public RowElement addSymbolicName(SymbolicName group)
+		{
+			return addString("symbolicName", group.getName());
+		}
 		
 	}
 	

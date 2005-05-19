@@ -246,7 +246,9 @@ public class DocumentSuite {
 		String value = element.getAttributeValue("foreach");
 		if (value == null) {
 			StatCvsDocument document = createDocument(element, renderer, defaultSettings);
-			documentTitleByFilename.put(document.getFilename(), document.getTitle());
+			if (document != null) {
+				documentTitleByFilename.put(document.getFilename(), document.getTitle());
+			}
 		}
 		else if ("author".equals(value)) {
 			for (Iterator i = content.getAuthors().iterator(); i.hasNext();) {

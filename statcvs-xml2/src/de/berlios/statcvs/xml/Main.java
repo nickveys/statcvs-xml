@@ -56,7 +56,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * 
  * @author Steffen Pingel
  * @author Tammo van Lessen
- * @version $Id: Main.java,v 1.33 2004-11-10 15:33:56 squig Exp $
+ * @version $Id: Main.java,v 1.34 2005-05-19 14:40:56 squig Exp $
  */
 public class Main {
 
@@ -130,6 +130,8 @@ public class Main {
 				+ "  -renderer <class>  class can be either html, xdoc, xml or a Java class name\n"
 				+ "  -suite <file>      xml file that is used to generate the documents\n"
 				+ "  -weburl <url>      integrate with web repository installation at <url>\n"
+				+ "  -maven             read author names from Maven project.xml\n"
+				+ "  -no-images         do not display author pictures\n"
 				+ "  -verbose           print extra progress information\n"
 				+ "  -debug             print debug information\n"
 				+ "\n"
