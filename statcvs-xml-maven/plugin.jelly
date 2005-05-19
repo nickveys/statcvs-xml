@@ -128,17 +128,22 @@
   <!--==================================================================-->
   <!-- Default goal                                                     -->
   <!--==================================================================-->
-  <goal name="statcvs" prereqs="statcvs:generate"
-	description="Generate CVS statistics for the current CVS project"/>
+  <goal name="statcvs" prereqs="statcvs:fetch-log"
+	description="Generate CVS statistics for the current CVS project">
+	
+	<attainGoal name="statcvs:generate-html"/>
+  </goal>
 
   <!--==================================================================-->
   <!-- Goal to create cvs log and to generate reports                   -->
   <!--==================================================================-->
-  <goal name="statcvs:generate" prereqs="statcvs:init"
+  <goal name="statcvs:fetch-log" prereqs="statcvs:init"
 	description="Generate CVS statistics for the current CVS project">
 
-	<attainGoal name="statcvs:init-variables"/>
-	
+	<j:if test="${empty(statcvs.logfile)}">
+	  <attainGoal name="statcvs:init-variables"/>
+	</j:if>
+
     <j:choose>
       <j:when test="${maven.mode.online}">
         <ant:mkdir dir="${maven.build.dir}"/>
@@ -188,8 +193,6 @@
 		  cvsRsh="${cvs.rsh}"
 			cvsRoot="${cvs.root}"/>
 		<!-- failonerror="true"/> -->
-		
-		<attainGoal name="statcvs:generate-xdoc"/>
       </j:when>
       <j:otherwise>
         <ant:echo>StatCvs can obtain statistics in the online-mode only.</ant:echo>
@@ -198,11 +201,13 @@
   </goal>
   
   <!--==================================================================-->
-  <!-- Goal to create cvs log and to generate reports                   -->
+  <!-- Goal to create cvs log and to generate xdoc reports              -->
   <!--==================================================================-->
   <goal name="statcvs:generate-xdoc" prereqs="statcvs:init">
 
-	<attainGoal name="statcvs:init-variables"/>
+	<j:if test="${empty(statcvs.logfile)}">
+	  <attainGoal name="statcvs:init-variables"/>
+	</j:if>
 
 	<!-- create directories for documents --> 
 	<property name="maven.docs.dest" 
@@ -270,6 +275,70 @@
 	  </fileset>
 	</copy>
   </goal>
+
+  <!--==================================================================-->
+  <!-- Goal to create cvs log and to generate html reports              -->
+  <!--==================================================================-->
+  <goal name="statcvs:generate-html" prereqs="statcvs:init">
+
+	<j:if test="${empty(statcvs.logfile)}">
+	  <attainGoal name="statcvs:init-variables"/>
+	</j:if>
+
+	<!-- create directories for documents --> 
+	<property name="maven.build.dir" 
+	  value="${pom.getPluginContext('maven-xdoc-plugin').getVariable('maven.build.dir')}"/>
+	<ant:mkdir dir="${maven.build.dir}/${statcvs.outputdir.html}"/>
+	
+	<!-- run statcvs-xml -->
+	<ant:property environment="env"/>
+	<j:set var="maven_opts" value="${env.MAVEN_OPTS}"/>
+
+	<j:set var="parsePOM" value="${statcvs.parsePOM}"/>
+	<j:set var="authorPictures" value="${statcvs.authorPictures}"/>
+	<j:set var="include" value="${statcvs.include}"/>
+	<j:set var="exclude" value="${statcvs.exclude}"/>
+	<j:set var="weburl" value="${pom.repository.url}"/>
+
+	<ant:java classname="de.berlios.statcvs.xml.Main" fork="true">
+	  <j:if test="${!empty(maven_opts)}">
+	  	<!-- debug: <ant:echo message="MAVEN_OPTS is set to =
+	  ${maven_opts}"/> -->
+		<ant:jvmarg line="${maven_opts}"/>
+	  </j:if>
+	  <ant:arg line="-output-dir '${maven.build.dir}/${statcvs.outputdir.html}'"/>
+	  <ant:arg line="-title '${statcvs.title}'"/>
+	  <ant:arg line="-renderer html"/> 
+	  <j:if test="${statcvs.verbose}">
+		<ant:arg line="-verbose"/> 
+	  </j:if>
+	  <j:if test="${!empty(weburl)}">
+		<ant:arg line="-weburl '${weburl}'"/>
+	  </j:if>
+	  <j:if test="${!empty(include)}">
+		<ant:arg line="-include '${include}'"/>
+	  </j:if>
+	  <j:if test="${!empty(exclude)}">
+		<ant:arg line="-exclude '${exclude}'"/>
+	  </j:if>
+	  <ant:arg value="${statcvs.logfile}"/>
+	  <ant:arg value="${statcvs.repository}"/>
+	  <j:if test="${statcvs.parsePOM}">
+		<ant:arg line="-maven"/> 
+	  </j:if>
+	  <j:if test="!${authorPictures}">
+		<ant:arg line="-no-images"/> 
+	  </j:if>
+	  <ant:classpath>
+		<ant:pathelement location="${plugin.getDependencyPath('statcvs:statcvs-xml')}"/>
+		<ant:pathelement location="${plugin.getDependencyPath('jfreechart:jfreechart')}"/>
+		<ant:pathelement location="${plugin.getDependencyPath('jcommon:jcommon')}"/>
+		<ant:pathelement location="${plugin.getDependencyPath('jdom:jdom')}"/>
+		<ant:pathelement location="${plugin.getDependencyPath('commons-logging:commons-logging')}"/>
+		<ant:pathelement location="${plugin.getDependencyPath('commons-jexl:commons-jexl'	)}"/>
+	  </ant:classpath>
+	</ant:java>
+  </goal>
   
   <!--==================================================================-->
   <!-- Goal to register as report                                       -->
@@ -292,6 +361,6 @@
   <!--==================================================================-->
   <!-- Goal to call goal to generate report                             -->
   <!--==================================================================-->
-  <goal name="statcvs:report" prereqs="statcvs"/>
+  <goal name="statcvs:report" prereqs="statcvs:fetch-log,statcvs:generate-xdoc"/>
 
 </project>

@@ -100,34 +100,61 @@
           <td>statcvs.parsePOM</td>
           <td>true</td>
           <td>
-			Default is true. 
+			Default is true. If true, developers' names set in the POM
+			will be used instead of ids.
           </td>
         </tr>
         <tr>
           <td>statcvs.authorPictures</td>
           <td>true</td>
           <td>
-			Default is false. 
+			Default is false. If true, the author report will include
+			pictures of each developer. The image files can be
+			configured through the <code>statcvs.xml</code> file. By
+			default, if a url is set in the POM for a developer, an
+			attempt is made to download an image named
+			${url}/${id}.png, e.g. the following entry in the POM
+			causes a download attempt of <code>http://steffenpingel.de/squig.png</code>:
+
+<source><![CDATA[
+<developer>
+  <name>Steffen Pingel</name>
+  <id>squig</id>
+  <url>http://steffenpingel.de</url>
+</developer>
+]]></source>
           </td>
         </tr>
         <tr>
           <td>statcvs.renderer</td>
           <td>true</td>
           <td>
+			Default is xdoc. The renderer to use when the xdoc report
+			is generated.
           </td>
         </tr>
         <tr>
           <td>statcvs.outputdir</td>
           <td>true</td>
           <td>
-			Default is statcvs. 
+			Default is statcvs. The output directory for the xdoc
+			report.
+          </td>
+        </tr>
+        <tr>
+          <td>statcvs.outputdir.html</td>
+          <td>true</td>
+          <td>
+			Default is statcvs-html. The output directory for the html
+			report. 
           </td>
         </tr>
         <tr>
           <td>statcvs.repository</td>
           <td>true</td>
           <td>
-			Default is ${basedir}. 
+			Default is ${basedir}. This is the root directory of the
+			working copy used to fetch the cvs log.
           </td>
         </tr>
      </table>

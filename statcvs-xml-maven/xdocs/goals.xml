@@ -30,25 +30,39 @@
       <goal>
         <name>statcvs</name>
         <description>
-          Fetch cvs log using repository defined in pom and generate
-          CVS statistics for the current CVS project. You'll need to
-          run <code>maven xdoc</code> (or <code>maven site</code>) to
-          render the StatCvs reports as HTML (they are rendered as
-          XML).
+          Downloads cvs log and generates html output (see
+		  <code>statcvs:fetch-log</code> and
+		  <code>statcvs:generate-html</code>).
         </description>
       </goal>
       <goal>
-        <name>statcvs:generate</name>
+        <name>statcvs:fetch-log</name>
         <description>
-          Same as the <code>statcvs</code> goal (see above).
+		  Download cvs log using repository defined in POM.
+        </description>
+      </goal>
+      <goal>
+        <name>statcvs:generate-html</name>
+        <description>
+          Generate CVS statistics as HTML from already existant cvs
+          log file. Requires prior invokation of the
+          <code>statcvs:fetch-log</code> goal to download the log.
         </description>
       </goal>
       <goal>
         <name>statcvs:generate-xdoc</name>
         <description>
-          Only generate statistics from already existant cvs log
-          file. Requires a prior invokation of the
-          <code>statcvs</code> goal to download the log.
+          Generate CVS statistics as xdoc from already existant cvs
+          log file. Requires prior invokation of the
+          <code>statcvs:fetch-log</code> goal to download the log.
+        </description>
+      </goal>
+      <goal>
+        <name>statcvs:report</name>
+        <description>
+          Download cvs log and generate xdoc output (see
+		  <code>statcvs:fetch-log</code> and
+		  <code>statcvs:generate-xdoc</code>).
         </description>
       </goal>
     </goals>
