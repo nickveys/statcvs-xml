@@ -130,6 +130,7 @@
   </dependencies>
 
   <build>
+    <nagEmailAddress>statcvs-xml-tracker@lists.berlios.de</nagEmailAddress>
 	<sourceDirectory>src</sourceDirectory>
     <unitTestSourceDirectory>test-src</unitTestSourceDirectory>
 
