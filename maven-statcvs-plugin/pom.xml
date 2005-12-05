@@ -4,7 +4,7 @@
   <groupId>statcvs</groupId>
   <artifactId>maven-statcvs-plugin</artifactId>
   <name>Maven StatCvs Plugin</name>
-  <version>2.6</version>
+  <version>3.0</version>
   <description>A plugin to generate statistics about CVS usage using StatCvs-XML.</description>
   <packaging>maven-plugin</packaging>
   <url>http://statcvs-xml.berlios.de/maven-plugin/</url>
