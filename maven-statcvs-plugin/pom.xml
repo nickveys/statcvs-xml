@@ -1,0 +1,143 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>statcvs</groupId>
+  <artifactId>maven-statcvs-plugin</artifactId>
+  <name>Maven StatCvs Plugin</name>
+  <version>2.6</version>
+  <description>A plugin to generate statistics about CVS usage using StatCvs-XML.</description>
+  <packaging>maven-plugin</packaging>
+  <url>http://statcvs-xml.berlios.de/maven-plugin/</url>
+  <issueManagement>
+    <url>http://developer.berlios.de/tracker/?group_id=872</url>
+  </issueManagement>
+  <developers>
+    <developer>
+      <id>dion</id>
+      <name>dIon Gillard</name>
+      <email>dion@multitask.com.au</email>
+      <organization>Multitask Consulting</organization>
+      <roles>
+        <role>Documentation</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>vmassol</id>
+      <name>Vincent Massol</name>
+      <email>vmassol@pivolis.com</email>
+      <organization>Pivolis</organization>
+      <roles>
+        <role>Creator</role>
+        <role>Java Developer</role>
+        <role>Release Manager</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>evenisse</id>
+      <name>Emmanuel Venisse</name>
+      <email>emmanuel@venisse.net</email>
+      <organization></organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>vanto</id>
+      <name>Tammo van Lessen</name>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>squig</id>
+      <name>Steffen Pingel</name>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+  </developers>
+  <dependencies>
+    <dependency>
+      <groupId>statcvs</groupId>
+      <artifactId>statcvs-xml</artifactId>
+      <version>0.9.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <reports>
+    <plugins>
+      <plugin>
+        <groupId>maven</groupId>
+        <artifactId>changes</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <goals>
+          <goal>
+            <id>report</id>
+          </goal>
+        </goals>
+      </plugin>
+    </plugins>
+  </reports>
+  <scm>
+    <connection>scm:cvs:pserver:anonymous@cvs.berlios.de:/cvsroot/statcvs-xml:statcvs-xml-maven</connection>
+    <url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml-maven/</url>
+  </scm>
+  <build>
+    <resources>
+      <resource>
+        <targetPath>plugin-resources</targetPath>
+        <directory>${basedir}/src/plugin-resources</directory>
+      </resource>
+      <resource>
+        <directory>${basedir}</directory>
+        <includes>
+          <include>plugin.jelly</include>
+          <include>plugin.properties</include>
+          <include>project.properties</include>
+          <include>project.xml</include>
+        </includes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>**/*~</exclude>
+            <exclude>**/#*#</exclude>
+            <exclude>**/.#*</exclude>
+            <exclude>**/%*%</exclude>
+            <exclude>**/._*</exclude>
+            <exclude>**/CVS</exclude>
+            <exclude>**/CVS/**</exclude>
+            <exclude>**/.cvsignore</exclude>
+            <exclude>**/SCCS</exclude>
+            <exclude>**/SCCS/**</exclude>
+            <exclude>**/vssver.scc</exclude>
+            <exclude>**/.svn</exclude>
+            <exclude>**/.svn/**</exclude>
+            <exclude>**/.DS_Store</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <distributionManagement>
+    <site>
+      <id>default</id>
+      <name>Default Site</name>
+      <url>scp://shell.berlios.de//home/groups/statcvs-xml/htdocs/maven-plugin/</url>
+    </site>
+  </distributionManagement>
+</project>
