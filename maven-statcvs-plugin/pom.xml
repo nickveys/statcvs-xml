@@ -93,21 +93,23 @@
     <url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml-maven/</url>
   </scm>
   <build>
-    <resources>
-      <resource>
-        <targetPath>plugin-resources</targetPath>
-        <directory>${basedir}/src/plugin-resources</directory>
-      </resource>
-      <resource>
-        <directory>${basedir}</directory>
-        <includes>
-          <include>plugin.jelly</include>
-          <include>plugin.properties</include>
-          <include>project.properties</include>
-          <include>project.xml</include>
-        </includes>
-      </resource>
-    </resources>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-eclipse-plugin</artifactId>
+          <configuration>
+            <projectnatures>
+              <java.lang.String>org.eclipse.jdt.core.javanature</java.lang.String>
+            </projectnatures>
+            <buildcommands>
+              <java.lang.String>org.eclipse.jdt.core.javabuilder</java.lang.String>
+            </buildcommands>
+            <!--  <outputDirectory>/target/eclipse-classes</outputDirectory> -->
+          </configuration>
+        </plugin> 
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
