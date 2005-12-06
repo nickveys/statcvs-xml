@@ -84,9 +84,9 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <reports>
+  <reporting>
     <plugins>
-      <plugin>
+      <!-- <plugin>
         <groupId>maven</groupId>
         <artifactId>changes</artifactId>
         <version>1.0-SNAPSHOT</version>
@@ -95,9 +95,13 @@
             <id>report</id>
           </goal>
         </goals>
+      </plugin> -->
+      <plugin>
+      	<groupId>statcvs</groupId>
+      	<artifactId>maven-statcvs-plugin</artifactId>
       </plugin>
     </plugins>
-  </reports>
+  </reporting>
   <scm>
     <connection>scm:cvs:pserver:anonymous@cvs.berlios.de:/cvsroot/statcvs-xml:statcvs-xml-maven</connection>
     <url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml-maven/</url>
