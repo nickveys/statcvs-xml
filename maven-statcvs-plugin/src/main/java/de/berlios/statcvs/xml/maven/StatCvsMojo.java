@@ -15,11 +15,12 @@ package de.berlios.statcvs.xml.maven;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.io.File;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import org.codehaus.doxia.module.xdoc.XdocSiteModule;
+import org.codehaus.doxia.site.renderer.SiteRenderer;
 
 /**
  * Goal which touches a timestamp file.
@@ -32,35 +33,38 @@ public class StatCvsMojo extends AbstractMojo {
 
 	/**
 	 * Location of the file.
-	 * @parameter expression="${project.build.directory}"
+	 * @parameter expression="${project.build.directory}/statcvs-xdocs"
 	 * @required
 	 */
-	private File outputDirectory;
+	private File reportsDirectory;
 
+    /**
+     * Specifies the directory where the report will be generated
+     *
+     * @parameter default-value="${project.reporting.outputDirectory}"
+     * @required
+     */
+    private File outputDirectory;
+    
+	/**
+     * @component
+     * @required
+     * @readonly
+     */
+    private SiteRenderer siteRenderer;
+    
 	public void execute() throws MojoExecutionException
 	{
-		File f = outputDirectory;
-		if (!f.exists()) {
-			f.mkdirs();
-		}
-		File touch = new File(f, "touch.txt");
-		FileWriter w = null;
-		try {
-			w = new FileWriter(touch);
-			w.write("touch.txt");
-		}
-		catch (IOException e) {
-			throw new MojoExecutionException("Error creating file " + touch, e);
-		}
-		finally {
-			if (w != null) {
-				try {
-					w.close();
-				}
-				catch (IOException e) {
-					// ignore
-				}
-			}
-		}
+		 if(reportsDirectory.exists()) {
+             File[] fileNames = reportsDirectory.listFiles();
+
+             if(fileNames.length > 0) {
+                 XdocSiteModule xdoc = new XdocSiteModule();
+
+                 //siteRenderer.render(reportsDirectory.getAbsolutePath(), outputDirectory.getAbsolutePath(), xdoc.getSourceDirectory(), 
+                 //		 xdoc.getExtension(), xdoc.getParserId());
+                 //, siteDescriptor, template, attributes, locale, outputEncoding );
+             }
+         }
 	}
 }
