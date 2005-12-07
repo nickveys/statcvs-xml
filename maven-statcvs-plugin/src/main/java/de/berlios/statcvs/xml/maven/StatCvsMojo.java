@@ -45,7 +45,7 @@ public class StatCvsMojo extends AbstractMavenReport {
      * 
      * @parameter
      *  expression="${connectionUrl}"
-     *  default-value="${project.scm.connection}"
+     *  default-value="${project.scm.developerConnection}"
      */
     private String connectionUrl;
 
