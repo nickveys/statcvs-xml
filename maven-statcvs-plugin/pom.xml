@@ -140,9 +140,8 @@
       	<groupId>statcvs</groupId>
       	<artifactId>maven-statcvs-plugin</artifactId>
 		<configuration>
-<!--
 		  <history>true</history>
--->
+		  <fork>true</fork>
 		</configuration>
       </plugin>
     </plugins>

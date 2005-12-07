@@ -1,11 +1,15 @@
 package de.berlios.statcvs.xml.maven;
 
 import java.io.File;
+import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import net.sf.statcvs.model.CvsContent;
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.reporting.MavenReportException;
-import org.apache.tools.ant.taskdefs.ExecuteJava;
 import org.codehaus.plexus.util.FileUtils;
 import de.berlios.statcvs.xml.Main;
 import de.berlios.statcvs.xml.output.ReportSettings;
@@ -68,21 +72,34 @@ public class StatCvsReport {
 		return (String[])args.toArray(new String[0]);
 	}
 	
-	public void executeForked(String[] args)
+	public void executeForked(String[] args) throws MavenReportException
 	{
-		ExecuteJava task = new ExecuteJava();
-		/* 
-		  <jvmargs>
-		  <ant:classpath>
-			<ant:pathelement location="${plugin.getDependencyPath('statcvs:statcvs-xml')}"/>
-			<ant:pathelement location="${plugin.getDependencyPath('jfreechart:jfreechart')}"/>
-			<ant:pathelement location="${plugin.getDependencyPath('jcommon:jcommon')}"/>
-			<ant:pathelement location="${plugin.getDependencyPath('jdom:jdom')}"/>
-			<ant:pathelement location="${plugin.getDependencyPath('commons-logging:commons-logging')}"/>
-			<ant:pathelement location="${plugin.getDependencyPath('commons-jexl:commons-jexl'	)}"/>
-		  </ant:classpath>
-		*/
-		task.run();
+		Set ids = new HashSet();
+		ids.add("statcvs-xml");
+		ids.add("jfreechart");
+		ids.add("jcommon");
+		ids.add("jdom");
+		ids.add("commons-logging");
+		ids.add("commons-jexl");
+		
+		JavaCommandLine cli = new JavaCommandLine();
+		cli.setWorkingDirectory(mojo.getWorkingDirectory());
+		cli.setExecutable(mojo.getJvm());
+		cli.setMainClass("de.berlios.statcvs.xml.Main");
+		for (Iterator it = mojo.getPluginArtifacts().iterator(); it.hasNext();) {
+			Artifact artifact = (Artifact)it.next();
+			if (ids.contains(artifact.getArtifactId())) {
+				cli.addClassPath(artifact.getFile());
+			}
+		}
+		
+		try {
+			Writer writer = cli.run(args);
+			cli.print(mojo.getLog(), writer);
+		}
+		catch (Exception e) {
+			throw new MavenReportException("Error while executing StatCvs.", e);
+		}
 	}
 	
 	public void executeInline(String[] args) throws MavenReportException
