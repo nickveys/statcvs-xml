@@ -140,7 +140,9 @@
       	<groupId>statcvs</groupId>
       	<artifactId>maven-statcvs-plugin</artifactId>
 		<configuration>
+<!--
 		  <history>true</history>
+-->
 		</configuration>
       </plugin>
     </plugins>

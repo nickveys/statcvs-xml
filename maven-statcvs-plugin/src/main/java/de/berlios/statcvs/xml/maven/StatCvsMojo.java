@@ -290,7 +290,7 @@ public class StatCvsMojo extends AbstractMavenReport {
 	}
 
 	public String getOutputName() {
-		return "statcvs";
+		return "statcvs/index";
 	}
 
 	protected MavenProject getProject() {
