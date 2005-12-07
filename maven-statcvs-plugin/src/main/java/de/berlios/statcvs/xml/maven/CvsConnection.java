@@ -2,7 +2,6 @@ package de.berlios.statcvs.xml.maven;
 
 import java.io.File;
 import java.util.List;
-import net.sf.statcvs.util.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.scm.ScmException;
 import org.apache.maven.scm.ScmFileSet;
@@ -13,6 +12,7 @@ import org.apache.maven.scm.command.update.UpdateScmResult;
 import org.apache.maven.scm.provider.ScmProvider;
 import org.apache.maven.scm.provider.cvslib.repository.CvsScmProviderRepository;
 import org.apache.maven.scm.repository.ScmRepository;
+import org.codehaus.plexus.util.FileUtils;
 
 /**
  * TODO compression, quiet, cvsRsh
@@ -26,10 +26,12 @@ public class CvsConnection {
 	private ScmProvider provider;
 	private File workingDirectory;
 	private ScmRepository scmRepository;
+	private File logFile;
 
-	public CvsConnection(StatCvsMojo mojo) throws ScmException
+	public CvsConnection(StatCvsMojo mojo, File logFile) throws ScmException
 	{
 		this.mojo = mojo;
+		this.logFile = logFile;
 		
 		initialize();
 	}
@@ -49,41 +51,38 @@ public class CvsConnection {
     	repository = (CvsScmProviderRepository)scmRepository.getProviderRepository();
     	provider = mojo.getScmManager().getProviderByRepository(scmRepository);
     	
-        if (mojo.isHistory()) {
-        	workingDirectory = new File(mojo.getHistoryWorkingDirectory(), repository.getModule());
-        }
-        else {
-        	workingDirectory = mojo.getWorkingDirectory();
-        }
+       	workingDirectory = mojo.getWorkingDirectory();
     }
 
-    public File execute() throws MojoExecutionException, ScmException
+    public void execute() throws MojoExecutionException, ScmException
     {
-    	File file = new File(mojo.getHistoryWorkingDirectory(), "cvs.log");
     	if (mojo.isHistory()) {
-    		String filename = mojo.getWorkingDirectory().getAbsolutePath() + "/CVS/Root/Entries";
-    		if (org.codehaus.plexus.util.FileUtils.fileExists(filename)) {
+    		String filename = workingDirectory.getAbsolutePath() + "/CVS/Root";
+    		if (FileUtils.fileExists(filename)) {
     			updateHistory();
     		}
     		else {
+    			FileUtils.mkdir(workingDirectory.getParentFile().getAbsolutePath());
     			checkOutHistory();
     		}
     	}
     	
     	fetchLog();
-    	
-    	return file;
     }
     
     private void checkOutHistory() throws ScmException, MojoExecutionException
     {
-    	ScmFileSet fileSet = new ScmFileSet(mojo.getHistoryWorkingDirectory());
+    	mojo.getLog().info("Checking out repository at " + workingDirectory.getAbsolutePath());
+    	
+    	ScmFileSet fileSet = new ScmFileSet(workingDirectory);
     	CheckOutScmResult result = provider.checkOut(scmRepository, fileSet, "1.1");
     	checkResult(result, result.getCheckedOutFiles());
     }
     
     private void updateHistory() throws ScmException, MojoExecutionException
     {
+    	mojo.getLog().info("Updating repository at " + workingDirectory.getAbsolutePath());
+    	
     	ScmFileSet fileSet = new ScmFileSet(workingDirectory);
     	UpdateScmResult result = provider.update(scmRepository, fileSet, "1.1");
     	checkResult(result, result.getUpdatedFiles());

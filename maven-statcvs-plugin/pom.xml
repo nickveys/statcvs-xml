@@ -93,6 +93,11 @@
       <version>2.0</version>
     </dependency>
     <dependency>
+      <groupId>ant</groupId>
+      <artifactId>ant</artifactId>
+      <version>1.6.5</version>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
@@ -134,12 +139,15 @@
       <plugin>
       	<groupId>statcvs</groupId>
       	<artifactId>maven-statcvs-plugin</artifactId>
+		<configuration>
+		  <history>true</history>
+		</configuration>
       </plugin>
     </plugins>
   </reporting>
   <scm>
     <connection>scm:cvs:pserver:anonymous@cvs.berlios.de:/cvsroot/statcvs-xml:maven-statcvs-plugin</connection>
-    <developerConnection>scm:cvs:ext:${maven.username}@cvs.berlios.de:/cvsroot/statcvs-xml:maven-statcvs-plugin</developerConnection>
+    <developerConnection>scm:cvs:ext:${user.name}@cvs.berlios.de:/cvsroot/statcvs-xml:maven-statcvs-plugin</developerConnection>
     <url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/statcvs-xml/statcvs-xml-maven/</url>
   </scm>
   <build>
