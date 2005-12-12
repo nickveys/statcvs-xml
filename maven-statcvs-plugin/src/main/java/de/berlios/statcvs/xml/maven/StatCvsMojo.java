@@ -116,12 +116,20 @@ public class StatCvsMojo extends AbstractMavenReport {
     private File reportingDirectory;
 
     /**
+     * Report output directory.
+     *
+     * @parameter expression="${project.build.directory}/generated-site/xdoc/statcvs"
+     * @required
+     */
+    private String outputDirectory;
+
+    /**
      * Specifies the directory where the report will be generated
      *
      * @parameter default-value="${project.reporting.outputDirectory}/statcvs"
      * @required
      */
-    private File outputDirectory;
+    private File htmlOutputDirectory;
 
     /**
      * Specifies if the pom should be used to determine real names.
@@ -145,7 +153,7 @@ public class StatCvsMojo extends AbstractMavenReport {
     /**
      * Specifies the StatCvs output renderer.
      *
-     * @parameter default-value="html"
+     * @parameter default-value="xdoc"
      * @required
      */
     private String renderer;
@@ -195,7 +203,7 @@ public class StatCvsMojo extends AbstractMavenReport {
 
         createReport();
         
-        String dest = outputDirectory.getAbsolutePath();
+        String dest = outputDirectory;
         String base = reportingDirectory.getAbsolutePath();
         String relativPath = dest.substring(base.length() + 1);
         sink.link(relativPath + "/index.html");
@@ -289,7 +297,7 @@ public class StatCvsMojo extends AbstractMavenReport {
 	}
 
 	protected String getOutputDirectory() {
-		return outputDirectory.getAbsolutePath();
+		return outputDirectory;
 	}
 
 	public String getOutputName() {
