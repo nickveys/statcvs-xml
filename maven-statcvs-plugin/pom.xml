@@ -142,6 +142,11 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>changes-maven-plugin</artifactId>
+        <configuration>
+        <!-- Once org.apache.maven.plugins releases changes-plugin this
+        will need to change to issueLinkTemplate -->
+          <link_template>http://developer.berlios.de/bugs/?func=detailbug&amp;group_id&#61;872&amp;bug_id&#61;%ISSUE%</link_template>
+        </configuration>
       </plugin>
 	  <plugin>
 		<groupId>org.apache.maven.plugins</groupId>

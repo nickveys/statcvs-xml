@@ -29,10 +29,13 @@
   </properties>
 
   <body>
-	<release version="3.0" date="2006-08-??">
+	<release version="3.0" date="2006-08-??" description="Initial tracked release">
       <action dev="squig" type="add">
 		Started on first release for Maven 2.0. The old Maven 1.x plugin is
 		available at http://statcvs-xml.berlios.de/maven-plugin/ .
+      </action>
+      <action dev="nickveys" type="fix" issue="8580">
+        Now saving the generated images along with the rest of the report.
       </action>
     </release>
   </body>
