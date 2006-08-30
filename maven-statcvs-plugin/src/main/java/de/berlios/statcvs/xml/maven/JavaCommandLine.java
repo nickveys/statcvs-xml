@@ -107,5 +107,8 @@ public class JavaCommandLine {
 	public String getMainClass() {
 		return mainClass;
 	}
-	
+
+    public String[] getCommandline() {
+        return cli.getCommandline();
+    }
 }

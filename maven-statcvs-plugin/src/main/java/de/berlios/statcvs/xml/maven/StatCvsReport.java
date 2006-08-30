@@ -1,8 +1,10 @@
 package de.berlios.statcvs.xml.maven;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.Set;
 import net.sf.statcvs.model.CvsContent;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.reporting.MavenReportException;
+import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
 import de.berlios.statcvs.xml.Main;
 import de.berlios.statcvs.xml.output.ReportSettings;
@@ -29,10 +32,7 @@ public class StatCvsReport {
 	public void execute() throws MavenReportException
 	{
 		String outputDirectory = mojo.getOutputDirectory();
-		
-		if (FileUtils.fileExists(outputDirectory)) {
-			FileUtils.mkdir(outputDirectory);
-		}
+        FileUtils.mkdir( outputDirectory );
 		
 		String[] args = getStatCvsArgs(outputDirectory);
 		if (mojo.isFork()) {
@@ -41,7 +41,29 @@ public class StatCvsReport {
 		else {
 			executeInline(args);
 		}
-	}
+
+        /* Copy image resources to gen-site/resources for inclusion */
+        DirectoryScanner ds = new DirectoryScanner();
+        ds.setIncludes( new String[] { "**/*.png" } );
+        ds.setBasedir( outputDirectory );
+        ds.scan();
+
+        String[] files = ds.getIncludedFiles();
+        mojo.getLog().debug("DirectoryScanner matched: " + Arrays.asList(files));
+        String resOutputDirectory = mojo.getResourceOutputDirectory();
+        mojo.getLog().info("Copying " + files.length + " files to " + resOutputDirectory);
+        FileUtils.mkdir( outputDirectory );
+        for ( int i = 0; i < files.length; i++ ) {
+            File src = new File( outputDirectory, files[i] );
+            File dest = new File( resOutputDirectory, files[i] );
+            try {
+                FileUtils.copyFile( src, dest );
+            } catch ( IOException e ) {
+                throw new MavenReportException( "Error copying images to resource dir" );
+            }
+        }
+
+    }
 
 	private String[] getStatCvsArgs(String outputDirectory)
 	{
@@ -74,6 +96,8 @@ public class StatCvsReport {
 	
 	public void executeForked(String[] args) throws MavenReportException
 	{
+        mojo.getLog().info("Executing StatCVS");
+
 		Set ids = new HashSet();
 		ids.add("statcvs-xml");
 		ids.add("jfreechart");
@@ -94,6 +118,7 @@ public class StatCvsReport {
 		}
 		
 		try {
+            mojo.getLog().debug("Executing " + Arrays.asList(cli.getCommandline()));
 			Writer writer = cli.run(args);
 			cli.print(mojo.getLog(), writer);
 		}
@@ -105,8 +130,11 @@ public class StatCvsReport {
 	public void executeInline(String[] args) throws MavenReportException
 	{
 		try {
+            mojo.getLog().debug("Reading settings: " + Arrays.asList(args));
 			ReportSettings settings = Main.readSettings(args);
+            mojo.getLog().debug("Generating content");
 			CvsContent content = Main.generateContent(settings);
+            mojo.getLog().debug("Generating suite");
 			Main.generateSuite(settings, content);
 		}
 		catch (Exception e) {

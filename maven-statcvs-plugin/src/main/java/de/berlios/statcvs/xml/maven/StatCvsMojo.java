@@ -124,6 +124,14 @@ public class StatCvsMojo extends AbstractMavenReport {
     private String outputDirectory;
 
     /**
+     * Report resource output directory (for images, etc).
+     *
+     * @parameter expression="${project.build.directory}/generated-site/resources/statcvs"
+     * @required
+     */
+    private String resourceOutputDirectory;
+
+    /**
      * Specifies the directory where the report will be generated
      *
      * @parameter default-value="${project.reporting.outputDirectory}/statcvs"
@@ -299,6 +307,10 @@ public class StatCvsMojo extends AbstractMavenReport {
 	protected String getOutputDirectory() {
 		return outputDirectory;
 	}
+    
+    protected String getResourceOutputDirectory() {
+        return resourceOutputDirectory; 
+    }
 
 	public String getOutputName() {
 		return "statcvs/index";

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.scm.ScmException;
@@ -100,6 +101,8 @@ public class CvsConnection {
 
     private void fetchLog() throws MojoExecutionException, ScmException
     {
+        mojo.getLog().info("Checking out CVS log");
+
     	ScmFileSet fileSet = new ScmFileSet(workingDirectory);
     	ChangeLogScmResult result = provider.changeLog(scmRepository, fileSet, null, null, 0, null);
     	checkResult(result, null);    	
@@ -107,6 +110,8 @@ public class CvsConnection {
     
     private void fetchLogForked() throws MojoExecutionException, ScmException
     {
+        mojo.getLog().info("Checking out CVS log");
+
 		Commandline cli = new Commandline();
 		cli.setWorkingDirectory(workingDirectory.getAbsolutePath());
 		cli.setExecutable("cvs");
@@ -118,6 +123,7 @@ public class CvsConnection {
 
 		int returnCode;
 		try {
+            mojo.getLog().debug("Executing " + Arrays.asList(cli.getCommandline()));
 			returnCode = CommandLineUtils.executeCommandLine(cli, out, err);
 		}
 		catch (CommandLineException e) {
