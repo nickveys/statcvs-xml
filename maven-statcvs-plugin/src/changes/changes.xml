@@ -25,12 +25,13 @@
     <author email="evenisse@ifrance.com">Emmanuel Venisse</author>
     <author email="vanto@users.berlios.de">Tammo van Lessen</author>
     <author>Steffen Pingel</author>
+    <author>Nick Veys</author>
   </properties>
 
   <body>
-	<release version="3.0" date="2005-12-??">
-      <action dev="squig" type="">
-		First release for Maven 2.0. The old Maven 1.x plugin is
+	<release version="3.0" date="2006-08-??">
+      <action dev="squig" type="add">
+		Started on first release for Maven 2.0. The old Maven 1.x plugin is
 		available at http://statcvs-xml.berlios.de/maven-plugin/ .
       </action>
     </release>
