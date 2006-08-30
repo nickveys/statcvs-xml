@@ -18,13 +18,13 @@ package de.berlios.statcvs.xml.maven;
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
+import org.apache.maven.doxia.parser.Parser;
+import org.apache.maven.doxia.sink.Sink;
+import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.apache.maven.scm.manager.ScmManager;
-import org.codehaus.doxia.parser.Parser;
-import org.codehaus.doxia.sink.Sink;
-import org.codehaus.doxia.site.renderer.SiteRenderer;
 
 /**
  * Generates a StatCvs report.
@@ -163,7 +163,7 @@ public class StatCvsMojo extends AbstractMavenReport {
      * @required
      * @readonly
      */
-    private SiteRenderer siteRenderer;
+    private Renderer siteRenderer;
 
 	/**
      * The working directory
@@ -312,7 +312,7 @@ public class StatCvsMojo extends AbstractMavenReport {
         return manager;
     }
     
-	protected SiteRenderer getSiteRenderer() {
+	protected Renderer getSiteRenderer() {
 		return siteRenderer;
 	}
 	
@@ -341,7 +341,7 @@ public class StatCvsMojo extends AbstractMavenReport {
 	}
 	
 	public String getTitle() {
-		// TODO
+		// TODO: I18N
 		return "StatCvs Report";
 	}
 	
