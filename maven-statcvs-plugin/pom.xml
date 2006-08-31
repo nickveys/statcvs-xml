@@ -199,7 +199,7 @@
     <site>
       <id>default</id>
       <name>Default Site</name>
-      <url>scp://shell.berlios.de//home/groups/statcvs-xml/htdocs/maven2-plugin/</url>
+      <url>scp://shell.berlios.de/home/groups/statcvs-xml/htdocs/maven2-plugin/</url>
     </site>
   </distributionManagement>
 </project>
