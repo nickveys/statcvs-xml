@@ -37,6 +37,7 @@
 
 	<menu name="Related">
 	  <item name="Maven Plugin" href="/maven-plugin/"/>
+      <item name="Maven 2 Plugin" href="/maven2-plugin/"/>
 	</menu>
 
   </body>

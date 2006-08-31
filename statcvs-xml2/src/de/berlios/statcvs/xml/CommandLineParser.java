@@ -29,7 +29,7 @@ import java.util.logging.Level;
  * and turns it into a {@link ConfigurationOptions} object.
  * 
  * @author Richard Cyganiak <rcyg@gmx.de>
- * @version $Id: CommandLineParser.java,v 1.16 2004-11-10 16:31:33 squig Exp $
+ * @version $Id: CommandLineParser.java,v 1.17 2006-08-31 22:41:14 nickveys Exp $
  */
 public class CommandLineParser {
 
@@ -124,6 +124,8 @@ public class CommandLineParser {
 			settings.put("projectName", popNextArg());
 		} else if (s.equals("maven")) {
 			settings.put("maven", "project.xml");
+		} else if (s.equals("maven2")) {
+			settings.put("maven2", "pom.xml");
 		} else if (s.equals("no-images")) {
 		    settings.put("showImages", "false");
 		} else {

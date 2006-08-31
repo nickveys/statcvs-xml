@@ -4,7 +4,7 @@
   <name>StatCVS-XML</name>
   <id>statcvs-xml</id>
   <groupId>statcvs</groupId>
-  <currentVersion>0.9.6</currentVersion>
+  <currentVersion>0.9.7</currentVersion>
   <organization>
     <name>StatCvs-XML Team</name>
     <url>http://statcvs-xml.berlios.de/</url>
@@ -97,6 +97,15 @@
       </roles>
       <url>http://steffenpingel.de</url>
       <timezone>+2</timezone>
+    </developer>
+    <developer>
+      <name>Nick Veys</name>
+      <id>nickveys</id>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <url>http://www.veys.com</url>
+      <timezone>-5</timezone>
     </developer>
   </developers>
 

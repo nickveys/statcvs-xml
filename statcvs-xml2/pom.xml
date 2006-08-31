@@ -3,7 +3,7 @@
   <groupId>statcvs</groupId>
   <artifactId>statcvs-xml</artifactId>
   <name>StatCVS-XML</name>
-  <version>0.9.6</version>
+  <version>0.9.7</version>
   <url>http://statcvs-xml.berlios.de/</url>
   <issueManagement>
     <url>http://developer.berlios.de/tracker/?group_id=872</url>
@@ -35,6 +35,15 @@
         <role>Developer</role>
       </roles>
       <timezone>+2</timezone>
+    </developer>
+    <developer>
+      <name>Nick Veys</name>
+      <id>nickveys</id>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <url>http://www.veys.com</url>
+      <timezone>-5</timezone>
     </developer>
   </developers>
   <scm>
@@ -86,6 +95,12 @@
     </plugins>
   </build>
   <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>jdom</groupId>
       <artifactId>jdom</artifactId>

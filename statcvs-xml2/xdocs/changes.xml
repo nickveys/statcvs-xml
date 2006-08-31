@@ -14,6 +14,11 @@
       </ul>
     </section>
 -->
+    <release version="0.9.7" date="XX">
+      <action dev="nickveys" type="add">
+        Added support for parsing Maven 2 POMs alongside Maven 1 project.xml files.
+      </action>
+    </release>
 	<release version="0.9.6" date="2005-05-19">
       <action dev="squig" type="add">
 		A report has been added that compares versions (i.e. tagged

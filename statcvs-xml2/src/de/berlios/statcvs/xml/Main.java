@@ -42,6 +42,7 @@ import net.sf.statcvs.util.LogFormatter;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 
 import de.berlios.statcvs.xml.output.CSVOutputter;
@@ -56,7 +57,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * 
  * @author Steffen Pingel
  * @author Tammo van Lessen
- * @version $Id: Main.java,v 1.35 2006-08-31 11:41:19 squig Exp $
+ * @version $Id: Main.java,v 1.36 2006-08-31 22:41:14 nickveys Exp $
  */
 public class Main {
 
@@ -137,6 +138,7 @@ public class Main {
 				+ "  -suite <file>      xml file that is used to generate the documents\n"
 				+ "  -weburl <url>      integrate with web repository installation at <url>\n"
 				+ "  -maven             read author names from Maven project.xml\n"
+                + "  -maven2            read author names from Maven 2 pom.xml\n"
 				+ "  -no-images         do not display author pictures\n"
 				+ "  -verbose           print extra progress information\n"
 				+ "  -debug             print debug information\n"
@@ -182,40 +184,12 @@ public class Main {
 		
 		ReportSettings settings = new ReportSettings(cmdlSettings);
 
-		// read settings from maven.xml
+		// read settings from maven (1|2) project descriptor
 		if (cmdlSettings.get("maven") != null) {
-		    File file = new File((String)cmdlSettings.get("maven"));
-		    if (file.exists()) {
-		        try {
-		            logger.info(I18n.tr("Reading project settings from {0}", file.getName()));
-		            SAXBuilder builder = new SAXBuilder();
-		            Document suite = builder.build(file);
-		            Element element = suite.getRootElement().getChild("developers");
-		            if (element != null) {
-		                for (Iterator it = element.getChildren().iterator(); it.hasNext();) {
-		                    Element developer = (Element)it.next();
-		                    String id = developer.getChildText("id");
-		                    if (id == null) {
-		                        continue;
-		                    }
-		                    if (developer.getChildText("name") != null) {
-		                        settings.setFullname(id, developer.getChildText("name"));
-		                    }
-		                    if (developer.getChildText("image") != null) {
-		                        settings.setAuthorPic(id, developer.getChildText("image"));
-		                    }
-		                    else if (developer.getChildText("url") != null) {
-		                        settings.setAuthorPic(id, developer.getChildText("url") + "/" + id + ".png");
-		                    }
-		                }
-		            }
-		        }
-		        catch (JDOMException e) {
-		            logger.info(I18n.tr("Could not read maven project file {0}: {1}",
-		                    		    cmdlSettings.get("maven"),
-		                    		    e.getLocalizedMessage()));
-		        }
-		    }
+			readNamesFromMaven(settings, (String) cmdlSettings.get("maven"));
+		}
+		if (cmdlSettings.get("maven2") != null) {
+			readNamesFromMaven(settings, (String) cmdlSettings.get("maven2"));
 		}
 
 		// read settings from statcvs.xml
@@ -237,6 +211,45 @@ public class Main {
 		return settings;
 	}				
 
+    private static void readNamesFromMaven(ReportSettings settings, String mavenProjectPath) throws IOException {
+		File file = new File(mavenProjectPath);
+		if (file.exists()) {
+			try {
+				logger.info(I18n.tr("Reading project settings from {0}", file.getName()));
+				SAXBuilder builder = new SAXBuilder();
+				Element root = builder.build(file).getRootElement();
+
+				// m2 poms typically have namespaces, m1 not so much
+				// it is ok for it to be blank, it will use the default namespace
+				Namespace ns = root.getNamespace();
+				Element element = root.getChild("developers", ns);
+				if (element != null) {
+					for (Iterator it = element.getChildren().iterator(); it.hasNext();) {
+						Element developer = (Element) it.next();
+						String id = developer.getChildText("id", ns);
+						if (id == null) {
+							continue;
+						}
+						if (developer.getChildText("name", ns) != null) {
+							settings.setFullname(id, developer.getChildText("name", ns));
+						}
+						if (developer.getChildText("image", ns) != null) {
+							settings.setAuthorPic(id, developer.getChildText("image", ns));
+						} else if (developer.getChildText("url", ns) != null) {
+							settings.setAuthorPic(id, developer.getChildText("url", ns) + "/" + id + ".png");
+						}
+					}
+				}
+			} catch (JDOMException e) {
+				logger.warning(I18n.tr("Could not read maven project file {0}: {1}",
+									mavenProjectPath, 
+									e.getLocalizedMessage()));
+			}
+		} else {
+			logger.warning("Maven project " + mavenProjectPath + " specified cannot be found.");
+		}
+	}
+    
 	public static void initLogger(Level level) 
 	{
 		if (level == null) {

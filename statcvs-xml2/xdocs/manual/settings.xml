@@ -117,8 +117,15 @@
          <td>maven</td>
          <td>-maven</td>
          <td></td>
-         <td>Specifies the path of a Maven project.xml that is used
-         to map author ids to names.</td>
+         <td>Specifies to use the Maven project.xml in the current working
+         directory to map author ids to names.</td>
+      </tr>
+      <tr>
+         <td>maven2</td>
+         <td>-maven2</td>
+         <td></td>
+         <td>Specifies to use the Maven 2 pom.xml in the current working
+         directory to map author ids to names.</td>
       </tr>
       <tr>
          <td>modules</td>
