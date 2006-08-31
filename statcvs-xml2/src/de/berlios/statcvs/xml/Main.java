@@ -56,7 +56,7 @@ import de.berlios.statcvs.xml.util.FileHelper;
  * 
  * @author Steffen Pingel
  * @author Tammo van Lessen
- * @version $Id: Main.java,v 1.34 2005-05-19 14:40:56 squig Exp $
+ * @version $Id: Main.java,v 1.35 2006-08-31 11:41:19 squig Exp $
  */
 public class Main {
 
@@ -87,11 +87,9 @@ public class Main {
 
 		try {
 			long startTime = System.currentTimeMillis();
-			ReportSettings settings = readSettings(args);
-			CvsContent content = generateContent(settings);
-			generateSuite(settings, content);
+			ReportSettings settings = run(args);
 			long endTime = System.currentTimeMillis();
-			System.out.println(I18n.tr("Done ({0}s). Generated reports in {1}.", new Long((endTime - startTime) / 1000),settings.getOutputPath()));
+			System.out.println(I18n.tr("Done ({0}s). Generated reports in {1}.", new Long((endTime - startTime) / 1000), settings.getOutputPath()));
 		} catch (InvalidCommandLineException e) {
 			System.err.println(e.getMessage());
 			printProperUsageAndExit();
@@ -109,6 +107,14 @@ public class Main {
 		}
 
 		System.exit(0);
+	}
+	
+	public static ReportSettings run(String[] args) throws IOException, LogSyntaxException, EmptyRepositoryException, InvalidCommandLineException
+	{
+		ReportSettings settings = readSettings(args);
+		CvsContent content = generateContent(settings);
+		generateSuite(settings, content);
+		return settings;
 	}
 
 	private static void printProperUsageAndExit() {
