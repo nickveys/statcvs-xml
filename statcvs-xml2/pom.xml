@@ -3,7 +3,7 @@
   <groupId>statcvs</groupId>
   <artifactId>statcvs-xml</artifactId>
   <name>StatCVS-XML</name>
-  <version>0.9.7</version>
+  <version>0.9.8</version>
   <url>http://statcvs-xml.berlios.de/</url>
   <issueManagement>
     <url>http://developer.berlios.de/tracker/?group_id=872</url>
