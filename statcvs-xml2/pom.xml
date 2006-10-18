@@ -5,6 +5,7 @@
   <name>StatCVS-XML</name>
   <version>0.9.8</version>
   <url>http://statcvs-xml.berlios.de/</url>
+  <description>XML output extensions for StatCvs</description>
   <issueManagement>
     <url>http://developer.berlios.de/tracker/?group_id=872</url>
   </issueManagement>
