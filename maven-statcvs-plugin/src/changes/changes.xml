@@ -35,6 +35,10 @@
       <action dev="nickveys" type="fix" issue="8580">
         Now saving the generated images along with the rest of the report.
       </action>
+      <action dev="nickveys" type="fix">
+        Applied patch 1486 from Hervé Boutemy, actually applying the 
+        includes/excludes now. Rearranged them to be arrays instead of one big string.
+      </action>
     </release>
   </body>
 </document>

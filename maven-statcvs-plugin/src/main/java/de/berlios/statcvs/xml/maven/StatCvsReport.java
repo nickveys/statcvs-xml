@@ -31,6 +31,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.StringUtils;
 
 import de.berlios.statcvs.xml.Main;
 import de.berlios.statcvs.xml.output.ReportSettings;
@@ -153,6 +154,9 @@ public class StatCvsReport {
     /**
      * Get the arguments to be passed to statcvs.
      * 
+     * TODO Returns as a string array, later, others turn it back into a list,
+     * or simply iterate. Decide on one method.
+     * 
      * @return statcvs arguments
      */
     private String[] getStatCvsArgs() {
@@ -173,12 +177,12 @@ public class StatCvsReport {
 
         if (mojo.getIncludes() != null) {
             args.add("-include");
-            mojo.getIncludes();
+            args.add(StringUtils.join(mojo.getIncludes(), File.pathSeparator));
         }
 
         if (mojo.getExcludes() != null) {
             args.add("-exclude");
-            mojo.getExcludes();
+            args.add(StringUtils.join(mojo.getExcludes(), File.pathSeparator));
         }
 
         if (mojo.isParsePOM()) {
