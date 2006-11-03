@@ -1,0 +1,28 @@
+ ------
+ Overview
+ ------
+ Nicholas Veys
+ ------
+ 03 November 2006
+ ------
+
+Overview
+
+  The {{{http://statcvs-xml.berlios.de/maven2-plugin/}StatCVS-Xml}} plugin allows you
+  to generate CVS statistics for your {{{http://maven.apache.org}Maven 2}} project.
+
+  The plugin accepts configuration parameters that will be used to customize the execution of 
+  the {{{http://statcvs-xml.berlios.de/}StatCVS-Xml}} tool.
+
+* Goals Overview
+
+  * {{{report-mojo.html}statcvs:report}} creates a StatCVS-Xml report.
+
+* Customization
+
+  The output of StatCvs-XML, i.e. the generated documents and the format of the reports, 
+  is highly customizable.  StatCvs-XML looks for a file called <<<statcvs.xml>>> in 
+  the project directory (next to the M2 pom.xml) to read project settings.
+
+  Please see the {{{http://statcvs-xml.berlios.de/manual/settings.html}StatCvs-XML manual}} 
+  for configuration options.

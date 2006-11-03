@@ -1,0 +1,27 @@
+ ------
+ Usage
+ ------
+ Nicholas Veys
+ ------
+ 03 November 2006
+
+Usage
+
+  To use the StatCVS-XML Maven 2 plugin, simply include the following in your POM.  
+  The plugin will be automatically downloaded from the Maven 2 repositories (or can
+  be manually installed by downloading and installing the artifacts).
+
++-----
+<project>
+  [...]
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>statcvs</groupId>
+        <artifactId>maven-statcvs-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+  [...]
+</project>
++-----

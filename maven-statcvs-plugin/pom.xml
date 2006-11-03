@@ -25,6 +25,7 @@
     <version>3.0</version>
     <packaging>maven-plugin</packaging>
     <url>http://statcvs-xml.berlios.de/maven2-plugin/</url>
+    <inceptionYear>2005</inceptionYear>
 
     <description>
         A Maven 2 plugin to generate statistics about CVS usage using
@@ -89,6 +90,7 @@
             <roles>
                 <role>Developer</role>
             </roles>
+            <url>http://www.veys.com</url>
         </developer>
     </developers>
 
@@ -150,6 +152,10 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-changes-plugin</artifactId>
                 <configuration>
                     <issueLinkTemplate>
@@ -159,7 +165,28 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-plugin-plugin</artifactId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>dependencies</report>
+                            <report>project-team</report>
+                            <report>mailing-list</report>
+                            <report>issue-tracking</report>
+                            <report>license</report>
+                            <report>scm</report>
+                            <report>summary</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -231,6 +258,48 @@
             </url>
         </site>
     </distributionManagement>
+
+    <mailingLists>
+        <mailingList>
+            <name>statcvs-xml-notification</name>
+            <subscribe>
+                https://lists.berlios.de/mailman/listinfo/statcvs-xml-notification
+            </subscribe>
+            <unsubscribe>
+                https://lists.berlios.de/mailman/listinfo/statcvs-xml-notification
+            </unsubscribe>
+            <post>statcvs-xml-notification@lists.berlios.de</post>
+            <archive>
+                https://lists.berlios.de/mailman/private/statcvs-xml-notification/
+            </archive>
+        </mailingList>
+        <mailingList>
+            <name>statcvs-xml-devel</name>
+            <subscribe>
+                https://lists.berlios.de/mailman/listinfo/statcvs-xml-devel
+            </subscribe>
+            <unsubscribe>
+                https://lists.berlios.de/mailman/listinfo/statcvs-xml-devel
+            </unsubscribe>
+            <post>statcvs-xml-devel@lists.berlios.de</post>
+            <archive>
+                https://lists.berlios.de/mailman/private/statcvs-xml-devel/
+            </archive>
+        </mailingList>
+        <mailingList>
+            <name>statcvs-xml-tracker</name>
+            <subscribe>
+                https://lists.berlios.de/mailman/listinfo/statcvs-xml-tracker
+            </subscribe>
+            <unsubscribe>
+                https://lists.berlios.de/mailman/listinfo/statcvs-xml-tracker
+            </unsubscribe>
+            <post>statcvs-xml-tracker@lists.berlios.de</post>
+            <archive>
+                https://lists.berlios.de/mailman/private/statcvs-xml-tracker/
+            </archive>
+        </mailingList>
+    </mailingLists>
 
     <repositories>
         <repository>

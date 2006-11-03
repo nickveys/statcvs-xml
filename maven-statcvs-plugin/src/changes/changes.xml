@@ -27,7 +27,7 @@
   </properties>
 
   <body>
-	<release version="3.0" date="2006-10-??" description="Initial tracked release">
+	<release version="3.0" date="2006-11-03" description="Initial tracked release">
       <action dev="squig" type="add">
 		Started on first release for Maven 2.0. The old Maven 1.x plugin is
 		available at http://statcvs-xml.berlios.de/maven-plugin/ .
@@ -42,6 +42,9 @@
       <action dev="nickveys" type="fix">
         Applied patch 1611 from Hervé Boutemy to retrieve developer names from the
         local POM instead of checked out version, will now see new devs added.
+      </action>
+      <action dev="nickveys" type="add">
+        Added site information to have a decent looking web site. :)
       </action>
     </release>
   </body>

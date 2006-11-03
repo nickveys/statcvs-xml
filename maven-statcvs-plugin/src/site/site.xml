@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Maven 2 StatCVS-XML Plugin">
+    <body>
+        <links>
+            <item name="Maven 2" href="http://maven.apache.org/maven2/" />
+            <item name="StatCVS-Xml" href="http://statcvs-xml.berlios.de/" />
+        </links>
+
+        <menu name="Overview">
+            <item name="Overview" href="index.html" />
+            <item name="Usage" href="usage.html" />
+            <item name="FAQ" href="faq.html" />
+        </menu>
+
+        ${reports}
+    </body>
+</project>

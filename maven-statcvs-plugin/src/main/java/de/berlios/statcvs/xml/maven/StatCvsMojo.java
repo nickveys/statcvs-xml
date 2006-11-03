@@ -27,10 +27,10 @@ import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.apache.maven.scm.manager.ScmManager;
 
+/* TODO HTML Generation, I18N */
+
 /**
  * Generates a StatCvs report.
- * 
- * TODO HTML Generation, I18N
  * 
  * @goal report
  * @phase process-sources
