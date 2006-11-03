@@ -22,7 +22,7 @@
     <groupId>statcvs</groupId>
     <artifactId>maven-statcvs-plugin</artifactId>
     <name>Maven 2 StatCvs Plugin</name>
-    <version>3.0</version>
+    <version>3.1</version>
     <packaging>maven-plugin</packaging>
     <url>http://statcvs-xml.berlios.de/maven2-plugin/</url>
     <inceptionYear>2005</inceptionYear>
