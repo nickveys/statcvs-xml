@@ -113,7 +113,7 @@ public class StatCvsReport {
         ids.add("commons-jexl");
 
         JavaCommandLine cli = new JavaCommandLine();
-        cli.setWorkingDirectory(mojo.getCvsSourceLocation());
+        cli.setWorkingDirectory(mojo.getBasedir());
         cli.setJvm(mojo.getJvm());
         cli.setMainClass("de.berlios.statcvs.xml.Main");
         for (Iterator it = mojo.getPluginArtifacts().iterator(); it.hasNext();) {

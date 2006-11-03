@@ -39,6 +39,10 @@
         Applied patch 1486 from Hervé Boutemy, actually applying the 
         includes/excludes now. Rearranged them to be arrays instead of one big string.
       </action>
+      <action dev="nickveys" type="fix">
+        Applied patch 1611 from Hervé Boutemy to retrieve developer names from the
+        local POM instead of checked out version, will now see new devs added.
+      </action>
     </release>
   </body>
 </document>

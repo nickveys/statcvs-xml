@@ -260,6 +260,15 @@ public class StatCvsMojo extends AbstractMavenReport {
         return true;
     }
 
+    /**
+     * Get the basedir of the executing project.
+     * 
+     * @return path to basedir of project
+     */
+    public File getBasedir() {
+        return basedir;
+    }
+
     public String getConnectionUrl() {
         return connectionUrl;
     }
