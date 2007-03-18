@@ -27,6 +27,13 @@
   </properties>
 
   <body>
+	<release version="3.1" date="" description="">
+      <action dev="squig" type="add">
+        Patch 1765 from Hervé Boutemy has been applied that adds a
+        configuration option webUrlType to set the type of the web
+        front-end for viewing CVS.
+      </action>
+    </release>
 	<release version="3.0" date="2006-11-03" description="Initial tracked release">
       <action dev="squig" type="add">
 		Started on first release for Maven 2.0. The old Maven 1.x plugin is

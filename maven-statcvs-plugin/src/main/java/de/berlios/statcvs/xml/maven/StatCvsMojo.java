@@ -39,30 +39,41 @@ public class StatCvsMojo extends AbstractMavenReport {
 
     /**
      * Specifies if pictures should be displayed on the author pages.
-     * 
+     *
      * @parameter default-value="false"
      */
     private boolean authorPictures;
 
     /**
      * The SCM connection URL.
-     * 
+     *
      * @parameter expression="${connectionUrl}"
      *            default-value="${project.scm.developerConnection}"
      */
     private String connectionUrl;
 
     /**
+     * @parameter default-value="${project.scm.url}"
+     */
+    private String webUrl;
+
+    /**
+     * other values : viewcvs, cvsweb, chora
+     * @parameter default-value="auto"
+     */
+    private String webUrlType;
+
+    /**
      * Determines the files not to consider when generating the report. Uses ant
      * style file-pattern matching.
-     * 
+     *
      * @parameter
      */
     private String[] excludes;
 
     /**
      * Specifies if the StatCvs should be invoked in a separate JVM.
-     * 
+     *
      * @parameter default-value="false"
      */
     private boolean fork;
@@ -273,10 +284,18 @@ public class StatCvsMojo extends AbstractMavenReport {
         return connectionUrl;
     }
 
+    public String getWebUrl() {
+      return webUrl;
+    }
+
+    public String getWebUrlType() {
+      return webUrlType;
+    }
+
     /**
      * Get the directory containing CVS sources from which to generate the
      * report.
-     * 
+     *
      * @return directory containing cvs files
      */
     public File getCvsSourceLocation() {

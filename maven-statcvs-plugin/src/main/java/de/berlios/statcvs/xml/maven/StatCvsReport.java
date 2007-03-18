@@ -193,6 +193,11 @@ public class StatCvsReport {
             args.add("-no-images");
         }
 
+        if (mojo.getWebUrl() != null && mojo.getWebUrl().length() > 0) {
+          args.add("-" + ("auto".equals(mojo.getWebUrlType()) ? "weburl" : mojo.getWebUrlType()));
+          args.add(mojo.getWebUrl());
+        }
+
         args.add(logFile.getAbsolutePath());
         args.add(mojo.getCvsSourceLocation().getAbsolutePath());
 
